@@ -1,0 +1,88 @@
+﻿@page "/day01"
+
+<div class="mb-3">
+    <label class="form-label">The input below is the example data. Paste your own user input from <a href="https://adventofcode.com/2022/day/1">Advent Of Code</a></label>
+    <textarea class="form-control" rows="10" @bind="input" maxlength="10000000"></textarea>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <button class="btn btn-primary" @onclick="SolvePart1">Solve Part 1</button>
+            <div>@output1</div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <button class="btn btn-primary" @onclick="SolvePart2">Solve Part 2</button>
+            <div>@output2</div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private string? output1;
+    private string? output2;
+    private void SolvePart1()
+    {
+        if (string.IsNullOrWhiteSpace(input))
+            return;
+        var lines = input.Replace("\r", "").Split(Environment.NewLine);
+        var count = 0;
+        var countMax = 0;
+        foreach (var line in lines)
+        {
+            if (line == "")
+            {
+                if (count > countMax)
+                    countMax = count;
+                count = 0;
+            }
+            else
+            {
+                count += int.Parse(line);
+            }
+        }
+        if (count > countMax)
+            countMax = count;
+
+        output1 = countMax.ToString();
+    }
+    private void SolvePart2()
+    {
+        if (string.IsNullOrWhiteSpace(input))
+            return;
+        var lines = input.Replace("\r", "").Split(Environment.NewLine);
+        var calories = new List<int>();
+        var count = 0;
+        foreach (var line in lines)
+        {
+            if (line == "")
+            {
+                calories.Add(count);
+                count = 0;
+            }
+            else
+            {
+                count += int.Parse(line);
+            }
+        }
+        calories.Add(count);
+        foreach (var e in calories)
+                Console.WriteLine(e);
+        output2 = calories.OrderByDescending(x => x).Take(3).Sum().ToString();
+    }
+    private string input = @"1000
+2000
+3000
+
+4000
+
+5000
+6000
+
+7000
+8000
+9000
+
+10000";
+}
