@@ -1,88 +1,66 @@
 ﻿@page "/day01"
+@inject HttpClient Http
 
 <div class="mb-3">
     <label class="form-label">The input below is the example data. Paste your own user input from <a href="https://adventofcode.com/2022/day/1">Advent Of Code</a></label>
     <textarea class="form-control" rows="10" @bind="Input" maxlength="10000000"></textarea>
 </div>
-<div class="container">
-    <div class="row">
-        <div class="col-12">
-            <button class="btn btn-primary" @onclick="SolvePart1">Solve Part 1</button>
-            <div>@Output1</div>
-        </div>
+<div>
+    <div>
+        <button class="btn btn-primary" @onclick="SolvePart1">Solve Part 1</button>
     </div>
-    <div class="row">
-        <div class="col-12">
-            <button class="btn btn-primary" @onclick="SolvePart2">Solve Part 2</button>
-            <div>@Output2</div>
-        </div>
+    <div>@Output1</div>
+</div>
+<div>
+    <div>
+        <button class="btn btn-primary" @onclick="SolvePart2">Solve Part 2</button>
     </div>
+    <div>@Output2</div>
 </div>
 
 @code {
+    private string Input { get; set; } = string.Empty;
+    protected override async Task OnInitializedAsync()
+    {
+        Input = (await Http.GetStringAsync("sample-data/day1.txt")).Replace("\r", "");
+    }
+
     private string Output1 { get; set; } = string.Empty;
     private string Output2 { get; set; } = string.Empty;
     private void SolvePart1()
     {
-        if (string.IsNullOrWhiteSpace(Input))
-            return;
-        var lines = Input.Split("\n");
-        var count = 0;
-        var countMax = 0;
-        foreach (var line in lines)
+        if (string.IsNullOrWhiteSpace(Input)) return;
+        var elfCalories = 0;
+        var maxCalories = 0;
+        foreach (var line in Input.Split("\n").Append(string.Empty))
         {
-            if (line == "")
-            {
-                if (count > countMax)
-                    countMax = count;
-                count = 0;
-            }
+            if (line != string.Empty)
+                elfCalories += int.Parse(line);
             else
             {
-                count += int.Parse(line);
+                if (elfCalories > maxCalories)
+                    maxCalories = elfCalories;
+                elfCalories = 0;
             }
         }
-        if (count > countMax)
-            countMax = count;
-
-        Output1 = countMax.ToString();
+        Output1 = maxCalories.ToString();
     }
     private void SolvePart2()
     {
         if (string.IsNullOrWhiteSpace(Input))
             return;
-        var lines = Input.Split("\n");
         var calories = new List<int>();
-        var count = 0;
-        foreach (var line in lines)
+        var elfCalories = 0;
+        foreach (var line in Input.Split("\n").Append(string.Empty))
         {
-            if (line == "")
-            {
-                calories.Add(count);
-                count = 0;
-            }
+            if (line != string.Empty)
+                elfCalories += int.Parse(line);
             else
             {
-                count += int.Parse(line);
+                calories.Add(elfCalories);
+                elfCalories = 0;
             }
         }
-        calories.Add(count);
-        foreach (var e in calories)
-            Console.WriteLine(e);
         Output2 = calories.OrderByDescending(x => x).Take(3).Sum().ToString();
     }
-    private string Input { get; set; } = @"1000
-2000
-3000
-
-4000
-
-5000
-6000
-
-7000
-8000
-9000
-
-10000".Replace("\r","");
 }
