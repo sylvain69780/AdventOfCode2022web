@@ -1,0 +1,58 @@
+﻿@page "/day02"
+@inject HttpClient Http
+
+<div class="mb-3">
+    <label class="form-label">The input below is the example data. Paste your own user input from <a href="https://adventofcode.com/2022/day/2">Advent Of Code</a></label>
+    <textarea class="form-control" rows="10" @bind="Input" maxlength="10000000"></textarea>
+</div>
+<div class ="mb-3">
+    <div class="mb-3">
+        <button class="btn btn-primary" @onclick="SolvePart1">Solve Part 1</button>
+    </div>
+    <div>@Output1</div>
+</div>
+<div class="mb-3">
+    <div class="mb-3">
+        <button class="btn btn-primary" @onclick="SolvePart2">Solve Part 2</button>
+    </div>
+    <div>@Output2</div>
+</div>
+
+@code {
+    private string Input { get; set; } = string.Empty;
+    protected override async Task OnInitializedAsync()
+    {
+        Input = (await Http.GetStringAsync("sample-data/day2.txt")).Replace("\r", "");
+    }
+
+    private string Output1 { get; set; } = string.Empty;
+    private void SolvePart1()
+    {
+        var defeats = new List<(int, int)> { (1, 3), (3, 2), (2, 1) };
+        var score = 0;
+        foreach (var (opponent, you) in Input.Split("\n").Select(x => x.Split(" ")).Select(x => ("ABC".IndexOf(x[0][0]) + 1, "XYZ".IndexOf(x[1][0]) + 1)))
+        {
+            score += you;
+            if (!defeats.Contains((opponent, you)))
+                score += you == opponent ? 3 : 6;
+        }
+        Output1 = score.ToString();
+    }
+    private string Output2 { get; set; } = string.Empty;
+    private void SolvePart2()
+    {
+        var score = 0;
+        var defeats = new List<(int, int)> { (1, 3), (3, 2), (2, 1) };
+        foreach (var (opponent, ending) in Input.Split("\n").Select(x => x.Split(" ")).Select(x => ("ABC".IndexOf(x[0][0]) + 1, "XYZ".IndexOf(x[1][0]) + 1)))
+        {
+            var you = opponent;
+            if (ending == 1)
+                you = defeats.Find(x => x.Item1 == opponent).Item2;
+            else if (ending == 3)
+                you = defeats.Find(x => x.Item2 == opponent).Item1;
+            score += you;
+            score += (ending - 1) * 3;
+        }
+        Output2 = score.ToString();
+    }
+}

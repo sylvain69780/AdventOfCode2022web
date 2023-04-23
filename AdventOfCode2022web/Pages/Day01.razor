@@ -5,14 +5,14 @@
     <label class="form-label">The input below is the example data. Paste your own user input from <a href="https://adventofcode.com/2022/day/1">Advent Of Code</a></label>
     <textarea class="form-control" rows="10" @bind="Input" maxlength="10000000"></textarea>
 </div>
-<div>
-    <div>
+<div class ="mb-3">
+    <div class="mb-3">
         <button class="btn btn-primary" @onclick="SolvePart1">Solve Part 1</button>
     </div>
     <div>@Output1</div>
 </div>
-<div>
-    <div>
+<div class="mb-3">
+    <div class="mb-3">
         <button class="btn btn-primary" @onclick="SolvePart2">Solve Part 2</button>
     </div>
     <div>@Output2</div>
@@ -26,7 +26,6 @@
     }
 
     private string Output1 { get; set; } = string.Empty;
-    private string Output2 { get; set; } = string.Empty;
     private void SolvePart1()
     {
         if (string.IsNullOrWhiteSpace(Input)) return;
@@ -45,6 +44,7 @@
         }
         Output1 = maxCalories.ToString();
     }
+    private string Output2 { get; set; } = string.Empty;
     private void SolvePart2()
     {
         if (string.IsNullOrWhiteSpace(Input))
