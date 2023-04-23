@@ -123,15 +123,15 @@ main[b-qs7qgbma46] {
         line-height: 3rem;
     }
 
-.nav-item[b-3abgficp7i]  a.active {
-    background-color: rgba(255,255,255,0.25);
-    color: white;
-}
+        .nav-item[b-3abgficp7i]  a.active {
+            background-color: rgba(255,255,255,0.25);
+            color: white;
+        }
 
-.nav-item[b-3abgficp7i]  a:hover {
-    background-color: rgba(255,255,255,0.1);
-    color: white;
-}
+        .nav-item[b-3abgficp7i]  a:hover {
+            background-color: rgba(255,255,255,0.1);
+            color: white;
+        }
 
 @media (min-width: 641px) {
     .navbar-toggler[b-3abgficp7i] {
