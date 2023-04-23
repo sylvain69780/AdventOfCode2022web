@@ -2,31 +2,31 @@
 
 <div class="mb-3">
     <label class="form-label">The input below is the example data. Paste your own user input from <a href="https://adventofcode.com/2022/day/1">Advent Of Code</a></label>
-    <textarea class="form-control" rows="10" @bind="input" maxlength="10000000"></textarea>
+    <textarea class="form-control" rows="10" @bind="Input" maxlength="10000000"></textarea>
 </div>
 <div class="container">
     <div class="row">
         <div class="col-12">
             <button class="btn btn-primary" @onclick="SolvePart1">Solve Part 1</button>
-            <div>@output1</div>
+            <div>@Output1</div>
         </div>
     </div>
     <div class="row">
         <div class="col-12">
             <button class="btn btn-primary" @onclick="SolvePart2">Solve Part 2</button>
-            <div>@output2</div>
+            <div>@Output2</div>
         </div>
     </div>
 </div>
 
 @code {
-    private string? output1;
-    private string? output2;
+    private string Output1 { get; set; } = string.Empty;
+    private string Output2 { get; set; } = string.Empty;
     private void SolvePart1()
     {
-        if (string.IsNullOrWhiteSpace(input))
+        if (string.IsNullOrWhiteSpace(Input))
             return;
-        var lines = input.Replace("\r", "").Split(Environment.NewLine);
+        var lines = Input.Split("\n");
         var count = 0;
         var countMax = 0;
         foreach (var line in lines)
@@ -45,13 +45,13 @@
         if (count > countMax)
             countMax = count;
 
-        output1 = countMax.ToString();
+        Output1 = countMax.ToString();
     }
     private void SolvePart2()
     {
-        if (string.IsNullOrWhiteSpace(input))
+        if (string.IsNullOrWhiteSpace(Input))
             return;
-        var lines = input.Replace("\r", "").Split(Environment.NewLine);
+        var lines = Input.Split("\n");
         var calories = new List<int>();
         var count = 0;
         foreach (var line in lines)
@@ -68,10 +68,10 @@
         }
         calories.Add(count);
         foreach (var e in calories)
-                Console.WriteLine(e);
-        output2 = calories.OrderByDescending(x => x).Take(3).Sum().ToString();
+            Console.WriteLine(e);
+        Output2 = calories.OrderByDescending(x => x).Take(3).Sum().ToString();
     }
-    private string input = @"1000
+    private string Input { get; set; } = @"1000
 2000
 3000
 
@@ -84,5 +84,5 @@
 8000
 9000
 
-10000";
+10000".Replace("\r","");
 }
