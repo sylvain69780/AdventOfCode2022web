@@ -33,11 +33,11 @@
       "url": "_framework\/icudt.dat"
     },
     {
-      "hash": "sha256-bmKiWtew7R\/eLOegUdkGPiqlz4pgmE0lAJWEtx24Yag=",
+      "hash": "sha256-tFQXdhjH+cj13Nk19\/HY9N1pLEJFpuIuNVe8t5rgqh8=",
       "url": "_framework\/blazor.boot.json"
     },
     {
-      "hash": "sha256-jjQSfEJWaHgKGMqRaazoOopVsWHZlBnLkwG9upH3oAA=",
+      "hash": "sha256-fteMxCPqTJCSVnXtz7oINNpvOyXgRjAmMrhvy6lYICg=",
       "url": "_framework\/AdventOfCode2022web.dll"
     },
     {
@@ -101,7 +101,7 @@
       "url": "_framework\/System.Collections.Concurrent.dll"
     },
     {
-      "hash": "sha256-oLYKTS7JjB\/I\/tS5hpkAJtaCMBuST+NcJ0cGrkvMMc0=",
+      "hash": "sha256-EsfaqGbzhTBHjXagVzXTJNgZf2MwU2O4kkB6kdcciTM=",
       "url": "_framework\/System.Collections.dll"
     },
     {
@@ -109,11 +109,7 @@
       "url": "_framework\/System.ComponentModel.dll"
     },
     {
-      "hash": "sha256-603NBYxw8QLYcHdp+vsFVo9Jz3jftqSOhsPyp5s3COE=",
-      "url": "_framework\/System.Console.dll"
-    },
-    {
-      "hash": "sha256-3V7Yz30P2Om6AP7dvr11jM8xxLdORAUvPMXEOciVLss=",
+      "hash": "sha256-FhpehJ3CYieIAWCe53gUE\/5ofV4P53uX85IqZhEk5Qw=",
       "url": "_framework\/System.Linq.dll"
     },
     {
@@ -121,7 +117,7 @@
       "url": "_framework\/System.Memory.dll"
     },
     {
-      "hash": "sha256-FZgSSZY4ubzoJTyW3Iotidc0M7KRAcNPRm72Iwt\/hHY=",
+      "hash": "sha256-DhUhnwqvXVVkjvBH2q0Tj0cY9729qc7GziCEYX33tjU=",
       "url": "_framework\/System.Net.Http.dll"
     },
     {
@@ -133,7 +129,7 @@
       "url": "_framework\/System.Net.Primitives.dll"
     },
     {
-      "hash": "sha256-RCCLzioodwBhvN7iTbWck\/ZEOR3VkbGtV5VfRhYGK1g=",
+      "hash": "sha256-58zvg23jd50tKJEziJqxs8ZMesJXn9PXq7OKVCI7VsM=",
       "url": "_framework\/System.Private.CoreLib.dll"
     },
     {
@@ -149,7 +145,7 @@
       "url": "_framework\/System.Runtime.CompilerServices.Unsafe.dll"
     },
     {
-      "hash": "sha256-K2w8s7l2b7PMUHFkYrIOnV7fCzorjvAovMu98NREQeA=",
+      "hash": "sha256-y+APrG6Hh3MLpVE3tQvhBCn45fKsOmp4zu+hFbBBdQ8=",
       "url": "_framework\/System.Runtime.dll"
     },
     {
@@ -237,9 +233,13 @@
       "url": "manifest.json"
     },
     {
+      "hash": "sha256-lD5Bhsd5ubJ1Q0V6tueCBF4rODVz13H0nSh\/BoDgY8g=",
+      "url": "sample-data\/day1.txt"
+    },
+    {
       "hash": "sha256-4Yh4OTT5TEAPNyXEzOG+n5l2HPK294WFItz4SIelj88=",
       "url": "sample-data\/weather.json"
     }
   ],
-  "version": "y78Mjy3G"
+  "version": "4bljSniz"
 };
