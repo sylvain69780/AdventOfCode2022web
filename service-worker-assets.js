@@ -33,11 +33,11 @@
       "url": "_framework\/icudt.dat"
     },
     {
-      "hash": "sha256-HRsVVAoCmpzIgWfEK5rHEvRjXUvkpbOGFLYTn+P1t1k=",
+      "hash": "sha256-51wg6bsM9ifu9vJu1G4dJVExdnzpowCn0YYRLGGAr9M=",
       "url": "_framework\/blazor.boot.json"
     },
     {
-      "hash": "sha256-fCOgEDIHOqCbZi6RcKsCEbHbHo14OW+smEE0\/HFrgB8=",
+      "hash": "sha256-KQpom0HMxedRNuA9Jg\/jsm3URDibHeTQtC9gT5j1O6o=",
       "url": "_framework\/AdventOfCode2022web.dll"
     },
     {
@@ -225,7 +225,7 @@
       "url": "icon-512.png"
     },
     {
-      "hash": "sha256-lqukBbu0P4UGx56+XMWvFod4ayTbhKAQzoS38RbdsCc=",
+      "hash": "sha256-4FiLUAIWfoUpgBy1d5NAnfGuEh1kVZpCWjEh1lipZ8k=",
       "url": "index.html"
     },
     {
@@ -333,5 +333,5 @@
       "url": "sample-data\/day25.txt"
     }
   ],
-  "version": "pAdIpipt"
+  "version": "1EOGufWr"
 };
