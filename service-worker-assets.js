@@ -33,11 +33,11 @@
       "url": "_framework\/icudt.dat"
     },
     {
-      "hash": "sha256-MPB9dXJ7F8gv0EBnqO\/8sw5LLaFGUL60xf1fvyFmuFo=",
+      "hash": "sha256-pQOApqrdQRkr7Lok+QASpIFWFVTzyZ\/P3\/QgrM5S3f8=",
       "url": "_framework\/blazor.boot.json"
     },
     {
-      "hash": "sha256-EWDzzwLkrBudDfyVHjQc+HI9UjFZNaJMaB2gqKF3o70=",
+      "hash": "sha256-8bS2TatcuCO4iSAlgJCMFI2xCKNoG6UoUhrLgkLxG04=",
       "url": "_framework\/AdventOfCode2022web.dll"
     },
     {
@@ -101,7 +101,7 @@
       "url": "_framework\/System.Collections.Concurrent.dll"
     },
     {
-      "hash": "sha256-EsfaqGbzhTBHjXagVzXTJNgZf2MwU2O4kkB6kdcciTM=",
+      "hash": "sha256-mRU5OQMxotEcrq4bJzwT5bwQKdKEjGPyyVuZczLjPVY=",
       "url": "_framework\/System.Collections.dll"
     },
     {
@@ -109,7 +109,11 @@
       "url": "_framework\/System.ComponentModel.dll"
     },
     {
-      "hash": "sha256-Z+mR9P7jeTO4UjUzF+THXXWjGaDap4G5Dzn+bO8j9PU=",
+      "hash": "sha256-OgGCZc0edngXvvB+2aNlQosYz75bYIRsYTLcmbBIHY4=",
+      "url": "_framework\/System.Console.dll"
+    },
+    {
+      "hash": "sha256-hrQ6XtaP\/5M9CmoT2wWWP0v4yO9RnujBQjfkZMvqToo=",
       "url": "_framework\/System.Linq.dll"
     },
     {
@@ -125,7 +129,7 @@
       "url": "_framework\/System.Net.Primitives.dll"
     },
     {
-      "hash": "sha256-IaEzNlbSqx2OwsuQa9pPM6c8J6pmX70Ian1gYjncx14=",
+      "hash": "sha256-RxUjc4s4sDf85KgGNfYa\/t+jFQvnL0lZaSc4vqoSFyM=",
       "url": "_framework\/System.Private.CoreLib.dll"
     },
     {
@@ -141,7 +145,7 @@
       "url": "_framework\/System.Runtime.CompilerServices.Unsafe.dll"
     },
     {
-      "hash": "sha256-rOYgPGy2YpG96gfOclEhTkyosfhgq6p5BwwON56yTHA=",
+      "hash": "sha256-p2JMMIOn0zhQN38rB2kelheCoEcL\/PDNl42ot0fAYOU=",
       "url": "_framework\/System.Runtime.dll"
     },
     {
@@ -230,16 +234,104 @@
     },
     {
       "hash": "sha256-lD5Bhsd5ubJ1Q0V6tueCBF4rODVz13H0nSh\/BoDgY8g=",
-      "url": "sample-data\/day1.txt"
+      "url": "sample-data\/day01.txt"
     },
     {
       "hash": "sha256-OBLqeAITo8R3kF30p3CKSslRUhyAN9v\/Sf3zer8IyJU=",
-      "url": "sample-data\/day2.txt"
+      "url": "sample-data\/day02.txt"
     },
     {
-      "hash": "sha256-4Yh4OTT5TEAPNyXEzOG+n5l2HPK294WFItz4SIelj88=",
-      "url": "sample-data\/weather.json"
+      "hash": "sha256-0oXPQAc8XeOtIuD9QkS4QXdctl7ynRGwGcRD893HzAQ=",
+      "url": "sample-data\/day03.txt"
+    },
+    {
+      "hash": "sha256-7g\/V+nQQAE0Mx13wNsznTBeKEafWt5dNgm5RJkvdhMw=",
+      "url": "sample-data\/day04.txt"
+    },
+    {
+      "hash": "sha256-HWrQbUixpSVojj53LGgbC5cjc9R6rBZE5RxjHrRXYpE=",
+      "url": "sample-data\/day05.txt"
+    },
+    {
+      "hash": "sha256-8ZRc1sGeVrPBx4lD717BgRaQekyh78QKV9SKsdt638U=",
+      "url": "sample-data\/day06.txt"
+    },
+    {
+      "hash": "sha256-8ZRc1sGeVrPBx4lD717BgRaQekyh78QKV9SKsdt638U=",
+      "url": "sample-data\/day07.txt"
+    },
+    {
+      "hash": "sha256-8ZRc1sGeVrPBx4lD717BgRaQekyh78QKV9SKsdt638U=",
+      "url": "sample-data\/day08.txt"
+    },
+    {
+      "hash": "sha256-8ZRc1sGeVrPBx4lD717BgRaQekyh78QKV9SKsdt638U=",
+      "url": "sample-data\/day09.txt"
+    },
+    {
+      "hash": "sha256-8ZRc1sGeVrPBx4lD717BgRaQekyh78QKV9SKsdt638U=",
+      "url": "sample-data\/day10.txt"
+    },
+    {
+      "hash": "sha256-8ZRc1sGeVrPBx4lD717BgRaQekyh78QKV9SKsdt638U=",
+      "url": "sample-data\/day11.txt"
+    },
+    {
+      "hash": "sha256-8ZRc1sGeVrPBx4lD717BgRaQekyh78QKV9SKsdt638U=",
+      "url": "sample-data\/day12.txt"
+    },
+    {
+      "hash": "sha256-8ZRc1sGeVrPBx4lD717BgRaQekyh78QKV9SKsdt638U=",
+      "url": "sample-data\/day13.txt"
+    },
+    {
+      "hash": "sha256-8ZRc1sGeVrPBx4lD717BgRaQekyh78QKV9SKsdt638U=",
+      "url": "sample-data\/day14.txt"
+    },
+    {
+      "hash": "sha256-8ZRc1sGeVrPBx4lD717BgRaQekyh78QKV9SKsdt638U=",
+      "url": "sample-data\/day15.txt"
+    },
+    {
+      "hash": "sha256-8ZRc1sGeVrPBx4lD717BgRaQekyh78QKV9SKsdt638U=",
+      "url": "sample-data\/day16.txt"
+    },
+    {
+      "hash": "sha256-8ZRc1sGeVrPBx4lD717BgRaQekyh78QKV9SKsdt638U=",
+      "url": "sample-data\/day17.txt"
+    },
+    {
+      "hash": "sha256-8ZRc1sGeVrPBx4lD717BgRaQekyh78QKV9SKsdt638U=",
+      "url": "sample-data\/day18.txt"
+    },
+    {
+      "hash": "sha256-8ZRc1sGeVrPBx4lD717BgRaQekyh78QKV9SKsdt638U=",
+      "url": "sample-data\/day19.txt"
+    },
+    {
+      "hash": "sha256-8ZRc1sGeVrPBx4lD717BgRaQekyh78QKV9SKsdt638U=",
+      "url": "sample-data\/day20.txt"
+    },
+    {
+      "hash": "sha256-8ZRc1sGeVrPBx4lD717BgRaQekyh78QKV9SKsdt638U=",
+      "url": "sample-data\/day21.txt"
+    },
+    {
+      "hash": "sha256-8ZRc1sGeVrPBx4lD717BgRaQekyh78QKV9SKsdt638U=",
+      "url": "sample-data\/day22.txt"
+    },
+    {
+      "hash": "sha256-8ZRc1sGeVrPBx4lD717BgRaQekyh78QKV9SKsdt638U=",
+      "url": "sample-data\/day23.txt"
+    },
+    {
+      "hash": "sha256-8ZRc1sGeVrPBx4lD717BgRaQekyh78QKV9SKsdt638U=",
+      "url": "sample-data\/day24.txt"
+    },
+    {
+      "hash": "sha256-8ZRc1sGeVrPBx4lD717BgRaQekyh78QKV9SKsdt638U=",
+      "url": "sample-data\/day25.txt"
     }
   ],
-  "version": "SatNBx2l"
+  "version": "JnRH9Of2"
 };
