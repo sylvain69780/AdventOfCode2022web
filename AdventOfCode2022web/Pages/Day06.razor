@@ -1,0 +1,56 @@
+﻿@page "/day06"
+@inject HttpClient Http
+
+<div class="mb-3">
+    <label class="form-label">The input below is the example data. Paste your own user input from <a href="https://adventofcode.com/2022/day/6">Advent Of Code</a></label>
+    <textarea class="form-control" rows="10" @bind="Input" maxlength="10000000"></textarea>
+</div>
+<div class ="mb-3">
+    <div class="mb-3">
+        <button class="btn btn-primary" @onclick="SolvePart1">Solve Part 1</button>
+    </div>
+    <div>@Output1</div>
+</div>
+<div class="mb-3">
+    <div class="mb-3">
+        <button class="btn btn-primary" @onclick="SolvePart2">Solve Part 2</button>
+    </div>
+    <div>@Output2</div>
+</div>
+
+@code {
+    private string Input { get; set; } = string.Empty;
+    protected override async Task OnInitializedAsync()
+    {
+        Input = (await Http.GetStringAsync("sample-data/day06.txt")).Replace("\r", "");
+    }
+
+    private string Output1 { get; set; } = string.Empty;
+    private void SolvePart1()
+    {
+        var marker = new Queue<char>();
+        var pos = 1;
+        foreach (var c in Input)
+        {
+            if (marker.Count == 4) marker.Dequeue();
+            marker.Enqueue(c);
+            if (marker.Count == 4 && marker.GroupBy(x => x).Select(y => y.Count()).Max() == 1) break;
+            pos++;
+        }
+        Output1 = pos.ToString();
+    }
+    private string Output2 { get; set; } = string.Empty;
+    private void SolvePart2()
+    {
+        var marker = new Queue<char>();
+        var pos = 1;
+        foreach (var c in Input)
+        {
+            if (marker.Count == 14) marker.Dequeue();
+            marker.Enqueue(c);
+            if (marker.Count == 14 && marker.GroupBy(x => x).Select(y => y.Count()).Max() == 1) break;
+            pos++;
+        }
+        Output2 = pos.ToString();
+    }
+}

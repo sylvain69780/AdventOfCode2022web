@@ -1,0 +1,123 @@
+﻿@page "/day07"
+@inject HttpClient Http
+
+<div class="mb-3">
+    <label class="form-label">The input below is the example data. Paste your own user input from <a href="https://adventofcode.com/2022/day/7">Advent Of Code</a></label>
+    <textarea class="form-control" rows="10" @bind="Input" maxlength="10000000"></textarea>
+</div>
+<div class ="mb-3">
+    <div class="mb-3">
+        <button class="btn btn-primary" @onclick="SolvePart1">Solve Part 1</button>
+    </div>
+    <div>@Output1</div>
+</div>
+<div class="mb-3">
+    <div class="mb-3">
+        <button class="btn btn-primary" @onclick="SolvePart2">Solve Part 2</button>
+    </div>
+    <div>@Output2</div>
+</div>
+
+@code {
+    private string Input { get; set; } = string.Empty;
+    protected override async Task OnInitializedAsync()
+    {
+        Input = (await Http.GetStringAsync("sample-data/day07.txt")).Replace("\r", "");
+    }
+
+    private string Output1 { get; set; } = string.Empty;
+    private void SolvePart1()
+    {
+        var input = Input.Split("\n");
+        var contents = new Dictionary<string, int>
+    {
+        { "#/", 0 }
+    };
+        var curdir = new Stack<string>();
+        foreach (var line in input)
+        {
+            if (line[0] == '$')
+            {
+                if (line[2..4] == "cd")
+                {
+                    var dir = line[5..];
+                    if (dir == "..")
+                    {
+                        curdir.Pop();
+                    }
+                    else curdir.Push(dir);
+                    Console.WriteLine("#" + string.Join("-", curdir.Reverse()));
+                }
+            }
+            else
+            {
+                if (line[0..4] != "dir ")
+                {
+                    var dir = "#" + string.Join("-", curdir.Reverse());
+                    var size = int.Parse(line.Split(" ")[0]);
+                    // tricky here we add also to parents
+                    foreach (var d in contents.Keys.Where(x => dir.Contains(x)))
+                        contents[d] += size;
+                }
+                else
+                {
+                    var dir = "#" + string.Join("-", curdir.Reverse()) + "-" + line[4..];
+                    contents.Add(dir, 0);
+                }
+            }
+        }
+        var atMost = 100000;
+        var res = contents.Values.Where(x => x <= atMost).Sum();
+        Console.WriteLine("Result :" + res); 
+        Output1 = res.ToString();
+    }
+    private string Output2 { get; set; } = string.Empty;
+    private void SolvePart2()
+    {
+        var input = Input.Split("\n");
+        var contents = new Dictionary<string, int>
+    {
+        { "#/", 0 }
+    };
+        var curdir = new Stack<string>();
+        foreach (var line in input)
+        {
+            if (line[0] == '$')
+            {
+                if (line[2..4] == "cd")
+                {
+                    var dir = line[5..];
+                    if (dir == "..")
+                    {
+                        curdir.Pop();
+                    }
+                    else curdir.Push(dir);
+                    Console.WriteLine("#" + string.Join("-", curdir.Reverse()));
+                }
+            }
+            else
+            {
+                if (line[0..4] != "dir ")
+                {
+                    var dir = "#" + string.Join("-", curdir.Reverse());
+                    var size = int.Parse(line.Split(" ")[0]);
+                    // tricky here we add also to parents
+                    foreach (var d in contents.Keys.Where(x => dir.Contains(x)))
+                        contents[d] += size;
+                }
+                else
+                {
+                    var dir = "#" + string.Join("-", curdir.Reverse()) + "-" + line[4..];
+                    contents.Add(dir, 0);
+                }
+            }
+        }
+        var total = 70000000;
+        var freeRequired = 30000000;
+        var used = contents["#/"];
+        var toBeFreed = freeRequired - (total - used);
+        var res = contents.Values.Where(x => x >= toBeFreed).Min();
+        Console.WriteLine("Result :" + res);
+        Output2 = res.ToString();
+    }
+}
