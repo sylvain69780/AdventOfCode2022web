@@ -7,22 +7,21 @@
     </div>
 </div>
 
-<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
+<div class="@NavMenuCssClass">
     <nav class="flex-column">
-        <div class="nav-item px-3">
+        <div class="nav-item px-3" @onclick="ToggleNavMenu">
             <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
                 <span class="oi oi-home" aria-hidden="true"></span> Home
             </NavLink>
         </div>
         <div class="nav-item px-3">
-
-        <button class="btn btn-primary mb-2" @onclick="IncrementDay">Next</button>
-        <button class="btn btn-primary mb-2" @onclick="DecrementDay">Prev</button>
+            <button class="btn btn-primary mb-2" @onclick="DecrementDay">Prev</button>
+            <button class="btn btn-primary mb-2" @onclick="IncrementDay">Next</button>
         </div>
 
-        @foreach(var i in Enumerable.Range(day,5))
+        @foreach (var i in Enumerable.Range(day, 5))
         {
-            <div class="nav-item px-3">
+            <div class="nav-item px-3" @onclick="ToggleNavMenu">
                 <NavLink class="nav-link" href="@string.Format("day{0:00}",i)">
                     <span class="oi oi-brush" aria-hidden="true"></span>@string.Format("Day {0:00}",i)
                 </NavLink>
@@ -35,11 +34,11 @@
     private int day = 1;
     private void IncrementDay()
     {
-        if (day <21 ) day++;
+        day += Math.Min(5,21-day) ;
     }
     private void DecrementDay()
     {
-        if (day > 1 ) day--;
+        day -= Math.Min(5, day-1);
     }
     private bool collapseNavMenu = true;
 
