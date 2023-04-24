@@ -1,0 +1,723 @@
+﻿@page "/day/{dayNumber:int}"
+@inject HttpClient Http
+
+<div class="mb-3">
+    <label class="form-label">The input below is the example data. Paste your own user input from <a href="https://adventofcode.com/2022/day/00">Advent Of Code</a></label>
+    <textarea class="form-control" rows="10" @bind="Input" maxlength="10000000"></textarea>
+</div>
+<div class="mb-3">
+    <div class="mb-3">
+        <button class="btn btn-primary" @onclick="SolvePart1">Solve Part 1</button>
+    </div>
+    <div>@Output1</div>
+</div>
+<div class="mb-3">
+    <div class="mb-3">
+        <button class="btn btn-primary" @onclick="SolvePart2">Solve Part 2</button>
+    </div>
+    <div>@Output2</div>
+</div>
+
+@code {
+    [Parameter]
+    public int dayNumber { get; set; }
+    private IPuzzleSolver solver = new SolveDay1();
+    private string Input { get; set; } = string.Empty;
+    protected override async Task OnParametersSetAsync()
+    {
+        solver = daySolvers[dayNumber - 1];
+        Output1 = Output2 = string.Empty;
+        Input = (await Http.GetStringAsync($"sample-data/day{string.Format("{0:00}", dayNumber)}.txt")).Replace("\r", "");
+    }
+
+    private string Output1 { get; set; } = string.Empty;
+    private void SolvePart1()
+    {
+        solver.Input = Input;
+        Output1 = solver.Part1();
+    }
+    private string Output2 { get; set; } = string.Empty;
+    private void SolvePart2()
+    {
+        solver.Input = Input;
+        Output2 = solver.Part2();
+    }
+    private IPuzzleSolver[] daySolvers = new IPuzzleSolver[]        {
+            new SolveDay1(),
+            new SolveDay2(),
+            new SolveDay3(),
+            new SolveDay4(),
+            new SolveDay5(),
+            new SolveDay6(),
+            new SolveDay7(),
+            new SolveDay8(),
+            new SolveDay9(),
+            new SolveDay10(),
+            new SolveDay11(),
+            new SolveDay12(),
+            new SolveDay13(),
+            new SolveDay14(),
+            new SolveDay15(),
+            new SolveDay16(),
+            new SolveDay17(),
+            new SolveDay18(),
+            new SolveDay19(),
+            new SolveDay20(),
+            new SolveDay21(),
+            new SolveDay22(),
+            new SolveDay23(),
+            new SolveDay24(),
+            new SolveDay25()
+    };
+
+    public interface IPuzzleSolver
+    {
+        string Input { get; set; }
+        string Part1();
+        string Part2();
+    }
+
+    public class SolveDay1 : IPuzzleSolver
+    {
+        public string Input { get; set; } = String.Empty;
+        public string Part1()
+        {
+            var elfCalories = 0;
+            var maxCalories = 0;
+            foreach (var line in Input.Split("\n").Append(string.Empty))
+            {
+                if (line != string.Empty)
+                    elfCalories += int.Parse(line);
+                else
+                {
+                    if (elfCalories > maxCalories)
+                        maxCalories = elfCalories;
+                    elfCalories = 0;
+                }
+            }
+            return maxCalories.ToString();
+        }
+        public string Part2()
+        {
+            var calories = new List<int>();
+            var elfCalories = 0;
+            foreach (var line in Input.Split("\n").Append(string.Empty))
+            {
+                if (line != string.Empty)
+                    elfCalories += int.Parse(line);
+                else
+                {
+                    calories.Add(elfCalories);
+                    elfCalories = 0;
+                }
+            }
+            return calories.OrderByDescending(x => x).Take(3).Sum().ToString();
+        }
+    }
+    public class SolveDay2 : IPuzzleSolver
+    {
+        public string Input { get; set; } = String.Empty;
+        public string Part1()
+        {
+            var defeats = new List<(int, int)> { (1, 3), (3, 2), (2, 1) };
+            var score = 0;
+            foreach (var (opponent, you) in Input.Split("\n").Select(x => x.Split(" ")).Select(x => ("ABC".IndexOf(x[0][0]) + 1, "XYZ".IndexOf(x[1][0]) + 1)))
+            {
+                score += you;
+                if (!defeats.Contains((opponent, you)))
+                    score += you == opponent ? 3 : 6;
+            }
+            return score.ToString();
+        }
+        public string Part2()
+        {
+            var score = 0;
+            var defeats = new List<(int, int)> { (1, 3), (3, 2), (2, 1) };
+            foreach (var (opponent, ending) in Input.Split("\n").Select(x => x.Split(" ")).Select(x => ("ABC".IndexOf(x[0][0]) + 1, "XYZ".IndexOf(x[1][0]) + 1)))
+            {
+                var you = opponent;
+                if (ending == 1)
+                    you = defeats.Find(x => x.Item1 == opponent).Item2;
+                else if (ending == 3)
+                    you = defeats.Find(x => x.Item2 == opponent).Item1;
+                score += you;
+                score += (ending - 1) * 3;
+            }
+            return score.ToString();
+        }
+    }
+    public class SolveDay3 : IPuzzleSolver
+    {
+        public string Input { get; set; } = String.Empty;
+        public string Part1()
+        {
+            var score = 0;
+            foreach (var rucksack in Input.Split("\n"))
+            {
+                var l = rucksack.Length;
+                var (a, b) = (rucksack.Substring(0, l / 2), rucksack.Substring(l / 2, l / 2));
+                var r = (int)a.First(x => b.Contains(x));
+                var p = r >= (int)'a' ? r - (int)'a' + 1 : r - (int)'A' + 27;
+                score += p;
+            }
+            return score.ToString();
+        }
+        public string Part2()
+        {
+            var score = 0;
+            var rucksacks = Input.Split("\n");
+            for (var i = 0; i < rucksacks.Length / 3; i++)
+            {
+                var (a, b, c) = (rucksacks[i * 3], rucksacks[i * 3 + 1], rucksacks[i * 3 + 2]);
+                var r = (int)a.First(x => b.Contains(x) && c.Contains(x));
+                var p = r >= (int)'a' ? r - (int)'a' + 1 : r - (int)'A' + 27;
+                score += p;
+            }
+            return score.ToString();
+        }
+    }
+    public class SolveDay4 : IPuzzleSolver
+    {
+        public string Input { get; set; } = String.Empty;
+        public string Part1()
+        {
+            var r = (string x) => { var r = x.Split("-"); return (start: int.Parse(r[0]), end: int.Parse(r[1])); };
+            var score = 0;
+            foreach (var (a, b) in Input.Split("\n").Select(x => x.Split(",")).Select(x => (r(x[0]), r(x[1]))))
+            {
+                if ((b.start >= a.start && b.end <= a.end) || (a.start >= b.start && a.end <= b.end))
+                    score++;
+            }
+            return score.ToString();
+        }
+        public string Part2()
+        {
+            var r = (string x) => { var r = x.Split("-"); return (start: int.Parse(r[0]), end: int.Parse(r[1])); };
+            var score = 0;
+            foreach (var (a, b) in Input.Split("\n").Select(x => x.Split(",")).Select(x => (r(x[0]), r(x[1]))))
+            {
+                if ((a.start <= b.start && b.start <= a.end) || (b.start <= a.start && a.start <= b.end))
+                    score++;
+            }
+            return score.ToString();
+        }
+    }
+    public class SolveDay5 : IPuzzleSolver
+    {
+        public string Input { get; set; } = String.Empty;
+        public string Part1()
+        {
+            var input = Input.Split("\n").AsEnumerable().GetEnumerator();
+            input.MoveNext();
+            var w = 1 + (input.Current.Length) / 4;
+            var stacks = new Stack<char>[w];
+            foreach (var i in Enumerable.Range(0, w))
+                stacks[i] = new Stack<char>();
+            while (input.Current[1] != '1')
+            {
+                foreach (var i in Enumerable.Range(0, w))
+                    if (input.Current[i * 4 + 1] != ' ')
+                        stacks[i].Push(input.Current[i * 4 + 1]);
+                input.MoveNext();
+            }
+            input.MoveNext();
+            // reversing the stacks because of read order of the input :-(
+            foreach (var i in Enumerable.Range(0, w))
+            {
+                var l = new Stack<char>();
+                foreach (var c in stacks[i])
+                    l.Push(c);
+                stacks[i] = l;
+            }
+            while (input.MoveNext())
+            {
+                Console.WriteLine(input.Current);
+                var i = input.Current.Replace("move ", "").Replace(" from ", ",").Replace(" to ", ",").Split(',').Select(x => int.Parse(x)).ToList();
+                var (amount, origin, destination) = (i[0], i[1], i[2]);
+                foreach (var c in Enumerable.Range(1, amount))
+                {
+                    stacks[destination - 1].Push(stacks[origin - 1].Pop());
+                    Console.WriteLine(string.Join("", stacks.Select(x => x.FirstOrDefault(' '))));
+                }
+            }
+            return string.Join("", stacks.Select(x => x.FirstOrDefault(' ')));
+        }
+        public string Part2()
+        {
+            var input = Input.Split("\n").AsEnumerable().GetEnumerator();
+            input.MoveNext();
+            var w = 1 + (input.Current.Length) / 4;
+            var stacks = new Stack<char>[w];
+            foreach (var i in Enumerable.Range(0, w))
+                stacks[i] = new Stack<char>();
+            while (input.Current[1] != '1')
+            {
+                foreach (var i in Enumerable.Range(0, w))
+                    if (input.Current[i * 4 + 1] != ' ')
+                        stacks[i].Push(input.Current[i * 4 + 1]);
+                input.MoveNext();
+            }
+            input.MoveNext();
+            // reversing the stacks because of read order of the input :-(
+            foreach (var i in Enumerable.Range(0, w))
+            {
+                var l = new Stack<char>();
+                foreach (var c in stacks[i])
+                    l.Push(c);
+                stacks[i] = l;
+            }
+            while (input.MoveNext())
+            {
+                Console.WriteLine(input.Current);
+                var i = input.Current.Replace("move ", "").Replace(" from ", ",").Replace(" to ", ",").Split(',').Select(x => int.Parse(x)).ToList();
+                var (amount, origin, destination) = (i[0], i[1], i[2]);
+                var mover = new Stack<char>();
+                foreach (var c in Enumerable.Range(1, amount))
+                    mover.Push(stacks[origin - 1].Pop());
+                foreach (var c in mover)
+                    stacks[destination - 1].Push(c);
+                Console.WriteLine(string.Join("", stacks.Select(x => x.FirstOrDefault(' '))));
+            }
+            return string.Join("", stacks.Select(x => x.FirstOrDefault(' ')));
+        }
+    }
+    public class SolveDay6 : IPuzzleSolver
+    {
+        public string Input { get; set; } = String.Empty;
+        public string Part1()
+        {
+            var marker = new Queue<char>();
+            var pos = 1;
+            foreach (var c in Input)
+            {
+                if (marker.Count == 4) marker.Dequeue();
+                marker.Enqueue(c);
+                if (marker.Count == 4 && marker.GroupBy(x => x).Select(y => y.Count()).Max() == 1) break;
+                pos++;
+            }
+            return pos.ToString();
+        }
+        public string Part2()
+        {
+            var marker = new Queue<char>();
+            var pos = 1;
+            foreach (var c in Input)
+            {
+                if (marker.Count == 14) marker.Dequeue();
+                marker.Enqueue(c);
+                if (marker.Count == 14 && marker.GroupBy(x => x).Select(y => y.Count()).Max() == 1) break;
+                pos++;
+            }
+            return pos.ToString();
+        }
+    }
+    public class SolveDay7 : IPuzzleSolver
+    {
+        public string Input { get; set; } = String.Empty;
+        public string Part1()
+        {
+            var input = Input.Split("\n");
+            var contents = new Dictionary<string, int>
+            {
+                { "#/", 0 }
+            };
+            var curdir = new Stack<string>();
+            foreach (var line in input)
+            {
+                if (line[0] == '$')
+                {
+                    if (line[2..4] == "cd")
+                    {
+                        var dir = line[5..];
+                        if (dir == "..")
+                        {
+                            curdir.Pop();
+                        }
+                        else curdir.Push(dir);
+                        Console.WriteLine("#" + string.Join("-", curdir.Reverse()));
+                    }
+                }
+                else
+                {
+                    if (line[0..4] != "dir ")
+                    {
+                        var dir = "#" + string.Join("-", curdir.Reverse());
+                        var size = int.Parse(line.Split(" ")[0]);
+                        // tricky here we add also to parents
+                        foreach (var d in contents.Keys.Where(x => dir.Contains(x)))
+                            contents[d] += size;
+                    }
+                    else
+                    {
+                        var dir = "#" + string.Join("-", curdir.Reverse()) + "-" + line[4..];
+                        contents.Add(dir, 0);
+                    }
+                }
+            }
+            var atMost = 100000;
+            var res = contents.Values.Where(x => x <= atMost).Sum();
+            Console.WriteLine("Result :" + res);
+            return res.ToString();
+        }
+        public string Part2()
+        {
+            var input = Input.Split("\n");
+            var contents = new Dictionary<string, int>
+            {
+                { "#/", 0 }
+            };
+            var curdir = new Stack<string>();
+            foreach (var line in input)
+            {
+                if (line[0] == '$')
+                {
+                    if (line[2..4] == "cd")
+                    {
+                        var dir = line[5..];
+                        if (dir == "..")
+                        {
+                            curdir.Pop();
+                        }
+                        else curdir.Push(dir);
+                        Console.WriteLine("#" + string.Join("-", curdir.Reverse()));
+                    }
+                }
+                else
+                {
+                    if (line[0..4] != "dir ")
+                    {
+                        var dir = "#" + string.Join("-", curdir.Reverse());
+                        var size = int.Parse(line.Split(" ")[0]);
+                        // tricky here we add also to parents
+                        foreach (var d in contents.Keys.Where(x => dir.Contains(x)))
+                            contents[d] += size;
+                    }
+                    else
+                    {
+                        var dir = "#" + string.Join("-", curdir.Reverse()) + "-" + line[4..];
+                        contents.Add(dir, 0);
+                    }
+                }
+            }
+            var total = 70000000;
+            var freeRequired = 30000000;
+            var used = contents["#/"];
+            var toBeFreed = freeRequired - (total - used);
+            var res = contents.Values.Where(x => x >= toBeFreed).Min();
+            Console.WriteLine("Result :" + res);
+            return res.ToString();
+        }
+    }
+    public class SolveDay8 : IPuzzleSolver
+    {
+        public string Input { get; set; } = String.Empty;
+        public string Part1()
+        {
+            var input = Input.Split("\n");
+            var gridWidth = input[0].Length;
+            var gridHeight = input.Length;
+            var explored = new HashSet<(int, int)>();
+            var getGrid = (int x, int y) => (int)input[y][x] - (int)'0';
+            foreach (var y in Enumerable.Range(0, gridHeight))
+            {
+                // left to right
+                var hmax = -1;
+                foreach (var x in Enumerable.Range(0, gridWidth))
+                {
+                    var h = getGrid(x, y);
+                    if (h > hmax)
+                    {
+                        hmax = h;
+                        if (!explored.Contains((x, y))) explored.Add((x, y));
+                    }
+                }
+                // right to left
+                hmax = -1;
+                foreach (var x in Enumerable.Range(0, gridWidth).Reverse())
+                {
+                    var h = getGrid(x, y);
+                    if (h > hmax)
+                    {
+                        hmax = h;
+                        if (!explored.Contains((x, y))) explored.Add((x, y));
+                    }
+                }
+            }
+            foreach (var x in Enumerable.Range(0, gridWidth))
+            {
+                // top to down
+                var hmax = -1;
+                foreach (var y in Enumerable.Range(0, gridHeight))
+                {
+                    var h = getGrid(x, y);
+                    if (h > hmax)
+                    {
+                        hmax = h;
+                        if (!explored.Contains((x, y))) explored.Add((x, y));
+                    }
+                }
+                // down to top
+                hmax = -1;
+                foreach (var y in Enumerable.Range(0, gridHeight).Reverse())
+                {
+                    var h = getGrid(x, y);
+                    if (h > hmax)
+                    {
+                        hmax = h;
+                        if (!explored.Contains((x, y))) explored.Add((x, y));
+                    }
+                }
+            }
+            Console.WriteLine(explored.Count);
+            return explored.Count.ToString();
+        }
+        public string Part2()
+        {
+            var input = Input.Split("\n");
+            var gridWidth = input[0].Length;
+            var gridHeight = input.Length;
+            var explored = new HashSet<(int, int)>();
+            var getGrid = (int x, int y) => (int)input[y][x] - (int)'0';
+            var directions = new List<(int, int)> { (1, 0), (-1, 0), (0, 1), (0, -1) };
+            var scoreMax = 0;
+            var borderReached = (int x, int y) => x < 0 || x >= gridWidth || y < 0 || y >= gridHeight;
+            foreach (var y in Enumerable.Range(0, gridHeight))
+                foreach (var x in Enumerable.Range(0, gridWidth))
+                {
+                    var h = getGrid(x, y);
+                    var score = 1;
+                    foreach (var (dx, dy) in directions)
+                    {
+                        var i = 1;
+                        var (nx, ny) = (x, y);
+                        do
+                        {
+                            (nx, ny) = (x + i * dx, y + i * dy);
+                            if (borderReached(nx, ny)) break;
+                            i++;
+                        } while (getGrid(nx, ny) < h);
+                        score *= (i - 1);
+                    }
+                    scoreMax = score > scoreMax ? score : scoreMax;
+                }
+            Console.WriteLine(scoreMax);
+            return scoreMax.ToString();
+        }
+    }
+    public class SolveDay9 : IPuzzleSolver
+    {
+        public string Input { get; set; } = String.Empty;
+        public string Part1()
+        {
+            return "";
+        }
+        public string Part2()
+        {
+            return "";
+        }
+    }
+    public class SolveDay10 : IPuzzleSolver
+    {
+        public string Input { get; set; } = String.Empty;
+        public string Part1()
+        {
+            return "";
+        }
+        public string Part2()
+        {
+            return "";
+        }
+    }
+    public class SolveDay11 : IPuzzleSolver
+    {
+        public string Input { get; set; } = String.Empty;
+        public string Part1()
+        {
+            return "";
+        }
+        public string Part2()
+        {
+            return "";
+        }
+    }
+    public class SolveDay12 : IPuzzleSolver
+    {
+        public string Input { get; set; } = String.Empty;
+        public string Part1()
+        {
+            return "";
+        }
+        public string Part2()
+        {
+            return "";
+        }
+    }
+    public class SolveDay13 : IPuzzleSolver
+    {
+        public string Input { get; set; } = String.Empty;
+        public string Part1()
+        {
+            return "";
+        }
+        public string Part2()
+        {
+            return "";
+        }
+    }
+    public class SolveDay14 : IPuzzleSolver
+    {
+        public string Input { get; set; } = String.Empty;
+        public string Part1()
+        {
+            return "";
+        }
+        public string Part2()
+        {
+            return "";
+        }
+    }
+    public class SolveDay15 : IPuzzleSolver
+    {
+        public string Input { get; set; } = String.Empty;
+        public string Part1()
+        {
+            return "";
+        }
+        public string Part2()
+        {
+            return "";
+        }
+    }
+    public class SolveDay16 : IPuzzleSolver
+    {
+        public string Input { get; set; } = String.Empty;
+        public string Part1()
+        {
+            return "";
+        }
+        public string Part2()
+        {
+            return "";
+        }
+    }
+    public class SolveDay17 : IPuzzleSolver
+    {
+        public string Input { get; set; } = String.Empty;
+        public string Part1()
+        {
+            return "";
+        }
+        public string Part2()
+        {
+            return "";
+        }
+    }
+    public class SolveDay18 : IPuzzleSolver
+    {
+        public string Input { get; set; } = String.Empty;
+        public string Part1()
+        {
+            return "";
+        }
+        public string Part2()
+        {
+            return "";
+        }
+    }
+    public class SolveDay19 : IPuzzleSolver
+    {
+        public string Input { get; set; } = String.Empty;
+        public string Part1()
+        {
+            return "";
+        }
+        public string Part2()
+        {
+            return "";
+        }
+    }
+    public class SolveDay20 : IPuzzleSolver
+    {
+        public string Input { get; set; } = String.Empty;
+        public string Part1()
+        {
+            return "";
+        }
+        public string Part2()
+        {
+            return "";
+        }
+    }
+    public class SolveDay21 : IPuzzleSolver
+    {
+        public string Input { get; set; } = String.Empty;
+        public string Part1()
+        {
+            return "";
+        }
+        public string Part2()
+        {
+            return "";
+        }
+    }
+    public class SolveDay22 : IPuzzleSolver
+    {
+        public string Input { get; set; } = String.Empty;
+        public string Part1()
+        {
+            return "";
+        }
+        public string Part2()
+        {
+            return "";
+        }
+    }
+    public class SolveDay23 : IPuzzleSolver
+    {
+        public string Input { get; set; } = String.Empty;
+        public string Part1()
+        {
+            return "";
+        }
+        public string Part2()
+        {
+            return "";
+        }
+    }
+    public class SolveDay24 : IPuzzleSolver
+    {
+        public string Input { get; set; } = String.Empty;
+        public string Part1()
+        {
+            return "";
+        }
+        public string Part2()
+        {
+            return "";
+        }
+    }
+    public class SolveDay25 : IPuzzleSolver
+    {
+        public string Input { get; set; } = String.Empty;
+        public string Part1()
+        {
+            return "";
+        }
+        public string Part2()
+        {
+            return "";
+        }
+    }
+    public class SolveDay : IPuzzleSolver
+    {
+        public string Input { get; set; } = String.Empty;
+        public string Part1()
+        {
+            return "";
+        }
+        public string Part2()
+        {
+            return "";
+        }
+    }
+}

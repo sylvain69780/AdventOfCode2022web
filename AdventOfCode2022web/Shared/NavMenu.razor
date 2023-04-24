@@ -22,7 +22,7 @@
         @foreach (var i in Enumerable.Range(day, 5))
         {
             <div class="nav-item px-3" @onclick="ToggleNavMenu">
-                <NavLink class="nav-link" href="@string.Format("day{0:00}",i)">
+                <NavLink class="nav-link" href="@string.Format("day/{0}",i)">
                     <span class="oi oi-brush" aria-hidden="true"></span>@string.Format("Day {0:00}",i)
                 </NavLink>
             </div>
