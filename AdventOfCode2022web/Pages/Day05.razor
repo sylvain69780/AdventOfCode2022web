@@ -1,0 +1,105 @@
+﻿@page "/day05"
+@inject HttpClient Http
+
+<div class="mb-3">
+    <label class="form-label">The input below is the example data. Paste your own user input from <a href="https://adventofcode.com/2022/day/5">Advent Of Code</a></label>
+    <textarea class="form-control" rows="10" @bind="Input" maxlength="10000000"></textarea>
+</div>
+<div class ="mb-3">
+    <div class="mb-3">
+        <button class="btn btn-primary" @onclick="SolvePart1">Solve Part 1</button>
+    </div>
+    <div>@Output1</div>
+</div>
+<div class="mb-3">
+    <div class="mb-3">
+        <button class="btn btn-primary" @onclick="SolvePart2">Solve Part 2</button>
+    </div>
+    <div>@Output2</div>
+</div>
+
+@code {
+    private string Input { get; set; } = string.Empty;
+    protected override async Task OnInitializedAsync()
+    {
+        Input = (await Http.GetStringAsync("sample-data/day05.txt")).Replace("\r", "");
+    }
+
+    private string Output1 { get; set; } = string.Empty;
+    private void SolvePart1()
+    {
+        var input = Input.Split("\n").AsEnumerable().GetEnumerator();
+        input.MoveNext();
+        var w = 1 + (input.Current.Length) / 4;
+        var stacks = new Stack<char>[w];
+        foreach (var i in Enumerable.Range(0, w))
+            stacks[i] = new Stack<char>();
+        while (input.Current[1] != '1')
+        {
+            foreach (var i in Enumerable.Range(0, w))
+                if (input.Current[i * 4 + 1] != ' ')
+                    stacks[i].Push(input.Current[i * 4 + 1]);
+            input.MoveNext();
+        }
+        input.MoveNext();
+        // reversing the stacks because of read order of the input :-(
+        foreach (var i in Enumerable.Range(0, w))
+        {
+            var l = new Stack<char>();
+            foreach (var c in stacks[i])
+                l.Push(c);
+            stacks[i] = l;
+        }
+        while (input.MoveNext())
+        {
+            Console.WriteLine(input.Current);
+            var i = input.Current.Replace("move ", "").Replace(" from ", ",").Replace(" to ", ",").Split(',').Select(x => int.Parse(x)).ToList();
+            var (amount, origin, destination) = (i[0], i[1], i[2]);
+            foreach (var c in Enumerable.Range(1, amount))
+            {
+                stacks[destination - 1].Push(stacks[origin - 1].Pop());
+                Console.WriteLine(string.Join("", stacks.Select(x => x.FirstOrDefault(' '))));
+            }
+        }
+        Output1 = string.Join("", stacks.Select(x => x.FirstOrDefault(' ')));
+    }
+    private string Output2 { get; set; } = string.Empty;
+    private void SolvePart2()
+    {
+        var input = Input.Split("\n").AsEnumerable().GetEnumerator();
+        input.MoveNext();
+        var w = 1 + (input.Current.Length) / 4;
+        var stacks = new Stack<char>[w];
+        foreach (var i in Enumerable.Range(0, w))
+            stacks[i] = new Stack<char>();
+        while (input.Current[1] != '1')
+        {
+            foreach (var i in Enumerable.Range(0, w))
+                if (input.Current[i * 4 + 1] != ' ')
+                    stacks[i].Push(input.Current[i * 4 + 1]);
+            input.MoveNext();
+        }
+        input.MoveNext();
+        // reversing the stacks because of read order of the input :-(
+        foreach (var i in Enumerable.Range(0, w))
+        {
+            var l = new Stack<char>();
+            foreach (var c in stacks[i])
+                l.Push(c);
+            stacks[i] = l;
+        }
+        while (input.MoveNext())
+        {
+            Console.WriteLine(input.Current);
+            var i = input.Current.Replace("move ", "").Replace(" from ", ",").Replace(" to ", ",").Split(',').Select(x => int.Parse(x)).ToList();
+            var (amount, origin, destination) = (i[0], i[1], i[2]);
+            var mover = new Stack<char>();
+            foreach (var c in Enumerable.Range(1, amount))
+                mover.Push(stacks[origin - 1].Pop());
+            foreach (var c in mover)
+                stacks[destination - 1].Push(c);
+            Console.WriteLine(string.Join("", stacks.Select(x => x.FirstOrDefault(' '))));
+        }
+        Output2 = string.Join("", stacks.Select(x => x.FirstOrDefault(' ')));
+    }
+}

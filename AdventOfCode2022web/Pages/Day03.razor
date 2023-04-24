@@ -1,0 +1,56 @@
+﻿@page "/day03"
+@inject HttpClient Http
+
+<div class="mb-3">
+    <label class="form-label">The input below is the example data. Paste your own user input from <a href="https://adventofcode.com/2022/day/3">Advent Of Code</a></label>
+    <textarea class="form-control" rows="10" @bind="Input" maxlength="10000000"></textarea>
+</div>
+<div class ="mb-3">
+    <div class="mb-3">
+        <button class="btn btn-primary" @onclick="SolvePart1">Solve Part 1</button>
+    </div>
+    <div>@Output1</div>
+</div>
+<div class="mb-3">
+    <div class="mb-3">
+        <button class="btn btn-primary" @onclick="SolvePart2">Solve Part 2</button>
+    </div>
+    <div>@Output2</div>
+</div>
+
+@code {
+    private string Input { get; set; } = string.Empty;
+    protected override async Task OnInitializedAsync()
+    {
+        Input = (await Http.GetStringAsync("sample-data/day03.txt")).Replace("\r", "");
+    }
+
+    private string Output1 { get; set; } = string.Empty;
+    private void SolvePart1()
+    {
+        var score = 0;
+        foreach (var rucksack in Input.Split("\n"))
+        {
+            var l = rucksack.Length;
+            var (a, b) = (rucksack.Substring(0, l / 2), rucksack.Substring(l / 2, l / 2));
+            var r = (int)a.First(x => b.Contains(x));
+            var p = r >= (int)'a' ? r - (int)'a' + 1 : r - (int)'A' + 27;
+            score += p;
+        }
+        Output1 = score.ToString();
+    }
+    private string Output2 { get; set; } = string.Empty;
+    private void SolvePart2()
+    {
+        var score = 0;
+        var rucksacks = Input.Split("\n");
+        for (var i = 0; i < rucksacks.Length / 3; i++)
+        {
+            var (a, b, c) = (rucksacks[i * 3], rucksacks[i * 3 + 1], rucksacks[i * 3 + 2]);
+            var r = (int)a.First(x => b.Contains(x) && c.Contains(x));
+            var p = r >= (int)'a' ? r - (int)'a' + 1 : r - (int)'A' + 27;
+            score += p;
+        }
+        Output2 = score.ToString();
+    }
+}

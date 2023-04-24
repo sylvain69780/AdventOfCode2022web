@@ -1,0 +1,52 @@
+﻿@page "/day04"
+@inject HttpClient Http
+
+<div class="mb-3">
+    <label class="form-label">The input below is the example data. Paste your own user input from <a href="https://adventofcode.com/2022/day/4">Advent Of Code</a></label>
+    <textarea class="form-control" rows="10" @bind="Input" maxlength="10000000"></textarea>
+</div>
+<div class ="mb-3">
+    <div class="mb-3">
+        <button class="btn btn-primary" @onclick="SolvePart1">Solve Part 1</button>
+    </div>
+    <div>@Output1</div>
+</div>
+<div class="mb-3">
+    <div class="mb-3">
+        <button class="btn btn-primary" @onclick="SolvePart2">Solve Part 2</button>
+    </div>
+    <div>@Output2</div>
+</div>
+
+@code {
+    private string Input { get; set; } = string.Empty;
+    protected override async Task OnInitializedAsync()
+    {
+        Input = (await Http.GetStringAsync("sample-data/day04.txt")).Replace("\r", "");
+    }
+
+    private string Output1 { get; set; } = string.Empty;
+    private void SolvePart1()
+    {
+        var r = (string x) => { var r = x.Split("-"); return (start: int.Parse(r[0]), end: int.Parse(r[1])); };
+        var score = 0;
+        foreach (var (a, b) in Input.Split("\n").Select(x => x.Split(",")).Select(x => (r(x[0]), r(x[1]))))
+        {
+            if ((b.start >= a.start && b.end <= a.end) || (a.start >= b.start && a.end <= b.end))
+                score++;
+        }
+        Output1 = score.ToString();
+    }
+    private string Output2 { get; set; } = string.Empty;
+    private void SolvePart2()
+    {
+        var r = (string x) => { var r = x.Split("-"); return (start: int.Parse(r[0]), end: int.Parse(r[1])); };
+        var score = 0;
+        foreach (var (a, b) in Input.Split("\n").Select(x => x.Split(",")).Select(x => (r(x[0]), r(x[1]))))
+        {
+            if ((a.start <= b.start && b.start <= a.end) || (b.start <= a.start && a.start <= b.end))
+                score++;
+        }
+        Output2 = score.ToString();
+    }
+}

@@ -22,7 +22,7 @@
     private string Input { get; set; } = string.Empty;
     protected override async Task OnInitializedAsync()
     {
-        Input = (await Http.GetStringAsync("sample-data/day2.txt")).Replace("\r", "");
+        Input = (await Http.GetStringAsync("sample-data/day02.txt")).Replace("\r", "");
     }
 
     private string Output1 { get; set; } = string.Empty;
