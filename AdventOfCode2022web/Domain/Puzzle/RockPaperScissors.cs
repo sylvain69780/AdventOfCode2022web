@@ -1,26 +1,12 @@
 ﻿namespace AdventOfCode2022web.Domain.Puzzle
 {
-    public class RockPaperScissors : IPuzzleSolver
+    public class RockPaperScissors : PuzzleSolver
     {
-        public async IAsyncEnumerable<string> Part1Async(string input)
-        {
-            Input = input;
-            yield return Part1();
-            await Task.Delay(1);
-        }
-        public async IAsyncEnumerable<string> Part2Async(string input)
-        {
-            Input = input;
-            yield return Part2();
-            await Task.Delay(1);
-        }
-
-        public string Input { get; set; } = String.Empty;
-        public string Part1()
+        protected override string Part1(string input)
         {
             var defeats = new List<(int, int)> { (1, 3), (3, 2), (2, 1) };
             var score = 0;
-            foreach (var (opponent, you) in Input.Split("\n").Select(x => x.Split(" ")).Select(x => ("ABC".IndexOf(x[0][0]) + 1, "XYZ".IndexOf(x[1][0]) + 1)))
+            foreach (var (opponent, you) in input.Split("\n").Select(x => x.Split(" ")).Select(x => ("ABC".IndexOf(x[0][0]) + 1, "XYZ".IndexOf(x[1][0]) + 1)))
             {
                 score += you;
                 if (!defeats.Contains((opponent, you)))
@@ -28,11 +14,11 @@
             }
             return score.ToString();
         }
-        public string Part2()
+        protected override string Part2(string input)
         {
             var score = 0;
             var defeats = new List<(int, int)> { (1, 3), (3, 2), (2, 1) };
-            foreach (var (opponent, ending) in Input.Split("\n").Select(x => x.Split(" ")).Select(x => ("ABC".IndexOf(x[0][0]) + 1, "XYZ".IndexOf(x[1][0]) + 1)))
+            foreach (var (opponent, ending) in input.Split("\n").Select(x => x.Split(" ")).Select(x => ("ABC".IndexOf(x[0][0]) + 1, "XYZ".IndexOf(x[1][0]) + 1)))
             {
                 var you = opponent;
                 if (ending == 1)

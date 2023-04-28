@@ -1,20 +1,7 @@
 ﻿namespace AdventOfCode2022web.Domain.Puzzle
 {
-    public class DistressSignal : IPuzzleSolver
+    public class DistressSignal : PuzzleSolver
     {
-        public async IAsyncEnumerable<string> Part1Async(string input)
-        {
-            Input = input;
-            yield return Part1();
-            await Task.Delay(1);
-        }
-        public async IAsyncEnumerable<string> Part2Async(string input)
-        {
-            Input = input;
-            yield return Part2();
-            await Task.Delay(1);
-        }
-
         class Day13Element
         {
             public static Day13Element ReadInput(string inp)
@@ -85,10 +72,9 @@
 
         }
 
-        public string Input { get; set; } = String.Empty;
-        public string Part1()
+        protected override string Part1(string inp)
         {
-            var input = Input.Split("\n").ToList().GetEnumerator();
+            var input = inp.Split("\n").ToList().GetEnumerator();
             var idx = 0;
             var score = 0;
             while (input.MoveNext())
@@ -104,9 +90,9 @@
             }
             return score.ToString();
         }
-        public string Part2()
+        protected override string Part2(string inp)
         {
-            var input = Input.Split("\n").Where(x => x != "").Append("[[2]]").Append("[[6]]").Select(x => (a: x, b: Day13Element.ReadInput(x)))
+            var input = inp.Split("\n").Where(x => x != "").Append("[[2]]").Append("[[6]]").Select(x => (a: x, b: Day13Element.ReadInput(x)))
                 .OrderByDescending(x => x.b, new MyComparer()).Select(x => x.a).ToList();
 
             return ((1 + input.IndexOf("[[2]]")) * (1 + input.IndexOf("[[6]]"))).ToString();

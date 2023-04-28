@@ -12,10 +12,10 @@ namespace AdventOfCode2022web.Domain.Puzzle
         public async IAsyncEnumerable<string> Part1Async(string inp)
         {
             var input = inp.Split("\n").Select(x => x.Replace(" -> ", "#").Split('#')
-        .Select(y => y.Split(','))
-        .Select(y => new Pt { x = int.Parse(y[0]), y = int.Parse(y[1]) }).ToList())
-        .ToList()
-        ;
+                .Select(y => y.Split(','))
+                .Select(y => new Pt { x = int.Parse(y[0]), y = int.Parse(y[1]) }).ToList())
+                .ToList()
+                ;
             var floor = input.SelectMany(x => x).Select(x => x.y).Max() + 2;
             var start = new Pt { x = 500, y = 0 };
             var directions = new (int, int)[] { (0, 1), (-1, 1), (1, 1), (0, 0) };

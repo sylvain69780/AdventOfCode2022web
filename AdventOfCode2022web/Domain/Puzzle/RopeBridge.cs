@@ -1,29 +1,15 @@
 ﻿namespace AdventOfCode2022web.Domain.Puzzle
 {
-    public class RopeBridge : IPuzzleSolver
+    public class RopeBridge : PuzzleSolver
     {
-        public async IAsyncEnumerable<string> Part1Async(string input)
-        {
-            Input = input;
-            yield return Part1();
-            await Task.Delay(1);
-        }
-        public async IAsyncEnumerable<string> Part2Async(string input)
-        {
-            Input = input;
-            yield return Part2();
-            await Task.Delay(1);
-        }
-
         struct Pt
         {
             public int x;
             public int y;
         }
-        public string Input { get; set; } = String.Empty;
-        public string Part1()
+        protected override string Part1(string inp)
         {
-            var input = Input.Split("\n")
+            var input = inp.Split("\n")
                 .Select(x => x.Split(" "))
                 .SelectMany(x => Enumerable.Range(0, int.Parse(x[1])), (x, y) => x[0]);
             var directions = new Dictionary<string, Pt>()
@@ -53,9 +39,9 @@
             var result = visited.Count;
             return result.ToString();
         }
-        public string Part2()
+        protected override string Part2(string inp)
         {
-            var input = Input.Split("\n")
+            var input = inp.Split("\n")
                 .Select(x => x.Split(" "))
                 .SelectMany(x => Enumerable.Range(0, int.Parse(x[1])), (x, y) => x[0]);
             var directions = new Dictionary<string, Pt>()

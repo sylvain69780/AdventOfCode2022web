@@ -23,7 +23,7 @@
 @code {
     [Parameter]
     public int dayNumber { get; set; }
-    private IPuzzleSolver _solver = new PuzzleSolver();
+    private IPuzzleSolver _solver = new CalorieCounting();
     private string Input { get; set; } = string.Empty;
     protected override async Task OnParametersSetAsync()
     {

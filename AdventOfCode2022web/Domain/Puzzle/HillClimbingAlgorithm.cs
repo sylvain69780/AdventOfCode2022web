@@ -1,24 +1,10 @@
 ﻿namespace AdventOfCode2022web.Domain.Puzzle
 {
-    public class HillClimbingAlgorithm : IPuzzleSolver
+    public class HillClimbingAlgorithm : PuzzleSolver
     {
-        public async IAsyncEnumerable<string> Part1Async(string input)
+        protected override string Part1(string inp)
         {
-            Input = input;
-            yield return Part1();
-            await Task.Delay(1);
-        }
-        public async IAsyncEnumerable<string> Part2Async(string input)
-        {
-            Input = input;
-            yield return Part2();
-            await Task.Delay(1);
-        }
-
-        public string Input { get; set; } = String.Empty;
-        public string Part1()
-        {
-            var input = Input.Split("\n");
+            var input = inp.Split("\n");
             var gridWidth = input[0].Length;
             var gridHeight = input.Length;
             var directions = new List<(int, int)> { (1, 0), (-1, 0), (0, 1), (0, -1) };
@@ -66,9 +52,9 @@
             Console.WriteLine(explored.Count);
             return score.ToString();
         }
-        public string Part2()
+        protected override string Part2(string inp)
         {
-            var input = Input.Split("\n");
+            var input = inp.Split("\n");
             var gridWidth = input[0].Length;
             var gridHeight = input.Length;
             var directions = new List<(int, int)> { (1, 0), (-1, 0), (0, 1), (0, -1) };

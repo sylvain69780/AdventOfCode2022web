@@ -1,24 +1,10 @@
 ﻿namespace AdventOfCode2022web.Domain.Puzzle
 {
-    public class SupplyStacks : IPuzzleSolver
+    public class SupplyStacks : PuzzleSolver
     {
-        public async IAsyncEnumerable<string> Part1Async(string input)
+        protected override string Part1(string inp)
         {
-            Input = input;
-            yield return Part1();
-            await Task.Delay(1);
-        }
-        public async IAsyncEnumerable<string> Part2Async(string input)
-        {
-            Input = input;
-            yield return Part2();
-            await Task.Delay(1);
-        }
-
-        public string Input { get; set; } = String.Empty;
-        public string Part1()
-        {
-            var input = Input.Split("\n").AsEnumerable().GetEnumerator();
+            var input = inp.Split("\n").AsEnumerable().GetEnumerator();
             input.MoveNext();
             var w = 1 + (input.Current.Length) / 4;
             var stacks = new Stack<char>[w];
@@ -53,9 +39,9 @@
             }
             return string.Join("", stacks.Select(x => x.FirstOrDefault(' ')));
         }
-        public string Part2()
+        protected override string Part2(string inp)
         {
-            var input = Input.Split("\n").AsEnumerable().GetEnumerator();
+            var input = inp.Split("\n").AsEnumerable().GetEnumerator();
             input.MoveNext();
             var w = 1 + (input.Current.Length) / 4;
             var stacks = new Stack<char>[w];

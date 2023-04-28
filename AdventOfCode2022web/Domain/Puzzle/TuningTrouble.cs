@@ -1,26 +1,12 @@
 ﻿namespace AdventOfCode2022web.Domain.Puzzle
 {
-    public class TuningTrouble : IPuzzleSolver
+    public class TuningTrouble : PuzzleSolver
     {
-        public async IAsyncEnumerable<string> Part1Async(string input)
-        {
-            Input = input;
-            yield return Part1();
-            await Task.Delay(1);
-        }
-        public async IAsyncEnumerable<string> Part2Async(string input)
-        {
-            Input = input;
-            yield return Part2();
-            await Task.Delay(1);
-        }
-
-        public string Input { get; set; } = String.Empty;
-        public string Part1()
+        protected override string Part1(string inp)
         {
             var marker = new Queue<char>();
             var pos = 1;
-            foreach (var c in Input)
+            foreach (var c in inp)
             {
                 if (marker.Count == 4) marker.Dequeue();
                 marker.Enqueue(c);
@@ -29,11 +15,11 @@
             }
             return pos.ToString();
         }
-        public string Part2()
+        protected override string Part2(string inp)
         {
             var marker = new Queue<char>();
             var pos = 1;
-            foreach (var c in Input)
+            foreach (var c in inp)
             {
                 if (marker.Count == 14) marker.Dequeue();
                 marker.Enqueue(c);

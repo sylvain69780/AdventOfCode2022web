@@ -1,25 +1,12 @@
 ﻿namespace AdventOfCode2022web.Domain.Puzzle
 {
-    public class CalorieCounting : IPuzzleSolver
+    public class CalorieCounting : PuzzleSolver
     {
-        public async IAsyncEnumerable<string> Part1Async(string input)
-        {
-            Input = input;
-            yield return Part1();
-            await Task.Delay(1);
-        }
-        public async IAsyncEnumerable<string> Part2Async(string input)
-        {
-            Input = input;
-            yield return Part2();
-            await Task.Delay(1);
-        }
-        public string Input { get; set; } = String.Empty;
-        public string Part1()
+        protected override string Part1(string inp)
         {
             var elfCalories = 0;
             var maxCalories = 0;
-            foreach (var line in Input.Split("\n").Append(string.Empty))
+            foreach (var line in inp.Split("\n").Append(string.Empty))
             {
                 if (line != string.Empty)
                     elfCalories += int.Parse(line);
@@ -32,11 +19,11 @@
             }
             return maxCalories.ToString();
         }
-        public string Part2()
+        protected override string Part2(string inp)
         {
             var calories = new List<int>();
             var elfCalories = 0;
-            foreach (var line in Input.Split("\n").Append(string.Empty))
+            foreach (var line in inp.Split("\n").Append(string.Empty))
             {
                 if (line != string.Empty)
                     elfCalories += int.Parse(line);
