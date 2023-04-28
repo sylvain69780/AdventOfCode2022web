@@ -78,7 +78,12 @@ namespace AdventOfCode2022web.Domain.Puzzle
                 {
                     var pp = (p.x + f.x, p.y + f.y, p.z + f.z);
                     if (grid.Contains(pp) && !input.Contains(pp))
+                    {
                         score++;
+                        Console.WriteLine(score);
+                        yield return score.ToString();
+                        await Task.Delay(1);
+                    }
                 }
             }
             Console.WriteLine(score);
