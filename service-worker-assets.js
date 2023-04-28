@@ -33,11 +33,11 @@
       "url": "_framework\/icudt.dat"
     },
     {
-      "hash": "sha256-7z1wyYTMjPMz1SLYCfnPlUbCw4Ly0K+mao+6GZPOR3s=",
+      "hash": "sha256-CeEkP4WbsOwsgFUN64BynlJkwd6I9d9\/tT4O45B6vWY=",
       "url": "_framework\/blazor.boot.json"
     },
     {
-      "hash": "sha256-o5bmyAYXeatwDnDE9O8ccs5UeJz0T3dlOotMUoUys0o=",
+      "hash": "sha256-bM061BdhD3a9Fa5F3Be4v5F8XJHsdGw4qxqHxArXBwM=",
       "url": "_framework\/AdventOfCode2022web.dll"
     },
     {
@@ -65,7 +65,7 @@
       "url": "_framework\/Microsoft.Extensions.Configuration.Json.dll"
     },
     {
-      "hash": "sha256-NAceT7aKzqRsGogCe8UyBWF01R1Qga83gXtq+v3p9V4=",
+      "hash": "sha256-WPrkNepjE9bu6IVo76gbZRsjQK6d\/9wEsfKYxKvz6X0=",
       "url": "_framework\/Microsoft.Extensions.DependencyInjection.Abstractions.dll"
     },
     {
@@ -97,11 +97,11 @@
       "url": "_framework\/Microsoft.JSInterop.WebAssembly.dll"
     },
     {
-      "hash": "sha256-t\/jFndAAuDNuffqUZ46yQ3ekmsGnx0YJglVNvmBGazc=",
+      "hash": "sha256-5A\/uNbYSSnHOSIBFW9IiW4GCKYOQJrQUc9a6\/QXlJLs=",
       "url": "_framework\/System.Collections.Concurrent.dll"
     },
     {
-      "hash": "sha256-gt2yOPwjLTttQIsbUrFEMDdMb3GDipdgHDjUfNtAaa0=",
+      "hash": "sha256-gmNufF2QbVtLnkk8lsGVVqVrR+Jjoj5Lhpu7Mp04XWk=",
       "url": "_framework\/System.Collections.dll"
     },
     {
@@ -113,7 +113,7 @@
       "url": "_framework\/System.Console.dll"
     },
     {
-      "hash": "sha256-9NDNa9v9i8h5uivJA2LvXR1f305uwhoeFS8peQhNcd8=",
+      "hash": "sha256-UlHnbGA5rBC6chUfyxxoVZ+jP9\/Q9S9oCaek\/Cuy\/FQ=",
       "url": "_framework\/System.Linq.dll"
     },
     {
@@ -121,7 +121,7 @@
       "url": "_framework\/System.Memory.dll"
     },
     {
-      "hash": "sha256-YD18pcRfaf5eqg6FZoSxecb28SHlFEY8coQ27UDU850=",
+      "hash": "sha256-bGMxxk2iD35FqPOLiIdiy4nvOfXTVRgKeS9x\/avUA34=",
       "url": "_framework\/System.Net.Http.dll"
     },
     {
@@ -129,7 +129,7 @@
       "url": "_framework\/System.Net.Primitives.dll"
     },
     {
-      "hash": "sha256-maRfd5ZM739JytX9DffaNdlTZ+uHKV6ABvmudo5wuHM=",
+      "hash": "sha256-xNpkvBgYLKyZHKLrl5RfvF+\/zeB86viEcjbyjcSEbrU=",
       "url": "_framework\/System.Private.CoreLib.dll"
     },
     {
@@ -145,7 +145,7 @@
       "url": "_framework\/System.Runtime.CompilerServices.Unsafe.dll"
     },
     {
-      "hash": "sha256-YzgkWYz46MAuR3gaQbvyAeBsKGkywPA1DVXWSU9tuDo=",
+      "hash": "sha256-cdhnAtsNQuCu0nQQ1M4mEd3WhXHtao576mwZ9pa2oZk=",
       "url": "_framework\/System.Runtime.dll"
     },
     {
@@ -153,8 +153,12 @@
       "url": "_framework\/System.Text.Encodings.Web.dll"
     },
     {
-      "hash": "sha256-Dovl19+hZZfs2+2gXgvpRq5nrcdFkfzLLvaZgzbjNmE=",
+      "hash": "sha256-CELLJUqcvdFmPK3b+v7tMav5KpGe5\/a39jONpQPz23M=",
       "url": "_framework\/System.Text.Json.dll"
+    },
+    {
+      "hash": "sha256-q803EqwGW\/O7GC6OHjUaHlom2tiECV4PikCa79U3lNo=",
+      "url": "_framework\/System.Text.RegularExpressions.dll"
     },
     {
       "hash": "sha256-MHGtKDXfOfYvHA6n+7ovihqE4cQr5PuEznOP4cbOHQM=",
@@ -233,7 +237,7 @@
       "url": "manifest.json"
     },
     {
-      "hash": "sha256-8ZRc1sGeVrPBx4lD717BgRaQekyh78QKV9SKsdt638U=",
+      "hash": "sha256-x5EOEY+Od2vTyg8QnRCi8DYsOJUYXDK1yxPx5gIqp4I=",
       "url": "sample-data\/BeaconExclusionZone.txt"
     },
     {
@@ -241,7 +245,7 @@
       "url": "sample-data\/BlizzardBasin.txt"
     },
     {
-      "hash": "sha256-8ZRc1sGeVrPBx4lD717BgRaQekyh78QKV9SKsdt638U=",
+      "hash": "sha256-OQYpv7rQMmgqGyb92ODr5Ozgx3VnJe\/UjIhmSEAkpUY=",
       "url": "sample-data\/BoilingBoulders.txt"
     },
     {
@@ -293,11 +297,11 @@
       "url": "sample-data\/NotEnoughMinerals.txt"
     },
     {
-      "hash": "sha256-8ZRc1sGeVrPBx4lD717BgRaQekyh78QKV9SKsdt638U=",
+      "hash": "sha256-BEPlVH1H24D7p0PMmvw+HrrSIcn515OtnxgOLQzix0I=",
       "url": "sample-data\/ProboscideaVolcanium.txt"
     },
     {
-      "hash": "sha256-8ZRc1sGeVrPBx4lD717BgRaQekyh78QKV9SKsdt638U=",
+      "hash": "sha256-bunJ\/ui7JBiHj5UV6cVx7BYj46pKqWdZAhX2DS6F2bM=",
       "url": "sample-data\/PyroclasticFlow.txt"
     },
     {
@@ -333,5 +337,5 @@
       "url": "sample-data\/UnstableDiffusion.txt"
     }
   ],
-  "version": "Zpb1nkvz"
+  "version": "e0mKHxpu"
 };
