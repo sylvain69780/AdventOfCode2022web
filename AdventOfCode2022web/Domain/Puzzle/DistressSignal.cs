@@ -2,6 +2,19 @@
 {
     public class DistressSignal : IPuzzleSolver
     {
+        public async IAsyncEnumerable<string> Part1Async(string input)
+        {
+            Input = input;
+            yield return Part1();
+            await Task.Delay(1);
+        }
+        public async IAsyncEnumerable<string> Part2Async(string input)
+        {
+            Input = input;
+            yield return Part2();
+            await Task.Delay(1);
+        }
+
         class Day13Element
         {
             public static Day13Element ReadInput(string inp)
@@ -33,7 +46,7 @@
                     return new Day13Leaf() { Val = int.Parse(inp) };
                 }
             }
-            public static int IsOrdered(Day13Element a, Day13Element b)
+            public static int IsOrdered(Day13Element? a, Day13Element? b)
             {
                 if (a is Day13Leaf av && b is Day13Leaf bv)
                     return av.Val < bv.Val ? 1 : av.Val == bv.Val ? 0 : -1;
@@ -41,16 +54,16 @@
                     a = new Day13List { Lst = new List<Day13Element> { a } };
                 if (b is Day13Leaf)
                     b = new Day13List { Lst = new List<Day13Element> { b } };
-                var al = (Day13List)a;
-                var bl = (Day13List)b;
-                for (var i = 0; i < Math.Min(al.Lst.Count, bl.Lst.Count); i++)
+                Day13List? al = a as Day13List;
+                Day13List? bl = b as Day13List;
+                for (var i = 0; i < Math.Min(al?.Lst.Count ?? 0, bl?.Lst.Count ?? 0); i++)
                 {
-                    var va = al.Lst[i];
-                    var vb = bl.Lst[i];
+                    var va = al?.Lst[i];
+                    var vb = bl?.Lst[i];
                     var res = IsOrdered(va, vb);
                     if (res != 0) return res;
                 }
-                return al.Lst.Count < bl.Lst.Count ? 1 : al.Lst.Count == bl.Lst.Count ? 0 : -1;
+                return al?.Lst.Count < bl?.Lst.Count ? 1 : al?.Lst.Count == bl?.Lst.Count ? 0 : -1;
             }
         }
          class Day13Leaf : Day13Element
@@ -65,7 +78,7 @@
         class MyComparer : IComparer<Day13Element>
         {
 
-            public int Compare(Day13Element A, Day13Element B)
+            public int Compare(Day13Element? A, Day13Element? B)
             {
                 return Day13Element.IsOrdered(A, B);
             }

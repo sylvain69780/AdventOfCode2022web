@@ -2,7 +2,7 @@
 @using AdventOfCode2022web.Domain.Puzzle;
 @inject HttpClient Http
 
-<h1>@solver.GetType().Name</h1>
+<h1>@_solver.GetType().Name</h1>
 <div class="mb-3">
     <label class="form-label">The input below is the example data. Paste your own user input from <a href="https://adventofcode.com/2022/day/@dayNumber">Advent Of Code</a></label>
     <pre><textarea class="form-control" rows="10" @bind="Input" maxlength="10000000"></textarea></pre>
@@ -23,26 +23,32 @@
 @code {
     [Parameter]
     public int dayNumber { get; set; }
-    private IPuzzleSolver solver = new PuzzleSolver();
+    private IPuzzleSolver _solver = new PuzzleSolver();
     private string Input { get; set; } = string.Empty;
     protected override async Task OnParametersSetAsync()
     {
-        solver = daySolvers[dayNumber - 1];
+        _solver = daySolvers[dayNumber - 1];
         Output1 = Output2 = string.Empty;
-        Input = (await Http.GetStringAsync($"sample-data/{solver.GetType().Name}.txt")).Replace("\r", "");
+        Input = (await Http.GetStringAsync($"sample-data/{_solver.GetType().Name}.txt")).Replace("\r", "");
     }
 
     private string Output1 { get; set; } = string.Empty;
-    private void SolvePart1()
+    private async Task SolvePart1()
     {
-        solver.Input = Input;
-        Output1 = solver.Part1();
+        await foreach (var s in _solver.Part1Async(Input))
+        {
+            Output1 = s;
+            StateHasChanged();
+        };
     }
     private string Output2 { get; set; } = string.Empty;
-    private void SolvePart2()
+    private async Task SolvePart2()
     {
-        solver.Input = Input;
-        Output2 = solver.Part2();
+        await foreach (var s in _solver.Part2Async(Input))
+        {
+            Output2 = s;
+            StateHasChanged();
+        };
     }
     private IPuzzleSolver[] daySolvers = new IPuzzleSolver[]        {
             new CalorieCounting(),
@@ -71,6 +77,4 @@
             new BlizzardBasin(),
             new FullOfHotAir()
     };
-
-
 }

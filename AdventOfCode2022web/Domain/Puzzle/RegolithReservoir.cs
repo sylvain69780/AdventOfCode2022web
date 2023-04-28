@@ -9,10 +9,9 @@ namespace AdventOfCode2022web.Domain.Puzzle
     }
     public class RegolithReservoir : IPuzzleSolver
     {
-        public string Input { get; set; } = String.Empty;
-        public string Part1()
+        public async IAsyncEnumerable<string> Part1Async(string inp)
         {
-            var input = Input.Split("\n").Select(x => x.Replace(" -> ", "#").Split('#')
+            var input = inp.Split("\n").Select(x => x.Replace(" -> ", "#").Split('#')
         .Select(y => y.Split(','))
         .Select(y => new Pt { x = int.Parse(y[0]), y = int.Parse(y[1]) }).ToList())
         .ToList()
@@ -61,14 +60,17 @@ namespace AdventOfCode2022web.Domain.Puzzle
                     // Console.WriteLine($"{sand.x} {sand.y}");
                 }
                 Console.WriteLine(score);
+                await Task.Delay(1);
+                yield return score.ToString();
+
             } while (sand.y < floor);
             score--;
-            return score.ToString();
+            yield return score.ToString();
 
         }
-        public string Part2()
+        public async IAsyncEnumerable<string> Part2Async(string inp)
         {
-            var input = Input.Split("\n").Select(x => x.Replace(" -> ", "#").Split('#')
+            var input = inp.Split("\n").Select(x => x.Replace(" -> ", "#").Split('#')
         .Select(y => y.Split(','))
         .Select(y => new Pt { x = int.Parse(y[0]), y = int.Parse(y[1]) }).ToList())
         .ToList()
@@ -122,8 +124,10 @@ namespace AdventOfCode2022web.Domain.Puzzle
                     // Console.WriteLine($"{sand.x} {sand.y}");
                 }
                 Console.WriteLine(score);
+                await Task.Delay(1);
+                yield return score.ToString();
             } while (sand.y != 0);
-            return score.ToString();
+            yield return score.ToString();
         }
     }
 }

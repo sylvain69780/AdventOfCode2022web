@@ -2,6 +2,19 @@
 {
     public class MonkeyInTheMiddle : IPuzzleSolver
     {
+        public async IAsyncEnumerable<string> Part1Async(string input)
+        {
+            Input = input;
+            yield return Part1();
+            await Task.Delay(1);
+        }
+        public async IAsyncEnumerable<string> Part2Async(string input)
+        {
+            Input = input;
+            yield return Part2();
+            await Task.Delay(1);
+        }
+
         class Monkey
         {
             public List<long> Items = new();
@@ -99,7 +112,7 @@
                 };
                 ms.Add(m);
             }
-            var bigDiv = ms.Select(x => x.Test).Aggregate(1l, (x, y) => y * x);
+            var bigDiv = ms.Select(x => x.Test).Aggregate(1L, (x, y) => y * x);
             foreach (var round in Enumerable.Range(1, 10000))
             {
                 foreach (var m in ms)
@@ -140,7 +153,7 @@
             }
             foreach (var m in ms)
                 Console.WriteLine("Inspections " + m.Inspections.ToString());
-            var score = ms.Select(x => x.Inspections).OrderByDescending(x => x).Take(2).Aggregate(1l, (x, y) => y * x);
+            var score = ms.Select(x => x.Inspections).OrderByDescending(x => x).Take(2).Aggregate(1L, (x, y) => y * x);
             Console.WriteLine("Score: " + score);
             return score.ToString();
         }

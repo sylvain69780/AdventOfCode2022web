@@ -2,6 +2,19 @@
 {
     public class TreetopTreeHouse : IPuzzleSolver
     {
+        public async IAsyncEnumerable<string> Part1Async(string input)
+        {
+            Input = input;
+            yield return Part1();
+            await Task.Delay(1);
+        }
+        public async IAsyncEnumerable<string> Part2Async(string input)
+        {
+            Input = input;
+            yield return Part2();
+            await Task.Delay(1);
+        }
+
         public string Input { get; set; } = String.Empty;
         public string Part1()
         {
@@ -94,210 +107,6 @@
                 }
             Console.WriteLine(scoreMax);
             return scoreMax.ToString();
-        }
-    }
-    public class SolveDay9 : IPuzzleSolver
-    {
-        public string Input { get; set; } = String.Empty;
-        public string Part1()
-        {
-            return "";
-        }
-        public string Part2()
-        {
-            return "";
-        }
-    }
-    public class SolveDay10 : IPuzzleSolver
-    {
-        public string Input { get; set; } = String.Empty;
-        public string Part1()
-        {
-            return "";
-        }
-        public string Part2()
-        {
-            return "";
-        }
-    }
-    public class SolveDay11 : IPuzzleSolver
-    {
-        public string Input { get; set; } = String.Empty;
-        public string Part1()
-        {
-            return "";
-        }
-        public string Part2()
-        {
-            return "";
-        }
-    }
-    public class SolveDay12 : IPuzzleSolver
-    {
-        public string Input { get; set; } = String.Empty;
-        public string Part1()
-        {
-            return "";
-        }
-        public string Part2()
-        {
-            return "";
-        }
-    }
-    public class SolveDay13 : IPuzzleSolver
-    {
-        public string Input { get; set; } = String.Empty;
-        public string Part1()
-        {
-            return "";
-        }
-        public string Part2()
-        {
-            return "";
-        }
-    }
-    public class SolveDay14 : IPuzzleSolver
-    {
-        public string Input { get; set; } = String.Empty;
-        public string Part1()
-        {
-            return "";
-        }
-        public string Part2()
-        {
-            return "";
-        }
-    }
-    public class SolveDay15 : IPuzzleSolver
-    {
-        public string Input { get; set; } = String.Empty;
-        public string Part1()
-        {
-            return "";
-        }
-        public string Part2()
-        {
-            return "";
-        }
-    }
-    public class SolveDay16 : IPuzzleSolver
-    {
-        public string Input { get; set; } = String.Empty;
-        public string Part1()
-        {
-            return "";
-        }
-        public string Part2()
-        {
-            return "";
-        }
-    }
-    public class SolveDay17 : IPuzzleSolver
-    {
-        public string Input { get; set; } = String.Empty;
-        public string Part1()
-        {
-            return "";
-        }
-        public string Part2()
-        {
-            return "";
-        }
-    }
-    public class SolveDay18 : IPuzzleSolver
-    {
-        public string Input { get; set; } = String.Empty;
-        public string Part1()
-        {
-            return "";
-        }
-        public string Part2()
-        {
-            return "";
-        }
-    }
-    public class SolveDay19 : IPuzzleSolver
-    {
-        public string Input { get; set; } = String.Empty;
-        public string Part1()
-        {
-            return "";
-        }
-        public string Part2()
-        {
-            return "";
-        }
-    }
-    public class SolveDay20 : IPuzzleSolver
-    {
-        public string Input { get; set; } = String.Empty;
-        public string Part1()
-        {
-            return "";
-        }
-        public string Part2()
-        {
-            return "";
-        }
-    }
-    public class SolveDay21 : IPuzzleSolver
-    {
-        public string Input { get; set; } = String.Empty;
-        public string Part1()
-        {
-            return "";
-        }
-        public string Part2()
-        {
-            return "";
-        }
-    }
-    public class SolveDay22 : IPuzzleSolver
-    {
-        public string Input { get; set; } = String.Empty;
-        public string Part1()
-        {
-            return "";
-        }
-        public string Part2()
-        {
-            return "";
-        }
-    }
-    public class SolveDay23 : IPuzzleSolver
-    {
-        public string Input { get; set; } = String.Empty;
-        public string Part1()
-        {
-            return "";
-        }
-        public string Part2()
-        {
-            return "";
-        }
-    }
-    public class SolveDay24 : IPuzzleSolver
-    {
-        public string Input { get; set; } = String.Empty;
-        public string Part1()
-        {
-            return "";
-        }
-        public string Part2()
-        {
-            return "";
-        }
-    }
-    public class SolveDay25 : IPuzzleSolver
-    {
-        public string Input { get; set; } = String.Empty;
-        public string Part1()
-        {
-            return "";
-        }
-        public string Part2()
-        {
-            return "";
         }
     }
 }
