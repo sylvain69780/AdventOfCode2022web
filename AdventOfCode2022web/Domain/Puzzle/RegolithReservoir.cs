@@ -2,13 +2,13 @@
 
 namespace AdventOfCode2022web.Domain.Puzzle
 {
-    struct Pt
-    {
-        public int x;
-        public int y;
-    }
     public class RegolithReservoir : IPuzzleSolver
     {
+        struct Pt
+        {
+            public int x;
+            public int y;
+        }
         public async IAsyncEnumerable<string> Part1Async(string inp)
         {
             var input = inp.Split("\n").Select(x => x.Replace(" -> ", "#").Split('#')
