@@ -120,13 +120,13 @@ namespace AdventOfCode2022web.Domain.Puzzle
                     }
                 }
                 q = nq;
-                //await Task.Delay(1);
-                //yield return "Queue lenght = " + q.Count.ToString();
+                yield return "Queue lenght = " + q.Count.ToString();
+                await Task.Delay(1);
             } while (q.Count > 1 && cnt-- != 0);
             var res = q.Dequeue();
             // too big for int
-            await Task.Delay(1);
             yield return ((long)res.Item1 * 4000000 + (long)res.Item2).ToString();
+            await Task.Delay(1);
         }
 
     }
