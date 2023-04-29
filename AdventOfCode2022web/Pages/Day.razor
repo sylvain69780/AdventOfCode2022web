@@ -9,13 +9,13 @@
 </div>
 <div class="mb-3">
     <div class="mb-3">
-        <button class="btn btn-primary" @onclick="SolvePart1">Solve Part 1</button>
+        <button class="btn btn-primary" disabled=@IsTask1Running @onclick ="SolvePart1">Solve Part 1</button>
     </div>
     <div><pre>@Output1</pre></div>
 </div>
 <div class="mb-3">
     <div class="mb-3">
-        <button class="btn btn-primary" @onclick="SolvePart2">Solve Part 2</button>
+        <button class="btn btn-primary" disabled=@IsTask2Running @onclick ="SolvePart2">Solve Part 2</button>
     </div>
     <div><pre>@Output2</pre></div>
 </div>
@@ -25,6 +25,8 @@
     public int dayNumber { get; set; }
     private IPuzzleSolver _solver = new CalorieCounting();
     private string Input { get; set; } = string.Empty;
+    public bool IsTask1Running { get; set; } = false;
+    public bool IsTask2Running { get; set; } = false;
     protected override async Task OnParametersSetAsync()
     {
         _solver = daySolvers[dayNumber - 1];
@@ -35,20 +37,24 @@
     private string Output1 { get; set; } = string.Empty;
     private async Task SolvePart1()
     {
+        IsTask1Running = true;
         await foreach (var s in _solver.Part1Async(Input))
         {
             Output1 = s;
             StateHasChanged();
         };
+        IsTask1Running = false;
     }
     private string Output2 { get; set; } = string.Empty;
     private async Task SolvePart2()
     {
+        IsTask2Running = true;
         await foreach (var s in _solver.Part2Async(Input))
         {
             Output2 = s;
             StateHasChanged();
         };
+        IsTask2Running = false;
     }
     private IPuzzleSolver[] daySolvers = new IPuzzleSolver[]        {
             new CalorieCounting(),

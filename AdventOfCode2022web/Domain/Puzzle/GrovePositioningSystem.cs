@@ -70,7 +70,7 @@
             }
             Console.WriteLine("END " + string.Join(',', input.Select(x => x.Value)));
             var selector = new int[3] { 1000, 2000, 3000 };
-            var score = 0l;
+            var score = 0L;
             foreach (var i in selector)
             {
                 var zero = input.FindIndex(x => x.Value == 0);
