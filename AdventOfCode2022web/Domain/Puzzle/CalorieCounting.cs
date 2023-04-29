@@ -5,25 +5,25 @@
         private static string[] ToLines(string s) => s.Split("\n");
         protected override string Part1(string puzzleInput)
         {
-            int elfCalories = 0, maxCalories = 0;
+            int sumOfCalories = 0, maxCalories = 0;
             foreach (var value in ToLines(puzzleInput))
             {
-                elfCalories = value == string.Empty ? 0 : elfCalories + int.Parse(value);
-                maxCalories = Math.Max(maxCalories, elfCalories);
+                sumOfCalories = value == string.Empty ? 0 : sumOfCalories + int.Parse(value);
+                maxCalories = Math.Max(maxCalories, sumOfCalories);
             }
             return maxCalories.ToString();
         }
         protected override string Part2(string puzzleInput)
         {
-            var calories = new List<int>() { 0 };
+            var sumOfCalories = new List<int>() { 0 };
             foreach (var value in ToLines(puzzleInput))
             {
                 if (value == string.Empty)
-                    calories.Add(0);
+                    sumOfCalories.Add(0);
                 else
-                    calories[-1] += int.Parse(value);
+                    sumOfCalories[-1] += int.Parse(value);
             }
-            return calories.OrderByDescending(x => x).Take(3).Sum().ToString();
+            return sumOfCalories.OrderByDescending(x => x).Take(3).Sum().ToString();
         }
     }
 }
