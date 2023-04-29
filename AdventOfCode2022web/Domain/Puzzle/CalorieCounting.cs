@@ -2,36 +2,26 @@
 {
     public class CalorieCounting : PuzzleSolver
     {
-        protected override string Part1(string inp)
+        private static string[] ToLines(string s) => s.Split("\n");
+        protected override string Part1(string puzzleInput)
         {
-            var elfCalories = 0;
-            var maxCalories = 0;
-            foreach (var line in inp.Split("\n").Append(string.Empty))
+            int elfCalories = 0, maxCalories = 0;
+            foreach (var value in ToLines(puzzleInput))
             {
-                if (line != string.Empty)
-                    elfCalories += int.Parse(line);
-                else
-                {
-                    if (elfCalories > maxCalories)
-                        maxCalories = elfCalories;
-                    elfCalories = 0;
-                }
+                elfCalories = value == string.Empty ? 0 : elfCalories + int.Parse(value);
+                maxCalories = Math.Max(maxCalories, elfCalories);
             }
             return maxCalories.ToString();
         }
-        protected override string Part2(string inp)
+        protected override string Part2(string puzzleInput)
         {
-            var calories = new List<int>();
-            var elfCalories = 0;
-            foreach (var line in inp.Split("\n").Append(string.Empty))
+            var calories = new List<int>() { 0 };
+            foreach (var value in ToLines(puzzleInput))
             {
-                if (line != string.Empty)
-                    elfCalories += int.Parse(line);
+                if (value == string.Empty)
+                    calories.Add(0);
                 else
-                {
-                    calories.Add(elfCalories);
-                    elfCalories = 0;
-                }
+                    calories[-1] += int.Parse(value);
             }
             return calories.OrderByDescending(x => x).Take(3).Sum().ToString();
         }
