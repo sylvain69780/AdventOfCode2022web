@@ -21,7 +21,7 @@
                 if (value == string.Empty)
                     sumOfCalories.Add(0);
                 else
-                    sumOfCalories[-1] += int.Parse(value);
+                    sumOfCalories[^1] += int.Parse(value);
             }
             return sumOfCalories.OrderByDescending(x => x).Take(3).Sum().ToString();
         }
