@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-
+﻿
 namespace AdventOfCode2022web.Domain.Puzzle
 {
     public abstract class PuzzleSolver : IPuzzleSolver

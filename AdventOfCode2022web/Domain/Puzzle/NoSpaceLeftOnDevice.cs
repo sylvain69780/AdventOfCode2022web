@@ -1,6 +1,4 @@
-﻿using System.Drawing;
-
-namespace AdventOfCode2022web.Domain.Puzzle
+﻿namespace AdventOfCode2022web.Domain.Puzzle
 {
     public class NoSpaceLeftOnDevice : PuzzleSolver
     {

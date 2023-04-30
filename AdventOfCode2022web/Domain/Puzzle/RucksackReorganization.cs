@@ -1,5 +1,4 @@
-﻿using System;
-
+﻿
 namespace AdventOfCode2022web.Domain.Puzzle
 {
     public class RucksackReorganization : PuzzleSolver

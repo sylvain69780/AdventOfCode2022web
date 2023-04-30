@@ -1,6 +1,4 @@
-﻿using System.Text.RegularExpressions;
-
-namespace AdventOfCode2022web.Domain.Puzzle
+﻿namespace AdventOfCode2022web.Domain.Puzzle
 {
     public class RegolithReservoir : IPuzzleSolver
     {
