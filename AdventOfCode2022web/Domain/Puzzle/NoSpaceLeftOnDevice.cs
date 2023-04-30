@@ -2,9 +2,12 @@
 {
     public class NoSpaceLeftOnDevice : PuzzleSolver
     {
-        protected override string Part1(string inp)
+        private static string Format(int v) => v.ToString();
+        private static string[] ToLines(string s) => s.Split("\n");
+
+        protected override string Part1(string puzzleInput)
         {
-            var input = inp.Split("\n");
+            var input = ToLines(puzzleInput);
             var contents = new Dictionary<string, int>
             {
                 { "#/", 0 }
@@ -47,9 +50,9 @@
             Console.WriteLine("Result :" + res);
             return res.ToString();
         }
-        protected override string Part2(string inp)
+        protected override string Part2(string puzzleInput)
         {
-            var input = inp.Split("\n");
+            var input = ToLines(puzzleInput);
             var contents = new Dictionary<string, int>
             {
                 { "#/", 0 }
