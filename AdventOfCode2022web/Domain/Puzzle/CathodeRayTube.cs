@@ -29,7 +29,7 @@ namespace AdventOfCode2022web.Domain.Puzzle
             yield return Format(sumOfSixSignalStrengths);
         }
 
-        private static IEnumerable<int> GetProgramResults(IEnumerable<int> numsToAdd)
+        private static IEnumerable<int> ComputeValuesOfXRegister(IEnumerable<int> numsToAdd)
         {
             var valueOfXregister = 1;
             var currentCycle = 0;
@@ -46,18 +46,17 @@ namespace AdventOfCode2022web.Domain.Puzzle
             var program = ToLines(puzzleInput);
             var numsToAdd = program.Select(x => x.Split(" "))
                 .SelectMany(x => x[0] == "noop" ? new int[] { 0 } : new int[] { 0, int.Parse(x[1]) });
-            var programResults = GetProgramResults(numsToAdd).GetEnumerator();
+            var valuesOfXRegister = ComputeValuesOfXRegister(numsToAdd).GetEnumerator();
             var messageLine = new StringBuilder();
             var message = new List<string>();
-            foreach (var y in Enumerable.Range(0, 6))
+            foreach (var _ in Enumerable.Range(0, 6))
             {
                 messageLine.Clear();
-                foreach (var x in Enumerable.Range(0, 40))
-                    if (programResults.MoveNext() && programResults.Current >= x - 1 && programResults.Current <= x + 1)
+                foreach (var pixelPosX in Enumerable.Range(0, 40))
+                    if (valuesOfXRegister.MoveNext() && valuesOfXRegister.Current >= pixelPosX - 1 && valuesOfXRegister.Current <= pixelPosX + 1)
                         messageLine.Append('#');
                     else
                         messageLine.Append('.');
-                Console.WriteLine(messageLine);
                 message.Add(messageLine.ToString());
             }
             yield return string.Join("\n", message);

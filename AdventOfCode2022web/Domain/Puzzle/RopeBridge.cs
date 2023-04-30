@@ -13,6 +13,20 @@
                     { "D", (0,-1)},
                 };
 
+        private static (int x,int y) MoveTailPosition((int x, int y) tail, (int x, int y) head)
+        {
+            var newTail = tail;
+            var (dx, dy) = (head.x - newTail.x, head.y - newTail.y);
+            if (Math.Abs(dx) > 1 || Math.Abs(dy) > 1)
+            {
+                if (head.x - newTail.x > 0) newTail.x++;
+                if (newTail.x - head.x > 0) newTail.x--;
+                if (head.y - newTail.y > 0) newTail.y++;
+                if (newTail.y - head.y > 0) newTail.y--;
+            }
+            return newTail;
+        }
+
         public IEnumerable<string> SolveFirstPart(string puzzleInput)
         {
             var seriesOfMotions = ToLines(puzzleInput)
@@ -27,12 +41,7 @@
                 var (x, y) = Directions[move];
                 head.x += x;
                 head.y += y;
-                var (dx, dy) = (head.x - tail.x, head.y - tail.y);
-                if (Math.Abs(dx) < 2 && Math.Abs(dy) < 2) continue;
-                if (head.x - tail.x > 0) tail.x++;
-                if (tail.x - head.x > 0) tail.x--;
-                if (head.y - tail.y > 0) tail.y++;
-                if (tail.y - head.y > 0) tail.y--;
+                tail = MoveTailPosition(tail, head);
                 visitedPositions.Add(tail);
             }
             yield return Format(visitedPositions.Count);
@@ -52,18 +61,11 @@
                 var (x, y) = Directions[move];
                 head.x += x;
                 head.y += y;
-                var prev = head;
+                var previous = head;
                 foreach (var i in Enumerable.Range(0, 9))
                 {
-                    var (dx, dy) = (prev.x - tail[i].x, prev.y - tail[i].y);
-                    if (Math.Abs(dx) > 1 || Math.Abs(dy) > 1)
-                    {
-                        if (prev.x - tail[i].x > 0) tail[i].x++;
-                        if (tail[i].x - prev.x > 0) tail[i].x--;
-                        if (prev.y - tail[i].y > 0) tail[i].y++;
-                        if (tail[i].y - prev.y > 0) tail[i].y--;
-                    }
-                    prev = tail[i];
+                    tail[i] = MoveTailPosition(tail[i], previous);
+                    previous = tail[i];
                 }
                 visited.Add(tail[8]);
             }
