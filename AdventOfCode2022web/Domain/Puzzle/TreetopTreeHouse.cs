@@ -8,7 +8,7 @@
 
         private class HeightMap
         {
-            public string[] Map { get; set; } = new string[0];
+            public string[] Map { get; set; } = Array.Empty<string>();
 
             public HeightMap(string[] map)
             {
@@ -16,7 +16,7 @@
             }
             public int Width => Map[0].Length;
             public int Height => Map.Length;
-            public int TreeHeight(int x, int y) => (int)Map[y][x] - (int)'0';
+            public int TreeHeight(int x, int y) => Map[y][x] - '0';
             public bool BorderReached(int x, int y) => x < 0 || x >= Width || y < 0 || y >= Height;
         }
 
