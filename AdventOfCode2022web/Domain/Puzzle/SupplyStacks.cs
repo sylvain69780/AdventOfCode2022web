@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 
 namespace AdventOfCode2022web.Domain.Puzzle
 {
-    public class SupplyStacks : PuzzleSolver
+    public class SupplyStacks : IPuzzleSolver
     {
         private static string[] ToLines(string s) => s.Split("\n");
 
@@ -39,7 +39,7 @@ namespace AdventOfCode2022web.Domain.Puzzle
             return (stacks,moves);
         }
 
-        protected override string SolveFirst(string puzzleInput)
+        public IEnumerable<string> SolveFirstPart(string puzzleInput)
         {
             var (stacks,moves) = ReadStacksAndMoves(puzzleInput);
             foreach(var (count, from, to) in moves)
@@ -50,9 +50,9 @@ namespace AdventOfCode2022web.Domain.Puzzle
                     stacks[to-1].Push(c);
                 }
             }
-            return string.Join("", stacks.Select(x => x.FirstOrDefault(' ')));
+            yield return string.Join("", stacks.Select(x => x.FirstOrDefault(' ')));
         }
-        protected override string SolveSecond(string puzzleInput)
+        public IEnumerable<string> SolveSecondPart(string puzzleInput)
         {
             var (stacks, moves) = ReadStacksAndMoves(puzzleInput);
             var tmp = new Stack<char>();
@@ -63,7 +63,7 @@ namespace AdventOfCode2022web.Domain.Puzzle
                 for (int i = 0; i < count; i++)
                     stacks[to - 1].Push(tmp.Pop());
             }
-            return string.Join("", stacks.Select(x => x.FirstOrDefault(' ')));
+            yield  return string.Join("", stacks.Select(x => x.FirstOrDefault(' ')));
         }
     }
 }

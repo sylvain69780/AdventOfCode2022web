@@ -1,6 +1,6 @@
 ﻿namespace AdventOfCode2022web.Domain.Puzzle
 {
-    public class DistressSignal : PuzzleSolver
+    public class DistressSignal : IPuzzleSolver
     {
         class Day13Element
         {
@@ -72,7 +72,7 @@
 
         }
 
-        protected override string SolveFirst(string inp)
+        public IEnumerable<string> SolveFirstPart(string inp)
         {
             var input = inp.Split("\n").ToList().GetEnumerator();
             var idx = 0;
@@ -88,14 +88,14 @@
                 Console.WriteLine(r);
                 if (r == 1) score += idx;
             }
-            return score.ToString();
+            yield return score.ToString();
         }
-        protected override string SolveSecond(string inp)
+        public IEnumerable<string> SolveSecondPart(string inp)
         {
             var input = inp.Split("\n").Where(x => x != "").Append("[[2]]").Append("[[6]]").Select(x => (a: x, b: Day13Element.ReadInput(x)))
                 .OrderByDescending(x => x.b, new MyComparer()).Select(x => x.a).ToList();
 
-            return ((1 + input.IndexOf("[[2]]")) * (1 + input.IndexOf("[[6]]"))).ToString();
+            yield return((1 + input.IndexOf("[[2]]")) * (1 + input.IndexOf("[[6]]"))).ToString();
         }
     }
 }

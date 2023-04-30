@@ -1,10 +1,10 @@
 ﻿namespace AdventOfCode2022web.Domain.Puzzle
 {
-    public class TuningTrouble : PuzzleSolver
+    public class TuningTrouble : IPuzzleSolver
     {
         private static string Format(int v) => v.ToString();
 
-        protected override string SolveFirst(string puzzleInput)
+        public IEnumerable<string> SolveFirstPart(string puzzleInput)
         {
             var marker = new Queue<char>();
             var processedCharacters = 0;
@@ -15,9 +15,9 @@
                 marker.Enqueue(c);
                 if (marker.Count == 4 && marker.GroupBy(x => x).Select(y => y.Count()).Max() == 1) break;
             }
-            return Format(processedCharacters);
+            yield return Format(processedCharacters);
         }
-        protected override string SolveSecond(string puzzleInput)
+        public IEnumerable<string> SolveSecondPart(string puzzleInput)
         {
             var marker = new Queue<char>();
             var processedCharacters = 0;
@@ -28,7 +28,7 @@
                 marker.Enqueue(c);
                 if (marker.Count == 14 && marker.GroupBy(x => x).Select(y => y.Count()).Max() == 1) break;
             }
-            return Format(processedCharacters);
+            yield return Format(processedCharacters);
         }
     }
 }

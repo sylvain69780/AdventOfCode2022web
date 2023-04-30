@@ -2,7 +2,7 @@
 {
     public class PyroclasticFlow : IPuzzleSolver
     {
-        public async IAsyncEnumerable<string> Part1Async(string inp)
+        public IEnumerable<string> SolveFirstPart(string inp)
         {
             var input = inp;
             var inputs = input.Length;
@@ -27,7 +27,6 @@
                 var top = grid.Count == 0 ? 0 : grid.Select(x => x.Item2).Max() + 1;
                 Console.WriteLine($"{i}: Tower top is at {top}");
                 yield return $"{i}: Tower top is at {top}";
-                await Task.Delay(1);
 
                 var (px, py) = (2, top + 3);
                 while (!stop)
@@ -43,7 +42,7 @@
                 }
             }
         }
-        public async IAsyncEnumerable<string> Part2Async(string inp)
+        public IEnumerable<string> SolveSecondPart(string inp)
         {
             var input = inp;
             var inputs = input.Length;
@@ -109,7 +108,6 @@
                         }
                         Console.WriteLine($"{i} key={key} top={top} starting {start} dist = {dist}.");
                         yield return $"{i} key={key} top={top} starting {start} dist = {dist}.";
-                        await Task.Delay(1);
                     }
                 }
                 i++;
@@ -122,7 +120,6 @@
             var v4 = (big - start) / dist;
             var v5 = heights[start + dist] - heights[start];
             yield return $"{v1} + {v4}x{v5} + {v3} = {v1 + v4 * v5 + v3}";
-            await Task.Delay(1);
         }
     }
 }

@@ -13,7 +13,7 @@ namespace AdventOfCode2022web.Domain.Puzzle
             public int Pressure;
             public List<string> Opened;
         }
-        public async IAsyncEnumerable<string> Part1Async(string inp)
+        public IEnumerable<string> SolveFirstPart(string inp)
         {
             var r = new Regex(@"Valve (..) has flow rate=(\d+); tunnels? leads? to valves? (.+)");
             var input = inp.Split("\n")
@@ -79,7 +79,6 @@ namespace AdventOfCode2022web.Domain.Puzzle
                                 score = newVisitor.Pressure;
                                 Console.WriteLine($"Visitor at {newVisitor.Position} pressure Rate {rate} END {newVisitor.Pressure} opened {string.Join(',', newVisitor.Opened)}.");
                                 yield return $"Visitor at {newVisitor.Position} pressure Rate {rate} END {newVisitor.Pressure} opened {string.Join(',', newVisitor.Opened)}.";
-                                await Task.Delay(1);
                                 newVisitor.Journal = visitor.Journal.GetRange(0, visitor.Journal.Count);
                                 scores.Add(newVisitor);
                             }
@@ -109,7 +108,7 @@ namespace AdventOfCode2022web.Domain.Puzzle
             }
 
         }
-        public async IAsyncEnumerable<string> Part2Async(string inp)
+        public IEnumerable<string> SolveSecondPart(string inp)
         {
             var r = new Regex(@"Valve (..) has flow rate=(\d+); tunnels? leads? to valves? (.+)");
             var input = inp.Split("\n")
@@ -205,7 +204,6 @@ namespace AdventOfCode2022web.Domain.Puzzle
                                 score = s;
                                 found = false;
                                 yield return $"BEST {score} " + string.Join(',', guess);
-                                await Task.Delay(1);
                                 break;
                             }
                             else
@@ -220,7 +218,7 @@ namespace AdventOfCode2022web.Domain.Puzzle
 
 
         }
-        public async IAsyncEnumerable<string> Part2bAsync(string inp)
+        public IEnumerable<string> Part2bAsync(string inp)
         {
             var r = new Regex(@"Valve (..) has flow rate=(\d+); tunnels? leads? to valves? (.+)");
             var input = inp.Split("\n")
@@ -380,7 +378,6 @@ namespace AdventOfCode2022web.Domain.Puzzle
                     Console.WriteLine($"{string.Join(',', win.Opened)} {win.Pressure}");
                     Console.WriteLine($"SCORE Visitor at {win.Position}, elephant at {win.PositionElephant} pressure {win.Pressure} opened {string.Join(',', win.Opened)}.");
                     yield return $"SCORE Visitor at {win.Position}, elephant at {win.PositionElephant} pressure {win.Pressure} opened {string.Join(',', win.Opened)}.";
-                    await Task.Delay(1);
                 }
             }
         }

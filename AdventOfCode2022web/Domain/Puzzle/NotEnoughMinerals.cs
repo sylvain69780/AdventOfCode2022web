@@ -4,7 +4,7 @@ namespace AdventOfCode2022web.Domain.Puzzle
 {
     public class NotEnoughMinerals : IPuzzleSolver
     {
-        public async IAsyncEnumerable<string> Part1Async(string inp)
+        public IEnumerable<string> SolveFirstPart(string inp)
         {
             var r = new Regex(@"Blueprint (\d+): Each ore robot costs (\d+) ore. Each clay robot costs (\d+) ore. Each obsidian robot costs (\d+) ore and (\d+) clay. Each geode robot costs (\d+) ore and (\d+) obsidian.");
             var input = inp.Split("\n")
@@ -26,9 +26,8 @@ namespace AdventOfCode2022web.Domain.Puzzle
                 quality += score * bp.Num;
             }
             yield return $"{quality}";
-            await Task.Delay(1);
         }
-        public async IAsyncEnumerable<string> Part2Async(string inp)
+        public IEnumerable<string> SolveSecondPart(string inp)
         {
             var r = new Regex(@"Blueprint (\d+): Each ore robot costs (\d+) ore. Each clay robot costs (\d+) ore. Each obsidian robot costs (\d+) ore and (\d+) clay. Each geode robot costs (\d+) ore and (\d+) obsidian.");
             var input = inp.Split("\n")
@@ -50,7 +49,6 @@ namespace AdventOfCode2022web.Domain.Puzzle
                 quality *= score;
             }
             yield return $"{quality}";
-            await Task.Delay(1);
         }
         struct BluePrint
         {

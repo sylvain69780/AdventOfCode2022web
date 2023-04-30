@@ -9,13 +9,13 @@
 </div>
 <div class="mb-3">
     <div class="mb-3">
-        <button class="btn btn-primary" disabled=@IsTask1Running @onclick ="SolvePart1">Solve Part 1</button>
+        <button class="btn btn-primary" disabled=@IsTask1Running @onclick="SolveFirstPart">Solve Part 1</button>
     </div>
     <div><pre>@Output1</pre></div>
 </div>
 <div class="mb-3">
     <div class="mb-3">
-        <button class="btn btn-primary" disabled=@IsTask2Running @onclick ="SolvePart2">Solve Part 2</button>
+        <button class="btn btn-primary" disabled=@IsTask2Running @onclick="SolveSecondPart">Solve Part 2</button>
     </div>
     <div><pre>@Output2</pre></div>
 </div>
@@ -35,24 +35,26 @@
     }
 
     private string Output1 { get; set; } = string.Empty;
-    private async Task SolvePart1()
+    private async Task SolveFirstPart()
     {
         IsTask1Running = true;
-        await foreach (var s in _solver.Part1Async(Input))
+        foreach (var s in _solver.SolveFirstPart(Input))
         {
             Output1 = s;
             StateHasChanged();
+            await Task.Delay(1);
         };
         IsTask1Running = false;
     }
     private string Output2 { get; set; } = string.Empty;
-    private async Task SolvePart2()
+    private async Task SolveSecondPart()
     {
         IsTask2Running = true;
-        await foreach (var s in _solver.Part2Async(Input))
+        foreach (var s in _solver.SolveSecondPart(Input))
         {
             Output2 = s;
             StateHasChanged();
+            await Task.Delay(1);
         };
         IsTask2Running = false;
     }

@@ -4,7 +4,7 @@ namespace AdventOfCode2022web.Domain.Puzzle
 {
     public class MonkeyMap : IPuzzleSolver
     {
-        public async IAsyncEnumerable<string> Part1Async(string inp)
+        public IEnumerable<string> SolveFirstPart(string inp)
         {
             var input = inp.Split("\n");
             var inputCommands = input[^1];
@@ -76,9 +76,8 @@ namespace AdventOfCode2022web.Domain.Puzzle
             Console.WriteLine($"({x},{y}) {facing}");
             var score = 1000 * y + 4 * x + facing;
             yield return $"SCORE {score}";
-            await Task.Delay(1);
         }
-        public async IAsyncEnumerable<string> Part2Async(string inp)
+        public IEnumerable<string> SolveSecondPart(string inp)
         {
             var input = inp.Split("\n");
             var inputCommands = input[^1];
@@ -187,7 +186,6 @@ namespace AdventOfCode2022web.Domain.Puzzle
             Console.WriteLine($"({x},{y}) {facing}");
             var score = 1000 * y + 4 * x + facing;
             yield return $"SCORE {score}";
-            await Task.Delay(1);
         }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace AdventOfCode2022web.Domain.Puzzle
 {
-    public class CampCleanup : PuzzleSolver
+    public class CampCleanup : IPuzzleSolver
     {
         private static string[] ToLines(string s) => s.Split("\n");
         private static string Format(int v) => v.ToString();
@@ -41,22 +41,22 @@ namespace AdventOfCode2022web.Domain.Puzzle
             }
         }
 
-        protected override string SolveFirst(string puzzleInput)
+        public IEnumerable<string> SolveFirstPart(string puzzleInput)
         {
             var score = 0;
             foreach (var (interval1, interval2) in ListOfSectionAssignmentPairs(ToLines(puzzleInput)))
                 if (interval1.Contains(interval2) || interval2.Contains(interval1)) 
                     score++;
-            return Format(score);
+            yield return Format(score);
         }
 
-        protected override string SolveSecond(string puzzleInput)
+        public IEnumerable<string> SolveSecondPart(string puzzleInput)
         {
             var score = 0;
             foreach (var (interval1, interval2) in ListOfSectionAssignmentPairs(ToLines(puzzleInput)))
                 if (interval1.Overlaps(interval2))
                     score++;
-            return Format(score);
+            yield return Format(score);
         }
     }
 }

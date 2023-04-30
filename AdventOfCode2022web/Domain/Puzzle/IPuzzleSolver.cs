@@ -1,10 +1,8 @@
-﻿using System.Collections.Generic;
-
-namespace AdventOfCode2022web.Domain.Puzzle
+﻿namespace AdventOfCode2022web.Domain.Puzzle
 {
     public interface IPuzzleSolver
     {
-        IAsyncEnumerable<string> Part1Async(string input);
-        IAsyncEnumerable<string> Part2Async(string input);
+        IEnumerable<string> SolveFirstPart(string input);
+        IEnumerable<string> SolveSecondPart(string input);
     }
 }

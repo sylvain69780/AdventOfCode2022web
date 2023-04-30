@@ -1,7 +1,7 @@
 ﻿
 namespace AdventOfCode2022web.Domain.Puzzle
 {
-    public class RucksackReorganization : PuzzleSolver
+    public class RucksackReorganization : IPuzzleSolver
     {
         private static string[] ToLines(string s) => s.Split("\n");
         private static string Format(int v) => v.ToString();
@@ -13,7 +13,7 @@ namespace AdventOfCode2022web.Domain.Puzzle
         /// </summary>
         private static int Priority(char item) => item >= 'a' ? item - 'a' + 1 : item - 'A' + 27;
 
-        protected override string SolveFirst(string puzzleInput)
+        public IEnumerable<string> SolveFirstPart(string puzzleInput)
         {
             var score = 0;
             foreach (var rucksack in ToLines(puzzleInput))
@@ -23,10 +23,10 @@ namespace AdventOfCode2022web.Domain.Puzzle
                 var sharedItem = compartmentA.First(x => compartmentB.Contains(x));
                 score += Priority(sharedItem);
             }
-            return Format(score);
+            yield return Format(score);
         }
 
-        protected override string SolveSecond(string puzzleInput)
+        public IEnumerable<string> SolveSecondPart(string puzzleInput)
         {
             var score = 0;
             var rucksacks = ToLines(puzzleInput);
@@ -36,7 +36,7 @@ namespace AdventOfCode2022web.Domain.Puzzle
                 var badge = firstGroup.First(x => secondGroup.Contains(x) && thirdGroup.Contains(x));
                 score += Priority(badge);
             }
-            return Format(score);
+            yield return Format(score);
         }
     }
 }

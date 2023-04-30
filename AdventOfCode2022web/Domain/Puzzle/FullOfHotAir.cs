@@ -2,7 +2,7 @@
 {
     public class FullOfHotAir : IPuzzleSolver
     {
-        public async IAsyncEnumerable<string> Part1Async(string inp)
+        public IEnumerable<string> SolveFirstPart(string inp)
         {
             var input = inp.Split("\n");
             var values = new char[] { '=', '-', '0', '1', '2' };
@@ -31,12 +31,10 @@
                 num += addUp;
             }
             yield return string.Concat(snafu);
-            await Task.Delay(1);
         }
-        public async IAsyncEnumerable<string> Part2Async(string inp)
+        public IEnumerable<string> SolveSecondPart(string inp)
         {
             yield return "The second part of the Challenge was to solve all Puzzles !";
-            await Task.Delay(1);
         }
     }
 }

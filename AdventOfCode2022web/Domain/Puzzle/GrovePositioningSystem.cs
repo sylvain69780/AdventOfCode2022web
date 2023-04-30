@@ -2,7 +2,7 @@
 {
     public class GrovePositioningSystem : IPuzzleSolver
     {
-        public async IAsyncEnumerable<string> Part1Async(string inp)
+        public IEnumerable<string> SolveFirstPart(string inp)
         {
             var c = 0;
             var input = inp.Split("\n").Select(x => (Idx: c++, Value: int.Parse(x))).ToList();
@@ -37,10 +37,9 @@
                 score += input[index].Value;
             }
             yield return $"SCORE {score}";
-            await Task.Delay(1);
         }
 
-        public async IAsyncEnumerable<string> Part2Async(string inp)
+        public IEnumerable<string> SolveSecondPart(string inp)
         {
             var c = 0;
             var input = inp.Split("\n").Select(x => (Idx: c++, Value: 811589153 * long.Parse(x))).ToList();
@@ -78,7 +77,6 @@
                 score += input[index].Value;
             }
             yield return $"SCORE {score}";
-            await Task.Delay(1);
         }
     }
 }

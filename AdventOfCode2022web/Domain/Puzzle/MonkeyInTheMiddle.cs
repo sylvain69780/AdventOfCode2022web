@@ -1,6 +1,6 @@
 ﻿namespace AdventOfCode2022web.Domain.Puzzle
 {
-    public class MonkeyInTheMiddle : PuzzleSolver
+    public class MonkeyInTheMiddle : IPuzzleSolver
     {
         class Monkey
         {
@@ -12,7 +12,7 @@
             public long Inspections;
         }
 
-        protected override string SolveFirst(string inp)
+        public IEnumerable<string> SolveFirstPart(string inp)
         {
             var input = inp.Split("\n").AsEnumerable().GetEnumerator();
             var ms = new List<Monkey>();
@@ -70,9 +70,9 @@
                 score = ms.Select(x => x.Inspections).OrderByDescending(x => x).Take(2).Aggregate((long)1, (x, y) => y * x);
                 Console.WriteLine("Score: " + score);
             }
-            return score.ToString();
+            yield  return score.ToString();
         }
-        protected override string SolveSecond(string inp)
+        public IEnumerable<string> SolveSecondPart(string inp)
         {
             var input = inp.Split("\n").AsEnumerable().GetEnumerator();
             var ms = new List<Monkey>();
@@ -142,7 +142,7 @@
                 Console.WriteLine("Inspections " + m.Inspections.ToString());
             var score = ms.Select(x => x.Inspections).OrderByDescending(x => x).Take(2).Aggregate(1L, (x, y) => y * x);
             Console.WriteLine("Score: " + score);
-            return score.ToString();
+            yield return score.ToString();
         }
     }
 }

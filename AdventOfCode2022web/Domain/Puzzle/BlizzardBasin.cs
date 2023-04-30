@@ -2,7 +2,7 @@
 {
     public class BlizzardBasin : IPuzzleSolver
     {
-        public async IAsyncEnumerable<string> Part1Async(string inp)
+        public IEnumerable<string> SolveFirstPart(string inp)
         {
             var input = inp.Split("\n");
             var start = (x: input[0].IndexOf('.'), y: 0);
@@ -63,9 +63,8 @@
                 search = newSearch;
             } while (search.Count > 0);
             yield return $"NOT FOUND {minute}";
-            await Task.Delay(1);
         }
-        public async IAsyncEnumerable<string> Part2Async(string inp)
+        public IEnumerable<string> SolveSecondPart(string inp)
         {
             var input = inp.Split("\n");
             var start = (x: input[0].IndexOf('.'), y: 0);
@@ -186,7 +185,6 @@
                 search = newSearch;
             } while (search.Count > 0);
             yield return $"SEARCH 3 completed {minute}";
-            await Task.Delay(1);
         }
 
     }

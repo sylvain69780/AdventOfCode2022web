@@ -10,7 +10,7 @@ namespace AdventOfCode2022web.Domain.Puzzle
             public int y;
         }
 
-        public async IAsyncEnumerable<string> Part1Async(string inp)
+        public IEnumerable<string> SolveFirstPart(string inp)
         {
             var r = new Regex(@"x=(-?\d+), y=(-?\d+)");
             var input = inp.Split("\n")
@@ -61,10 +61,9 @@ namespace AdventOfCode2022web.Domain.Puzzle
                     }
                 }
             }
-            await Task.Delay(1);
             yield return score.ToString();
         }
-        public async IAsyncEnumerable<string> Part2Async(string inp)
+        public IEnumerable<string> SolveSecondPart(string inp)
         {
             var r = new Regex(@"x=(-?\d+), y=(-?\d+)");
             var input = inp.Split("\n")
@@ -121,13 +120,10 @@ namespace AdventOfCode2022web.Domain.Puzzle
                 }
                 q = nq;
                 yield return "Queue lenght = " + q.Count.ToString();
-                await Task.Delay(1);
             } while (q.Count > 1 && cnt-- != 0);
             var res = q.Dequeue();
             // too big for int
             yield return ((long)res.Item1 * 4000000 + (long)res.Item2).ToString();
-            await Task.Delay(1);
         }
-
     }
 }

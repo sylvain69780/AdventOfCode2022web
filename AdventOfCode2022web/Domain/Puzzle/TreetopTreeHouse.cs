@@ -1,6 +1,6 @@
 ﻿namespace AdventOfCode2022web.Domain.Puzzle
 {
-    public class TreetopTreeHouse : PuzzleSolver
+    public class TreetopTreeHouse : IPuzzleSolver
     {
         private static string[] ToLines(string s) => s.Split("\n");
         private static string Format(int v) => v.ToString();
@@ -20,7 +20,7 @@
             public bool BorderReached(int x, int y) => x < 0 || x >= Width || y < 0 || y >= Height;
         }
 
-        protected override string SolveFirst(string puzzleInput)
+        public IEnumerable<string> SolveFirstPart(string puzzleInput)
         {
             var map = new HeightMap(ToLines(puzzleInput));
             var visibleTrees = 0;
@@ -43,12 +43,12 @@
                     }
                 }
 
-            return Format(visibleTrees);
+            yield return Format(visibleTrees);
         }
 
         private static readonly (int, int)[] Directions = new (int x, int y)[] { (1, 0), (-1, 0), (0, 1), (0, -1) };
 
-        protected override string SolveSecond(string puzzleInput)
+        public IEnumerable<string> SolveSecondPart(string puzzleInput)
         {
             var map = new HeightMap(ToLines(puzzleInput));
             var scoreMax = 0;
@@ -70,7 +70,7 @@
                     }
                     scoreMax = Math.Max(score, scoreMax);
                 }
-            return Format(scoreMax);
+            yield return Format(scoreMax);
         }
     }
 }

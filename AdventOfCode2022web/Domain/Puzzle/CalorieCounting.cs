@@ -1,9 +1,9 @@
 ﻿namespace AdventOfCode2022web.Domain.Puzzle
 {
-    public class CalorieCounting : PuzzleSolver
+    public class CalorieCounting : IPuzzleSolver
     {
         private static string[] ToLines(string s) => s.Split("\n");
-        protected override string SolveFirst(string puzzleInput)
+        public IEnumerable<string> SolveFirstPart(string puzzleInput)
         {
             int sumOfCalories = 0, maxCalories = 0;
             foreach (var value in ToLines(puzzleInput))
@@ -14,9 +14,9 @@
                     sumOfCalories += int.Parse(value);
                 maxCalories = Math.Max(maxCalories, sumOfCalories);
             }
-            return maxCalories.ToString();
+            yield return maxCalories.ToString();
         }
-        protected override string SolveSecond(string puzzleInput)
+        public IEnumerable<string> SolveSecondPart(string puzzleInput)
         {
             var sumOfCalories = new List<int>() { 0 };
             foreach (var value in ToLines(puzzleInput))
@@ -26,7 +26,7 @@
                 else
                     sumOfCalories[^1] += int.Parse(value);
             }
-            return sumOfCalories.OrderByDescending(x => x).Take(3).Sum().ToString();
+            yield return sumOfCalories.OrderByDescending(x => x).Take(3).Sum().ToString();
         }
     }
 }

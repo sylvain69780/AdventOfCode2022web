@@ -2,12 +2,12 @@
 
 namespace AdventOfCode2022web.Domain.Puzzle
 {
-    public class CathodeRayTube : PuzzleSolver
+    public class CathodeRayTube : IPuzzleSolver
     {
         private static string Format(int v) => v.ToString();
         private static string[] ToLines(string s) => s.Split("\n");
 
-        protected override string SolveFirst(string puzzleInput)
+        public IEnumerable<string> SolveFirstPart(string puzzleInput)
         {
             var program = ToLines(puzzleInput);
             var numsToAdd = program.Select(x => x.Split(" "))
@@ -26,7 +26,7 @@ namespace AdventOfCode2022web.Domain.Puzzle
                 }
                 valueOfXregister += value;
             }
-            return Format(sumOfSixSignalStrengths);
+            yield return Format(sumOfSixSignalStrengths);
         }
 
         private static IEnumerable<int> GetProgramResults(IEnumerable<int> numsToAdd)
@@ -41,7 +41,7 @@ namespace AdventOfCode2022web.Domain.Puzzle
             }
         }
 
-        protected override string SolveSecond(string puzzleInput)
+        public IEnumerable<string> SolveSecondPart(string puzzleInput)
         {
             var program = ToLines(puzzleInput);
             var numsToAdd = program.Select(x => x.Split(" "))
@@ -60,7 +60,7 @@ namespace AdventOfCode2022web.Domain.Puzzle
                 Console.WriteLine(messageLine);
                 message.Add(messageLine.ToString());
             }
-            return string.Join("\n", message);
+            yield return string.Join("\n", message);
         }
     }
 }

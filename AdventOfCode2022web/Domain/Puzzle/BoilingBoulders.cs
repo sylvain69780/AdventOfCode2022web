@@ -2,7 +2,7 @@
 {
     public class BoilingBoulders : IPuzzleSolver
     {
-        public async IAsyncEnumerable<string> Part1Async(string inp)
+        public IEnumerable<string> SolveFirstPart(string inp)
         {
             var input = inp.Split("\n").Select(x => x.Split(','))
                 .Select(x => x.Select(y => int.Parse(y)).ToArray())
@@ -28,9 +28,8 @@
                 }
             }
             yield return score.ToString();
-            await Task.Delay(1);
         }
-        public async IAsyncEnumerable<string> Part2Async(string inp)
+        public IEnumerable<string> SolveSecondPart(string inp)
         {
             var input = inp.Split("\n").Select(x => x.Split(','))
                 .Select(x => x.Select(y => int.Parse(y)).ToArray())
@@ -80,13 +79,11 @@
                         score++;
                         Console.WriteLine(score);
                         yield return score.ToString();
-                        await Task.Delay(1);
                     }
                 }
             }
             Console.WriteLine(score);
             yield return score.ToString();
-            await Task.Delay(1);
         }
     }
 }

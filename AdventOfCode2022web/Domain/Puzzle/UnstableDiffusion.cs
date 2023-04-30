@@ -2,7 +2,7 @@
 {
     public class UnstableDiffusion : IPuzzleSolver
     {
-        public async IAsyncEnumerable<string> Part1Async(string inp)
+        public IEnumerable<string> SolveFirstPart(string inp)
         {
             var input = inp.Split("\n");
             var row = 0;
@@ -88,9 +88,8 @@
                 );
             var score = (x2 - x1 + 1) * (y2 - y1 + 1) - elves.Count;
             yield return $"SCORE = {score}";
-            await Task.Delay(1);
         }
-        public async IAsyncEnumerable<string> Part2Async(string inp)
+        public IEnumerable<string> SolveSecondPart(string inp)
         {
             var input = inp.Split("\n");
             var row = 0;
@@ -180,8 +179,6 @@
                 );
             var score = (x2 - x1 + 1) * (y2 - y1 + 1) - elves.Count;
             yield return $"SCORE = {round}";
-            await Task.Delay(1);
         }
-
     }
 }

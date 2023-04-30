@@ -7,7 +7,7 @@
             public int x;
             public int y;
         }
-        public async IAsyncEnumerable<string> Part1Async(string inp)
+        public IEnumerable<string> SolveFirstPart(string inp)
         {
             var input = inp.Split("\n").Select(x => x.Replace(" -> ", "#").Split('#')
                 .Select(y => y.Split(','))
@@ -58,7 +58,6 @@
                     // Console.WriteLine($"{sand.x} {sand.y}");
                 }
                 Console.WriteLine(score);
-                await Task.Delay(1);
                 yield return score.ToString();
 
             } while (sand.y < floor);
@@ -66,7 +65,7 @@
             yield return score.ToString();
 
         }
-        public async IAsyncEnumerable<string> Part2Async(string inp)
+        public IEnumerable<string> SolveSecondPart(string inp)
         {
             var input = inp.Split("\n").Select(x => x.Replace(" -> ", "#").Split('#')
         .Select(y => y.Split(','))
@@ -122,7 +121,6 @@
                     // Console.WriteLine($"{sand.x} {sand.y}");
                 }
                 Console.WriteLine(score);
-                await Task.Delay(1);
                 yield return score.ToString();
             } while (sand.y != 0);
             yield return score.ToString();

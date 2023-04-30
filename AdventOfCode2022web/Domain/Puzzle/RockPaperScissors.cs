@@ -2,7 +2,7 @@
 
 namespace AdventOfCode2022web.Domain.Puzzle
 {
-    public class RockPaperScissors : PuzzleSolver
+    public class RockPaperScissors : IPuzzleSolver
     {
         private static string[] ToLines(string s) => s.Split("\n");
         private static string Format(int v) => v.ToString();
@@ -31,7 +31,7 @@ namespace AdventOfCode2022web.Domain.Puzzle
         private static (Moves OpponentPlayed, GameResults ExpectedResult) DecodeMovesPart2(string s)
             => ((Moves)(s[0] - 'A'), (GameResults)(s[2] - 'X'));
 
-        protected override string SolveFirst(string puzzleInput)
+        public IEnumerable<string> SolveFirstPart(string puzzleInput)
         {
             var score = 0;
             foreach (var round in ToLines(puzzleInput).Select(x => DecodeMovesPart1(x)))
@@ -42,10 +42,10 @@ namespace AdventOfCode2022web.Domain.Puzzle
                 else if (!FirstPlayerWins.Contains(round))
                     score += 6;
             }
-            return Format(score);
+            yield return Format(score);
         }
 
-        protected override string SolveSecond(string puzzleInput)
+        public IEnumerable<string> SolveSecondPart(string puzzleInput)
         {
             var score = 0;
             foreach (var (opponentPlayed, expectedResult) in ToLines(puzzleInput).Select(x => DecodeMovesPart2(x)))
@@ -58,7 +58,7 @@ namespace AdventOfCode2022web.Domain.Puzzle
                 score += (int)youPlay + 1;
                 score += (int)expectedResult * 3;
             }
-            return Format(score);
+            yield return Format(score);
         }
     }
 }

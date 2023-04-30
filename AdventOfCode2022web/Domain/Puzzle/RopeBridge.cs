@@ -1,6 +1,6 @@
 ﻿namespace AdventOfCode2022web.Domain.Puzzle
 {
-    public class RopeBridge : PuzzleSolver
+    public class RopeBridge : IPuzzleSolver
     {
         private static string[] ToLines(string s) => s.Split("\n");
         private static string Format(int v) => v.ToString();
@@ -13,7 +13,7 @@
                     { "D", (0,-1)},
                 };
 
-        protected override string SolveFirst(string puzzleInput)
+        public IEnumerable<string> SolveFirstPart(string puzzleInput)
         {
             var seriesOfMotions = ToLines(puzzleInput)
                 .Select(x => x.Split(" "))
@@ -35,9 +35,9 @@
                 if (tail.y - head.y > 0) tail.y--;
                 visitedPositions.Add(tail);
             }
-            return Format(visitedPositions.Count);
+            yield return Format(visitedPositions.Count);
         }
-        protected override string SolveSecond(string puzzleInput)
+        public IEnumerable<string> SolveSecondPart(string puzzleInput)
         {
             var seriesOfMotions = ToLines(puzzleInput)
                 .Select(x => x.Split(" "))
@@ -67,7 +67,7 @@
                 }
                 visited.Add(tail[8]);
             }
-            return Format(visited.Count);
+            yield return Format(visited.Count);
         }
     }
 }

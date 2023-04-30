@@ -1,11 +1,11 @@
 ﻿namespace AdventOfCode2022web.Domain.Puzzle
 {
-    public class NoSpaceLeftOnDevice : PuzzleSolver
+    public class NoSpaceLeftOnDevice : IPuzzleSolver
     {
         private static string Format(int v) => v.ToString();
         private static string[] ToLines(string s) => s.Split("\n");
 
-        protected override string SolveFirst(string puzzleInput)
+        public IEnumerable<string> SolveFirstPart(string puzzleInput)
         {
             var terminalOutputs = ToLines(puzzleInput);
             var directoryContentSize = new Dictionary<string, int>
@@ -46,9 +46,9 @@
                 }
             }
             var sumOfTotalSizesOfDirectories = directoryContentSize.Values.Where(x => x <= 100000).Sum();
-            return Format(sumOfTotalSizesOfDirectories);
+            yield return Format(sumOfTotalSizesOfDirectories);
         }
-        protected override string SolveSecond(string puzzleInput)
+        public IEnumerable<string> SolveSecondPart(string puzzleInput)
         {
             var terminalOutputs = ToLines(puzzleInput);
             var directoryContentSize = new Dictionary<string, int>
@@ -93,7 +93,7 @@
             var totalSpaceUsed = directoryContentSize["#/"];
             var toBeFreed = freeSpaceRequired - (totalDiskSize - totalSpaceUsed);
             var totalSizeOfDirectoryToBeDeleted = directoryContentSize.Values.Where(x => x >= toBeFreed).Min();
-            return Format(totalSizeOfDirectoryToBeDeleted);
+            yield return Format(totalSizeOfDirectoryToBeDeleted);
         }
     }
 }

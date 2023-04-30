@@ -1,8 +1,8 @@
 ﻿namespace AdventOfCode2022web.Domain.Puzzle
 {
-    public class HillClimbingAlgorithm : PuzzleSolver
+    public class HillClimbingAlgorithm : IPuzzleSolver
     {
-        protected override string SolveFirst(string inp)
+        public IEnumerable<string> SolveFirstPart(string inp)
         {
             var input = inp.Split("\n");
             var gridWidth = input[0].Length;
@@ -50,9 +50,9 @@
                 queue = newQueue;
             }
             Console.WriteLine(explored.Count);
-            return score.ToString();
+            yield return score.ToString();
         }
-        protected override string SolveSecond(string inp)
+        public IEnumerable<string> SolveSecondPart(string inp)
         {
             var input = inp.Split("\n");
             var gridWidth = input[0].Length;
@@ -93,7 +93,7 @@
                 queue = newQueue;
             }
             Console.WriteLine(explored.Count);
-            return score.ToString();
+            yield return score.ToString();
         }
     }
 }
