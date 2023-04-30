@@ -98,7 +98,6 @@ namespace AdventOfCode2022web.Domain.Puzzle
             visited.Add((0, 0));
 
             var minMax = (0, 0, 0, 0);
-            var count = 0;
             foreach (var move in seriesOfMotions)
             {
                 var (x, y) = Directions[move];
@@ -110,11 +109,15 @@ namespace AdventOfCode2022web.Domain.Puzzle
                     tails[i] = MoveTailPosition(tails[i], previous);
                     previous = tails[i];
                 }
+                if (visited.Count <= 20)
+                {
+                    var (visualize, newMinMax) = Visualize(head, tails, visited, minMax);
+                    minMax = newMinMax;
+                    yield return $"The tail visited {visited.Count} positions." + '\n' + visualize;
+                }
+                else if (!visited.Contains(tails[8]))
+                    yield return $"Visited {visited.Count} positions.";
                 visited.Add(tails[8]);
-                var (visualize, newMinMax) = Visualize(head, tails, visited, minMax);
-                minMax = newMinMax;
-                count++;
-                if (count < 1000) yield return count.ToString()+'\n'+visualize;
             }
             yield return Format(visited.Count);
         }
