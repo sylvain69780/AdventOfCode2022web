@@ -4,49 +4,63 @@ namespace AdventOfCode2022web.Domain.Puzzle
 {
     public class CathodeRayTube : PuzzleSolver
     {
-        protected override string Part1(string inp)
+        private static string Format(int v) => v.ToString();
+        private static string[] ToLines(string s) => s.Split("\n");
+
+        protected override string Part1(string puzzleInput)
         {
-            var input = inp.Split("\n");
-            var x = input.Select(x => x.Split(" "))
+            var program = ToLines(puzzleInput);
+            var numsToAdd = program.Select(x => x.Split(" "))
                 .SelectMany(x => x[0] == "noop" ? new int[] { 0 } : new int[] { 0, int.Parse(x[1]) });
-            var X = 1;
-            var cycles = 20;
-            var c = 0;
-            var s = 0;
-            foreach (var i in x)
+            var valueOfXregister = 1;
+            var cycleToRecord = 20;
+            var currentCycle = 0;
+            var sumOfSixSignalStrengths = 0;
+            foreach (var value in numsToAdd)
             {
-                c++;
-                if (c == cycles)
+                currentCycle++;
+                if (currentCycle == cycleToRecord)
                 {
-                    cycles += 40;
-                    s += X * c;
+                    cycleToRecord += 40;
+                    sumOfSixSignalStrengths += valueOfXregister * currentCycle;
                 }
-                X += i;
+                valueOfXregister += value;
             }
-            return s.ToString();
+            return Format(sumOfSixSignalStrengths);
         }
-        protected override string Part2(string inp)
+
+        private static IEnumerable<int> GetProgramResults(IEnumerable<int> numsToAdd)
         {
-            var input = inp.Split("\n");
-            var seq = input.Select(x => x.Split(" "))
+            var valueOfXregister = 1;
+            var currentCycle = 0;
+            foreach (var value in numsToAdd)
+            {
+                yield return valueOfXregister;
+                currentCycle++;
+                valueOfXregister += value;
+            }
+        }
+
+        protected override string Part2(string puzzleInput)
+        {
+            var program = ToLines(puzzleInput);
+            var numsToAdd = program.Select(x => x.Split(" "))
                 .SelectMany(x => x[0] == "noop" ? new int[] { 0 } : new int[] { 0, int.Parse(x[1]) });
-            var X = 1;
-            var c = 0;
-            var seq2 = seq.Select(x => (c: ++c, X, X2: X += x)).GetEnumerator();
-            var line = new StringBuilder();
-            var res = new List<string>();
+            var programResults = GetProgramResults(numsToAdd).GetEnumerator();
+            var messageLine = new StringBuilder();
+            var message = new List<string>();
             foreach (var y in Enumerable.Range(0, 6))
             {
-                line.Clear();
+                messageLine.Clear();
                 foreach (var x in Enumerable.Range(0, 40))
-                    if (seq2.MoveNext() && seq2.Current.X >= x - 1 && seq2.Current.X <= x + 1)
-                        line.Append('#');
+                    if (programResults.MoveNext() && programResults.Current >= x - 1 && programResults.Current <= x + 1)
+                        messageLine.Append('#');
                     else
-                        line.Append('.');
-                Console.WriteLine(line);
-                res.Add(line.ToString());
+                        messageLine.Append('.');
+                Console.WriteLine(messageLine);
+                message.Add(messageLine.ToString());
             }
-            return string.Join("\n", res);
+            return string.Join("\n", message);
         }
     }
 }
