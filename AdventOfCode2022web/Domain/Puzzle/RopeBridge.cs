@@ -2,81 +2,72 @@
 {
     public class RopeBridge : PuzzleSolver
     {
-        struct Pt
-        {
-            public int x;
-            public int y;
-        }
-        protected override string Part1(string inp)
-        {
-            var input = inp.Split("\n")
-                .Select(x => x.Split(" "))
-                .SelectMany(x => Enumerable.Range(0, int.Parse(x[1])), (x, y) => x[0]);
-            var directions = new Dictionary<string, Pt>()
+        private static string[] ToLines(string s) => s.Split("\n");
+        private static string Format(int v) => v.ToString();
+
+        private static readonly Dictionary<string, (int x, int y)> Directions = new()
                 {
-                    { "R", new Pt{x=1,y=0 } },
-                    { "L", new Pt{x=-1,y=0 } },
-                    { "U", new Pt{x=0,y=1 } },
-                    { "D", new Pt { x =0,y=-1 } },
+                    { "R", (1,0) },
+                    { "L", (-1,0)},
+                    { "U", (0,1) },
+                    { "D", (0,-1)},
                 };
-            var visited = new HashSet<(int, int)>();
-            var h = (x: 0, y: 0);
-            var t = (x: 0, y: 0);
-            visited.Add(t);
-            foreach (var d in input)
-            {
-                var dir = directions[d];
-                h.x += dir.x;
-                h.y += dir.y;
-                var (dx, dy) = (h.x - t.x, h.y - t.y);
-                if (Math.Abs(dx) < 2 && Math.Abs(dy) < 2) continue;
-                if (h.x - t.x > 0) t.x++;
-                if (t.x - h.x > 0) t.x--;
-                if (h.y - t.y > 0) t.y++;
-                if (t.y - h.y > 0) t.y--;
-                visited.Add(t);
-            }
-            var result = visited.Count;
-            return result.ToString();
-        }
-        protected override string Part2(string inp)
+
+        protected override string Part1(string puzzleInput)
         {
-            var input = inp.Split("\n")
+            var seriesOfMotions = ToLines(puzzleInput)
                 .Select(x => x.Split(" "))
                 .SelectMany(x => Enumerable.Range(0, int.Parse(x[1])), (x, y) => x[0]);
-            var directions = new Dictionary<string, Pt>()
+            var visitedPositions = new HashSet<(int x, int y)>();
+            var head = (x: 0, y: 0);
+            var tail = (x: 0, y: 0);
+            visitedPositions.Add(tail);
+            foreach (var move in seriesOfMotions)
             {
-                { "R", new Pt{x=1,y=0 } },
-                { "L", new Pt{x=-1,y=0 } },
-                { "U", new Pt{x=0,y=1 } },
-                { "D", new Pt { x =0,y=-1 } },
-            };
-            var visited = new HashSet<(int, int)>();
-            var h = (x: 0, y: 0);
-            var t = new Pt[9];
+                var (x, y) = Directions[move];
+                head.x += x;
+                head.y += y;
+                var (dx, dy) = (head.x - tail.x, head.y - tail.y);
+                if (Math.Abs(dx) < 2 && Math.Abs(dy) < 2) continue;
+                if (head.x - tail.x > 0) tail.x++;
+                if (tail.x - head.x > 0) tail.x--;
+                if (head.y - tail.y > 0) tail.y++;
+                if (tail.y - head.y > 0) tail.y--;
+                visitedPositions.Add(tail);
+            }
+            return Format(visitedPositions.Count);
+        }
+        protected override string Part2(string puzzleInput)
+        {
+            var seriesOfMotions = ToLines(puzzleInput)
+                .Select(x => x.Split(" "))
+                .SelectMany(x => Enumerable.Range(0, int.Parse(x[1])), (x, y) => x[0]);
+
+            var visited = new HashSet<(int x, int y)>();
+            var head = (x: 0, y: 0);
+            var tail = new (int x,int y)[9];
             visited.Add((0, 0));
-            foreach (var d in input)
+            foreach (var move in seriesOfMotions)
             {
-                var dir = directions[d];
-                h.x += dir.x;
-                h.y += dir.y;
-                var prev = new Pt { x = h.x, y = h.y };
+                var (x, y) = Directions[move];
+                head.x += x;
+                head.y += y;
+                var prev = head;
                 foreach (var i in Enumerable.Range(0, 9))
                 {
-                    var (dx, dy) = (prev.x - t[i].x, prev.y - t[i].y);
+                    var (dx, dy) = (prev.x - tail[i].x, prev.y - tail[i].y);
                     if (Math.Abs(dx) > 1 || Math.Abs(dy) > 1)
                     {
-                        if (prev.x - t[i].x > 0) t[i].x++;
-                        if (t[i].x - prev.x > 0) t[i].x--;
-                        if (prev.y - t[i].y > 0) t[i].y++;
-                        if (t[i].y - prev.y > 0) t[i].y--;
+                        if (prev.x - tail[i].x > 0) tail[i].x++;
+                        if (tail[i].x - prev.x > 0) tail[i].x--;
+                        if (prev.y - tail[i].y > 0) tail[i].y++;
+                        if (tail[i].y - prev.y > 0) tail[i].y--;
                     }
-                    prev = t[i];
+                    prev = tail[i];
                 }
-                visited.Add((t[8].x, t[8].y));
+                visited.Add(tail[8]);
             }
-            var result = visited.Count;
-            return result.ToString();
+            return Format(visited.Count);
         }
     }
 }
