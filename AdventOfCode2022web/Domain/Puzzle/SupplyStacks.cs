@@ -6,18 +6,16 @@ namespace AdventOfCode2022web.Domain.Puzzle
     public class SupplyStacks : PuzzleSolver
     {
         private static string[] ToLines(string s) => s.Split("\n");
-        private static string Format(int v) => v.ToString();
 
         private (Stack<char>[],List<(int Count,int From, int To)>) ReadStacksAndMoves(string puzzleInput)
         {
             var records = ToLines(puzzleInput).AsEnumerable().GetEnumerator();
             records.MoveNext();
-            var numStacks = 1 + (records.Current.Length) / 4;
-            var stacks = new Stack<char>[numStacks];
+            var stacks = new Stack<char>[1 + records.Current.Length / 4];
             for (int i = 0; i < stacks.Length; i++)
                 stacks[i] = new Stack<char>();
-            var rows = new Stack<string>();
 
+            var rows = new Stack<string>();
             while (records.Current[1] != '1')
             {
                 rows.Push(records.Current);
