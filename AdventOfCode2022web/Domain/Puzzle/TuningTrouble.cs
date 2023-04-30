@@ -4,31 +4,28 @@
     {
         private static string Format(int v) => v.ToString();
 
-        public IEnumerable<string> SolveFirstPart(string puzzleInput)
+        private static int FindMarkerPosition(string puzzleInput, int sequenceLenght)
         {
             var marker = new Queue<char>();
             var processedCharacters = 0;
             foreach (var c in puzzleInput)
             {
                 processedCharacters++;
-                if (marker.Count == 4) marker.Dequeue();
-                marker.Enqueue(c);
-                if (marker.Count == 4 && marker.GroupBy(x => x).Select(y => y.Count()).Max() == 1) break;
+                if (marker.Count == sequenceLenght) marker.Dequeue();
+                    marker.Enqueue(c);
+                if (marker.Count == sequenceLenght && marker.GroupBy(x => x).Select(y => y.Count()).Max() == 1) 
+                    break;
             }
-            yield return Format(processedCharacters);
+            return processedCharacters;
+        }
+
+        public IEnumerable<string> SolveFirstPart(string puzzleInput)
+        {
+            yield return Format(FindMarkerPosition(puzzleInput, 4));
         }
         public IEnumerable<string> SolveSecondPart(string puzzleInput)
         {
-            var marker = new Queue<char>();
-            var processedCharacters = 0;
-            foreach (var c in puzzleInput)
-            {
-                processedCharacters++;
-                if (marker.Count == 14) marker.Dequeue();
-                marker.Enqueue(c);
-                if (marker.Count == 14 && marker.GroupBy(x => x).Select(y => y.Count()).Max() == 1) break;
-            }
-            yield return Format(processedCharacters);
+            yield return Format(FindMarkerPosition(puzzleInput, 14));
         }
     }
 }

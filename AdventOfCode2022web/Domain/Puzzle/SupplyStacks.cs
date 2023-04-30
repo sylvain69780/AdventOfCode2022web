@@ -7,7 +7,7 @@ namespace AdventOfCode2022web.Domain.Puzzle
     {
         private static string[] ToLines(string s) => s.Split("\n");
 
-        private (Stack<char>[],List<(int Count,int From, int To)>) ReadStacksAndMoves(string puzzleInput)
+        private static Stack<char>[] ReadStacks(string puzzleInput)
         {
             var records = ToLines(puzzleInput).AsEnumerable().GetEnumerator();
             records.MoveNext();
@@ -22,27 +22,33 @@ namespace AdventOfCode2022web.Domain.Puzzle
                 records.MoveNext();
             }
             foreach (var row in rows)
-            {
                 for (int stackIdx = 0; stackIdx < stacks.Length; stackIdx++)
                     if (row[stackIdx * 4 + 1] != ' ')
                         stacks[stackIdx].Push(row[stackIdx * 4 + 1]);
-            }
+            return stacks;
+        }
 
-            records.MoveNext(); // skip blank separator line
+        private static List<(int Count, int From, int To)> ReadMovesToDo(string puzzleInput)
+        {
+            var records = ToLines(puzzleInput).AsEnumerable().GetEnumerator();
+            records.MoveNext(); // skip until blank separator line
+            while (records.Current != "")
+                records.MoveNext();
             var moves = new List<(int Move, int From, int To)>();
-            var regex = new Regex(@"move (\d+) from (\d+) to (\d+)",RegexOptions.Compiled);
+            var regex = new Regex(@"move (\d+) from (\d+) to (\d+)", RegexOptions.Compiled);
             while (records.MoveNext())
             {
                 var g = regex.Match(records.Current).Groups;
-                moves.Add((int.Parse(g[1].Value), int.Parse(g[2].Value) , int.Parse(g[3].Value) ));
+                moves.Add((int.Parse(g[1].Value), int.Parse(g[2].Value), int.Parse(g[3].Value)));
             }
-            return (stacks,moves);
+            return moves;
         }
 
         public IEnumerable<string> SolveFirstPart(string puzzleInput)
         {
-            var (stacks,moves) = ReadStacksAndMoves(puzzleInput);
-            foreach(var (count, from, to) in moves)
+            var stacks = ReadStacks(puzzleInput);
+            var moves = ReadMovesToDo(puzzleInput);
+            foreach (var (count, from, to) in moves)
             {
                 for (var i = 0; i< count;i++)
                 {
@@ -50,11 +56,12 @@ namespace AdventOfCode2022web.Domain.Puzzle
                     stacks[to-1].Push(c);
                 }
             }
-            yield return string.Join("", stacks.Select(x => x.FirstOrDefault(' ')));
+            yield return string.Join("", stacks.Select(x => x.Count == 0 ? ' ' : x.Peek()));
         }
         public IEnumerable<string> SolveSecondPart(string puzzleInput)
         {
-            var (stacks, moves) = ReadStacksAndMoves(puzzleInput);
+            var stacks = ReadStacks(puzzleInput);
+            var moves = ReadMovesToDo(puzzleInput);
             var tmp = new Stack<char>();
             foreach (var (count, from, to) in moves)
             {
@@ -63,7 +70,7 @@ namespace AdventOfCode2022web.Domain.Puzzle
                 for (int i = 0; i < count; i++)
                     stacks[to - 1].Push(tmp.Pop());
             }
-            yield  return string.Join("", stacks.Select(x => x.FirstOrDefault(' ')));
+            yield  return string.Join("", stacks.Select(x => x.Count == 0 ? ' ' : x.Peek()));
         }
     }
 }
