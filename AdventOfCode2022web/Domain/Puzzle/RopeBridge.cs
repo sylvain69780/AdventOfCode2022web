@@ -1,4 +1,6 @@
-﻿namespace AdventOfCode2022web.Domain.Puzzle
+﻿using System.Text;
+
+namespace AdventOfCode2022web.Domain.Puzzle
 {
     public class RopeBridge : IPuzzleSolver
     {
@@ -46,6 +48,44 @@
             }
             yield return Format(visitedPositions.Count);
         }
+
+        private static (string,(int,int,int,int)) Visualize((int x, int y) head, (int x, int y)[] tails, HashSet<(int x, int y)> visited, (int,int,int,int) oldMinMax)
+        {
+            var (xMax, yMax, xMin, yMin) = oldMinMax;
+            xMax = Math.Max(xMax, head.x);
+            yMax = Math.Max(yMax, head.y);
+            xMin = Math.Min(xMin, head.x);
+            yMin = Math.Min(yMin, head.y);
+            foreach ( var (tx,ty) in tails)
+            {
+                xMax = Math.Max(xMax, tx);
+                yMax = Math.Max(yMax, ty);
+                xMin = Math.Min(xMin, tx);
+                yMin = Math.Min(yMin, ty);
+            }
+            foreach (var (tx, ty) in visited)
+            {
+                xMax = Math.Max(xMax, tx);
+                yMax = Math.Max(yMax, ty);
+                xMin = Math.Min(xMin, tx);
+                yMin = Math.Min(yMin, ty);
+            }
+            var sb = new StringBuilder();
+            for (var y = yMin; y <= yMax; y++)
+            {
+                for (var x = xMin; x <= xMax; x++)
+                {
+                    var c = '.';
+                    if (visited.Contains((x, y))) c = '*';
+                    if (tails.Contains((x, y))) c = 'T';
+                    if ((x, y) == head) c = 'H';
+                    sb.Append(c);
+                }
+                sb.Append('\n');
+            }
+            return (sb.ToString(), (xMax, yMax, xMin, yMin));
+        }
+
         public IEnumerable<string> SolveSecondPart(string puzzleInput)
         {
             var seriesOfMotions = ToLines(puzzleInput)
@@ -54,8 +94,11 @@
 
             var visited = new HashSet<(int x, int y)>();
             var head = (x: 0, y: 0);
-            var tail = new (int x,int y)[9];
+            var tails = new (int x,int y)[9];
             visited.Add((0, 0));
+
+            var minMax = (0, 0, 0, 0);
+            var count = 0;
             foreach (var move in seriesOfMotions)
             {
                 var (x, y) = Directions[move];
@@ -64,10 +107,14 @@
                 var previous = head;
                 foreach (var i in Enumerable.Range(0, 9))
                 {
-                    tail[i] = MoveTailPosition(tail[i], previous);
-                    previous = tail[i];
+                    tails[i] = MoveTailPosition(tails[i], previous);
+                    previous = tails[i];
                 }
-                visited.Add(tail[8]);
+                visited.Add(tails[8]);
+                var (visualize, newMinMax) = Visualize(head, tails, visited, minMax);
+                minMax = newMinMax;
+                count++;
+                if (count < 1000) yield return count.ToString()+'\n'+visualize;
             }
             yield return Format(visited.Count);
         }
