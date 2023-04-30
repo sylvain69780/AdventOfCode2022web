@@ -1,79 +1,69 @@
-﻿namespace AdventOfCode2022web.Domain.Puzzle
+﻿using System.Collections.Generic;
+using System.Text.RegularExpressions;
+
+namespace AdventOfCode2022web.Domain.Puzzle
 {
     public class SupplyStacks : PuzzleSolver
     {
-        protected override string Part1(string inp)
+        private static string[] ToLines(string s) => s.Split("\n");
+        private static string Format(int v) => v.ToString();
+
+        private (Stack<char>[],List<(int Count,int From, int To)>) ReadStacksAndMoves(string puzzleInput)
         {
-            var input = inp.Split("\n").AsEnumerable().GetEnumerator();
-            input.MoveNext();
-            var w = 1 + (input.Current.Length) / 4;
-            var stacks = new Stack<char>[w];
-            foreach (var i in Enumerable.Range(0, w))
+            var records = ToLines(puzzleInput).AsEnumerable().GetEnumerator();
+            records.MoveNext();
+            var numStacks = 1 + (records.Current.Length) / 4;
+            var stacks = new Stack<char>[numStacks];
+            for (int i = 0; i < stacks.Length; i++)
                 stacks[i] = new Stack<char>();
-            while (input.Current[1] != '1')
+            var rows = new Stack<string>();
+
+            while (records.Current[1] != '1')
             {
-                foreach (var i in Enumerable.Range(0, w))
-                    if (input.Current[i * 4 + 1] != ' ')
-                        stacks[i].Push(input.Current[i * 4 + 1]);
-                input.MoveNext();
+                rows.Push(records.Current);
+                records.MoveNext();
             }
-            input.MoveNext();
-            // reversing the stacks because of read order of the input :-(
-            foreach (var i in Enumerable.Range(0, w))
+            foreach (var row in rows)
             {
-                var l = new Stack<char>();
-                foreach (var c in stacks[i])
-                    l.Push(c);
-                stacks[i] = l;
+                for (int stackIdx = 0; stackIdx < stacks.Length; stackIdx++)
+                    if (row[stackIdx * 4 + 1] != ' ')
+                        stacks[stackIdx].Push(row[stackIdx * 4 + 1]);
             }
-            while (input.MoveNext())
+
+            records.MoveNext(); // skip blank separator line
+            var moves = new List<(int Move, int From, int To)>();
+            var regex = new Regex(@"move (\d+) from (\d+) to (\d+)",RegexOptions.Compiled);
+            while (records.MoveNext())
             {
-                Console.WriteLine(input.Current);
-                var i = input.Current.Replace("move ", "").Replace(" from ", ",").Replace(" to ", ",").Split(',').Select(x => int.Parse(x)).ToList();
-                var (amount, origin, destination) = (i[0], i[1], i[2]);
-                foreach (var c in Enumerable.Range(1, amount))
+                var g = regex.Match(records.Current).Groups;
+                moves.Add((int.Parse(g[1].Value), int.Parse(g[2].Value) , int.Parse(g[3].Value) ));
+            }
+            return (stacks,moves);
+        }
+
+        protected override string Part1(string puzzleInput)
+        {
+            var (stacks,moves) = ReadStacksAndMoves(puzzleInput);
+            foreach(var (count, from, to) in moves)
+            {
+                for (var i = 0; i< count;i++)
                 {
-                    stacks[destination - 1].Push(stacks[origin - 1].Pop());
-                    Console.WriteLine(string.Join("", stacks.Select(x => x.FirstOrDefault(' '))));
+                    var c = stacks[from-1].Pop();
+                    stacks[to-1].Push(c);
                 }
             }
             return string.Join("", stacks.Select(x => x.FirstOrDefault(' ')));
         }
-        protected override string Part2(string inp)
+        protected override string Part2(string puzzleInput)
         {
-            var input = inp.Split("\n").AsEnumerable().GetEnumerator();
-            input.MoveNext();
-            var w = 1 + (input.Current.Length) / 4;
-            var stacks = new Stack<char>[w];
-            foreach (var i in Enumerable.Range(0, w))
-                stacks[i] = new Stack<char>();
-            while (input.Current[1] != '1')
+            var (stacks, moves) = ReadStacksAndMoves(puzzleInput);
+            var tmp = new Stack<char>();
+            foreach (var (count, from, to) in moves)
             {
-                foreach (var i in Enumerable.Range(0, w))
-                    if (input.Current[i * 4 + 1] != ' ')
-                        stacks[i].Push(input.Current[i * 4 + 1]);
-                input.MoveNext();
-            }
-            input.MoveNext();
-            // reversing the stacks because of read order of the input :-(
-            foreach (var i in Enumerable.Range(0, w))
-            {
-                var l = new Stack<char>();
-                foreach (var c in stacks[i])
-                    l.Push(c);
-                stacks[i] = l;
-            }
-            while (input.MoveNext())
-            {
-                Console.WriteLine(input.Current);
-                var i = input.Current.Replace("move ", "").Replace(" from ", ",").Replace(" to ", ",").Split(',').Select(x => int.Parse(x)).ToList();
-                var (amount, origin, destination) = (i[0], i[1], i[2]);
-                var mover = new Stack<char>();
-                foreach (var c in Enumerable.Range(1, amount))
-                    mover.Push(stacks[origin - 1].Pop());
-                foreach (var c in mover)
-                    stacks[destination - 1].Push(c);
-                Console.WriteLine(string.Join("", stacks.Select(x => x.FirstOrDefault(' '))));
+                for (int i = 0; i < count; i++)
+                    tmp.Push(stacks[from - 1].Pop());
+                for (int i = 0; i < count; i++)
+                    stacks[to - 1].Push(tmp.Pop());
             }
             return string.Join("", stacks.Select(x => x.FirstOrDefault(' ')));
         }
