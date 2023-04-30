@@ -23,58 +23,27 @@
         protected override string Part1(string puzzleInput)
         {
             var map = new HeightMap(ToLines(puzzleInput));
-            var visibleTrees = new HashSet<(int x, int y)>();
-            foreach (var y in Enumerable.Range(0, map.Height))
-            {
-                // left to right
-                var hmax = -1;
-                foreach (var x in Enumerable.Range(0, map.Width))
+            var visibleTrees = 0;
+            foreach (var yTree in Enumerable.Range(0, map.Height))
+                foreach (var xTree in Enumerable.Range(0, map.Width))
                 {
-                    var h = map.TreeHeight(x, y);
-                    if (h > hmax)
+                    var treeHeight = map.TreeHeight(xTree, yTree);
+                    foreach (var (dx, dy) in Directions)
                     {
-                        hmax = h;
-                        if (!visibleTrees.Contains((x, y))) visibleTrees.Add((x, y));
+                        var distance = 1;
+                        var (x, y) = (xTree + dx * distance, yTree + dy * distance);
+                        var borderReached = map.BorderReached(x, y);
+                        while (!borderReached && map.TreeHeight(x, y) < treeHeight)
+                        {
+                            distance++;
+                            (x, y) = (xTree + dx * distance, yTree + dy * distance);
+                            borderReached = map.BorderReached(x, y);
+                        }
+                        if (borderReached) { visibleTrees++; break; }
                     }
                 }
-                // right to left
-                hmax = -1;
-                foreach (var x in Enumerable.Range(0, map.Width).Reverse())
-                {
-                    var h = map.TreeHeight(x, y);
-                    if (h > hmax)
-                    {
-                        hmax = h;
-                        if (!visibleTrees.Contains((x, y))) visibleTrees.Add((x, y));
-                    }
-                }
-            }
-            foreach (var x in Enumerable.Range(0, map.Width))
-            {
-                // top to down
-                var hmax = -1;
-                foreach (var y in Enumerable.Range(0, map.Height))
-                {
-                    var h = map.TreeHeight(x, y);
-                    if (h > hmax)
-                    {
-                        hmax = h;
-                        if (!visibleTrees.Contains((x, y))) visibleTrees.Add((x, y));
-                    }
-                }
-                // down to top
-                hmax = -1;
-                foreach (var y in Enumerable.Range(0, map.Height).Reverse())
-                {
-                    var h = map.TreeHeight(x, y);
-                    if (h > hmax)
-                    {
-                        hmax = h;
-                        if (!visibleTrees.Contains((x, y))) visibleTrees.Add((x, y));
-                    }
-                }
-            }
-            return Format(visibleTrees.Count);
+
+            return Format(visibleTrees);
         }
 
         private static readonly (int, int)[] Directions = new (int x, int y)[] { (1, 0), (-1, 0), (0, 1), (0, -1) };
@@ -86,20 +55,20 @@
             foreach (var yTree in Enumerable.Range(0, map.Height))
                 foreach (var xTree in Enumerable.Range(0, map.Width))
                 {
-                    var treeHeight = map.TreeHeight( xTree, yTree);
+                    var treeHeight = map.TreeHeight(xTree, yTree);
                     var score = 1;
                     foreach (var (dx, dy) in Directions)
                     {
                         var distance = 1;
                         var (x, y) = (xTree + distance * dx, yTree + distance * dy);
-                        while ( !map.BorderReached(x, y) && map.TreeHeight(x, y) < treeHeight ) 
+                        while (!map.BorderReached(x, y) && map.TreeHeight(x, y) < treeHeight)
                         {
                             distance++;
                             (x, y) = (xTree + distance * dx, yTree + distance * dy);
-                        } 
-                        score *= distance - (map.BorderReached(x, y) ? 1:0);
+                        }
+                        score *= distance - (map.BorderReached(x, y) ? 1 : 0);
                     }
-                    scoreMax = Math.Max(score,scoreMax);
+                    scoreMax = Math.Max(score, scoreMax);
                 }
             return Format(scoreMax);
         }
