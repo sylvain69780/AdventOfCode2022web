@@ -1,4 +1,6 @@
-﻿namespace AdventOfCode2022web.Domain.Puzzle
+﻿using System.Drawing;
+
+namespace AdventOfCode2022web.Domain.Puzzle
 {
     public class NoSpaceLeftOnDevice : PuzzleSolver
     {
@@ -7,96 +9,93 @@
 
         protected override string Part1(string puzzleInput)
         {
-            var input = ToLines(puzzleInput);
-            var contents = new Dictionary<string, int>
+            var terminalOutputs = ToLines(puzzleInput);
+            var directoryContentSize = new Dictionary<string, int>
             {
                 { "#/", 0 }
             };
-            var curdir = new Stack<string>();
-            foreach (var line in input)
+            var currentDirectory = new Stack<string>();
+            foreach (var terminalOutput in terminalOutputs)
             {
-                if (line[0] == '$')
+                if (terminalOutput[0] == '$')
                 {
-                    if (line[2..4] == "cd")
+                    if (terminalOutput[2..4] == "cd")
                     {
-                        var dir = line[5..];
-                        if (dir == "..")
+                        var directory = terminalOutput[5..];
+                        if (directory == "..")
                         {
-                            curdir.Pop();
+                            currentDirectory.Pop();
                         }
-                        else curdir.Push(dir);
-                        Console.WriteLine("#" + string.Join("-", curdir.Reverse()));
+                        else currentDirectory.Push(directory);
+                        Console.WriteLine("#" + string.Join("-", currentDirectory.Reverse()));
                     }
                 }
                 else
                 {
-                    if (line[0..4] != "dir ")
+                    if (terminalOutput[0..4] != "dir ")
                     {
-                        var dir = "#" + string.Join("-", curdir.Reverse());
-                        var size = int.Parse(line.Split(" ")[0]);
+                        var directory = "#" + string.Join("-", currentDirectory.Reverse());
+                        var size = int.Parse(terminalOutput.Split(" ")[0]);
                         // tricky here we add also to parents
-                        foreach (var d in contents.Keys.Where(x => dir.Contains(x)))
-                            contents[d] += size;
+                        foreach (var d in directoryContentSize.Keys.Where(x => directory.Contains(x)))
+                            directoryContentSize[d] += size;
                     }
                     else
                     {
-                        var dir = "#" + string.Join("-", curdir.Reverse()) + "-" + line[4..];
-                        contents.Add(dir, 0);
+                        var directory = "#" + string.Join("-", currentDirectory.Reverse()) + "-" + terminalOutput[4..];
+                        directoryContentSize.Add(directory, 0);
                     }
                 }
             }
-            var atMost = 100000;
-            var res = contents.Values.Where(x => x <= atMost).Sum();
-            Console.WriteLine("Result :" + res);
-            return res.ToString();
+            var sumOfTotalSizesOfDirectories = directoryContentSize.Values.Where(x => x <= 100000).Sum();
+            return Format(sumOfTotalSizesOfDirectories);
         }
         protected override string Part2(string puzzleInput)
         {
-            var input = ToLines(puzzleInput);
-            var contents = new Dictionary<string, int>
+            var terminalOutputs = ToLines(puzzleInput);
+            var directoryContentSize = new Dictionary<string, int>
             {
                 { "#/", 0 }
             };
-            var curdir = new Stack<string>();
-            foreach (var line in input)
+            var currentDirectory = new Stack<string>();
+            foreach (var terminalOutput in terminalOutputs)
             {
-                if (line[0] == '$')
+                if (terminalOutput[0] == '$')
                 {
-                    if (line[2..4] == "cd")
+                    if (terminalOutput[2..4] == "cd")
                     {
-                        var dir = line[5..];
-                        if (dir == "..")
+                        var directory = terminalOutput[5..];
+                        if (directory == "..")
                         {
-                            curdir.Pop();
+                            currentDirectory.Pop();
                         }
-                        else curdir.Push(dir);
-                        Console.WriteLine("#" + string.Join("-", curdir.Reverse()));
+                        else currentDirectory.Push(directory);
+                        Console.WriteLine("#" + string.Join("-", currentDirectory.Reverse()));
                     }
                 }
                 else
                 {
-                    if (line[0..4] != "dir ")
+                    if (terminalOutput[0..4] != "dir ")
                     {
-                        var dir = "#" + string.Join("-", curdir.Reverse());
-                        var size = int.Parse(line.Split(" ")[0]);
+                        var directory = "#" + string.Join("-", currentDirectory.Reverse());
+                        var size = int.Parse(terminalOutput.Split(" ")[0]);
                         // tricky here we add also to parents
-                        foreach (var d in contents.Keys.Where(x => dir.Contains(x)))
-                            contents[d] += size;
+                        foreach (var d in directoryContentSize.Keys.Where(x => directory.Contains(x)))
+                            directoryContentSize[d] += size;
                     }
                     else
                     {
-                        var dir = "#" + string.Join("-", curdir.Reverse()) + "-" + line[4..];
-                        contents.Add(dir, 0);
+                        var directory = "#" + string.Join("-", currentDirectory.Reverse()) + "-" + terminalOutput[4..];
+                        directoryContentSize.Add(directory, 0);
                     }
                 }
             }
-            var total = 70000000;
-            var freeRequired = 30000000;
-            var used = contents["#/"];
-            var toBeFreed = freeRequired - (total - used);
-            var res = contents.Values.Where(x => x >= toBeFreed).Min();
-            Console.WriteLine("Result :" + res);
-            return res.ToString();
+            var totalDiskSize = 70000000;
+            var freeSpaceRequired = 30000000;
+            var totalSpaceUsed = directoryContentSize["#/"];
+            var toBeFreed = freeSpaceRequired - (totalDiskSize - totalSpaceUsed);
+            var totalSizeOfDirectoryToBeDeleted = directoryContentSize.Values.Where(x => x >= toBeFreed).Min();
+            return Format(totalSizeOfDirectoryToBeDeleted);
         }
     }
 }
