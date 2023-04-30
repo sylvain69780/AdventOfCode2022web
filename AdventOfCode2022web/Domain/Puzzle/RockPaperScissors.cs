@@ -11,9 +11,9 @@ namespace AdventOfCode2022web.Domain.Puzzle
         private enum GameResults { Lose = 0, Draw = 1, Win = 2 };
 
         /// <summary>
-        /// Rules of the Game
+        /// Rules of the Game : When the round is lost 
         /// </summary>
-        private static readonly (Moves OpponentPlayed, Moves YouPlayed)[] RoundIsLost = {
+        private static readonly List<(Moves FirstMove, Moves SecondMove)> FirstPlayerWins = new() {
                 (Moves.Rock, Moves.Scissors),
                 (Moves.Scissors, Moves.Paper),
                 (Moves.Paper,Moves.Rock)
@@ -31,31 +31,32 @@ namespace AdventOfCode2022web.Domain.Puzzle
         private static (Moves OpponentPlayed, GameResults ExpectedResult) DecodeMovesPart2(string s)
             => ((Moves)(s[0] - 'A'), (GameResults)(s[2] - 'X'));
 
-
-        protected override string Part1(string puzzleInput)
+        protected override string SolveFirst(string puzzleInput)
         {
             var score = 0;
             foreach (var round in ToLines(puzzleInput).Select(x => DecodeMovesPart1(x)))
             {
                 score += (int)round.YouPlayed + 1;
-                if (!RoundIsLost.Contains(round))
-                    score += round.YouPlayed == round.OpponentPlayed ? 3 : 6;
+                if (round.YouPlayed == round.OpponentPlayed)
+                    score += 3;
+                else if (!FirstPlayerWins.Contains(round))
+                    score += 6;
             }
             return Format(score);
         }
 
-        protected override string Part2(string puzzleInput)
+        protected override string SolveSecond(string puzzleInput)
         {
             var score = 0;
-            foreach (var round in ToLines(puzzleInput).Select(x => DecodeMovesPart2(x)))
+            foreach (var (opponentPlayed, expectedResult) in ToLines(puzzleInput).Select(x => DecodeMovesPart2(x)))
             {
-                var youPlay = round.OpponentPlayed;
-                if (round.ExpectedResult == GameResults.Lose)
-                    youPlay = RoundIsLost.First(x => x.OpponentPlayed == round.OpponentPlayed).YouPlayed;
-                if (round.ExpectedResult == GameResults.Win)
-                    youPlay = RoundIsLost.First(x => x.YouPlayed == round.OpponentPlayed).OpponentPlayed;
+                var youPlay = opponentPlayed; // Draw
+                if (expectedResult == GameResults.Win)
+                    youPlay = FirstPlayerWins.Find(x => x.SecondMove == opponentPlayed).FirstMove;
+                if (expectedResult == GameResults.Lose)
+                    youPlay = FirstPlayerWins.Find(x => x.FirstMove == opponentPlayed).SecondMove;
                 score += (int)youPlay + 1;
-                score += (int)round.ExpectedResult * 3;
+                score += (int)expectedResult * 3;
             }
             return Format(score);
         }

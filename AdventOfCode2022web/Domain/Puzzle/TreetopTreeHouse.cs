@@ -20,7 +20,7 @@
             public bool BorderReached(int x, int y) => x < 0 || x >= Width || y < 0 || y >= Height;
         }
 
-        protected override string Part1(string puzzleInput)
+        protected override string SolveFirst(string puzzleInput)
         {
             var map = new HeightMap(ToLines(puzzleInput));
             var visibleTrees = 0;
@@ -48,7 +48,7 @@
 
         private static readonly (int, int)[] Directions = new (int x, int y)[] { (1, 0), (-1, 0), (0, 1), (0, -1) };
 
-        protected override string Part2(string puzzleInput)
+        protected override string SolveSecond(string puzzleInput)
         {
             var map = new HeightMap(ToLines(puzzleInput));
             var scoreMax = 0;

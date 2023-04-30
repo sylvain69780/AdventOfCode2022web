@@ -5,7 +5,7 @@
         private static string Format(int v) => v.ToString();
         private static string[] ToLines(string s) => s.Split("\n");
 
-        protected override string Part1(string puzzleInput)
+        protected override string SolveFirst(string puzzleInput)
         {
             var terminalOutputs = ToLines(puzzleInput);
             var directoryContentSize = new Dictionary<string, int>
@@ -48,7 +48,7 @@
             var sumOfTotalSizesOfDirectories = directoryContentSize.Values.Where(x => x <= 100000).Sum();
             return Format(sumOfTotalSizesOfDirectories);
         }
-        protected override string Part2(string puzzleInput)
+        protected override string SolveSecond(string puzzleInput)
         {
             var terminalOutputs = ToLines(puzzleInput);
             var directoryContentSize = new Dictionary<string, int>

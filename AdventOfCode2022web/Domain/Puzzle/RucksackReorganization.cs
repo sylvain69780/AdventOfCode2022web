@@ -11,22 +11,22 @@ namespace AdventOfCode2022web.Domain.Puzzle
         /// Lowercase item types a through z have priorities 1 through 26.
         /// Uppercase item types A through Z have priorities 27 through 52.
         /// </summary>
-        private static int Priority(char item) => item >= 'a' ? (item - 'a') + 1 : (item - 'A') + 27;
+        private static int Priority(char item) => item >= 'a' ? item - 'a' + 1 : item - 'A' + 27;
 
-        protected override string Part1(string puzzleInput)
+        protected override string SolveFirst(string puzzleInput)
         {
             var score = 0;
             foreach (var rucksack in ToLines(puzzleInput))
             {
                 var compartmentSize = rucksack.Length / 2;
-                var (compartmentA, compartmentB) = (rucksack.Substring(0, compartmentSize), rucksack.Substring(compartmentSize, compartmentSize));
+                var (compartmentA, compartmentB) = (rucksack[..compartmentSize], rucksack[compartmentSize..(compartmentSize+compartmentSize)]);
                 var sharedItem = compartmentA.First(x => compartmentB.Contains(x));
                 score += Priority(sharedItem);
             }
             return Format(score);
         }
 
-        protected override string Part2(string puzzleInput)
+        protected override string SolveSecond(string puzzleInput)
         {
             var score = 0;
             var rucksacks = ToLines(puzzleInput);

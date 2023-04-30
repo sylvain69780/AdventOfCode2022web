@@ -72,7 +72,7 @@
 
         }
 
-        protected override string Part1(string inp)
+        protected override string SolveFirst(string inp)
         {
             var input = inp.Split("\n").ToList().GetEnumerator();
             var idx = 0;
@@ -90,7 +90,7 @@
             }
             return score.ToString();
         }
-        protected override string Part2(string inp)
+        protected override string SolveSecond(string inp)
         {
             var input = inp.Split("\n").Where(x => x != "").Append("[[2]]").Append("[[6]]").Select(x => (a: x, b: Day13Element.ReadInput(x)))
                 .OrderByDescending(x => x.b, new MyComparer()).Select(x => x.a).ToList();

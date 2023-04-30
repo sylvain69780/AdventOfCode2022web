@@ -7,7 +7,7 @@ namespace AdventOfCode2022web.Domain.Puzzle
         private static string Format(int v) => v.ToString();
         private static string[] ToLines(string s) => s.Split("\n");
 
-        protected override string Part1(string puzzleInput)
+        protected override string SolveFirst(string puzzleInput)
         {
             var program = ToLines(puzzleInput);
             var numsToAdd = program.Select(x => x.Split(" "))
@@ -41,7 +41,7 @@ namespace AdventOfCode2022web.Domain.Puzzle
             }
         }
 
-        protected override string Part2(string puzzleInput)
+        protected override string SolveSecond(string puzzleInput)
         {
             var program = ToLines(puzzleInput);
             var numsToAdd = program.Select(x => x.Split(" "))

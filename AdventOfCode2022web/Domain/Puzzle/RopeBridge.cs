@@ -13,7 +13,7 @@
                     { "D", (0,-1)},
                 };
 
-        protected override string Part1(string puzzleInput)
+        protected override string SolveFirst(string puzzleInput)
         {
             var seriesOfMotions = ToLines(puzzleInput)
                 .Select(x => x.Split(" "))
@@ -37,7 +37,7 @@
             }
             return Format(visitedPositions.Count);
         }
-        protected override string Part2(string puzzleInput)
+        protected override string SolveSecond(string puzzleInput)
         {
             var seriesOfMotions = ToLines(puzzleInput)
                 .Select(x => x.Split(" "))

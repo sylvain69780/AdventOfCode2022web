@@ -12,7 +12,7 @@
             public long Inspections;
         }
 
-        protected override string Part1(string inp)
+        protected override string SolveFirst(string inp)
         {
             var input = inp.Split("\n").AsEnumerable().GetEnumerator();
             var ms = new List<Monkey>();
@@ -72,7 +72,7 @@
             }
             return score.ToString();
         }
-        protected override string Part2(string inp)
+        protected override string SolveSecond(string inp)
         {
             var input = inp.Split("\n").AsEnumerable().GetEnumerator();
             var ms = new List<Monkey>();

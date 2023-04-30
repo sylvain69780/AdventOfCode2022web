@@ -39,7 +39,7 @@ namespace AdventOfCode2022web.Domain.Puzzle
             return (stacks,moves);
         }
 
-        protected override string Part1(string puzzleInput)
+        protected override string SolveFirst(string puzzleInput)
         {
             var (stacks,moves) = ReadStacksAndMoves(puzzleInput);
             foreach(var (count, from, to) in moves)
@@ -52,7 +52,7 @@ namespace AdventOfCode2022web.Domain.Puzzle
             }
             return string.Join("", stacks.Select(x => x.FirstOrDefault(' ')));
         }
-        protected override string Part2(string puzzleInput)
+        protected override string SolveSecond(string puzzleInput)
         {
             var (stacks, moves) = ReadStacksAndMoves(puzzleInput);
             var tmp = new Stack<char>();

@@ -20,41 +20,41 @@ namespace AdventOfCode2022web.Domain.Puzzle
                 End = end;
             }
 
-            public bool Contains(Interval a) => a.Start >= Start && a.End <= End;
+            public bool Contains(Interval interval) => interval.Start >= Start && interval.End <= End;
 
-            public bool Overlaps(Interval a) => a.Start <= End && a.End >= Start;
+            public bool Overlaps(Interval interval) => interval.Start <= End && interval.End >= Start;
         }
 
-        private static Interval ToInterval(string a)
+        private static Interval ToInterval(string intervalStr)
         {
-            var b = a.Split("-");
-            return new Interval(int.Parse(b[0]), int.Parse(b[1]));
+            var split = intervalStr.Split("-");
+            return new Interval(int.Parse(split[0]), int.Parse(split[1]));
         }
 
         private static IEnumerable<(Interval Interval1, Interval Interval2)> ListOfSectionAssignmentPairs(IEnumerable<string> records)
         {
-            foreach (var a in records)
+            foreach (var record in records)
             {
-                var b = a.Split(",");
-                (string part1, string part2) = (b[0], b[1]);
-                yield return (ToInterval(part1), ToInterval(part2));
+                var split = record.Split(",");
+                (string intervalStr1, string intervalStr2) = (split[0], split[1]);
+                yield return (ToInterval(intervalStr1), ToInterval(intervalStr2));
             }
         }
 
-        protected override string Part1(string puzzleInput)
+        protected override string SolveFirst(string puzzleInput)
         {
             var score = 0;
-            foreach (var (a, b) in ListOfSectionAssignmentPairs(ToLines(puzzleInput)))
-                if (a.Contains(b) || b.Contains(a)) 
+            foreach (var (interval1, interval2) in ListOfSectionAssignmentPairs(ToLines(puzzleInput)))
+                if (interval1.Contains(interval2) || interval2.Contains(interval1)) 
                     score++;
             return Format(score);
         }
 
-        protected override string Part2(string puzzleInput)
+        protected override string SolveSecond(string puzzleInput)
         {
             var score = 0;
-            foreach (var (a, b) in ListOfSectionAssignmentPairs(ToLines(puzzleInput)))
-                if (a.Overlaps(b))
+            foreach (var (interval1, interval2) in ListOfSectionAssignmentPairs(ToLines(puzzleInput)))
+                if (interval1.Overlaps(interval2))
                     score++;
             return Format(score);
         }

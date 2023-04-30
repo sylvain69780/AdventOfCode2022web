@@ -2,7 +2,7 @@
 {
     public class HillClimbingAlgorithm : PuzzleSolver
     {
-        protected override string Part1(string inp)
+        protected override string SolveFirst(string inp)
         {
             var input = inp.Split("\n");
             var gridWidth = input[0].Length;
@@ -52,7 +52,7 @@
             Console.WriteLine(explored.Count);
             return score.ToString();
         }
-        protected override string Part2(string inp)
+        protected override string SolveSecond(string inp)
         {
             var input = inp.Split("\n");
             var gridWidth = input[0].Length;

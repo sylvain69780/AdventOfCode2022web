@@ -3,17 +3,20 @@
     public class CalorieCounting : PuzzleSolver
     {
         private static string[] ToLines(string s) => s.Split("\n");
-        protected override string Part1(string puzzleInput)
+        protected override string SolveFirst(string puzzleInput)
         {
             int sumOfCalories = 0, maxCalories = 0;
             foreach (var value in ToLines(puzzleInput))
             {
-                sumOfCalories = value == string.Empty ? 0 : sumOfCalories + int.Parse(value);
+                if (value == string.Empty)
+                    sumOfCalories = 0;
+                else 
+                    sumOfCalories += int.Parse(value);
                 maxCalories = Math.Max(maxCalories, sumOfCalories);
             }
             return maxCalories.ToString();
         }
-        protected override string Part2(string puzzleInput)
+        protected override string SolveSecond(string puzzleInput)
         {
             var sumOfCalories = new List<int>() { 0 };
             foreach (var value in ToLines(puzzleInput))

@@ -5,15 +5,15 @@ namespace AdventOfCode2022web.Domain.Puzzle
     {
         public virtual async IAsyncEnumerable<string> Part1Async(string input)
         {
-            yield return Part1(input);
+            yield return SolveFirst(input);
             await Task.Delay(1);
         }
         public virtual async IAsyncEnumerable<string> Part2Async(string input)
         {
-            yield return Part2(input);
+            yield return SolveSecond(input);
             await Task.Delay(1);
         }
-        protected abstract string Part1(string input);
-        protected abstract string Part2(string input);
+        protected abstract string SolveFirst(string input);
+        protected abstract string SolveSecond(string input);
     }
 }

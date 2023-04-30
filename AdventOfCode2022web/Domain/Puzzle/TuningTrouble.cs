@@ -4,7 +4,7 @@
     {
         private static string Format(int v) => v.ToString();
 
-        protected override string Part1(string puzzleInput)
+        protected override string SolveFirst(string puzzleInput)
         {
             var marker = new Queue<char>();
             var processedCharacters = 0;
@@ -17,7 +17,7 @@
             }
             return Format(processedCharacters);
         }
-        protected override string Part2(string puzzleInput)
+        protected override string SolveSecond(string puzzleInput)
         {
             var marker = new Queue<char>();
             var processedCharacters = 0;
