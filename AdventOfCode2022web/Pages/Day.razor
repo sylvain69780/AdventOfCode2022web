@@ -1,5 +1,6 @@
 ﻿@page "/day/{dayNumber:int}"
 @using AdventOfCode2022web.Domain.Puzzle;
+@using System.Diagnostics;
 @inject HttpClient Http
 
 <h1>@_solver.GetType().Name</h1>
@@ -38,11 +39,15 @@
     private async Task SolveFirstPart()
     {
         IsTask1Running = true;
+        var stopwatch = new Stopwatch();
         foreach (var s in _solver.SolveFirstPart(Input))
         {
+            stopwatch.Start();
             Output1 = s;
             StateHasChanged();
-            await Task.Delay(50);
+            stopwatch.Stop();
+            await Task.Delay(Math.Max(0,16-(int)stopwatch.ElapsedMilliseconds));
+            stopwatch.Reset();
         };
         IsTask1Running = false;
     }
@@ -50,11 +55,15 @@
     private async Task SolveSecondPart()
     {
         IsTask2Running = true;
+        var stopwatch = new Stopwatch();
         foreach (var s in _solver.SolveSecondPart(Input))
         {
+            stopwatch.Start();
             Output2 = s;
             StateHasChanged();
-            await Task.Delay(50);
+            stopwatch.Stop();
+            await Task.Delay(Math.Max(0, 16 - (int)stopwatch.ElapsedMilliseconds));
+            stopwatch.Reset();
         };
         IsTask2Running = false;
     }

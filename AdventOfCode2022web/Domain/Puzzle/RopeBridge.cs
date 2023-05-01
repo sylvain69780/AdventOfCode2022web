@@ -49,41 +49,38 @@ namespace AdventOfCode2022web.Domain.Puzzle
             yield return Format(visitedPositions.Count);
         }
 
-        private static (string,(int,int,int,int)) Visualize((int x, int y) head, (int x, int y)[] tails, HashSet<(int x, int y)> visited, (int,int,int,int) oldMinMax)
+        private class Visualizer
         {
-            var (xMax, yMax, xMin, yMin) = oldMinMax;
-            xMax = Math.Max(xMax, head.x);
-            yMax = Math.Max(yMax, head.y);
-            xMin = Math.Min(xMin, head.x);
-            yMin = Math.Min(yMin, head.y);
-            foreach ( var (tx,ty) in tails)
+            private int xMin;
+            private int yMin;
+            private int xMax;
+            private int yMax;
+
+            public string Visualize((int x, int y) head, (int x, int y)[] tails, HashSet<(int x, int y)> visited)
             {
-                xMax = Math.Max(xMax, tx);
-                yMax = Math.Max(yMax, ty);
-                xMin = Math.Min(xMin, tx);
-                yMin = Math.Min(yMin, ty);
-            }
-            foreach (var (tx, ty) in visited)
-            {
-                xMax = Math.Max(xMax, tx);
-                yMax = Math.Max(yMax, ty);
-                xMin = Math.Min(xMin, tx);
-                yMin = Math.Min(yMin, ty);
-            }
-            var sb = new StringBuilder();
-            for (var y = yMin; y <= yMax; y++)
-            {
-                for (var x = xMin; x <= xMax; x++)
+                var items = tails.AsEnumerable().Append(head).Concat(visited);
+                foreach (var (tx, ty) in items)
                 {
-                    var c = '.';
-                    if (visited.Contains((x, y))) c = '*';
-                    if (tails.Contains((x, y))) c = 'T';
-                    if ((x, y) == head) c = 'H';
-                    sb.Append(c);
+                    xMax = Math.Max(xMax, tx);
+                    yMax = Math.Max(yMax, ty);
+                    xMin = Math.Min(xMin, tx);
+                    yMin = Math.Min(yMin, ty);
                 }
-                sb.Append('\n');
+                var sb = new StringBuilder();
+                for (var y = yMin; y <= yMax; y++)
+                {
+                    for (var x = xMin; x <= xMax; x++)
+                    {
+                        var c = ' ';
+                        if (visited.Contains((x, y))) c = '.';
+                        if (tails.Contains((x, y))) c = 'T';
+                        if ((x, y) == head) c = 'H';
+                        sb.Append(c);
+                    }
+                    sb.Append('\n');
+                }
+                return sb.ToString();
             }
-            return (sb.ToString(), (xMax, yMax, xMin, yMin));
         }
 
         public IEnumerable<string> SolveSecondPart(string puzzleInput)
@@ -97,7 +94,8 @@ namespace AdventOfCode2022web.Domain.Puzzle
             var tails = new (int x,int y)[9];
             visited.Add((0, 0));
 
-            var minMax = (0, 0, 0, 0);
+            var visualizer = new Visualizer();
+            var count = 0;
             foreach (var move in seriesOfMotions)
             {
                 var (x, y) = Directions[move];
@@ -109,14 +107,8 @@ namespace AdventOfCode2022web.Domain.Puzzle
                     tails[i] = MoveTailPosition(tails[i], previous);
                     previous = tails[i];
                 }
-                if (visited.Count <= 20)
-                {
-                    var (visualize, newMinMax) = Visualize(head, tails, visited, minMax);
-                    minMax = newMinMax;
-                    yield return $"The tail visited {visited.Count} positions." + '\n' + visualize;
-                }
-                else if (!visited.Contains(tails[8]))
-                    yield return $"Visited {visited.Count} positions.";
+                if (count++ < 1000)
+                    yield return $"The tail visited {visited.Count} positions." + '\n' + visualizer.Visualize(head, tails, visited);
                 visited.Add(tails[8]);
             }
             yield return Format(visited.Count);
