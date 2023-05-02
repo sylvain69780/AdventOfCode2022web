@@ -15,7 +15,7 @@ namespace AdventOfCode2022web.Domain.Puzzle
                     { "D", (0,-1)},
                 };
 
-        private static (int x,int y) MoveTailPosition((int x, int y) tail, (int x, int y) head)
+        private static (int x, int y) MoveTailPosition((int x, int y) tail, (int x, int y) head)
         {
             var newTail = tail;
             var (dx, dy) = (head.x - newTail.x, head.y - newTail.y);
@@ -56,7 +56,7 @@ namespace AdventOfCode2022web.Domain.Puzzle
             private int xMax;
             private int yMax;
 
-            public StringBuilder Visualize((int x, int y) head, (int x, int y)[] tails, HashSet<(int x, int y)> visited)
+            public string Visualize((int x, int y) head, (int x, int y)[] tails, HashSet<(int x, int y)> visited)
             {
                 var items = tails.AsEnumerable().Append(head).Concat(visited);
                 foreach (var (tx, ty) in items)
@@ -79,7 +79,7 @@ namespace AdventOfCode2022web.Domain.Puzzle
                     }
                     sb.Append('\n');
                 }
-                return sb;
+                return sb.Insert(0, $"The tail visited {visited.Count} positions." + '\n').ToString();
             }
         }
 
@@ -91,7 +91,7 @@ namespace AdventOfCode2022web.Domain.Puzzle
 
             var visited = new HashSet<(int x, int y)>();
             var head = (x: 0, y: 0);
-            var tails = new (int x,int y)[9];
+            var tails = new (int x, int y)[9];
             visited.Add((0, 0));
 
             var visualizer = new Visualizer();
@@ -108,14 +108,10 @@ namespace AdventOfCode2022web.Domain.Puzzle
                     previous = tails[i];
                 }
                 if (count++ < 1000)
-                    yield return visualizer.Visualize(head, tails, visited)
-                        .Insert(0,$"The tail visited {visited.Count} positions." + '\n')
-                        .ToString() ;
+                    yield return visualizer.Visualize(head, tails, visited);
                 visited.Add(tails[8]);
             }
-            yield return visualizer.Visualize(head, tails, visited)
-                        .Insert(0, $"The tail visited {visited.Count} positions." + '\n')
-                        .ToString();
+            yield return visualizer.Visualize(head, tails, visited);
         }
     }
 }
