@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Security.Cryptography;
+using System.Text;
 
 namespace AdventOfCode2022web.Domain.Puzzle
 {
@@ -49,15 +50,20 @@ namespace AdventOfCode2022web.Domain.Puzzle
             return monkeys;
         }
 
-        private static string Visualize(List<Monkey> monkeys)
+        private static string Visualize(List<Monkey> monkeys,int round)
         {
-            return monkeys.Select(x => x.Inspections).OrderByDescending(x => x).Take(2).Aggregate(1L, (x, y) => y * x).ToString();
+            var sb = new StringBuilder($"After round {round} the monkeys are holding items with these worry levels:\n");
+            foreach (var monkey in monkeys)
+                sb.Append($"Monkey {monkey.Id}: {string.Join(", ",monkey.WorryLevelOfItems)}\n");
+            return sb.Append(monkeys.Select(x => x.Inspections).OrderByDescending(x => x).Take(2).Aggregate(1L, (x, y) => y * x))
+                .ToString();
         }
 
         public IEnumerable<string> SolveFirstPart(string puzzleInput)
         {
             var monkeys = BuildMonkeyList(puzzleInput);
-            foreach (var round in Enumerable.Range(1, 20))
+            const int maxRound = 20;
+            foreach (var round in Enumerable.Range(1, maxRound))
             {
                 foreach (var monkey in monkeys)
                 {
@@ -78,7 +84,7 @@ namespace AdventOfCode2022web.Domain.Puzzle
                     monkey.WorryLevelOfItems.Clear();
                 }
             }
-            yield return Visualize(monkeys);
+            yield return Visualize(monkeys,maxRound);
         }
         public IEnumerable<string> SolveSecondPart(string puzzleInput)
         {
@@ -86,7 +92,8 @@ namespace AdventOfCode2022web.Domain.Puzzle
             var bigDiv = monkeys.Select(x => x.DivisibilityToTest).Aggregate(1L, (x, y) => y * x);
             var stopwatch = new Stopwatch();
             stopwatch.Start();
-            foreach (var round in Enumerable.Range(1, 10000))
+            const int maxRound = 10000;
+            foreach (var round in Enumerable.Range(1, maxRound))
             {
                 foreach (var monkey in monkeys)
                 {
@@ -108,11 +115,11 @@ namespace AdventOfCode2022web.Domain.Puzzle
                 }
                 if (stopwatch.ElapsedMilliseconds > 1000)
                 {
-                    yield return Visualize(monkeys);
+                    yield return Visualize(monkeys,round);
                     stopwatch.Restart();
                 }
             }
-            yield return Visualize(monkeys);
+            yield return Visualize(monkeys,maxRound);
         }
     }
 }
