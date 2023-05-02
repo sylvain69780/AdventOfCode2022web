@@ -56,7 +56,7 @@ namespace AdventOfCode2022web.Domain.Puzzle
             private int xMax;
             private int yMax;
 
-            public string Visualize((int x, int y) head, (int x, int y)[] tails, HashSet<(int x, int y)> visited)
+            public StringBuilder Visualize((int x, int y) head, (int x, int y)[] tails, HashSet<(int x, int y)> visited)
             {
                 var items = tails.AsEnumerable().Append(head).Concat(visited);
                 foreach (var (tx, ty) in items)
@@ -79,7 +79,7 @@ namespace AdventOfCode2022web.Domain.Puzzle
                     }
                     sb.Append('\n');
                 }
-                return sb.ToString();
+                return sb;
             }
         }
 
@@ -108,10 +108,14 @@ namespace AdventOfCode2022web.Domain.Puzzle
                     previous = tails[i];
                 }
                 if (count++ < 1000)
-                    yield return $"The tail visited {visited.Count} positions." + '\n' + visualizer.Visualize(head, tails, visited);
+                    yield return visualizer.Visualize(head, tails, visited)
+                        .Insert(0,$"The tail visited {visited.Count} positions." + '\n')
+                        .ToString() ;
                 visited.Add(tails[8]);
             }
-            yield return Format(visited.Count);
+            yield return visualizer.Visualize(head, tails, visited)
+                        .Insert(0, $"The tail visited {visited.Count} positions." + '\n')
+                        .ToString();
         }
     }
 }
