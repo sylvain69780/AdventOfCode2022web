@@ -1,148 +1,118 @@
-﻿namespace AdventOfCode2022web.Domain.Puzzle
+﻿using System.Diagnostics;
+using System.Security.Cryptography;
+
+namespace AdventOfCode2022web.Domain.Puzzle
 {
     public class MonkeyInTheMiddle : IPuzzleSolver
     {
         class Monkey
         {
-            public List<long> Items = new();
-            public string[] Oper = new string[3];
+            public int Id;
+            public List<long> WorryLevelOfItems = new ();
+            public char OperationToPerform;
+            public int? ValueToAddOrMultiply;
             public long Test;
             public int IfTrue;
             public int IfFalse;
             public long Inspections;
         }
 
-        public IEnumerable<string> SolveFirstPart(string inp)
+        private static List<Monkey> BuildMonkeyList(string puzzleInput)
         {
-            var input = inp.Split("\n").AsEnumerable().GetEnumerator();
-            var ms = new List<Monkey>();
+            var input = puzzleInput.Split("\n").AsEnumerable().GetEnumerator();
+            var monkeys = new List<Monkey>();
+            var counter = 0;
             while (input.MoveNext())
             {
                 input.MoveNext();
-                var items = input.Current.Replace("  Starting items: ", "").Split(',').Select(x => long.Parse(x)).ToList();
+                var items = input.Current[18..].Split(',').Select(x => long.Parse(x)).ToList();
                 input.MoveNext();
-                var oper = input.Current.Replace("  Operation: new = ", "").Split(' ');
+                var split = input.Current[19..].Split(' ');
                 input.MoveNext();
-                var test = int.Parse(input.Current.Replace("  Test: divisible by ", ""));
+                var test = int.Parse(input.Current[21..]);
                 input.MoveNext();
-                var ifTrue = int.Parse(input.Current.Replace("    If true: throw to monkey ", ""));
+                var ifTrue = int.Parse(input.Current[29..]);
                 input.MoveNext();
-                var ifFalse = int.Parse(input.Current.Replace("   If false: throw to monkey ", ""));
+                var ifFalse = int.Parse(input.Current[29..]);
                 input.MoveNext();
-                var m = new Monkey
+                monkeys.Add(new Monkey
                 {
-                    Items = items,
-                    Oper = oper,
+                    Id = counter++,
+                    WorryLevelOfItems = items,
+                    OperationToPerform = split[1][0],
+                    ValueToAddOrMultiply = split[2] == "old" ? null : int.Parse(split[2]),
                     Test = test,
                     IfFalse = ifFalse,
                     IfTrue = ifTrue
-                };
-                ms.Add(m);
+                });
             }
-            long score = 0;
+            return monkeys;
+        }
+
+        private static string Visualize(List<Monkey> monkeys)
+        {
+            return monkeys.Select(x => x.Inspections).OrderByDescending(x => x).Take(2).Aggregate(1L, (x, y) => y * x).ToString();
+        }
+
+        public IEnumerable<string> SolveFirstPart(string puzzleInput)
+        {
+            var monkeys = BuildMonkeyList(puzzleInput);
             foreach (var round in Enumerable.Range(1, 20))
             {
-                foreach (var m in ms)
+                foreach (var monkey in monkeys)
                 {
-                    Console.WriteLine($"Monkey {ms.IndexOf(m)}");
-                    m.Inspections += m.Items.Count;
-                    foreach (var i in m.Items)
+                    monkey.Inspections += monkey.WorryLevelOfItems.Count;
+                    foreach (var currentWorryLevelOfItem in monkey.WorryLevelOfItems)
                     {
-                        Console.WriteLine($"  Monkey inspects an item with a worry level of {i}.");
-                        var op = m.Oper[1] == "*" ? "muliplied" : "increased";
-                        var arg = m.Oper[2] == "old" ? "itself" : m.Oper[2];
-                        var o = m.Oper[2] == "old" ? i : int.Parse(m.Oper[2]);
-                        var newVal = m.Oper[1] == "*" ? i * o : i + o;
-                        Console.WriteLine($"    Worry level is {op} by {arg} to {newVal}.");
-                        newVal /= 3;
-                        Console.WriteLine($"    Monkey gets bored with item. Worry level is divided by 3 to {newVal}");
-                        if (newVal % m.Test == 0)
-                            ms[m.IfTrue].Items.Add(newVal);
+                        var newWorryLevelOfItem = currentWorryLevelOfItem;
+                        if (monkey.OperationToPerform == '*')
+                            newWorryLevelOfItem *= monkey.ValueToAddOrMultiply ?? currentWorryLevelOfItem;
                         else
-                            ms[m.IfFalse].Items.Add(newVal);
+                            newWorryLevelOfItem += monkey.ValueToAddOrMultiply ?? currentWorryLevelOfItem;
+                        newWorryLevelOfItem /= 3;
+                        if (newWorryLevelOfItem % monkey.Test == 0)
+                            monkeys[monkey.IfTrue].WorryLevelOfItems.Add(newWorryLevelOfItem);
+                        else
+                            monkeys[monkey.IfFalse].WorryLevelOfItems.Add(newWorryLevelOfItem);
                     }
-                    m.Items.Clear();
+                    monkey.WorryLevelOfItems.Clear();
                 }
-                foreach (var m in ms)
-                    Console.WriteLine("items " + String.Join(',', m.Items));
-                foreach (var m in ms)
-                    Console.WriteLine("Inspections " + m.Inspections.ToString());
-                score = ms.Select(x => x.Inspections).OrderByDescending(x => x).Take(2).Aggregate((long)1, (x, y) => y * x);
-                Console.WriteLine("Score: " + score);
             }
-            yield  return score.ToString();
+            yield return Visualize(monkeys);
         }
-        public IEnumerable<string> SolveSecondPart(string inp)
+        public IEnumerable<string> SolveSecondPart(string puzzleInput)
         {
-            var input = inp.Split("\n").AsEnumerable().GetEnumerator();
-            var ms = new List<Monkey>();
-            while (input.MoveNext())
-            {
-                input.MoveNext();
-                var items = input.Current.Replace("  Starting items: ", "").Split(',').Select(x => long.Parse(x)).ToList();
-                input.MoveNext();
-                var oper = input.Current.Replace("  Operation: new = ", "").Split(' ');
-                input.MoveNext();
-                var test = int.Parse(input.Current.Replace("  Test: divisible by ", ""));
-                input.MoveNext();
-                var ifTrue = int.Parse(input.Current.Replace("    If true: throw to monkey ", ""));
-                input.MoveNext();
-                var ifFalse = int.Parse(input.Current.Replace("   If false: throw to monkey ", ""));
-                input.MoveNext();
-                var m = new Monkey
-                {
-                    Items = items,
-                    Oper = oper,
-                    Test = test,
-                    IfFalse = ifFalse,
-                    IfTrue = ifTrue
-                };
-                ms.Add(m);
-            }
-            var bigDiv = ms.Select(x => x.Test).Aggregate(1L, (x, y) => y * x);
+            var monkeys = BuildMonkeyList(puzzleInput);
+            var bigDiv = monkeys.Select(x => x.Test).Aggregate(1L, (x, y) => y * x);
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
             foreach (var round in Enumerable.Range(1, 10000))
             {
-                foreach (var m in ms)
+                foreach (var monkey in monkeys)
                 {
-                    m.Inspections += m.Items.Count;
-                    foreach (var i in m.Items)
+                    monkey.Inspections += monkey.WorryLevelOfItems.Count;
+                    foreach (var currentWorryLevelOfItem in monkey.WorryLevelOfItems)
                     {
-                        var newVal = i;
-                        if (m.Oper[1] == "*")
-                        {
-                            if (m.Oper[2] == "old")
-                            {
-                                newVal *= newVal;
-                            }
-                            else
-                            {
-                                var o = int.Parse(m.Oper[2]);
-                                newVal *= o;
-                            }
-                        }
+                        var newWorryLevelOfItem = currentWorryLevelOfItem;
+                        if (monkey.OperationToPerform == '*')
+                            newWorryLevelOfItem *= monkey.ValueToAddOrMultiply ?? currentWorryLevelOfItem;
                         else
-                        {
-                            var o = int.Parse(m.Oper[2]);
-                            newVal += o;
-                        }
-                        newVal = newVal % bigDiv;
-                        if (newVal % m.Test == 0)
-                            ms[m.IfTrue].Items.Add(newVal);
+                            newWorryLevelOfItem += monkey.ValueToAddOrMultiply ?? currentWorryLevelOfItem;
+                        newWorryLevelOfItem %= bigDiv;
+                        if (newWorryLevelOfItem % monkey.Test == 0)
+                            monkeys[monkey.IfTrue].WorryLevelOfItems.Add(newWorryLevelOfItem);
                         else
-                            ms[m.IfFalse].Items.Add(newVal);
+                            monkeys[monkey.IfFalse].WorryLevelOfItems.Add(newWorryLevelOfItem);
                     }
-                    m.Items.Clear();
+                    monkey.WorryLevelOfItems.Clear();
                 }
-                //foreach (var m in ms)
-                //    Console.WriteLine("items " + String.Join(',', m.Items));
-                //foreach (var m in ms)
-                //    Console.WriteLine("Inspections " + m.Inspections.ToString());
+                if (stopwatch.ElapsedMilliseconds > 1000)
+                {
+                    yield return Visualize(monkeys);
+                    stopwatch.Restart();
+                }
             }
-            foreach (var m in ms)
-                Console.WriteLine("Inspections " + m.Inspections.ToString());
-            var score = ms.Select(x => x.Inspections).OrderByDescending(x => x).Take(2).Aggregate(1L, (x, y) => y * x);
-            Console.WriteLine("Score: " + score);
-            yield return score.ToString();
+            yield return Visualize(monkeys);
         }
     }
 }
