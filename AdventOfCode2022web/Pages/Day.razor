@@ -1,9 +1,11 @@
 ﻿@page "/day/{dayNumber:int}"
 @using AdventOfCode2022web.Domain.Puzzle;
 @using System.Diagnostics;
+@using System.Text.RegularExpressions;
 @inject HttpClient Http
 
-<h1>@_solver.GetType().Name</h1>
+<h1>
+    @Regex.Replace(_solver.GetType().Name, "(\\B[A-Z])", " $1")</h1>
 <div class="mb-3">
     <label class="form-label">The data below is that provided for example. Paste your own user input from <a href="https://adventofcode.com/2022/day/@dayNumber">Advent Of Code</a></label>
     <pre><textarea class="form-control" rows="10" @bind="Input" maxlength="10000000"></textarea></pre>
@@ -26,8 +28,6 @@
     public int dayNumber { get; set; }
     private IPuzzleSolver _solver = new CalorieCounting();
     private string Input { get; set; } = string.Empty;
-    public bool IsTask1Running { get; set; } = false;
-    public bool IsTask2Running { get; set; } = false;
     protected override async Task OnParametersSetAsync()
     {
         _solver = daySolvers[dayNumber - 1];
@@ -36,6 +36,7 @@
     }
 
     private string Output1 { get; set; } = string.Empty;
+    public bool IsTask1Running { get; set; } = false;
     private async Task SolveFirstPart()
     {
         IsTask1Running = true;
@@ -52,6 +53,7 @@
         IsTask1Running = false;
     }
     private string Output2 { get; set; } = string.Empty;
+    public bool IsTask2Running { get; set; } = false;
     private async Task SolveSecondPart()
     {
         IsTask2Running = true;
