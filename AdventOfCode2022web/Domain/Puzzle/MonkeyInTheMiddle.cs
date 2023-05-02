@@ -11,9 +11,9 @@ namespace AdventOfCode2022web.Domain.Puzzle
             public List<long> WorryLevelOfItems = new ();
             public char OperationToPerform;
             public int? ValueToAddOrMultiply;
-            public long Test;
-            public int IfTrue;
-            public int IfFalse;
+            public long DivisibilityToTest;
+            public int MonkeyRecipientIfDivisible;
+            public int MonkeyRecipientIfNotDivisible;
             public long Inspections;
         }
 
@@ -25,11 +25,11 @@ namespace AdventOfCode2022web.Domain.Puzzle
             while (input.MoveNext())
             {
                 input.MoveNext();
-                var items = input.Current[18..].Split(',').Select(x => long.Parse(x)).ToList();
+                var worryLevelOfItems = input.Current[18..].Split(',').Select(x => long.Parse(x)).ToList();
                 input.MoveNext();
-                var split = input.Current[19..].Split(' ');
+                var operAndValue = input.Current[19..].Split(' ');
                 input.MoveNext();
-                var test = int.Parse(input.Current[21..]);
+                var divisibilityToTest = int.Parse(input.Current[21..]);
                 input.MoveNext();
                 var ifTrue = int.Parse(input.Current[29..]);
                 input.MoveNext();
@@ -38,12 +38,12 @@ namespace AdventOfCode2022web.Domain.Puzzle
                 monkeys.Add(new Monkey
                 {
                     Id = counter++,
-                    WorryLevelOfItems = items,
-                    OperationToPerform = split[1][0],
-                    ValueToAddOrMultiply = split[2] == "old" ? null : int.Parse(split[2]),
-                    Test = test,
-                    IfFalse = ifFalse,
-                    IfTrue = ifTrue
+                    WorryLevelOfItems = worryLevelOfItems,
+                    OperationToPerform = operAndValue[1][0],
+                    ValueToAddOrMultiply = operAndValue[2] == "old" ? null : int.Parse(operAndValue[2]),
+                    DivisibilityToTest = divisibilityToTest,
+                    MonkeyRecipientIfDivisible = ifTrue,
+                    MonkeyRecipientIfNotDivisible = ifFalse
                 });
             }
             return monkeys;
@@ -70,10 +70,10 @@ namespace AdventOfCode2022web.Domain.Puzzle
                         else
                             newWorryLevelOfItem += monkey.ValueToAddOrMultiply ?? currentWorryLevelOfItem;
                         newWorryLevelOfItem /= 3;
-                        if (newWorryLevelOfItem % monkey.Test == 0)
-                            monkeys[monkey.IfTrue].WorryLevelOfItems.Add(newWorryLevelOfItem);
+                        if (newWorryLevelOfItem % monkey.DivisibilityToTest == 0)
+                            monkeys[monkey.MonkeyRecipientIfDivisible].WorryLevelOfItems.Add(newWorryLevelOfItem);
                         else
-                            monkeys[monkey.IfFalse].WorryLevelOfItems.Add(newWorryLevelOfItem);
+                            monkeys[monkey.MonkeyRecipientIfNotDivisible].WorryLevelOfItems.Add(newWorryLevelOfItem);
                     }
                     monkey.WorryLevelOfItems.Clear();
                 }
@@ -83,7 +83,7 @@ namespace AdventOfCode2022web.Domain.Puzzle
         public IEnumerable<string> SolveSecondPart(string puzzleInput)
         {
             var monkeys = BuildMonkeyList(puzzleInput);
-            var bigDiv = monkeys.Select(x => x.Test).Aggregate(1L, (x, y) => y * x);
+            var bigDiv = monkeys.Select(x => x.DivisibilityToTest).Aggregate(1L, (x, y) => y * x);
             var stopwatch = new Stopwatch();
             stopwatch.Start();
             foreach (var round in Enumerable.Range(1, 10000))
@@ -99,10 +99,10 @@ namespace AdventOfCode2022web.Domain.Puzzle
                         else
                             newWorryLevelOfItem += monkey.ValueToAddOrMultiply ?? currentWorryLevelOfItem;
                         newWorryLevelOfItem %= bigDiv;
-                        if (newWorryLevelOfItem % monkey.Test == 0)
-                            monkeys[monkey.IfTrue].WorryLevelOfItems.Add(newWorryLevelOfItem);
+                        if (newWorryLevelOfItem % monkey.DivisibilityToTest == 0)
+                            monkeys[monkey.MonkeyRecipientIfDivisible].WorryLevelOfItems.Add(newWorryLevelOfItem);
                         else
-                            monkeys[monkey.IfFalse].WorryLevelOfItems.Add(newWorryLevelOfItem);
+                            monkeys[monkey.MonkeyRecipientIfNotDivisible].WorryLevelOfItems.Add(newWorryLevelOfItem);
                     }
                     monkey.WorryLevelOfItems.Clear();
                 }
