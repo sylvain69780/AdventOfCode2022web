@@ -33,11 +33,11 @@
       "url": "_framework\/icudt.dat"
     },
     {
-      "hash": "sha256-Hn5eauEXlauPivKslV6dS3JPz5by5LdvAf9bq7MCRfk=",
+      "hash": "sha256-hHkbJvoM6OT9mgtMHkR+H9QVlhJN92qAGwtz6L9wEJM=",
       "url": "_framework\/blazor.boot.json"
     },
     {
-      "hash": "sha256-urwFML1ZnuD76sQ0DPSeJmxmvg65SbnOBHDkdNC9p6I=",
+      "hash": "sha256-h45snt9ZBv1uMtpPkKgeiP5BHPOCjjq2DoeYYJQoMcI=",
       "url": "_framework\/AdventOfCode2022web.dll"
     },
     {
@@ -337,5 +337,5 @@
       "url": "sample-data\/UnstableDiffusion.txt"
     }
   ],
-  "version": "RivusbSu"
+  "version": "L7Z+yAjR"
 };
