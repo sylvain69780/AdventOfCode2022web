@@ -1,4 +1,6 @@
-﻿namespace AdventOfCode2022web.Domain.Puzzle
+﻿using System.Diagnostics;
+
+namespace AdventOfCode2022web.Domain.Puzzle
 {
     public class HillClimbingAlgorithm : IPuzzleSolver
     {
@@ -11,22 +13,21 @@
 
             public HillMap(string puzzleInput)
             {
-                var input = puzzleInput.Split("\n");
-                var start = (x: 0, y: 0);
-                foreach (var l in input)
+                Map = puzzleInput.Split("\n");
+                Start = (0, 0);
+                foreach (var l in Map)
                 {
                     var s = l.IndexOf('S');
                     if (s != -1)
                     {
-                        start.x = s;
+                        Start.x = s;
                         break;
                     }
-                    start.y++;
+                    Start.y++;
                 }
-                Map = input;
-                Start = start;
-                Width = input[0].Length;
-                Height = input.Length;
+                Width = Map[0].Length;
+                Height = Map.Length;
+                ExploredPositions = new HashSet<(int, int)>();
             }
 
             public int Altitude((int x, int y) p)
@@ -39,22 +40,34 @@
 
             public bool IsExit((int x, int y) p) => Map[p.y][p.x] == 'E';
 
-            public bool IsOutOfMap((int x,int y ) p) => p.x < 0 || p.x >= Width || p.y < 0 || p.y >= Height;
+            public bool IsOutOfMap((int x, int y) p) => p.x < 0 || p.x >= Width || p.y < 0 || p.y >= Height;
 
             public IEnumerable<(int x, int y)> GetZeroHeighPositions()
             {
                 for (var y = 0; y < Height; y++)
                     for (var x = 0; x < Width; x++)
-                        if (Map[y][x] == 'a') yield return((x, y));
+                        if (Map[y][x] == 'a') yield return ((x, y));
             }
+
+            public HashSet<(int, int)> ExploredPositions;
+
+            public void SetAsExplored((int x, int y) p)
+            {
+                ExploredPositions.Add(p);
+            }
+
+            public bool IsExploredPosition((int x, int y) position)
+                => ExploredPositions.Contains(position);
         }
 
         static readonly List<(int x, int y)> Directions = new() { (1, 0), (-1, 0), (0, 1), (0, -1) };
 
+
+
         public IEnumerable<string> SolveFirstPart(string puzzleInput)
         {
             var map = new HillMap(puzzleInput);
-            var exploredPositions = new HashSet<(int, int)>() { map.Start };
+            map.SetAsExplored(map.Start);
             var breadthFirstSearchQueue = new Queue<(int x, int y)>();
             breadthFirstSearchQueue.Enqueue(map.Start);
             var score = 0;
@@ -67,58 +80,57 @@
                     var currentPosition = breadthFirstSearchQueue.Dequeue();
                     foreach (var (x, y) in Directions)
                     {
-                        var nextPosition = (x: currentPosition.x + x, y: currentPosition.y + y);
-                        if (map.IsOutOfMap(nextPosition) || exploredPositions.Contains(nextPosition)) continue;
-                        if (map.Altitude(nextPosition) - map.Altitude(currentPosition) < 2)
+                        var nextPosition = (currentPosition.x + x, currentPosition.y + y);
+                        if (map.IsOutOfMap(nextPosition) || map.IsExploredPosition(nextPosition))
+                            continue;
+                        if (map.Altitude(nextPosition) - map.Altitude(currentPosition) >= 2)
+                            continue;
+                        if (map.IsExit(nextPosition))
                         {
-                            newQueue.Enqueue(nextPosition);
-                            exploredPositions.Add(nextPosition);
-                            if (map.IsExit(nextPosition)) { newQueue.Clear(); breadthFirstSearchQueue.Clear(); break; }
+                            newQueue.Clear();
+                            breadthFirstSearchQueue.Clear();
+                            break;
                         }
+                        newQueue.Enqueue(nextPosition);
+                        map.SetAsExplored(nextPosition);
                     }
                 }
                 breadthFirstSearchQueue = newQueue;
             }
-            Console.WriteLine(exploredPositions.Count);
             yield return score.ToString();
         }
         public IEnumerable<string> SolveSecondPart(string puzzleInput)
         {
             var map = new HillMap(puzzleInput);
+            map.SetAsExplored(map.Start);
             var breadthFirstSearchQueue = new Queue<(int x, int y)>();
             foreach (var position in map.GetZeroHeighPositions())
                 breadthFirstSearchQueue.Enqueue(position);
-            var exploredPositions = new HashSet<(int, int)>() { map.Start };
-            breadthFirstSearchQueue.Enqueue(map.Start);
-            var score = 0;
-            while (breadthFirstSearchQueue.Count > 0)
+            var distance = 1;
+            var newQueue = new Queue<(int, int)>();
+            while (breadthFirstSearchQueue.TryDequeue(out var currentPosition))
             {
-                score++;
-                var newQueue = new Queue<(int, int)>();
-                while (breadthFirstSearchQueue.Count > 0)
+                foreach (var (dx, dy) in Directions)
                 {
-                    var currentPosition = breadthFirstSearchQueue.Dequeue();
-                    foreach (var (dx, dy) in Directions)
+                    var nextPosition = (currentPosition.x + dx, currentPosition.y + dy);
+                    if (map.IsOutOfMap(nextPosition) || map.IsExploredPosition(nextPosition)) continue;
+                    if (map.Altitude(nextPosition) - map.Altitude(currentPosition) >= 2) continue;
+                    newQueue.Enqueue(nextPosition);
+                    map.SetAsExplored(nextPosition);
+                    if (map.IsExit(nextPosition))
                     {
-                        var nextPosition = (x: currentPosition.x + dx, y: currentPosition.y + dy);
-                        if (map.IsOutOfMap(nextPosition) || exploredPositions.Contains(nextPosition)) continue;
-                        if (map.Altitude(nextPosition) - map.Altitude(currentPosition) < 2)
-                        {
-                            newQueue.Enqueue(nextPosition);
-                            exploredPositions.Add(nextPosition);
-                            if (map.IsExit(nextPosition)) 
-                            { 
-                                newQueue.Clear();
-                                breadthFirstSearchQueue.Clear(); 
-                                break; 
-                            }
-                        }
+                        yield return distance.ToString();
+                        yield break;
                     }
                 }
-                breadthFirstSearchQueue = newQueue;
+                if (breadthFirstSearchQueue.Count == 0)
+                {
+                    distance++;
+                    while (newQueue.TryDequeue(out var item))
+                        breadthFirstSearchQueue.Enqueue(item);
+                }
             }
-            Console.WriteLine(exploredPositions.Count);
-            yield return score.ToString();
+            yield return "Not found " + distance.ToString();
         }
     }
 }
