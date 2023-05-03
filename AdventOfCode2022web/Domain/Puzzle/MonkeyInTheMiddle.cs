@@ -71,10 +71,11 @@ namespace AdventOfCode2022web.Domain.Puzzle
                     foreach (var currentWorryLevelOfItem in monkey.WorryLevelOfItems)
                     {
                         var newWorryLevelOfItem = currentWorryLevelOfItem;
+                        var valueToAddOrMultiply = monkey.ValueToAddOrMultiply ?? currentWorryLevelOfItem;
                         if (monkey.OperationToPerform == '*')
-                            newWorryLevelOfItem *= monkey.ValueToAddOrMultiply ?? currentWorryLevelOfItem;
+                            newWorryLevelOfItem *= valueToAddOrMultiply;
                         else
-                            newWorryLevelOfItem += monkey.ValueToAddOrMultiply ?? currentWorryLevelOfItem;
+                            newWorryLevelOfItem += valueToAddOrMultiply;
                         newWorryLevelOfItem /= 3;
                         if (newWorryLevelOfItem % monkey.DivisibilityToTest == 0)
                             monkeys[monkey.MonkeyRecipientIfDivisible].WorryLevelOfItems.Add(newWorryLevelOfItem);
@@ -101,10 +102,11 @@ namespace AdventOfCode2022web.Domain.Puzzle
                     foreach (var currentWorryLevelOfItem in monkey.WorryLevelOfItems)
                     {
                         var newWorryLevelOfItem = currentWorryLevelOfItem;
+                        var valueToAddOrMultiply = monkey.ValueToAddOrMultiply ?? currentWorryLevelOfItem;
                         if (monkey.OperationToPerform == '*')
-                            newWorryLevelOfItem *= monkey.ValueToAddOrMultiply ?? currentWorryLevelOfItem;
+                            newWorryLevelOfItem *= valueToAddOrMultiply;
                         else
-                            newWorryLevelOfItem += monkey.ValueToAddOrMultiply ?? currentWorryLevelOfItem;
+                            newWorryLevelOfItem += valueToAddOrMultiply;
                         newWorryLevelOfItem %= bigDiv;
                         if (newWorryLevelOfItem % monkey.DivisibilityToTest == 0)
                             monkeys[monkey.MonkeyRecipientIfDivisible].WorryLevelOfItems.Add(newWorryLevelOfItem);
