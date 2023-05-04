@@ -1,13 +1,12 @@
-﻿@page "/day/{dayNumber:int}"
+﻿@page "/day/{PuzzleNumber:int}"
 @using AdventOfCode2022web.Domain.Puzzle;
 @using System.Diagnostics;
 @using System.Text.RegularExpressions;
 @inject HttpClient Http
 
-<h1>
-    @Regex.Replace(_solver.GetType().Name, "(\\B[A-Z])", " $1")</h1>
+<h1>@PuzzleTitle</h1>
 <div class="mb-3">
-    <label class="form-label">The data below is that provided for example. Paste your own user input from <a href="https://adventofcode.com/2022/day/@dayNumber">Advent Of Code</a></label>
+    <label class="form-label">The data below is that provided for example. Paste your own user input from <a href="https://adventofcode.com/2022/day/@PuzzleNumber">Advent Of Code</a></label>
     <pre><textarea class="form-control" rows="10" @bind="Input" maxlength="10000000"></textarea></pre>
 </div>
 <div class="mb-3">
@@ -25,14 +24,25 @@
 
 @code {
     [Parameter]
-    public int dayNumber { get; set; }
+    public int PuzzleNumber { get; set; }
+    public string PuzzleName { get; set; } = "";
+    public string PuzzleTitle { get; set; } = "";
+    private static List<(string Class, int Number, string Title)> ListOfPuzzles = System.Reflection.Assembly.GetExecutingAssembly().GetTypes()
+    .Where(x => x.IsClass && typeof(IPuzzleSolver).IsAssignableFrom(x) && x.GetCustomAttributes(typeof(PuzzleAttribute), false).Length == 1)
+    .Select(x => (Class: x.Name, Attr: ((PuzzleAttribute)x.GetCustomAttributes(typeof(PuzzleAttribute), false)[0])))
+    .Select(x => (x.Class, Number: x.Attr.Number, Title: x.Attr.Title))
+    .OrderBy(x => x.Number).ToList();
     private IPuzzleSolver _solver = new CalorieCounting();
     private string Input { get; set; } = string.Empty;
     protected override async Task OnParametersSetAsync()
     {
-        _solver = daySolvers[dayNumber - 1];
+        var puzzle = ListOfPuzzles.Single(x => x.Number == PuzzleNumber);
+        PuzzleTitle = puzzle.Title;
+        PuzzleName = puzzle.Class;
+        _solver = System.Reflection.Assembly.GetExecutingAssembly()
+            .GetTypes().Where(x => x.IsClass && x.Name == PuzzleName).Select(x => (IPuzzleSolver)(Activator.CreateInstance(x) ?? new CalorieCounting())).Single();
         Output1 = Output2 = string.Empty;
-        Input = (await Http.GetStringAsync($"sample-data/{_solver.GetType().Name}.txt")).Replace("\r", "");
+        Input = (await Http.GetStringAsync($"sample-data/{PuzzleName}.txt")).Replace("\r", "");
     }
 
     private string Output1 { get; set; } = string.Empty;
@@ -71,6 +81,7 @@
         stopwatch.Stop();
         IsTask2Running = false;
     }
+    // System.Reflection.Assembly.GetExecutingAssembly().GetTypes().Where(x => x.IsClass && typeof(IPuzzleSolver).IsAssignableFrom(x)).Select(x => (IPuzzleSolver) Activator.CreateInstance(x)).ToArray();
     private IPuzzleSolver[] daySolvers = new IPuzzleSolver[]        {
             new CalorieCounting(),
             new RockPaperScissors(),
@@ -97,5 +108,5 @@
             new UnstableDiffusion(),
             new BlizzardBasin(),
             new FullOfHotAir()
-    };
+    }; 
 }

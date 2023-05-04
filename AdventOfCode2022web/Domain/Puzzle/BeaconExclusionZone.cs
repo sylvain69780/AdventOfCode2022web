@@ -2,6 +2,7 @@
 
 namespace AdventOfCode2022web.Domain.Puzzle
 {
+    [Puzzle(15, "Beacon Exclusion Zone")]
     public class BeaconExclusionZone : IPuzzleSolver
     {
         struct Pt

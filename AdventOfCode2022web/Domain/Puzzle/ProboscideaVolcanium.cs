@@ -2,6 +2,7 @@
 
 namespace AdventOfCode2022web.Domain.Puzzle
 {
+    [Puzzle(16, "Proboscidea Volcanium")]
     public class ProboscideaVolcanium : IPuzzleSolver
     {
         struct PipeVisitor

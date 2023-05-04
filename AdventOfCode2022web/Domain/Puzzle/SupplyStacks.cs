@@ -3,6 +3,7 @@ using System.Text.RegularExpressions;
 
 namespace AdventOfCode2022web.Domain.Puzzle
 {
+    [Puzzle(5, "Supply Stacks")]
     public class SupplyStacks : IPuzzleSolver
     {
         private static string[] ToLines(string s) => s.Split("\n");

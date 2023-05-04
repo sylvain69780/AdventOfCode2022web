@@ -1,9 +1,9 @@
 ﻿using System.Diagnostics;
-using System.Security.Cryptography;
 using System.Text;
 
 namespace AdventOfCode2022web.Domain.Puzzle
 {
+    [Puzzle(11, "Monkey In The Middle")]
     public class MonkeyInTheMiddle : IPuzzleSolver
     {
         class Monkey

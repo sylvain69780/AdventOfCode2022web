@@ -2,6 +2,7 @@
 
 namespace AdventOfCode2022web.Domain.Puzzle
 {
+    [Puzzle(19, "Not Enough Minerals")]
     public class NotEnoughMinerals : IPuzzleSolver
     {
         public IEnumerable<string> SolveFirstPart(string inp)

@@ -2,6 +2,7 @@
 
 namespace AdventOfCode2022web.Domain.Puzzle
 {
+    [Puzzle(2, "Rock Paper Scissors")]
     public class RockPaperScissors : IPuzzleSolver
     {
         private static string[] ToLines(string s) => s.Split("\n");

@@ -1,6 +1,7 @@
 ﻿
 namespace AdventOfCode2022web.Domain.Puzzle
 {
+    [Puzzle(3, "Rucksack Reorganization")]
     public class RucksackReorganization : IPuzzleSolver
     {
         private static string[] ToLines(string s) => s.Split("\n");

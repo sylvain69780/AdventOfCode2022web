@@ -1,5 +1,6 @@
 ﻿namespace AdventOfCode2022web.Domain.Puzzle
 {
+    [Puzzle(13, "Distress Signal")]
     public class DistressSignal : IPuzzleSolver
     {
         class Day13Element

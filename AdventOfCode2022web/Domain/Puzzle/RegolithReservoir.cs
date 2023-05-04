@@ -1,5 +1,6 @@
 ﻿namespace AdventOfCode2022web.Domain.Puzzle
 {
+    [Puzzle(14, "Regolith Reservoir")]
     public class RegolithReservoir : IPuzzleSolver
     {
         struct Pt

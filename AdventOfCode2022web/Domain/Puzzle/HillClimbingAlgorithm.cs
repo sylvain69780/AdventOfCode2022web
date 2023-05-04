@@ -2,6 +2,7 @@
 
 namespace AdventOfCode2022web.Domain.Puzzle
 {
+    [Puzzle(12, "Hill Climbing Algorithm")]
     public class HillClimbingAlgorithm : IPuzzleSolver
     {
         private class HillMap
@@ -110,18 +111,18 @@ namespace AdventOfCode2022web.Domain.Puzzle
             var newQueue = new Queue<(int, int)>();
             while (breadthFirstSearchQueue.TryDequeue(out var currentPosition))
             {
-                foreach (var (dx, dy) in Directions)
+                foreach (var nextPosition in Directions.Select(d => (currentPosition.x + d.x, currentPosition.y + d.y)))
                 {
-                    var nextPosition = (currentPosition.x + dx, currentPosition.y + dy);
-                    if (map.IsOutOfMap(nextPosition) || map.IsExploredPosition(nextPosition)) continue;
-                    if (map.Altitude(nextPosition) - map.Altitude(currentPosition) >= 2) continue;
-                    newQueue.Enqueue(nextPosition);
-                    map.SetAsExplored(nextPosition);
+                    if (map.IsOutOfMap(nextPosition) || map.IsExploredPosition(nextPosition)
+                        || (map.Altitude(nextPosition) - map.Altitude(currentPosition) >= 2))
+                        continue;
                     if (map.IsExit(nextPosition))
                     {
                         yield return distance.ToString();
                         yield break;
                     }
+                    newQueue.Enqueue(nextPosition);
+                    map.SetAsExplored(nextPosition);
                 }
                 if (breadthFirstSearchQueue.Count == 0)
                 {

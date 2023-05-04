@@ -1,5 +1,6 @@
 ﻿namespace AdventOfCode2022web.Domain.Puzzle
 {
+    [Puzzle(24, "Blizzard Basin")]
     public class BlizzardBasin : IPuzzleSolver
     {
         public IEnumerable<string> SolveFirstPart(string inp)

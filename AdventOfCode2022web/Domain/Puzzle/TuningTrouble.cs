@@ -1,5 +1,6 @@
 ﻿namespace AdventOfCode2022web.Domain.Puzzle
 {
+    [Puzzle(6, "Tuning Trouble")]
     public class TuningTrouble : IPuzzleSolver
     {
         private static string Format(int v) => v.ToString();

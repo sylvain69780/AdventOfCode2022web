@@ -2,6 +2,7 @@
 
 namespace AdventOfCode2022web.Domain.Puzzle
 {
+    [Puzzle(21, "Monkey Math")]
     public class MonkeyMath : IPuzzleSolver
     {
         public IEnumerable<string> SolveFirstPart(string inp)

@@ -1,5 +1,6 @@
 ﻿namespace AdventOfCode2022web.Domain.Puzzle
 {
+    [Puzzle(8, "Treetop Tree House")]
     public class TreetopTreeHouse : IPuzzleSolver
     {
         private static string[] ToLines(string s) => s.Split("\n");

@@ -1,5 +1,6 @@
 ﻿namespace AdventOfCode2022web.Domain.Puzzle
 {
+    [Puzzle(7, "No Space Left On Device")]
     public class NoSpaceLeftOnDevice : IPuzzleSolver
     {
         private static string Format(int v) => v.ToString();

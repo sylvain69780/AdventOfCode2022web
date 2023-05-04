@@ -1,5 +1,6 @@
 ﻿namespace AdventOfCode2022web.Domain.Puzzle
 {
+    [Puzzle(1, "Calorie Counting")]
     public class CalorieCounting : IPuzzleSolver
     {
         private static string[] ToLines(string s) => s.Split("\n");

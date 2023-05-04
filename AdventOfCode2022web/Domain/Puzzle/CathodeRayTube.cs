@@ -2,6 +2,7 @@
 
 namespace AdventOfCode2022web.Domain.Puzzle
 {
+    [Puzzle(10, "Cathode Ray Tube")]
     public class CathodeRayTube : IPuzzleSolver
     {
         private static string Format(int v) => v.ToString();

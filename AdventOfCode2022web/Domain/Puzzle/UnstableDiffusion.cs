@@ -1,5 +1,6 @@
 ﻿namespace AdventOfCode2022web.Domain.Puzzle
 {
+    [Puzzle(23, "Unstable Diffusion")]
     public class UnstableDiffusion : IPuzzleSolver
     {
         public IEnumerable<string> SolveFirstPart(string inp)

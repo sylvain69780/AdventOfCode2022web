@@ -1,4 +1,5 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
+﻿@using AdventOfCode2022web.Domain.Puzzle;
+<div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="">AdventOfCode2022web</a>
         <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
@@ -15,15 +16,18 @@
             </NavLink>
         </div>
         <div class="nav-item px-3">
-            <button class="btn btn-primary mb-2" @onclick="DecrementDay">Prev</button>
-            <button class="btn btn-primary mb-2" @onclick="IncrementDay">Next</button>
+            <button class="btn btn-primary mb-2" @onclick="DecrementPage">Prev</button>
+            <button class="btn btn-primary mb-2" @onclick="IncrementPage">Next</button>
         </div>
-
-        @foreach (var i in Enumerable.Range(day, 5))
+        @for (var i = 0; i < 5; i++)
         {
+            var puzzleIndex = i + puzzlePageNumber * 5;
+            if (puzzleIndex >= ListOfPuzzles.Count) continue;
+            var item = ListOfPuzzles[puzzleIndex];
             <div class="nav-item px-3" @onclick="ToggleNavMenu">
-                <NavLink class="nav-link" href="@string.Format("day/{0}",i)">
-                    <span class="oi oi-puzzle-piece" aria-hidden="true"></span>@string.Format("Day {0}",i)
+                <NavLink class="nav-link" href="@($"day/{item.Number}")">
+                    <span class="oi oi-puzzle-piece" aria-hidden="true"></span>
+                    <div data-toggle="tooltip" data-placement="top" title="@($"{item.Title}")">@($"Day {item.Number}")</div>
                 </NavLink>
             </div>
         }
@@ -31,14 +35,21 @@
 </div>
 
 @code {
-    private int day = 1;
-    private void IncrementDay()
+    private static List<(string Class, int Number, string Title)> ListOfPuzzles = System.Reflection.Assembly.GetExecutingAssembly().GetTypes()
+    .Where(x => x.IsClass && typeof(IPuzzleSolver).IsAssignableFrom(x) && x.GetCustomAttributes(typeof(PuzzleAttribute), false).Length == 1)
+    .Select(x => (Class: x.Name, Attr: ((PuzzleAttribute)x.GetCustomAttributes(typeof(PuzzleAttribute), false)[0])))
+    .Select(x => (x.Class, Number: x.Attr.Number, Title: x.Attr.Title))
+    .OrderBy(x => x.Number).ToList();
+    private int puzzlePageNumber = 0;
+    private void IncrementPage()
     {
-        day += Math.Min(5,21-day) ;
+        if (puzzlePageNumber <= ListOfPuzzles.Count / 5)
+            puzzlePageNumber += 1;
     }
-    private void DecrementDay()
+    private void DecrementPage()
     {
-        day -= Math.Min(5, day-1);
+        if (puzzlePageNumber > 0) 
+            puzzlePageNumber -= 1;
     }
     private bool collapseNavMenu = true;
 

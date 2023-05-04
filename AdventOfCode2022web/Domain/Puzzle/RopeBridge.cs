@@ -1,7 +1,9 @@
-﻿using System.Text;
+﻿using System.ComponentModel;
+using System.Text;
 
 namespace AdventOfCode2022web.Domain.Puzzle
 {
+    [Puzzle(9,"Rope Bridge")]
     public class RopeBridge : IPuzzleSolver
     {
         private static string[] ToLines(string s) => s.Split("\n");
