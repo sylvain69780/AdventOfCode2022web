@@ -1,7 +1,7 @@
 ﻿namespace AdventOfCode2022web.Domain.Puzzle
 {
-    [Puzzle(13, "Distress Signal")]
-    public class DistressSignal : IPuzzleSolver
+    [Puzzle(26, "Distress Signal Without JSON")]
+    public class DistressSignal : IPuzzleSolver 
     {
         private static string[] ToLines(string s) => s.Split("\n");
 
@@ -87,3 +87,4 @@
         }
     }
 }
+
