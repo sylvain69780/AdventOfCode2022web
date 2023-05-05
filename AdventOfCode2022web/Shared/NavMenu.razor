@@ -1,4 +1,5 @@
 ﻿@using AdventOfCode2022web.Domain.Puzzle;
+@using System.Reflection;
 <div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="">AdventOfCode2022web</a>
@@ -19,31 +20,29 @@
             <button class="btn btn-primary mb-2" @onclick="DecrementPage">Prev</button>
             <button class="btn btn-primary mb-2" @onclick="IncrementPage">Next</button>
         </div>
-        @for (var i = 0; i < 5; i++)
-        {
-            var puzzleIndex = i + puzzlePageNumber * 5;
-            if (puzzleIndex >= ListOfPuzzles.Count) continue;
-            var item = ListOfPuzzles[puzzleIndex];
-            <div class="nav-item px-3" @onclick="ToggleNavMenu">
-                <NavLink class="nav-link" href="@($"day/{item.Number}")">
-                    <span class="oi oi-puzzle-piece" aria-hidden="true"></span>
-                    <div data-toggle="tooltip" data-placement="top" title="@($"{item.Title}")">@($"Day {item.Number}")</div>
-                </NavLink>
-            </div>
+        @{
+            var puzzles = PuzzleHelper.Puzzles;
+            var first = 1 + puzzlePageNumber * 5 ;
+            var last = Math.Min(puzzles.Count, first + 5 - 1);
+            for (var puzzleIndex = first; puzzleIndex <= last; puzzleIndex++)
+            {
+                var item = puzzles[puzzleIndex];
+                <div class="nav-item px-3" @onclick="ToggleNavMenu">
+                    <NavLink class="nav-link" href="@($"day/{item.Number}")">
+                        <span class="oi oi-puzzle-piece" aria-hidden="true"></span>
+                        <div data-toggle="tooltip" data-placement="top" title="@($"{item.Title}")">@($"Day {item.Number}")</div>
+                    </NavLink>
+                </div>
+            }
         }
     </nav>
 </div>
 
 @code {
-    private static List<(string Class, int Number, string Title)> ListOfPuzzles = System.Reflection.Assembly.GetExecutingAssembly().GetTypes()
-    .Where(x => x.IsClass && typeof(IPuzzleSolver).IsAssignableFrom(x) && x.GetCustomAttributes(typeof(PuzzleAttribute), false).Length == 1)
-    .Select(x => (Class: x.Name, Attr: ((PuzzleAttribute)x.GetCustomAttributes(typeof(PuzzleAttribute), false)[0])))
-    .Select(x => (x.Class, Number: x.Attr.Number, Title: x.Attr.Title))
-    .OrderBy(x => x.Number).ToList();
     private int puzzlePageNumber = 0;
     private void IncrementPage()
     {
-        if (puzzlePageNumber <= ListOfPuzzles.Count / 5)
+        if (puzzlePageNumber < (PuzzleHelper.Puzzles.Count-1)/5 )  
             puzzlePageNumber += 1;
     }
     private void DecrementPage()

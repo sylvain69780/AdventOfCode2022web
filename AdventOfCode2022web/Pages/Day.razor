@@ -23,36 +23,30 @@
 </div>
 
 @code {
+    private IPuzzleSolver? _solver;
     [Parameter]
     public int PuzzleNumber { get; set; }
-    public string PuzzleName { get; set; } = "";
-    public string PuzzleTitle { get; set; } = "";
-    private static List<(string Class, int Number, string Title)> ListOfPuzzles = System.Reflection.Assembly.GetExecutingAssembly().GetTypes()
-    .Where(x => x.IsClass && typeof(IPuzzleSolver).IsAssignableFrom(x) && x.GetCustomAttributes(typeof(PuzzleAttribute), false).Length == 1)
-    .Select(x => (Class: x.Name, Attr: ((PuzzleAttribute)x.GetCustomAttributes(typeof(PuzzleAttribute), false)[0])))
-    .Select(x => (x.Class, Number: x.Attr.Number, Title: x.Attr.Title))
-    .OrderBy(x => x.Number).ToList();
-    private IPuzzleSolver _solver = new CalorieCounting();
-    private string Input { get; set; } = string.Empty;
+    private string? PuzzleTitle;
+    private string? Input;
+    private string? Output1;
+    private string? Output2;
+    private bool IsTask1Running;
+    private bool IsTask2Running;
     protected override async Task OnParametersSetAsync()
     {
-        var puzzle = ListOfPuzzles.Single(x => x.Number == PuzzleNumber);
+        var puzzle = PuzzleHelper.Puzzles[PuzzleNumber];
         PuzzleTitle = puzzle.Title;
-        PuzzleName = puzzle.Class;
-        _solver = System.Reflection.Assembly.GetExecutingAssembly()
-            .GetTypes().Where(x => x.IsClass && x.Name == PuzzleName).Select(x => (IPuzzleSolver)(Activator.CreateInstance(x) ?? new CalorieCounting())).Single();
+        _solver = (IPuzzleSolver)(Activator.CreateInstance(puzzle.Type))!;
         Output1 = Output2 = string.Empty;
-        Input = (await Http.GetStringAsync($"sample-data/{PuzzleName}.txt")).Replace("\r", "");
+        Input = (await Http.GetStringAsync($"sample-data/{puzzle.Type.Name}.txt")).Replace("\r", "");
     }
 
-    private string Output1 { get; set; } = string.Empty;
-    public bool IsTask1Running { get; set; } = false;
     private async Task SolveFirstPart()
     {
         IsTask1Running = true;
         var stopwatch = new Stopwatch();
         stopwatch.Start();
-        foreach (var s in _solver.SolveFirstPart(Input))
+        foreach (var s in _solver!.SolveFirstPart(Input!))
         {
             Output1 = s;
             StateHasChanged();
@@ -63,14 +57,12 @@
         stopwatch.Stop();
         IsTask1Running = false;
     }
-    private string Output2 { get; set; } = string.Empty;
-    public bool IsTask2Running { get; set; } = false;
     private async Task SolveSecondPart()
     {
         IsTask2Running = true;
         var stopwatch = new Stopwatch();
         stopwatch.Start();
-        foreach (var s in _solver.SolveSecondPart(Input))
+        foreach (var s in _solver!.SolveSecondPart(Input!))
         {
             Output2 = s;
             StateHasChanged();

@@ -3,100 +3,87 @@
     [Puzzle(13, "Distress Signal")]
     public class DistressSignal : IPuzzleSolver
     {
-        class Day13Element
+        private static string[] ToLines(string s) => s.Split("\n");
+
+        class IntegerPacket : Packet
         {
-            public static Day13Element ReadInput(string inp)
+            public int Integer;
+        }
+        class ListPacket : Packet
+        {
+            public List<Packet>? List;
+        }
+        class Packet : IComparable<Packet>
+        {
+            int IComparable<Packet>.CompareTo(Packet? right)
             {
-                if (inp[0] == '[')
+                var left = this;
+                var leftInteger = left as IntegerPacket;
+                var rightInteger = right as IntegerPacket;
+                if (leftInteger != null && rightInteger != null)
+                    return leftInteger.Integer.CompareTo(rightInteger.Integer);
+                var leftPacket = leftInteger == null ? (ListPacket)left : new ListPacket { List = new List<Packet> { left } };
+                var rightPacket = rightInteger == null ? (ListPacket)right! : new ListPacket { List = new List<Packet> { right! } };
+                for (var i = 0; i < Math.Min(leftPacket.List!.Count, rightPacket.List!.Count); i++)
                 {
-                    if (inp[1] == ']') return new Day13List();
-                    var begin = 1;
-                    var st = new List<string>();
-                    var lvl = 0;
-                    for (var end = 1; end < inp.Length - 2; end++)
-                    {
-                        if (inp[end] == ',' && lvl == 0)
-                        {
-                            st.Add(inp[begin..end]);
-                            begin = end + 1;
-                        }
-                        if (inp[end] == '[') lvl++;
-                        if (inp[end] == ']') lvl--;
-                    }
-                    st.Add(inp[begin..(inp.Length - 1)]);
-                    return new Day13List
-                    {
-                        Lst = st.Select(x => ReadInput(x)).ToList()
-                    };
-                }
-                else
-                {
-                    return new Day13Leaf() { Val = int.Parse(inp) };
-                }
-            }
-            public static int IsOrdered(Day13Element? a, Day13Element? b)
-            {
-                if (a is Day13Leaf av && b is Day13Leaf bv)
-                    return av.Val < bv.Val ? 1 : av.Val == bv.Val ? 0 : -1;
-                if (a is Day13Leaf)
-                    a = new Day13List { Lst = new List<Day13Element> { a } };
-                if (b is Day13Leaf)
-                    b = new Day13List { Lst = new List<Day13Element> { b } };
-                Day13List? al = a as Day13List;
-                Day13List? bl = b as Day13List;
-                for (var i = 0; i < Math.Min(al?.Lst.Count ?? 0, bl?.Lst.Count ?? 0); i++)
-                {
-                    var va = al?.Lst[i];
-                    var vb = bl?.Lst[i];
-                    var res = IsOrdered(va, vb);
+                    int res = ((IComparable<Packet>)leftPacket.List[i]).CompareTo(rightPacket.List[i]);
                     if (res != 0) return res;
                 }
-                return al?.Lst.Count < bl?.Lst.Count ? 1 : al?.Lst.Count == bl?.Lst.Count ? 0 : -1;
+                return leftPacket.List.Count.CompareTo(rightPacket.List.Count);
             }
         }
-         class Day13Leaf : Day13Element
+        class PacketHelper
         {
-            public int Val;
-        }
-         class Day13List : Day13Element
-        {
-            public List<Day13Element> Lst = new();
-        }
-
-        class MyComparer : IComparer<Day13Element>
-        {
-
-            public int Compare(Day13Element? A, Day13Element? B)
+            public static Packet BuildPacket(string packetString)
             {
-                return Day13Element.IsOrdered(A, B);
+                if (packetString[0] == '[')
+                {
+                    if (packetString[1] == ']')
+                        return new ListPacket { List = new List<Packet>() };
+                    var childPackets = new List<Packet>();
+                    var level = 0;
+                    var beginString = 1;
+                    for (var endString = 1; endString < packetString.Length - 2; endString++)
+                    {
+                        if (packetString[endString] == '[') 
+                            level++;
+                        else if (packetString[endString] == ']') 
+                            level--;
+                        else if (packetString[endString] == ',' && level == 0)
+                        {
+                            childPackets.Add(BuildPacket(packetString[beginString..endString]));
+                            beginString = endString + 1;
+                        }
+                    }
+                    childPackets.Add(BuildPacket(packetString[beginString..(packetString.Length - 1)]));
+                    return new ListPacket { List = childPackets };
+                }
+                else
+                    return new IntegerPacket() { Integer = int.Parse(packetString) };
             }
-
         }
 
-        public IEnumerable<string> SolveFirstPart(string inp)
+        public IEnumerable<string> SolveFirstPart(string puzzleInput)
         {
-            var input = inp.Split("\n").ToList().GetEnumerator();
-            var idx = 0;
-            var score = 0;
-            while (input.MoveNext())
+            var packetStrings = ToLines(puzzleInput);
+            var wellOrderedPackets = 0;
+            for (var pairId = 1; pairId * 3 <= packetStrings.Length + 1; pairId++)
             {
-                idx++;
-                var p1 = Day13Element.ReadInput(input.Current);
-                input.MoveNext();
-                var p2 = Day13Element.ReadInput(input.Current);
-                input.MoveNext();
-                var r = Day13Element.IsOrdered(p1, p2);
-                Console.WriteLine(r);
-                if (r == 1) score += idx;
+                var firstPacket = PacketHelper.BuildPacket(packetStrings[pairId * 3 - 3]);
+                var secondPacket = PacketHelper.BuildPacket(packetStrings[pairId * 3 - 2]);
+                if ( ((IComparable<Packet>)secondPacket).CompareTo(firstPacket) > 0 ) 
+                    wellOrderedPackets += pairId;
             }
-            yield return score.ToString();
+            yield return wellOrderedPackets.ToString();
         }
-        public IEnumerable<string> SolveSecondPart(string inp)
+        public IEnumerable<string> SolveSecondPart(string puzzleInput)
         {
-            var input = inp.Split("\n").Where(x => x != "").Append("[[2]]").Append("[[6]]").Select(x => (a: x, b: Day13Element.ReadInput(x)))
-                .OrderByDescending(x => x.b, new MyComparer()).Select(x => x.a).ToList();
-
-            yield return((1 + input.IndexOf("[[2]]")) * (1 + input.IndexOf("[[6]]"))).ToString();
+            var packetStrings = ToLines(puzzleInput).Where(x => x != "")
+                .Append("[[2]]").Append("[[6]]")
+                .Select(x => (PacketString: x, Packet: PacketHelper.BuildPacket(x)))
+                .OrderBy(x => x.Packet)
+                .Select(x => x.PacketString).ToList();
+            yield return ((1 + packetStrings.IndexOf("[[2]]")) * (1 + packetStrings.IndexOf("[[6]]"))).ToString();
         }
     }
 }
