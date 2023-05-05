@@ -26,8 +26,8 @@ namespace AdventOfCode2022web.Domain.Puzzle
                 bool xMoveNext, yMoveNext;
                 while (true)
                 {
-                    xMoveNext = xEnumerator.MoveNext() && xEnumerator.Current.ValueKind != JsonValueKind.Undefined;
-                    yMoveNext = yEnumerator.MoveNext() && yEnumerator.Current.ValueKind != JsonValueKind.Undefined;
+                    xMoveNext = xEnumerator.MoveNext(); // && xEnumerator.Current.ValueKind != JsonValueKind.Undefined;
+                    yMoveNext = yEnumerator.MoveNext(); // && yEnumerator.Current.ValueKind != JsonValueKind.Undefined;
                     if (xMoveNext && !yMoveNext)
                         return 1;
                     else if (!xMoveNext && yMoveNext)
@@ -93,7 +93,7 @@ namespace AdventOfCode2022web.Domain.Puzzle
             var packets = JsonSerializer.Deserialize<JsonElement[]>(packetStrings);
             Array.Sort(packets!, new JsonElementComparer());
             int firstPacket = 0,secondPacket = 0;
-            StringBuilder a = new StringBuilder();
+            StringBuilder a = new();
             for (var index = 0; index < packets!.Length; index++)
             {
                 var serializedPacket = JsonSerializer.Serialize(packets[index]);
@@ -103,8 +103,8 @@ namespace AdventOfCode2022web.Domain.Puzzle
                 else if (serializedPacket == "[[6]]")
                     secondPacket = index + 1;
             }
-            yield return a.ToString();
-            // yield return (firstPacket * secondPacket).ToString();
+            // yield return a.ToString();
+            yield return (firstPacket * secondPacket).ToString();
         }
     }
 }
