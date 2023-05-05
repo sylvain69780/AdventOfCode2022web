@@ -12,10 +12,10 @@ namespace AdventOfCode2022web.Domain.Puzzle
         public class JsonElementComparer : Comparer<JsonElement>
         {
             public override int Compare(JsonElement x, JsonElement y)
-                => CompareTo(x, y);
+                => DistressSignalUsingJson.Compare(x, y);
         }
 
-        public static int CompareTo(JsonElement x, JsonElement y)
+        public static int Compare(JsonElement x, JsonElement y)
         {
             if (x.ValueKind == JsonValueKind.Number && y.ValueKind == JsonValueKind.Number)
                 return x.GetInt32().CompareTo(y.GetInt32());
@@ -36,7 +36,7 @@ namespace AdventOfCode2022web.Domain.Puzzle
                         return 0;
                     else
                     {
-                        var tmp = CompareTo(xEnumerator.Current, yEnumerator.Current);
+                        var tmp = Compare(xEnumerator.Current, yEnumerator.Current);
                         if (tmp != 0)
                             return tmp;
                     }
@@ -45,9 +45,9 @@ namespace AdventOfCode2022web.Domain.Puzzle
             else
             {
                 if (x.ValueKind == JsonValueKind.Number)
-                    return CompareTo(JsonSerializer.Deserialize<JsonElement>($"[{x.GetInt32()}]"), y);
+                    return Compare(JsonSerializer.Deserialize<JsonElement>($"[{x.GetInt32()}]"), y);
                 else
-                    return CompareTo(x,JsonSerializer.Deserialize<JsonElement>($"[{y.GetInt32()}]"));
+                    return Compare(x,JsonSerializer.Deserialize<JsonElement>($"[{y.GetInt32()}]"));
 
                 //    int? firstIntegerOfJsonElement(JsonElement e)
                 //    {
@@ -82,7 +82,7 @@ namespace AdventOfCode2022web.Domain.Puzzle
             var wellOrderedPackets = 0;
             for (var pairId = 0; pairId < packets!.Length / 2; pairId++)
             {
-                if (CompareTo(packets[pairId * 2], packets[pairId * 2 + 1]) < 0 ) 
+                if (Compare(packets[pairId * 2], packets[pairId * 2 + 1]) < 0 ) 
                     wellOrderedPackets += pairId+1;
             }
             yield return wellOrderedPackets.ToString();
