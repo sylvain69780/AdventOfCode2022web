@@ -47,7 +47,7 @@ namespace AdventOfCode2022web.Puzzles
                 tail = MoveTailPosition(tail, head);
                 visitedPositions.Add(tail);
             }
-            await func("View updated part 1");
+            await func("No visualization available.");
             return Format(visitedPositions.Count);
         }
 
