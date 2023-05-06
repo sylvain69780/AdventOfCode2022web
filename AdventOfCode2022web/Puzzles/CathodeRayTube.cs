@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace AdventOfCode2022web.Domain.Puzzle
+namespace AdventOfCode2022web.Puzzles
 {
     [Puzzle(10, "Cathode Ray Tube")]
     public class CathodeRayTube : IPuzzleSolver

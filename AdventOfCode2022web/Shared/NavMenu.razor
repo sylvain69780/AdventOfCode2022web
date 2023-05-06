@@ -1,4 +1,4 @@
-﻿@using AdventOfCode2022web.Domain.Puzzle;
+﻿@using AdventOfCode2022web.Puzzles;
 @using System.Reflection;
 <div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
@@ -21,14 +21,16 @@
             <button class="btn btn-primary mb-2" @onclick="IncrementPage">Next</button>
         </div>
         @{
-            var puzzles = PuzzleHelper.Puzzles;
-            var first = 1 + puzzlePageNumber * 5 ;
-            var last = Math.Min(puzzles.Count, first + 5 - 1);
+            var puzzles = PuzzleHelper.Puzzles.Values.OrderBy(x => x.Number).ToList();
+            var first = puzzlePageNumber * 5 ;
+            var last = Math.Min(puzzles.Count-1, first + 5 - 1);
+            var v1 = "puzzle";
+            var v2 = "puzzleV2";
             for (var puzzleIndex = first; puzzleIndex <= last; puzzleIndex++)
             {
                 var item = puzzles[puzzleIndex];
                 <div class="nav-item px-3" @onclick="ToggleNavMenu">
-                    <NavLink class="nav-link" href="@($"day/{item.Number}")">
+                    <NavLink class="nav-link" href="@($"{(typeof(IPuzzleSolverV2).IsAssignableFrom(item.Type) ? v2 : v1)}/{item.Number}")">
                         <span class="oi oi-puzzle-piece" aria-hidden="true"></span>
                         <div data-toggle="tooltip" data-placement="top" title="@($"{item.Title}")">@($"Day {item.Number}")</div>
                     </NavLink>

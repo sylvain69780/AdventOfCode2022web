@@ -1,4 +1,4 @@
-﻿namespace AdventOfCode2022web.Domain.Puzzle
+﻿namespace AdventOfCode2022web.Puzzles
 {
     [Puzzle(14, "Regolith Reservoir")]
     public class RegolithReservoir : IPuzzleSolver
@@ -42,9 +42,9 @@
                                 var begin = rocks[i];
                                 var end = rocks[i + 1];
                                 if (begin.y == end.y)
-                                    isRockBlocking = nsand.y == begin.y && ((begin.x <= nsand.x && nsand.x <= end.x) || (end.x <= nsand.x && nsand.x <= begin.x));
+                                    isRockBlocking = nsand.y == begin.y && (begin.x <= nsand.x && nsand.x <= end.x || end.x <= nsand.x && nsand.x <= begin.x);
                                 else if (begin.x == end.x)
-                                    isRockBlocking = nsand.x == begin.x && ((begin.y <= nsand.y && nsand.y <= end.y) || (end.y <= nsand.y && nsand.y <= begin.y));
+                                    isRockBlocking = nsand.x == begin.x && (begin.y <= nsand.y && nsand.y <= end.y || end.y <= nsand.y && nsand.y <= begin.y);
                                 if (isRockBlocking) break;
                             }
                             if (isRockBlocking) break;
@@ -105,9 +105,9 @@
                                 var begin = rocks[i];
                                 var end = rocks[i + 1];
                                 if (begin.y == end.y)
-                                    isRockBlocking = nsand.y == begin.y && ((begin.x <= nsand.x && nsand.x <= end.x) || (end.x <= nsand.x && nsand.x <= begin.x));
+                                    isRockBlocking = nsand.y == begin.y && (begin.x <= nsand.x && nsand.x <= end.x || end.x <= nsand.x && nsand.x <= begin.x);
                                 else if (begin.x == end.x)
-                                    isRockBlocking = nsand.x == begin.x && ((begin.y <= nsand.y && nsand.y <= end.y) || (end.y <= nsand.y && nsand.y <= begin.y));
+                                    isRockBlocking = nsand.x == begin.x && (begin.y <= nsand.y && nsand.y <= end.y || end.y <= nsand.y && nsand.y <= begin.y);
                                 if (isRockBlocking) break;
                             }
                             if (isRockBlocking) break;

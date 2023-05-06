@@ -1,4 +1,4 @@
-﻿namespace AdventOfCode2022web.Domain.Puzzle
+﻿namespace AdventOfCode2022web.Puzzles
 {
     [Puzzle(23, "Unstable Diffusion")]
     public class UnstableDiffusion : IPuzzleSolver

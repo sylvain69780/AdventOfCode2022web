@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace AdventOfCode2022web.Domain.Puzzle
+namespace AdventOfCode2022web.Puzzles
 {
     [Puzzle(4, "Camp Cleanup")]
     public class CampCleanup : IPuzzleSolver
@@ -46,7 +46,7 @@ namespace AdventOfCode2022web.Domain.Puzzle
         {
             var score = 0;
             foreach (var (interval1, interval2) in ListOfSectionAssignmentPairs(ToLines(puzzleInput)))
-                if (interval1.Contains(interval2) || interval2.Contains(interval1)) 
+                if (interval1.Contains(interval2) || interval2.Contains(interval1))
                     score++;
             yield return Format(score);
         }

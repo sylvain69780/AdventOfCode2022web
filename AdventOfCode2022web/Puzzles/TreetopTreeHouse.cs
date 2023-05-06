@@ -1,4 +1,4 @@
-﻿namespace AdventOfCode2022web.Domain.Puzzle
+﻿namespace AdventOfCode2022web.Puzzles
 {
     [Puzzle(8, "Treetop Tree House")]
     public class TreetopTreeHouse : IPuzzleSolver

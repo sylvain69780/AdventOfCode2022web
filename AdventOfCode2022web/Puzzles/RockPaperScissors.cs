@@ -1,6 +1,4 @@
-﻿
-
-namespace AdventOfCode2022web.Domain.Puzzle
+﻿namespace AdventOfCode2022web.Puzzles
 {
     [Puzzle(2, "Rock Paper Scissors")]
     public class RockPaperScissors : IPuzzleSolver
@@ -23,8 +21,8 @@ namespace AdventOfCode2022web.Domain.Puzzle
         /// <summary>Decodes Input PART 1 A = X = Rock B = Y = Paper C = Z = Scissors</summary>
         /// <param name="s"></param>
         /// <returns>OpponentPlayed YouPlayed tuple</returns>
-        private static (Moves OpponentPlayed, Moves YouPlayed) DecodeMovesPart1(string s) 
-            => ((Moves)(s[0] - 'A'),(Moves)(s[2] - 'X'));
+        private static (Moves OpponentPlayed, Moves YouPlayed) DecodeMovesPart1(string s)
+            => ((Moves)(s[0] - 'A'), (Moves)(s[2] - 'X'));
 
         /// <summary>Decodes Input PART 2 X = Lose Y = Draw Z = Win</summary>
         /// <param name="s"></param>

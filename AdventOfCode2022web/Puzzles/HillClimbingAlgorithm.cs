@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace AdventOfCode2022web.Domain.Puzzle
+namespace AdventOfCode2022web.Puzzles
 {
     [Puzzle(12, "Hill Climbing Algorithm")]
     public class HillClimbingAlgorithm : IPuzzleSolver
@@ -36,7 +36,7 @@ namespace AdventOfCode2022web.Domain.Puzzle
                 char c = Map[p.y][p.x];
                 if (c == 'S') c = 'a';
                 if (c == 'E') c = 'z';
-                return (int)c - (int)'a';
+                return c - 'a';
             }
 
             public bool IsExit((int x, int y) p) => Map[p.y][p.x] == 'E';
@@ -47,7 +47,7 @@ namespace AdventOfCode2022web.Domain.Puzzle
             {
                 for (var y = 0; y < Height; y++)
                     for (var x = 0; x < Width; x++)
-                        if (Map[y][x] == 'a') yield return ((x, y));
+                        if (Map[y][x] == 'a') yield return (x, y);
             }
 
             public HashSet<(int, int)> ExploredPositions;
@@ -114,7 +114,7 @@ namespace AdventOfCode2022web.Domain.Puzzle
                 foreach (var nextPosition in Directions.Select(d => (currentPosition.x + d.x, currentPosition.y + d.y)))
                 {
                     if (map.IsOutOfMap(nextPosition) || map.IsExploredPosition(nextPosition)
-                        || (map.Altitude(nextPosition) - map.Altitude(currentPosition) >= 2))
+                        || map.Altitude(nextPosition) - map.Altitude(currentPosition) >= 2)
                         continue;
                     if (map.IsExit(nextPosition))
                     {

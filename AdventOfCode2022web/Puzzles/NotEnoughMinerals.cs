@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace AdventOfCode2022web.Domain.Puzzle
+namespace AdventOfCode2022web.Puzzles
 {
     [Puzzle(19, "Not Enough Minerals")]
     public class NotEnoughMinerals : IPuzzleSolver
@@ -80,9 +80,9 @@ namespace AdventOfCode2022web.Domain.Puzzle
                     var maxGeodesPossible = state.Geodes + state.GeodeRobots * timeRemaining + timeRemaining * (timeRemaining - 1) / 2;
                     if (maxGeodesPossible < bestScore)
                         continue;
-                    if (state.RobotToBuild == RobotTypes.ObsidianRobot && (state.ClayRobots == 0))
+                    if (state.RobotToBuild == RobotTypes.ObsidianRobot && state.ClayRobots == 0)
                         continue;
-                    if (state.RobotToBuild == RobotTypes.GeodeRobot && (state.ObsidianRobots == 0))
+                    if (state.RobotToBuild == RobotTypes.GeodeRobot && state.ObsidianRobots == 0)
                         continue;
                     (int o, int c, int ob) cost = state.RobotToBuild == RobotTypes.OreRobot ? (OreRobotCost, 0, 0) :
                         state.RobotToBuild == RobotTypes.ClayRobot ? (ClayRobotCost, 0, 0) :
@@ -138,16 +138,16 @@ namespace AdventOfCode2022web.Domain.Puzzle
                     var backTrack = state.BackTrack;
                     state.RobotToBuild = RobotTypes.OreRobot;
                     state.BackTrack = backTrack + $" - {state.Minutes} OreRobot";
-                    search.Push((FactoryState)state);
+                    search.Push(state);
                     state.RobotToBuild = RobotTypes.ClayRobot;
                     state.BackTrack = backTrack + $" - {state.Minutes} ClayRobot";
-                    search.Push((FactoryState)state);
+                    search.Push(state);
                     state.RobotToBuild = RobotTypes.ObsidianRobot;
                     state.BackTrack = backTrack + $" - {state.Minutes} ObsidianRobot";
-                    search.Push((FactoryState)state);
+                    search.Push(state);
                     state.RobotToBuild = RobotTypes.GeodeRobot;
                     state.BackTrack = backTrack + $" - {state.Minutes} GeodeRobot";
-                    search.Push((FactoryState)state);
+                    search.Push(state);
                 }
                 return bestScore;
             }

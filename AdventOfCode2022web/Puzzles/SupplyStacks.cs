@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
-namespace AdventOfCode2022web.Domain.Puzzle
+namespace AdventOfCode2022web.Puzzles
 {
     [Puzzle(5, "Supply Stacks")]
     public class SupplyStacks : IPuzzleSolver
@@ -51,10 +51,10 @@ namespace AdventOfCode2022web.Domain.Puzzle
             var moves = ReadMovesToDo(puzzleInput);
             foreach (var (count, from, to) in moves)
             {
-                for (var i = 0; i< count;i++)
+                for (var i = 0; i < count; i++)
                 {
-                    var c = stacks[from-1].Pop();
-                    stacks[to-1].Push(c);
+                    var c = stacks[from - 1].Pop();
+                    stacks[to - 1].Push(c);
                 }
             }
             yield return string.Join("", stacks.Select(x => x.Count == 0 ? ' ' : x.Peek()));
@@ -71,7 +71,7 @@ namespace AdventOfCode2022web.Domain.Puzzle
                 for (int i = 0; i < count; i++)
                     stacks[to - 1].Push(tmp.Pop());
             }
-            yield  return string.Join("", stacks.Select(x => x.Count == 0 ? ' ' : x.Peek()));
+            yield return string.Join("", stacks.Select(x => x.Count == 0 ? ' ' : x.Peek()));
         }
     }
 }

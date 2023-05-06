@@ -1,0 +1,90 @@
+﻿@page "/puzzleV2/{PuzzleNumber:int}"
+@using System.Diagnostics;
+@using System.Text.RegularExpressions;
+@using AdventOfCode2022web.Puzzles;
+@inject HttpClient Http
+
+<h1>@PuzzleTitle</h1>
+<div class="mb-3">
+    <label class="form-label">The data below is that provided for example. Paste your own user input from <a href="https://adventofcode.com/2022/day/@PuzzleNumber">Advent Of Code</a></label>
+    <pre><textarea class="form-control" rows="10" @bind="Input" maxlength="10000000"></textarea></pre>
+</div>
+<div class="mb-3">
+        <button class="btn btn-primary" disabled=@IsTask1Running @onclick="SolveFirstPart">Solve First Part</button>
+        <button class="btn btn-primary" disabled=@IsTask2Running @onclick="SolveSecondPart">Solve Second Part</button>
+</div>
+<div class="p-3 mb-2 bg-primary text-white">@Response</div>
+<div class="p-3 mb-2 bg-secondary text-white"><pre>@ViewData</pre></div>
+
+@code {
+    private IPuzzleSolverV2? _solver;
+    [Parameter]
+    public int PuzzleNumber { get; set; }
+    private string? PuzzleTitle;
+    private string? Input;
+    private string? Response;
+    private string? ViewData;
+    private bool IsTask1Running;
+    private bool IsTask2Running;
+    protected override async Task OnParametersSetAsync()
+    {
+        var puzzle = PuzzleHelper.Puzzles[PuzzleNumber];
+        PuzzleTitle = puzzle.Title;
+        _solver = (IPuzzleSolverV2)(Activator.CreateInstance(puzzle.Type))!;
+        Response = "The solution will be displayed here.";
+        ViewData = string.Empty;
+        IsTask1Running = true;
+        Input = (await Http.GetStringAsync($"sample-data/{puzzle.Type.Name}.txt")).Replace("\r", "");
+        IsTask2Running = false;
+    }
+
+    private async Task SolveFirstPart()
+    {
+        //        Response = await TestCallSolver("Input",async (string s) => { ViewData = s; await Task.Delay(1); });
+        Response = string.Empty;
+        ViewData = string.Empty;
+        Response = await _solver!.SolveSecondPart(Input!, async (string s) => { 
+            ViewData = s; 
+            StateHasChanged();
+            await Task.Delay(1); 
+        });
+        //IsTask1Running = true;
+        //var stopwatch = new Stopwatch();
+        //stopwatch.Start();
+        //foreach (var s in _solver!.SolveFirstPart(Input!))
+        //{
+        //    Response = s;
+        //    StateHasChanged();
+        //    stopwatch.Stop();
+        //    await Task.Delay(Math.Max(0,16 - (int)stopwatch.ElapsedMilliseconds));
+        //    stopwatch.Restart();
+        //};
+        //stopwatch.Stop();
+        //IsTask1Running = false;
+    }
+
+    private async Task<string> TestCallSolver(string input,Func<string, Task> func)
+    {
+        await func("coucou");
+        return input;
+    }
+
+    private async Task SolveSecondPart()
+    {
+        //    IsTask2Running = true;
+        //    var stopwatch = new Stopwatch();
+        //    stopwatch.Start();
+        //    foreach (var s in _solver!.SolveSecondPart(Input!))
+        //    {
+        //        Response = s;
+        //        StateHasChanged();
+        //        stopwatch.Stop();
+        //        await Task.Delay(Math.Max(0, 16 - (int)stopwatch.ElapsedMilliseconds));
+        //        stopwatch.Restart();
+        //    };
+        //    stopwatch.Stop();
+        //    IsTask2Running = false;
+        //
+        await Task.Delay(1);
+    }
+}

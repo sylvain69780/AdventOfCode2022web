@@ -1,4 +1,4 @@
-﻿namespace AdventOfCode2022web.Domain.Puzzle
+﻿namespace AdventOfCode2022web.Puzzles
 {
     [Puzzle(20, "Grove Positioning System")]
     public class GrovePositioningSystem : IPuzzleSolver
@@ -34,7 +34,7 @@
             foreach (var i in selector)
             {
                 var zero = input.FindIndex(x => x.Value == 0);
-                var index = (i + zero) % (input.Count);
+                var index = (i + zero) % input.Count;
                 score += input[index].Value;
             }
             yield return $"SCORE {score}";
@@ -74,7 +74,7 @@
             foreach (var i in selector)
             {
                 var zero = input.FindIndex(x => x.Value == 0);
-                var index = (int)((i + zero) % (input.Count));
+                var index = (i + zero) % input.Count;
                 score += input[index].Value;
             }
             yield return $"SCORE {score}";

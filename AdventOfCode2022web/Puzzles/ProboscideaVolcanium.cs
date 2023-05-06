@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace AdventOfCode2022web.Domain.Puzzle
+namespace AdventOfCode2022web.Puzzles
 {
     [Puzzle(16, "Proboscidea Volcanium")]
     public class ProboscideaVolcanium : IPuzzleSolver

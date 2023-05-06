@@ -1,5 +1,4 @@
-﻿
-namespace AdventOfCode2022web.Domain.Puzzle
+﻿namespace AdventOfCode2022web.Puzzles
 {
     [Puzzle(3, "Rucksack Reorganization")]
     public class RucksackReorganization : IPuzzleSolver
@@ -20,7 +19,7 @@ namespace AdventOfCode2022web.Domain.Puzzle
             foreach (var rucksack in ToLines(puzzleInput))
             {
                 var compartmentSize = rucksack.Length / 2;
-                var (compartmentA, compartmentB) = (rucksack[..compartmentSize], rucksack[compartmentSize..(compartmentSize+compartmentSize)]);
+                var (compartmentA, compartmentB) = (rucksack[..compartmentSize], rucksack[compartmentSize..(compartmentSize + compartmentSize)]);
                 var sharedItem = compartmentA.First(x => compartmentB.Contains(x));
                 score += Priority(sharedItem);
             }

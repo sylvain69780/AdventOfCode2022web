@@ -1,7 +1,7 @@
-﻿@page "/day/{PuzzleNumber:int}"
-@using AdventOfCode2022web.Domain.Puzzle;
+﻿@page "/puzzle/{PuzzleNumber:int}"
 @using System.Diagnostics;
 @using System.Text.RegularExpressions;
+@using AdventOfCode2022web.Puzzles;
 @inject HttpClient Http
 
 <h1>@PuzzleTitle</h1>

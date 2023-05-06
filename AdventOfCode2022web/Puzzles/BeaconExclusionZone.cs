@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace AdventOfCode2022web.Domain.Puzzle
+namespace AdventOfCode2022web.Puzzles
 {
     [Puzzle(15, "Beacon Exclusion Zone")]
     public class BeaconExclusionZone : IPuzzleSolver
@@ -33,7 +33,7 @@ namespace AdventOfCode2022web.Domain.Puzzle
             var covered = new HashSet<(int, int)>();
             var discard = input.Select(x => (x.Beacon.x, x.Beacon.y)).ToHashSet();
             discard.UnionWith(input.Select(x => (x.Sensor.x, x.Sensor.y)).ToHashSet());
-            var h = input.Count <=14 ? 10 : 2000000; // looking at this row
+            var h = input.Count <= 14 ? 10 : 2000000; // looking at this row
             var inters = new List<(int xmin, int xmax)>();
             foreach (var x in input)
             {
@@ -41,7 +41,7 @@ namespace AdventOfCode2022web.Domain.Puzzle
                 var dh = Math.Abs(x.Sensor.y - h);
                 if (dh > dist) continue;
                 dist -= dh;
-                var inter = (xmin : x.Sensor.x - dist , xmax : x.Sensor.x + dist);
+                var inter = (xmin: x.Sensor.x - dist, xmax: x.Sensor.x + dist);
                 inters.Add(inter);
             }
             var start = inters.Select(x => x.xmin).Min(); //  not tested
@@ -87,7 +87,7 @@ namespace AdventOfCode2022web.Domain.Puzzle
             discard.UnionWith(input.Select(x => (x.Sensor.x, x.Sensor.y)).ToHashSet());
             var q = new Queue<(int, int, int, int)>();
             var cmax = 4000000;
-            var cnt = (int)Math.Sqrt((double)cmax) + 3;
+            var cnt = (int)Math.Sqrt(cmax) + 3;
             q.Enqueue((0, 0, cmax, cmax));
             do
             {
@@ -124,7 +124,7 @@ namespace AdventOfCode2022web.Domain.Puzzle
             } while (q.Count > 1 && cnt-- != 0);
             var res = q.Dequeue();
             // too big for int
-            yield return ((long)res.Item1 * 4000000 + (long)res.Item2).ToString();
+            yield return ((long)res.Item1 * 4000000 + res.Item2).ToString();
         }
     }
 }

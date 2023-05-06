@@ -1,4 +1,4 @@
-﻿namespace AdventOfCode2022web.Domain.Puzzle
+﻿namespace AdventOfCode2022web.Puzzles
 {
     [Puzzle(6, "Tuning Trouble")]
     public class TuningTrouble : IPuzzleSolver
@@ -13,8 +13,8 @@
             {
                 processedCharacters++;
                 if (marker.Count == sequenceLenght) marker.Dequeue();
-                    marker.Enqueue(c);
-                if (marker.Count == sequenceLenght && marker.GroupBy(x => x).Select(y => y.Count()).Max() == 1) 
+                marker.Enqueue(c);
+                if (marker.Count == sequenceLenght && marker.GroupBy(x => x).Select(y => y.Count()).Max() == 1)
                     break;
             }
             return processedCharacters;

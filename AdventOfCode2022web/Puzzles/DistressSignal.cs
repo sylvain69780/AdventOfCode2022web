@@ -1,7 +1,7 @@
-﻿namespace AdventOfCode2022web.Domain.Puzzle
+﻿namespace AdventOfCode2022web.Puzzles
 {
     [Puzzle(26, "Distress Signal Without JSON")]
-    public class DistressSignal : IPuzzleSolver 
+    public class DistressSignal : IPuzzleSolver
     {
         private static string[] ToLines(string s) => s.Split("\n");
 
@@ -45,9 +45,9 @@
                     var beginString = 1;
                     for (var endString = 1; endString < packetString.Length - 2; endString++)
                     {
-                        if (packetString[endString] == '[') 
+                        if (packetString[endString] == '[')
                             level++;
-                        else if (packetString[endString] == ']') 
+                        else if (packetString[endString] == ']')
                             level--;
                         else if (packetString[endString] == ',' && level == 0)
                         {
@@ -71,7 +71,7 @@
             {
                 var firstPacket = PacketHelper.BuildPacket(packetStrings[pairId * 3 - 3]);
                 var secondPacket = PacketHelper.BuildPacket(packetStrings[pairId * 3 - 2]);
-                if ( ((IComparable<Packet>)secondPacket).CompareTo(firstPacket) > 0 ) 
+                if (((IComparable<Packet>)secondPacket).CompareTo(firstPacket) > 0)
                     wellOrderedPackets += pairId;
             }
             yield return wellOrderedPackets.ToString();

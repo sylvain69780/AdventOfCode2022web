@@ -1,10 +1,9 @@
-﻿using System.ComponentModel;
-using System.Text;
+﻿using System.Text;
 
-namespace AdventOfCode2022web.Domain.Puzzle
+namespace AdventOfCode2022web.Puzzles
 {
-    [Puzzle(9,"Rope Bridge")]
-    public class RopeBridge : IPuzzleSolver
+    [Puzzle(9, "Rope Bridge")]
+    public class RopeBridge : IPuzzleSolverV2
     {
         private static string[] ToLines(string s) => s.Split("\n");
         private static string Format(int v) => v.ToString();
@@ -31,7 +30,7 @@ namespace AdventOfCode2022web.Domain.Puzzle
             return newTail;
         }
 
-        public IEnumerable<string> SolveFirstPart(string puzzleInput)
+        public async Task<string> SolveFirstPart(string puzzleInput, Func<string, Task> func)
         {
             var seriesOfMotions = ToLines(puzzleInput)
                 .Select(x => x.Split(" "))
@@ -48,7 +47,8 @@ namespace AdventOfCode2022web.Domain.Puzzle
                 tail = MoveTailPosition(tail, head);
                 visitedPositions.Add(tail);
             }
-            yield return Format(visitedPositions.Count);
+            await func("View updated part 1");
+            return Format(visitedPositions.Count);
         }
 
         private class Visualizer
@@ -85,7 +85,7 @@ namespace AdventOfCode2022web.Domain.Puzzle
             }
         }
 
-        public IEnumerable<string> SolveSecondPart(string puzzleInput)
+        public async Task<string> SolveSecondPart(string puzzleInput, Func<string, Task> func)
         {
             var seriesOfMotions = ToLines(puzzleInput)
                 .Select(x => x.Split(" "))
@@ -109,11 +109,14 @@ namespace AdventOfCode2022web.Domain.Puzzle
                     tails[i] = MoveTailPosition(tails[i], previous);
                     previous = tails[i];
                 }
-                if (count++ < 1000)
-                    yield return visualizer.Visualize(head, tails, visited);
+                if (count++ < 200)
+                {
+                    await func(visualizer.Visualize(head, tails, visited));
+                    await Task.Delay(100);
+                }
                 visited.Add(tails[8]);
             }
-            yield return visualizer.Visualize(head, tails, visited);
+            return visited.Count.ToString();
         }
     }
 }

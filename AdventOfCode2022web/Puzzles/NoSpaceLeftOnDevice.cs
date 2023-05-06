@@ -1,4 +1,4 @@
-﻿namespace AdventOfCode2022web.Domain.Puzzle
+﻿namespace AdventOfCode2022web.Puzzles
 {
     [Puzzle(7, "No Space Left On Device")]
     public class NoSpaceLeftOnDevice : IPuzzleSolver
@@ -6,7 +6,7 @@
         private static string Format(int v) => v.ToString();
         private static string[] ToLines(string s) => s.Split("\n");
 
-        private static Dictionary<string,int> BuildDirectoriesContentSize(string[] terminalOutputs)
+        private static Dictionary<string, int> BuildDirectoriesContentSize(string[] terminalOutputs)
         {
             var directoriesContentSize = new Dictionary<string, int>
             {
@@ -22,7 +22,7 @@
                         var directory = terminalOutput[5..];
                         if (directory == "..")
                             currentDirectory.Pop();
-                        else 
+                        else
                             currentDirectory.Push(directory);
                         Console.WriteLine("#" + string.Join("-", currentDirectory.Reverse()));
                     }

@@ -1,4 +1,4 @@
-﻿namespace AdventOfCode2022web.Domain.Puzzle
+﻿namespace AdventOfCode2022web.Puzzles
 {
     [Puzzle(1, "Calorie Counting")]
     public class CalorieCounting : IPuzzleSolver
@@ -11,7 +11,7 @@
             {
                 if (value == string.Empty)
                     sumOfCalories = 0;
-                else 
+                else
                     sumOfCalories += int.Parse(value);
                 maxCalories = Math.Max(maxCalories, sumOfCalories);
             }

@@ -1,4 +1,4 @@
-﻿namespace AdventOfCode2022web.Domain.Puzzle
+﻿namespace AdventOfCode2022web.Puzzles
 {
     [Puzzle(24, "Blizzard Basin")]
     public class BlizzardBasin : IPuzzleSolver

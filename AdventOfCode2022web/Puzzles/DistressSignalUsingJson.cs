@@ -1,10 +1,7 @@
-﻿using System.Dynamic;
-using System.Net.Sockets;
-using System.Runtime.CompilerServices;
-using System.Text;
+﻿using System.Text;
 using System.Text.Json;
 
-namespace AdventOfCode2022web.Domain.Puzzle
+namespace AdventOfCode2022web.Puzzles
 {
     [Puzzle(13, "Distress Signal")]
     public class DistressSignalUsingJson : IPuzzleSolver
@@ -47,7 +44,7 @@ namespace AdventOfCode2022web.Domain.Puzzle
                 if (x.ValueKind == JsonValueKind.Number)
                     return Compare(JsonSerializer.Deserialize<JsonElement>($"[{x.GetInt32()}]"), y);
                 else
-                    return Compare(x,JsonSerializer.Deserialize<JsonElement>($"[{y.GetInt32()}]"));
+                    return Compare(x, JsonSerializer.Deserialize<JsonElement>($"[{y.GetInt32()}]"));
 
                 //    int? firstIntegerOfJsonElement(JsonElement e)
                 //    {
@@ -72,18 +69,18 @@ namespace AdventOfCode2022web.Domain.Puzzle
                 //    else
                 //        return xInteger.Value.CompareTo(yInteger.Value);
                 //
-                }
             }
+        }
 
-            public IEnumerable<string> SolveFirstPart(string puzzleInput)
+        public IEnumerable<string> SolveFirstPart(string puzzleInput)
         {
             var packetStrings = @"[" + puzzleInput.Replace("\n\n", "\n").Replace("\n", ",") + "]";
             var packets = JsonSerializer.Deserialize<JsonElement[]>(packetStrings);
             var wellOrderedPackets = 0;
             for (var pairId = 0; pairId < packets!.Length / 2; pairId++)
             {
-                if (Compare(packets[pairId * 2], packets[pairId * 2 + 1]) < 0 ) 
-                    wellOrderedPackets += pairId+1;
+                if (Compare(packets[pairId * 2], packets[pairId * 2 + 1]) < 0)
+                    wellOrderedPackets += pairId + 1;
             }
             yield return wellOrderedPackets.ToString();
         }
@@ -92,14 +89,14 @@ namespace AdventOfCode2022web.Domain.Puzzle
             var packetStrings = @"[[[2]],[[6]]," + puzzleInput.Replace("\n\n", "\n").Replace("\n", ",") + "]";
             var packets = JsonSerializer.Deserialize<JsonElement[]>(packetStrings);
             Array.Sort(packets!, new JsonElementComparer());
-            int firstPacket = 0,secondPacket = 0;
+            int firstPacket = 0, secondPacket = 0;
             StringBuilder a = new();
             for (var index = 0; index < packets!.Length; index++)
             {
                 var serializedPacket = JsonSerializer.Serialize(packets[index]);
                 a.Append(serializedPacket + "\n");
                 if (serializedPacket == "[[2]]")
-                    firstPacket = index+1;
+                    firstPacket = index + 1;
                 else if (serializedPacket == "[[6]]")
                     secondPacket = index + 1;
             }

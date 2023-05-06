@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Text;
 
-namespace AdventOfCode2022web.Domain.Puzzle
+namespace AdventOfCode2022web.Puzzles
 {
     [Puzzle(11, "Monkey In The Middle")]
     public class MonkeyInTheMiddle : IPuzzleSolver
@@ -9,7 +9,7 @@ namespace AdventOfCode2022web.Domain.Puzzle
         class Monkey
         {
             public int Id;
-            public List<long> WorryLevelOfItems = new ();
+            public List<long> WorryLevelOfItems = new();
             public char OperationToPerform;
             public int? ValueToAddOrMultiply;
             public long DivisibilityToTest;
@@ -50,11 +50,11 @@ namespace AdventOfCode2022web.Domain.Puzzle
             return monkeys;
         }
 
-        private static string Visualize(List<Monkey> monkeys,int round)
+        private static string Visualize(List<Monkey> monkeys, int round)
         {
             var sb = new StringBuilder($"After round {round} the monkeys are holding items with these worry levels:\n");
             foreach (var monkey in monkeys)
-                sb.Append($"Monkey {monkey.Id}: {string.Join(", ",monkey.WorryLevelOfItems)}\n");
+                sb.Append($"Monkey {monkey.Id}: {string.Join(", ", monkey.WorryLevelOfItems)}\n");
             return sb.Append(monkeys.Select(x => x.Inspections).OrderByDescending(x => x).Take(2).Aggregate(1L, (x, y) => y * x))
                 .ToString();
         }
@@ -85,7 +85,7 @@ namespace AdventOfCode2022web.Domain.Puzzle
                     monkey.WorryLevelOfItems.Clear();
                 }
             }
-            yield return Visualize(monkeys,maxRound);
+            yield return Visualize(monkeys, maxRound);
         }
         public IEnumerable<string> SolveSecondPart(string puzzleInput)
         {
@@ -117,11 +117,11 @@ namespace AdventOfCode2022web.Domain.Puzzle
                 }
                 if (stopwatch.ElapsedMilliseconds > 1000)
                 {
-                    yield return Visualize(monkeys,round);
+                    yield return Visualize(monkeys, round);
                     stopwatch.Restart();
                 }
             }
-            yield return Visualize(monkeys,maxRound);
+            yield return Visualize(monkeys, maxRound);
         }
     }
 }
