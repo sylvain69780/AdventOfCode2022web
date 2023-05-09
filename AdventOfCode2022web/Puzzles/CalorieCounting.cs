@@ -4,7 +4,7 @@
     public class CalorieCounting : IPuzzleSolver
     {
         private static string[] ToLines(string s) => s.Split("\n");
-        public IEnumerable<string> SolveFirstPart(string puzzleInput)
+        public string SolveFirstPart(string puzzleInput)
         {
             int sumOfCalories = 0, maxCalories = 0;
             foreach (var value in ToLines(puzzleInput))
@@ -15,9 +15,9 @@
                     sumOfCalories += int.Parse(value);
                 maxCalories = Math.Max(maxCalories, sumOfCalories);
             }
-            yield return maxCalories.ToString();
+             return maxCalories.ToString();
         }
-        public IEnumerable<string> SolveSecondPart(string puzzleInput)
+        public string SolveSecondPart(string puzzleInput)
         {
             var sumOfCalories = new List<int>() { 0 };
             foreach (var value in ToLines(puzzleInput))
@@ -27,7 +27,7 @@
                 else
                     sumOfCalories[^1] += int.Parse(value);
             }
-            yield return sumOfCalories.OrderByDescending(x => x).Take(3).Sum().ToString();
+             return sumOfCalories.OrderByDescending(x => x).Take(3).Sum().ToString();
         }
     }
 }

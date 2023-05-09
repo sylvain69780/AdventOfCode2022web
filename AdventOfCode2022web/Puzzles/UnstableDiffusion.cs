@@ -3,7 +3,7 @@
     [Puzzle(23, "Unstable Diffusion")]
     public class UnstableDiffusion : IPuzzleSolver
     {
-        public IEnumerable<string> SolveFirstPart(string inp)
+        public string SolveFirstPart(string inp)
         {
             var input = inp.Split("\n");
             var row = 0;
@@ -88,9 +88,9 @@
                 elves.Select(x => x.y).Max()
                 );
             var score = (x2 - x1 + 1) * (y2 - y1 + 1) - elves.Count;
-            yield return $"SCORE = {score}";
+            return $"SCORE = {score}";
         }
-        public IEnumerable<string> SolveSecondPart(string inp)
+        public string SolveSecondPart(string inp)
         {
             var input = inp.Split("\n");
             var row = 0;
@@ -179,7 +179,7 @@
                 elves.Select(x => x.y).Max()
                 );
             var score = (x2 - x1 + 1) * (y2 - y1 + 1) - elves.Count;
-            yield return $"SCORE = {round}";
+            return $"SCORE = {round}";
         }
     }
 }

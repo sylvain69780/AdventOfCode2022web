@@ -5,7 +5,7 @@ namespace AdventOfCode2022web.Puzzles
     [Puzzle(22, "Monkey Map")]
     public class MonkeyMap : IPuzzleSolver
     {
-        public IEnumerable<string> SolveFirstPart(string inp)
+        public string SolveFirstPart(string inp)
         {
             var input = inp.Split("\n");
             var inputCommands = input[^1];
@@ -76,9 +76,9 @@ namespace AdventOfCode2022web.Puzzles
             }
             Console.WriteLine($"({x},{y}) {facing}");
             var score = 1000 * y + 4 * x + facing;
-            yield return $"SCORE {score}";
+            return $"SCORE {score}";
         }
-        public IEnumerable<string> SolveSecondPart(string inp)
+        public string SolveSecondPart(string inp)
         {
             var input = inp.Split("\n");
             var inputCommands = input[^1];
@@ -186,7 +186,7 @@ namespace AdventOfCode2022web.Puzzles
             }
             Console.WriteLine($"({x},{y}) {facing}");
             var score = 1000 * y + 4 * x + facing;
-            yield return $"SCORE {score}";
+            return $"SCORE {score}";
         }
     }
 }

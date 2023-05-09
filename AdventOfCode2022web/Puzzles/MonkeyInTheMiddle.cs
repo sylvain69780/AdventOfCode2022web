@@ -59,7 +59,7 @@ namespace AdventOfCode2022web.Puzzles
                 .ToString();
         }
 
-        public IEnumerable<string> SolveFirstPart(string puzzleInput)
+        public string SolveFirstPart(string puzzleInput)
         {
             var monkeys = BuildMonkeyList(puzzleInput);
             const int maxRound = 20;
@@ -85,9 +85,9 @@ namespace AdventOfCode2022web.Puzzles
                     monkey.WorryLevelOfItems.Clear();
                 }
             }
-            yield return Visualize(monkeys, maxRound);
+            return Visualize(monkeys, maxRound);
         }
-        public IEnumerable<string> SolveSecondPart(string puzzleInput)
+        public string SolveSecondPart(string puzzleInput)
         {
             var monkeys = BuildMonkeyList(puzzleInput);
             var bigDiv = monkeys.Select(x => x.DivisibilityToTest).Aggregate(1L, (x, y) => y * x);
@@ -117,11 +117,11 @@ namespace AdventOfCode2022web.Puzzles
                 }
                 if (stopwatch.ElapsedMilliseconds > 1000)
                 {
-                    yield return Visualize(monkeys, round);
+                    //yield return Visualize(monkeys, round);
                     stopwatch.Restart();
                 }
             }
-            yield return Visualize(monkeys, maxRound);
+            return Visualize(monkeys, maxRound);
         }
     }
 }

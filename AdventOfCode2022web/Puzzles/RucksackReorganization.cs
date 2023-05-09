@@ -13,7 +13,7 @@
         /// </summary>
         private static int Priority(char item) => item >= 'a' ? item - 'a' + 1 : item - 'A' + 27;
 
-        public IEnumerable<string> SolveFirstPart(string puzzleInput)
+        public string SolveFirstPart(string puzzleInput)
         {
             var score = 0;
             foreach (var rucksack in ToLines(puzzleInput))
@@ -23,10 +23,10 @@
                 var sharedItem = compartmentA.First(x => compartmentB.Contains(x));
                 score += Priority(sharedItem);
             }
-            yield return Format(score);
+             return Format(score);
         }
 
-        public IEnumerable<string> SolveSecondPart(string puzzleInput)
+        public string SolveSecondPart(string puzzleInput)
         {
             var score = 0;
             var rucksacks = ToLines(puzzleInput);
@@ -36,7 +36,7 @@
                 var badge = firstGroup.First(x => secondGroup.Contains(x) && thirdGroup.Contains(x));
                 score += Priority(badge);
             }
-            yield return Format(score);
+             return Format(score);
         }
     }
 }

@@ -14,7 +14,7 @@ namespace AdventOfCode2022web.Puzzles
             public int Pressure;
             public List<string> Opened;
         }
-        public IEnumerable<string> SolveFirstPart(string inp)
+        public string SolveFirstPart(string inp)
         {
             var r = new Regex(@"Valve (..) has flow rate=(\d+); tunnels? leads? to valves? (.+)");
             var input = inp.Split("\n")
@@ -79,7 +79,7 @@ namespace AdventOfCode2022web.Puzzles
                             {
                                 score = newVisitor.Pressure;
                                 Console.WriteLine($"Visitor at {newVisitor.Position} pressure Rate {rate} END {newVisitor.Pressure} opened {string.Join(',', newVisitor.Opened)}.");
-                                yield return $"Visitor at {newVisitor.Position} pressure Rate {rate} END {newVisitor.Pressure} opened {string.Join(',', newVisitor.Opened)}.";
+                                //return $"Visitor at {newVisitor.Position} pressure Rate {rate} END {newVisitor.Pressure} opened {string.Join(',', newVisitor.Opened)}.";
                                 newVisitor.Journal = visitor.Journal.GetRange(0, visitor.Journal.Count);
                                 scores.Add(newVisitor);
                             }
@@ -103,13 +103,14 @@ namespace AdventOfCode2022web.Puzzles
                 {
                     var win = visitors.OrderByDescending(x => x.Pressure).First();
                     Console.WriteLine($"{string.Join(',', win.Opened)} {win.Pressure}");
-                    //yield return $"{string.Join(',', win.Opened)} {win.Pressure}";
+                    //return $"{string.Join(',', win.Opened)} {win.Pressure}";
                     //await Task.Delay(1);
                 }
             }
+            return "bad";
 
         }
-        public IEnumerable<string> SolveSecondPart(string inp)
+        public string SolveSecondPart(string inp)
         {
             var r = new Regex(@"Valve (..) has flow rate=(\d+); tunnels? leads? to valves? (.+)");
             var input = inp.Split("\n")
@@ -204,8 +205,8 @@ namespace AdventOfCode2022web.Puzzles
                             {
                                 score = s;
                                 found = false;
-                                yield return $"BEST {score} " + string.Join(',', guess);
-                                break;
+                                return $"BEST {score} " + string.Join(',', guess);
+                                //break;
                             }
                             else
                             {
@@ -216,8 +217,7 @@ namespace AdventOfCode2022web.Puzzles
                         }
                 }
             }
-
-
+                
         }
         public IEnumerable<string> Part2bAsync(string inp)
         {

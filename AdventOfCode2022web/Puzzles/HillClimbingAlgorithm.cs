@@ -65,7 +65,7 @@ namespace AdventOfCode2022web.Puzzles
 
 
 
-        public IEnumerable<string> SolveFirstPart(string puzzleInput)
+        public string SolveFirstPart(string puzzleInput)
         {
             var map = new HillMap(puzzleInput);
             map.SetAsExplored(map.Start);
@@ -98,9 +98,9 @@ namespace AdventOfCode2022web.Puzzles
                 }
                 breadthFirstSearchQueue = newQueue;
             }
-            yield return score.ToString();
+            return score.ToString();
         }
-        public IEnumerable<string> SolveSecondPart(string puzzleInput)
+        public string SolveSecondPart(string puzzleInput)
         {
             var map = new HillMap(puzzleInput);
             map.SetAsExplored(map.Start);
@@ -118,8 +118,7 @@ namespace AdventOfCode2022web.Puzzles
                         continue;
                     if (map.IsExit(nextPosition))
                     {
-                        yield return distance.ToString();
-                        yield break;
+                        return distance.ToString();
                     }
                     newQueue.Enqueue(nextPosition);
                     map.SetAsExplored(nextPosition);
@@ -131,7 +130,7 @@ namespace AdventOfCode2022web.Puzzles
                         breadthFirstSearchQueue.Enqueue(item);
                 }
             }
-            yield return "Not found " + distance.ToString();
+            return "Not found " + distance.ToString();
         }
     }
 }

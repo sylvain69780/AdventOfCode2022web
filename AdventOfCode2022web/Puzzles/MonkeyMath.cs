@@ -5,7 +5,7 @@ namespace AdventOfCode2022web.Puzzles
     [Puzzle(21, "Monkey Math")]
     public class MonkeyMath : IPuzzleSolver
     {
-        public IEnumerable<string> SolveFirstPart(string inp)
+        public string SolveFirstPart(string inp)
         {
             var input = inp.Split("\n");
             var r1 = new Regex(@"([a-z]+): ([a-z]+) ([\+\-\/\*]) ([a-z]+)");
@@ -40,9 +40,9 @@ namespace AdventOfCode2022web.Puzzles
                 else
                     search.Push(Left);
             }
-            yield return $"Score : {values["root"]}";
+            return $"Score : {values["root"]}";
         }
-        public IEnumerable<string> SolveSecondPart(string inp)
+        public string SolveSecondPart(string inp)
         {
             var input = inp.Split("\n");
             var r1 = new Regex(@"([a-z]+): ([a-z]+) ([\+\-\/\*]) ([a-z]+)");
@@ -98,10 +98,10 @@ namespace AdventOfCode2022web.Puzzles
                 if (result > 0)
                     guessMin = guess;
                 Console.WriteLine($"For {guess} => {result}");
-                yield return $"For {guess} => {result}";
+                //yield return $"For {guess} => {result}";
                 guess = guessMin + (guessMax - guessMin) / 2;
             } while (result != 0 || guessMin == guess);
-            yield return $"value = {guess}";
+            return $"value = {guess}";
         }
     }
 }

@@ -8,7 +8,7 @@
             public int x;
             public int y;
         }
-        public IEnumerable<string> SolveFirstPart(string inp)
+        public string SolveFirstPart(string inp)
         {
             var input = inp.Split("\n").Select(x => x.Replace(" -> ", "#").Split('#')
                 .Select(y => y.Split(','))
@@ -59,14 +59,14 @@
                     // Console.WriteLine($"{sand.x} {sand.y}");
                 }
                 Console.WriteLine(score);
-                yield return score.ToString();
+                ///yield return score.ToString();
 
             } while (sand.y < floor);
             score--;
-            yield return score.ToString();
+            return score.ToString();
 
         }
-        public IEnumerable<string> SolveSecondPart(string inp)
+        public string SolveSecondPart(string inp)
         {
             var input = inp.Split("\n").Select(x => x.Replace(" -> ", "#").Split('#')
         .Select(y => y.Split(','))
@@ -122,9 +122,9 @@
                     // Console.WriteLine($"{sand.x} {sand.y}");
                 }
                 Console.WriteLine(score);
-                yield return score.ToString();
+                //yield return score.ToString();
             } while (sand.y != 0);
-            yield return score.ToString();
+            return score.ToString();
         }
     }
 }

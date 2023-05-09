@@ -72,7 +72,7 @@ namespace AdventOfCode2022web.Puzzles
             }
         }
 
-        public IEnumerable<string> SolveFirstPart(string puzzleInput)
+        public string SolveFirstPart(string puzzleInput)
         {
             var packetStrings = @"[" + puzzleInput.Replace("\n\n", "\n").Replace("\n", ",") + "]";
             var packets = JsonSerializer.Deserialize<JsonElement[]>(packetStrings);
@@ -82,9 +82,9 @@ namespace AdventOfCode2022web.Puzzles
                 if (Compare(packets[pairId * 2], packets[pairId * 2 + 1]) < 0)
                     wellOrderedPackets += pairId + 1;
             }
-            yield return wellOrderedPackets.ToString();
+            return wellOrderedPackets.ToString();
         }
-        public IEnumerable<string> SolveSecondPart(string puzzleInput)
+        public string SolveSecondPart(string puzzleInput)
         {
             var packetStrings = @"[[[2]],[[6]]," + puzzleInput.Replace("\n\n", "\n").Replace("\n", ",") + "]";
             var packets = JsonSerializer.Deserialize<JsonElement[]>(packetStrings);
@@ -101,7 +101,7 @@ namespace AdventOfCode2022web.Puzzles
                     secondPacket = index + 1;
             }
             // yield return a.ToString();
-            yield return (firstPacket * secondPacket).ToString();
+            return (firstPacket * secondPacket).ToString();
         }
     }
 }

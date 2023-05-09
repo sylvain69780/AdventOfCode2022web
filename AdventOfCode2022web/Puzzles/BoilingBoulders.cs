@@ -3,7 +3,7 @@
     [Puzzle(18, "Boiling Boulders")]
     public class BoilingBoulders : IPuzzleSolver
     {
-        public IEnumerable<string> SolveFirstPart(string inp)
+        public string SolveFirstPart(string inp)
         {
             var input = inp.Split("\n").Select(x => x.Split(','))
                 .Select(x => x.Select(y => int.Parse(y)).ToArray())
@@ -28,9 +28,9 @@
                         score++;
                 }
             }
-            yield return score.ToString();
+            return score.ToString();
         }
-        public IEnumerable<string> SolveSecondPart(string inp)
+        public string SolveSecondPart(string inp)
         {
             var input = inp.Split("\n").Select(x => x.Split(','))
                 .Select(x => x.Select(y => int.Parse(y)).ToArray())
@@ -79,12 +79,12 @@
                     {
                         score++;
                         Console.WriteLine(score);
-                        yield return score.ToString();
+                        //return score.ToString();
                     }
                 }
             }
             Console.WriteLine(score);
-            yield return score.ToString();
+            return score.ToString();
         }
     }
 }

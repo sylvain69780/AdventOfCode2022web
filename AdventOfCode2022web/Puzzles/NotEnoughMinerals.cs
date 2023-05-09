@@ -5,7 +5,7 @@ namespace AdventOfCode2022web.Puzzles
     [Puzzle(19, "Not Enough Minerals")]
     public class NotEnoughMinerals : IPuzzleSolver
     {
-        public IEnumerable<string> SolveFirstPart(string inp)
+        public string SolveFirstPart(string inp)
         {
             var r = new Regex(@"Blueprint (\d+): Each ore robot costs (\d+) ore. Each clay robot costs (\d+) ore. Each obsidian robot costs (\d+) ore and (\d+) clay. Each geode robot costs (\d+) ore and (\d+) obsidian.");
             var input = inp.Split("\n")
@@ -26,9 +26,9 @@ namespace AdventOfCode2022web.Puzzles
                 var score = bp.ComputeMaxGeodes(maxMinutes);
                 quality += score * bp.Num;
             }
-            yield return $"{quality}";
+            return $"{quality}";
         }
-        public IEnumerable<string> SolveSecondPart(string inp)
+        public string SolveSecondPart(string inp)
         {
             var r = new Regex(@"Blueprint (\d+): Each ore robot costs (\d+) ore. Each clay robot costs (\d+) ore. Each obsidian robot costs (\d+) ore and (\d+) clay. Each geode robot costs (\d+) ore and (\d+) obsidian.");
             var input = inp.Split("\n")
@@ -49,7 +49,7 @@ namespace AdventOfCode2022web.Puzzles
                 Console.WriteLine($"{bp.Num} Score = {score}");
                 quality *= score;
             }
-            yield return $"{quality}";
+            return $"{quality}";
         }
         struct BluePrint
         {

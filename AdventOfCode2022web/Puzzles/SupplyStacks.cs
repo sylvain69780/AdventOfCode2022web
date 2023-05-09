@@ -45,7 +45,7 @@ namespace AdventOfCode2022web.Puzzles
             return moves;
         }
 
-        public IEnumerable<string> SolveFirstPart(string puzzleInput)
+        public string SolveFirstPart(string puzzleInput)
         {
             var stacks = ReadStacks(puzzleInput);
             var moves = ReadMovesToDo(puzzleInput);
@@ -57,9 +57,9 @@ namespace AdventOfCode2022web.Puzzles
                     stacks[to - 1].Push(c);
                 }
             }
-            yield return string.Join("", stacks.Select(x => x.Count == 0 ? ' ' : x.Peek()));
+             return string.Join("", stacks.Select(x => x.Count == 0 ? ' ' : x.Peek()));
         }
-        public IEnumerable<string> SolveSecondPart(string puzzleInput)
+        public string SolveSecondPart(string puzzleInput)
         {
             var stacks = ReadStacks(puzzleInput);
             var moves = ReadMovesToDo(puzzleInput);
@@ -71,7 +71,7 @@ namespace AdventOfCode2022web.Puzzles
                 for (int i = 0; i < count; i++)
                     stacks[to - 1].Push(tmp.Pop());
             }
-            yield return string.Join("", stacks.Select(x => x.Count == 0 ? ' ' : x.Peek()));
+             return string.Join("", stacks.Select(x => x.Count == 0 ? ' ' : x.Peek()));
         }
     }
 }

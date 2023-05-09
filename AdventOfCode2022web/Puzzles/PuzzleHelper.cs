@@ -4,8 +4,8 @@ namespace AdventOfCode2022web.Puzzles
 {
     public interface IPuzzleSolver
     {
-        IEnumerable<string> SolveFirstPart(string input);
-        IEnumerable<string> SolveSecondPart(string input);
+        string SolveFirstPart(string input);
+        string SolveSecondPart(string input);
     }
 
     public interface IPuzzleSolverV2

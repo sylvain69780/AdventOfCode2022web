@@ -3,7 +3,7 @@
     [Puzzle(24, "Blizzard Basin")]
     public class BlizzardBasin : IPuzzleSolver
     {
-        public IEnumerable<string> SolveFirstPart(string inp)
+        public string SolveFirstPart(string inp)
         {
             var input = inp.Split("\n");
             var start = (x: input[0].IndexOf('.'), y: 0);
@@ -54,8 +54,7 @@
                         var pos = (x: expedition.x + dx, y: expedition.y + dy);
                         if (pos == arrival)
                         {
-                            yield return $"FOUND {minute}";
-                            yield break;
+                            return $"FOUND {minute}";
                         }
                         if (pos.y >= 0 && !blizzardsPos.Contains(pos) && !walls.Contains(pos) && !newSearch.Contains(pos))
                             newSearch.Enqueue(pos);
@@ -63,9 +62,9 @@
                 }
                 search = newSearch;
             } while (search.Count > 0);
-            yield return $"NOT FOUND {minute}";
+            return $"NOT FOUND {minute}";
         }
-        public IEnumerable<string> SolveSecondPart(string inp)
+        public string SolveSecondPart(string inp)
         {
             var input = inp.Split("\n");
             var start = (x: input[0].IndexOf('.'), y: 0);
@@ -185,7 +184,7 @@
                 }
                 search = newSearch;
             } while (search.Count > 0);
-            yield return $"SEARCH 3 completed {minute}";
+            return $"SEARCH 3 completed {minute}";
         }
 
     }

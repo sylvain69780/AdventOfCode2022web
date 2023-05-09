@@ -22,7 +22,7 @@
 
         private static readonly (int, int)[] Directions = new (int x, int y)[] { (1, 0), (-1, 0), (0, 1), (0, -1) };
 
-        public IEnumerable<string> SolveFirstPart(string puzzleInput)
+        public string SolveFirstPart(string puzzleInput)
         {
             var map = new HeightMap(ToLines(puzzleInput));
             var visibleTrees = 0;
@@ -48,10 +48,10 @@
                         }
                     }
                 }
-            yield return Format(visibleTrees);
+             return Format(visibleTrees);
         }
 
-        public IEnumerable<string> SolveSecondPart(string puzzleInput)
+        public string SolveSecondPart(string puzzleInput)
         {
             var map = new HeightMap(ToLines(puzzleInput));
             var scoreMax = 0;
@@ -73,7 +73,7 @@
                     }
                     scoreMax = Math.Max(score, scoreMax);
                 }
-            yield return Format(scoreMax);
+             return Format(scoreMax);
         }
     }
 }

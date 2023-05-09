@@ -63,7 +63,7 @@
             }
         }
 
-        public IEnumerable<string> SolveFirstPart(string puzzleInput)
+        public string SolveFirstPart(string puzzleInput)
         {
             var packetStrings = ToLines(puzzleInput);
             var wellOrderedPackets = 0;
@@ -74,16 +74,16 @@
                 if (((IComparable<Packet>)secondPacket).CompareTo(firstPacket) > 0)
                     wellOrderedPackets += pairId;
             }
-            yield return wellOrderedPackets.ToString();
+            return wellOrderedPackets.ToString();
         }
-        public IEnumerable<string> SolveSecondPart(string puzzleInput)
+        public string SolveSecondPart(string puzzleInput)
         {
             var packetStrings = ToLines(puzzleInput).Where(x => x != "")
                 .Append("[[2]]").Append("[[6]]")
                 .Select(x => (PacketString: x, Packet: PacketHelper.BuildPacket(x)))
                 .OrderBy(x => x.Packet)
                 .Select(x => x.PacketString).ToList();
-            yield return ((1 + packetStrings.IndexOf("[[2]]")) * (1 + packetStrings.IndexOf("[[6]]"))).ToString();
+            return ((1 + packetStrings.IndexOf("[[2]]")) * (1 + packetStrings.IndexOf("[[6]]"))).ToString();
         }
     }
 }

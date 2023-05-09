@@ -42,22 +42,22 @@ namespace AdventOfCode2022web.Puzzles
             }
         }
 
-        public IEnumerable<string> SolveFirstPart(string puzzleInput)
+        public string SolveFirstPart(string puzzleInput)
         {
             var score = 0;
             foreach (var (interval1, interval2) in ListOfSectionAssignmentPairs(ToLines(puzzleInput)))
                 if (interval1.Contains(interval2) || interval2.Contains(interval1))
                     score++;
-            yield return Format(score);
+             return Format(score);
         }
 
-        public IEnumerable<string> SolveSecondPart(string puzzleInput)
+        public string SolveSecondPart(string puzzleInput)
         {
             var score = 0;
             foreach (var (interval1, interval2) in ListOfSectionAssignmentPairs(ToLines(puzzleInput)))
                 if (interval1.Overlaps(interval2))
                     score++;
-            yield return Format(score);
+             return Format(score);
         }
     }
 }

@@ -41,36 +41,12 @@
         Input = (await Http.GetStringAsync($"sample-data/{puzzle.Type.Name}.txt")).Replace("\r", "");
     }
 
-    private async Task SolveFirstPart()
+    private void SolveFirstPart()
     {
-        IsTask1Running = true;
-        var stopwatch = new Stopwatch();
-        stopwatch.Start();
-        foreach (var s in _solver!.SolveFirstPart(Input!))
-        {
-            Output1 = s;
-            StateHasChanged();
-            stopwatch.Stop();
-            await Task.Delay(Math.Max(0,16 - (int)stopwatch.ElapsedMilliseconds));
-            stopwatch.Restart();
-        };
-        stopwatch.Stop();
-        IsTask1Running = false;
+        Output1 = _solver!.SolveFirstPart(Input!);
     }
-    private async Task SolveSecondPart()
+    private void SolveSecondPart()
     {
-        IsTask2Running = true;
-        var stopwatch = new Stopwatch();
-        stopwatch.Start();
-        foreach (var s in _solver!.SolveSecondPart(Input!))
-        {
-            Output2 = s;
-            StateHasChanged();
-            stopwatch.Stop();
-            await Task.Delay(Math.Max(0, 16 - (int)stopwatch.ElapsedMilliseconds));
-            stopwatch.Restart();
-        };
-        stopwatch.Stop();
-        IsTask2Running = false;
+        Output2 = _solver!.SolveSecondPart(Input!);
     }
 }

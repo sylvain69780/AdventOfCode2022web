@@ -20,13 +20,13 @@
             return processedCharacters;
         }
 
-        public IEnumerable<string> SolveFirstPart(string puzzleInput)
+        public string SolveFirstPart(string puzzleInput)
         {
-            yield return Format(FindMarkerPosition(puzzleInput, 4));
+             return Format(FindMarkerPosition(puzzleInput, 4));
         }
-        public IEnumerable<string> SolveSecondPart(string puzzleInput)
+        public string SolveSecondPart(string puzzleInput)
         {
-            yield return Format(FindMarkerPosition(puzzleInput, 14));
+             return Format(FindMarkerPosition(puzzleInput, 14));
         }
     }
 }

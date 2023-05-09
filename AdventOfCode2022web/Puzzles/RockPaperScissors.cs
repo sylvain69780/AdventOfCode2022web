@@ -30,7 +30,7 @@
         private static (Moves OpponentPlayed, GameResults ExpectedResult) DecodeMovesPart2(string s)
             => ((Moves)(s[0] - 'A'), (GameResults)(s[2] - 'X'));
 
-        public IEnumerable<string> SolveFirstPart(string puzzleInput)
+        public string SolveFirstPart(string puzzleInput)
         {
             var score = 0;
             foreach (var round in ToLines(puzzleInput).Select(x => DecodeMovesPart1(x)))
@@ -41,10 +41,10 @@
                 else if (!FirstPlayerWins.Contains(round))
                     score += 6;
             }
-            yield return Format(score);
+            return Format(score);
         }
 
-        public IEnumerable<string> SolveSecondPart(string puzzleInput)
+        public string SolveSecondPart(string puzzleInput)
         {
             var score = 0;
             foreach (var (opponentPlayed, expectedResult) in ToLines(puzzleInput).Select(x => DecodeMovesPart2(x)))
@@ -57,7 +57,7 @@
                 score += (int)youPlay + 1;
                 score += (int)expectedResult * 3;
             }
-            yield return Format(score);
+            return Format(score);
         }
     }
 }

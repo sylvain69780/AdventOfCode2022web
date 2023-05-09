@@ -3,7 +3,7 @@
     [Puzzle(20, "Grove Positioning System")]
     public class GrovePositioningSystem : IPuzzleSolver
     {
-        public IEnumerable<string> SolveFirstPart(string inp)
+        public string SolveFirstPart(string inp)
         {
             var c = 0;
             var input = inp.Split("\n").Select(x => (Idx: c++, Value: int.Parse(x))).ToList();
@@ -37,10 +37,10 @@
                 var index = (i + zero) % input.Count;
                 score += input[index].Value;
             }
-            yield return $"SCORE {score}";
+            return $"SCORE {score}";
         }
 
-        public IEnumerable<string> SolveSecondPart(string inp)
+        public string SolveSecondPart(string inp)
         {
             var c = 0;
             var input = inp.Split("\n").Select(x => (Idx: c++, Value: 811589153 * long.Parse(x))).ToList();
@@ -77,7 +77,7 @@
                 var index = (i + zero) % input.Count;
                 score += input[index].Value;
             }
-            yield return $"SCORE {score}";
+            return $"SCORE {score}";
         }
     }
 }

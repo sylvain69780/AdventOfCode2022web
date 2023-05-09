@@ -8,7 +8,7 @@ namespace AdventOfCode2022web.Puzzles
         private static string Format(int v) => v.ToString();
         private static string[] ToLines(string s) => s.Split("\n");
 
-        public IEnumerable<string> SolveFirstPart(string puzzleInput)
+        public string SolveFirstPart(string puzzleInput)
         {
             var program = ToLines(puzzleInput);
             var numsToAdd = program.Select(x => x.Split(" "))
@@ -27,7 +27,7 @@ namespace AdventOfCode2022web.Puzzles
                 }
                 valueOfXregister += value;
             }
-            yield return Format(sumOfSixSignalStrengths);
+            return Format(sumOfSixSignalStrengths);
         }
 
         private static IEnumerable<int> ComputeValuesOfXRegister(IEnumerable<int> numsToAdd)
@@ -42,7 +42,7 @@ namespace AdventOfCode2022web.Puzzles
             }
         }
 
-        public IEnumerable<string> SolveSecondPart(string puzzleInput)
+        public string SolveSecondPart(string puzzleInput)
         {
             var program = ToLines(puzzleInput);
             var numsToAdd = program.Select(x => x.Split(" "))
@@ -60,7 +60,7 @@ namespace AdventOfCode2022web.Puzzles
                         messageLine.Append('.');
                 message.Add(messageLine.ToString());
             }
-            yield return string.Join("\n", message);
+            return string.Join("\n", message);
         }
     }
 }

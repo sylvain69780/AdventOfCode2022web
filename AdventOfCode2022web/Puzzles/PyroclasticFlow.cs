@@ -3,7 +3,7 @@
     [Puzzle(17, "Pyroclastic Flow")]
     public class PyroclasticFlow : IPuzzleSolver
     {
-        public IEnumerable<string> SolveFirstPart(string inp)
+        public string SolveFirstPart(string inp)
         {
             var input = inp;
             var inputs = input.Length;
@@ -27,7 +27,7 @@
                 var stop = false;
                 var top = grid.Count == 0 ? 0 : grid.Select(x => x.Item2).Max() + 1;
                 Console.WriteLine($"{i}: Tower top is at {top}");
-                yield return $"{i}: Tower top is at {top}";
+                //yield return $"{i}: Tower top is at {top}";
 
                 var (px, py) = (2, top + 3);
                 while (!stop)
@@ -42,8 +42,9 @@
                             grid.Add((p.Item1 + px, p.Item2 + py));
                 }
             }
+            return "bad";
         }
-        public IEnumerable<string> SolveSecondPart(string inp)
+        public string SolveSecondPart(string inp)
         {
             var input = inp;
             var inputs = input.Length;
@@ -108,7 +109,7 @@
                             }
                         }
                         Console.WriteLine($"{i} key={key} top={top} starting {start} dist = {dist}.");
-                        yield return $"{i} key={key} top={top} starting {start} dist = {dist}.";
+                        //yield return $"{i} key={key} top={top} starting {start} dist = {dist}.";
                     }
                 }
                 i++;
@@ -120,7 +121,7 @@
             var v3 = heights[v2 + start] - heights[start];
             var v4 = (big - start) / dist;
             var v5 = heights[start + dist] - heights[start];
-            yield return $"{v1} + {v4}x{v5} + {v3} = {v1 + v4 * v5 + v3}";
+            return $"{v1} + {v4}x{v5} + {v3} = {v1 + v4 * v5 + v3}";
         }
     }
 }

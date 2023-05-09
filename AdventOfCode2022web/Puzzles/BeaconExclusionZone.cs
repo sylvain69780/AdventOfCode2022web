@@ -11,7 +11,7 @@ namespace AdventOfCode2022web.Puzzles
             public int y;
         }
 
-        public IEnumerable<string> SolveFirstPart(string inp)
+        public string SolveFirstPart(string inp)
         {
             var r = new Regex(@"x=(-?\d+), y=(-?\d+)");
             var input = inp.Split("\n")
@@ -56,15 +56,13 @@ namespace AdventOfCode2022web.Puzzles
                     if (inter.Item1 <= i && inter.Item2 >= i)
                     {
                         score++;
-                        //await Task.Delay(1);
-                        //yield return score.ToString();
                         break;
                     }
                 }
             }
-            yield return score.ToString();
+            return score.ToString();
         }
-        public IEnumerable<string> SolveSecondPart(string inp)
+        public string SolveSecondPart(string inp)
         {
             var r = new Regex(@"x=(-?\d+), y=(-?\d+)");
             var input = inp.Split("\n")
@@ -120,11 +118,11 @@ namespace AdventOfCode2022web.Puzzles
                     }
                 }
                 q = nq;
-                yield return "Queue lenght = " + q.Count.ToString();
+                // yield return "Queue lenght = " + q.Count.ToString();
             } while (q.Count > 1 && cnt-- != 0);
             var res = q.Dequeue();
             // too big for int
-            yield return ((long)res.Item1 * 4000000 + res.Item2).ToString();
+            return ((long)res.Item1 * 4000000 + res.Item2).ToString();
         }
     }
 }

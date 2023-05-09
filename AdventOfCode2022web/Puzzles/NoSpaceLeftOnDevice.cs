@@ -47,14 +47,14 @@
             return directoriesContentSize;
         }
 
-        public IEnumerable<string> SolveFirstPart(string puzzleInput)
+        public string SolveFirstPart(string puzzleInput)
         {
             var terminalOutputs = ToLines(puzzleInput);
             var directoriesContentSize = BuildDirectoriesContentSize(terminalOutputs);
             var sumOfTotalSizesOfDirectories = directoriesContentSize.Values.Where(x => x <= 100000).Sum();
-            yield return Format(sumOfTotalSizesOfDirectories);
+            return Format(sumOfTotalSizesOfDirectories);
         }
-        public IEnumerable<string> SolveSecondPart(string puzzleInput)
+        public string SolveSecondPart(string puzzleInput)
         {
             var terminalOutputs = ToLines(puzzleInput);
             var directoriesContentSize = BuildDirectoriesContentSize(terminalOutputs);
@@ -63,7 +63,7 @@
             var totalSpaceUsed = directoriesContentSize["#/"];
             var toBeFreed = freeSpaceRequired - (totalDiskSize - totalSpaceUsed);
             var totalSizeOfDirectoryToBeDeleted = directoriesContentSize.Values.Where(x => x >= toBeFreed).Min();
-            yield return Format(totalSizeOfDirectoryToBeDeleted);
+            return Format(totalSizeOfDirectoryToBeDeleted);
         }
     }
 }
