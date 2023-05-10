@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Linq;
+using System.Text;
 using System.Text.Json;
 
 namespace AdventOfCode2022web.Puzzles
@@ -23,8 +24,8 @@ namespace AdventOfCode2022web.Puzzles
                 bool xMoveNext, yMoveNext;
                 while (true)
                 {
-                    xMoveNext = xEnumerator.MoveNext(); // && xEnumerator.Current.ValueKind != JsonValueKind.Undefined;
-                    yMoveNext = yEnumerator.MoveNext(); // && yEnumerator.Current.ValueKind != JsonValueKind.Undefined;
+                    xMoveNext = xEnumerator.MoveNext();
+                    yMoveNext = yEnumerator.MoveNext();
                     if (xMoveNext && !yMoveNext)
                         return 1;
                     else if (!xMoveNext && yMoveNext)
@@ -45,30 +46,6 @@ namespace AdventOfCode2022web.Puzzles
                     return Compare(JsonSerializer.Deserialize<JsonElement>($"[{x.GetInt32()}]"), y);
                 else
                     return Compare(x, JsonSerializer.Deserialize<JsonElement>($"[{y.GetInt32()}]"));
-
-                //    int? firstIntegerOfJsonElement(JsonElement e)
-                //    {
-                //        if (e.ValueKind == JsonValueKind.Number)
-                //            return e.GetInt32();
-                //        else if (e.ValueKind == JsonValueKind.Array)
-                //            using (var enumerator = e.EnumerateArray().GetEnumerator())
-                //                if (enumerator.MoveNext() /* && enumerator.Current.ValueKind != JsonValueKind.Undefined */ )
-                //                    return firstIntegerOfJsonElement(enumerator.Current);
-                //        return null;
-                //    }
-                //    var xInteger = firstIntegerOfJsonElement(x);
-                //    var yInteger = firstIntegerOfJsonElement(y);
-                //    if (xInteger == null && yInteger == null)
-                //        return 0;
-                //    else if (yInteger == null)
-                //        return 1;
-                //    else if (xInteger == null)
-                //        return -1;
-                //    else if (xInteger.Value == yInteger.Value)
-                //        return x.ValueKind == JsonValueKind.Array ? 1 : -1;
-                //    else
-                //        return xInteger.Value.CompareTo(yInteger.Value);
-                //
             }
         }
 
@@ -86,7 +63,7 @@ namespace AdventOfCode2022web.Puzzles
         }
         public string SolveSecondPart(string puzzleInput)
         {
-            var packetStrings = @"[[[2]],[[6]]," + puzzleInput.Replace("\n\n", "\n").Replace("\n", ",") + "]";
+            var packetStrings = @"[[[2]],[[6]]," + puzzleInput.Replace("\n\n", "\n").Replace("\n", ",") + "]" ;
             var packets = JsonSerializer.Deserialize<JsonElement[]>(packetStrings);
             Array.Sort(packets!, new JsonElementComparer());
             int firstPacket = 0, secondPacket = 0;
@@ -100,8 +77,7 @@ namespace AdventOfCode2022web.Puzzles
                 else if (serializedPacket == "[[6]]")
                     secondPacket = index + 1;
             }
-            // yield return a.ToString();
-            return (firstPacket * secondPacket).ToString();
+            return (firstPacket * secondPacket).ToString(); // + "\n" + string.Join('\n',packets);
         }
     }
 }

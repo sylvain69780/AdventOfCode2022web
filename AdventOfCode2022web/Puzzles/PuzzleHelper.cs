@@ -10,8 +10,8 @@ namespace AdventOfCode2022web.Puzzles
 
     public interface IPuzzleSolverV2
     {
-        Task<string> SolveFirstPart(string input, Func<string, Task> func);
-        Task<string> SolveSecondPart(string input, Func<string, Task> func);
+        Task<string> SolveFirstPart(string input, Func<string, Task> update, CancellationToken cancellationToken);
+        Task<string> SolveSecondPart(string input, Func<string, Task> update, CancellationToken cancellationToken);
     }
 
     [AttributeUsage(AttributeTargets.Class)]
@@ -28,6 +28,6 @@ namespace AdventOfCode2022web.Puzzles
         .Where(x => x.IsClass && (typeof(IPuzzleSolver).IsAssignableFrom(x) || typeof(IPuzzleSolverV2).IsAssignableFrom(x)))
         .Select(x => (Type: x, Attr: x.GetCustomAttribute<PuzzleAttribute>()!))
         .Select(x => (x.Type, x.Attr.Number, x.Attr.Title))
-        .OrderBy(x => x.Number).ToDictionary(x => x.Number);
+        .ToDictionary(x => x.Number);
     }
 }

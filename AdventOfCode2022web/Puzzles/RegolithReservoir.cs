@@ -1,130 +1,139 @@
-﻿namespace AdventOfCode2022web.Puzzles
+﻿using System.Diagnostics;
+using System.Runtime.InteropServices;
+
+namespace AdventOfCode2022web.Puzzles
 {
     [Puzzle(14, "Regolith Reservoir")]
-    public class RegolithReservoir : IPuzzleSolver
+    public class RegolithReservoir : IPuzzleSolverV2
     {
-        struct Pt
+        private static readonly (int x, int y)[] Directions = new (int x, int y)[] { (0, 1), (-1, 1), (1, 1) };
+
+        public static string Visualize(int iterations)
         {
-            public int x;
-            public int y;
+            return iterations.ToString();
         }
-        public string SolveFirstPart(string inp)
+
+        public async Task<string> SolveFirstPart(string puzzleInput, Func<string, Task> update, CancellationToken cancellationToken)
         {
-            var input = inp.Split("\n").Select(x => x.Replace(" -> ", "#").Split('#')
+            var paths = puzzleInput.Split("\n").Select(x => x.Replace(" -> ", "#").Split('#')
                 .Select(y => y.Split(','))
-                .Select(y => new Pt { x = int.Parse(y[0]), y = int.Parse(y[1]) }).ToList())
-                .ToList()
-                ;
-            var floor = input.SelectMany(x => x).Select(x => x.y).Max() + 2;
-            var start = new Pt { x = 500, y = 0 };
-            var directions = new (int, int)[] { (0, 1), (-1, 1), (1, 1), (0, 0) };
-            var rest = new HashSet<(int, int)>();
-            var sand = start;
-            var score = 0;
-            do
+                .Select(y => (x: int.Parse(y[0]), y: int.Parse(y[1]))).ToList())
+                .ToList();
+            var floorPosition = paths.SelectMany(x => x).Select(x => x.y).Max() + 2;
+            var occupiedPositions = new HashSet<(int x, int y)>();
+            foreach (var rocks in paths)
             {
-                score++;
-                sand = start;
-                var moving = true;
-                while (moving && sand.y < floor)
+                for (var i = 0; i < rocks.Count - 1; i++)
                 {
-                    var nsand = sand;
-                    foreach (var (dx, dy) in directions)
-                    {
-                        nsand = new Pt { x = sand.x + dx, y = sand.y + dy };
-                        if (dx == 0 && dy == 0) break;
-                        if (rest.Contains((nsand.x, nsand.y))) continue;
-                        var isRockBlocking = false;
-                        foreach (var rocks in input)
-                        {
-                            foreach (var i in Enumerable.Range(0, rocks.Count - 1))
-                            {
-                                var begin = rocks[i];
-                                var end = rocks[i + 1];
-                                if (begin.y == end.y)
-                                    isRockBlocking = nsand.y == begin.y && (begin.x <= nsand.x && nsand.x <= end.x || end.x <= nsand.x && nsand.x <= begin.x);
-                                else if (begin.x == end.x)
-                                    isRockBlocking = nsand.x == begin.x && (begin.y <= nsand.y && nsand.y <= end.y || end.y <= nsand.y && nsand.y <= begin.y);
-                                if (isRockBlocking) break;
-                            }
-                            if (isRockBlocking) break;
-                        }
-                        if (!isRockBlocking) break;
-                    }
-                    moving = nsand.x != sand.x || nsand.y != sand.y;
-                    if (moving)
-                        sand = nsand;
-                    else
-                        rest.Add((sand.x, sand.y));
-                    // Console.WriteLine($"{sand.x} {sand.y}");
+                    var beginRock = rocks[i];
+                    var endRock = rocks[i + 1];
+                    if (beginRock.y == endRock.y)
+                        for (var x = Math.Min(beginRock.x, endRock.x); x <= Math.Max(beginRock.x, endRock.x); x++)
+                            occupiedPositions.Add((x, beginRock.y));
+                    if (beginRock.x == endRock.x)
+                        for (var y = Math.Min(beginRock.y, endRock.y); y <= Math.Max(beginRock.y, endRock.y); y++)
+                            occupiedPositions.Add((beginRock.x,y));
                 }
-                Console.WriteLine(score);
-                ///yield return score.ToString();
+            }
 
-            } while (sand.y < floor);
-            score--;
-            return score.ToString();
-
+            var iterations = 0;
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
+            while (true)
+            {
+                var sandPosition = (x: 500, y: 0);
+                var isFreeToMove = true;
+                while (isFreeToMove && sandPosition.y < floorPosition)
+                {
+                    var newSandPosition = sandPosition;
+                    foreach (var (dx, dy) in Directions)
+                    {
+                        var (x, y) = (sandPosition.x + dx, sandPosition.y + dy);
+                        if (!occupiedPositions.Contains((x, y)))
+                        {
+                            newSandPosition = (x, y);
+                            break;
+                        }
+                    }
+                    if (newSandPosition == sandPosition)
+                        isFreeToMove = false;
+                    else
+                        sandPosition = newSandPosition;
+                }
+                if (sandPosition.y >= floorPosition) 
+                    break;
+                occupiedPositions.Add(sandPosition);
+                iterations++;
+                if (stopwatch.ElapsedMilliseconds > 1000)
+                {
+                    stopwatch.Restart();
+                    await update(Visualize(iterations));
+                    if (cancellationToken.IsCancellationRequested)
+                        break;
+                }
+            }
+            return iterations.ToString();
         }
-        public string SolveSecondPart(string inp)
+        public async Task<string> SolveSecondPart(string puzzleInput, Func<string, Task> update, CancellationToken cancellationToken)
         {
-            var input = inp.Split("\n").Select(x => x.Replace(" -> ", "#").Split('#')
-        .Select(y => y.Split(','))
-        .Select(y => new Pt { x = int.Parse(y[0]), y = int.Parse(y[1]) }).ToList())
-        .ToList()
-        ;
-            var floor = input.SelectMany(x => x).Select(x => x.y).Max() + 2;
-            input.Add(
-                new List<Pt> {
-            new Pt { x = int.MinValue, y = floor },
-            new Pt { x = int.MaxValue, y = floor }
-                });
-            var start = new Pt { x = 500, y = 0 };
-            var directions = new (int, int)[] { (0, 1), (-1, 1), (1, 1), (0, 0) };
-            var rest = new HashSet<(int, int)>();
-            var sand = start;
-            var score = 0;
-            do
+            var paths = puzzleInput.Split("\n").Select(x => x.Replace(" -> ", "#").Split('#')
+                .Select(y => y.Split(','))
+                .Select(y => (x: int.Parse(y[0]), y: int.Parse(y[1]))).ToList())
+                .ToList();
+            var floorPosition = paths.SelectMany(x => x).Select(x => x.y).Max() + 2;
+            var occupiedPositions = new HashSet<(int x, int y)>();
+            foreach (var rocks in paths)
             {
-                score++;
-                sand = start;
-                var moving = true;
-                while (moving)
+                for (var i = 0; i < rocks.Count - 1; i++)
                 {
-                    var nsand = sand;
-                    foreach (var (dx, dy) in directions)
-                    {
-                        nsand = new Pt { x = sand.x + dx, y = sand.y + dy };
-                        if (dx == 0 && dy == 0) break;
-                        if (rest.Contains((nsand.x, nsand.y))) continue;
-                        var isRockBlocking = false;
-                        foreach (var rocks in input)
-                        {
-                            foreach (var i in Enumerable.Range(0, rocks.Count - 1))
-                            {
-                                var begin = rocks[i];
-                                var end = rocks[i + 1];
-                                if (begin.y == end.y)
-                                    isRockBlocking = nsand.y == begin.y && (begin.x <= nsand.x && nsand.x <= end.x || end.x <= nsand.x && nsand.x <= begin.x);
-                                else if (begin.x == end.x)
-                                    isRockBlocking = nsand.x == begin.x && (begin.y <= nsand.y && nsand.y <= end.y || end.y <= nsand.y && nsand.y <= begin.y);
-                                if (isRockBlocking) break;
-                            }
-                            if (isRockBlocking) break;
-                        }
-                        if (!isRockBlocking) break;
-                    }
-                    moving = nsand.x != sand.x || nsand.y != sand.y;
-                    if (moving)
-                        sand = nsand;
-                    else
-                        rest.Add((sand.x, sand.y));
-                    // Console.WriteLine($"{sand.x} {sand.y}");
+                    var beginRock = rocks[i];
+                    var endRock = rocks[i + 1];
+                    if (beginRock.y == endRock.y)
+                        for (var x = Math.Min(beginRock.x, endRock.x); x <= Math.Max(beginRock.x, endRock.x); x++)
+                            occupiedPositions.Add((x, beginRock.y));
+                    if (beginRock.x == endRock.x)
+                        for (var y = Math.Min(beginRock.y, endRock.y); y <= Math.Max(beginRock.y, endRock.y); y++)
+                            occupiedPositions.Add((beginRock.x, y));
                 }
-                Console.WriteLine(score);
-                //yield return score.ToString();
-            } while (sand.y != 0);
-            return score.ToString();
+            }
+            var iterations = 0;
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
+            while (true)
+            {
+                var sandPosition = (x: 500, y: 0);
+                var isFreeToMove = true;
+                while (isFreeToMove)
+                {
+                    var newSandPosition = sandPosition;
+                    foreach (var (dx, dy) in Directions)
+                    {
+                        var (x, y) = (sandPosition.x + dx, sandPosition.y + dy);
+                        if (y < floorPosition && !occupiedPositions.Contains((x, y)))
+                        {
+                            newSandPosition = (x, y);
+                            break;
+                        }
+                    }
+                    if (newSandPosition == sandPosition)
+                        isFreeToMove = false;
+                    else
+                        sandPosition = newSandPosition;
+                }
+                iterations++;
+                if (sandPosition == (500,0))
+                    break;
+                occupiedPositions.Add(sandPosition);
+                if (stopwatch.ElapsedMilliseconds > 1000)
+                {
+                    stopwatch.Restart();
+                    await update(Visualize(iterations));
+                    if (cancellationToken.IsCancellationRequested)
+                        break;
+                }
+            }
+            stopwatch.Stop();
+            return iterations.ToString();
         }
     }
 }

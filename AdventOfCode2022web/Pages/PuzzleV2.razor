@@ -3,6 +3,7 @@
 @using System.Text.RegularExpressions;
 @using AdventOfCode2022web.Puzzles;
 @inject HttpClient Http
+@implements IDisposable
 
 <h1>@PuzzleTitle</h1>
 <div class="mb-3">
@@ -10,8 +11,9 @@
     <pre><textarea class="form-control" rows="10" @bind="Input" maxlength="10000000"></textarea></pre>
 </div>
 <div class="mb-3">
-        <button class="btn btn-primary" disabled=@IsTask1Running @onclick="SolveFirstPart">Solve First Part</button>
-        <button class="btn btn-primary" disabled=@IsTask2Running @onclick="SolveSecondPart">Solve Second Part</button>
+        <button class="btn btn-primary" disabled=@IsTaskRunning @onclick="SolveFirstPart">Solve First Part</button>
+        <button class="btn btn-primary" disabled=@IsTaskRunning @onclick="SolveSecondPart">Solve Second Part</button>
+    <button class="btn btn-secondary" disabled=@( !IsTaskRunning ) @onclick="CancelComputation">Cancel</button>
 </div>
 <div class="p-3 mb-2 bg-primary text-white">@Response</div>
 <div class="p-3 mb-2 bg-secondary text-white"><pre>@ViewData</pre></div>
@@ -24,8 +26,8 @@
     private string? Input;
     private string? Response;
     private string? ViewData;
-    private bool IsTask1Running;
-    private bool IsTask2Running;
+    private bool IsTaskRunning;
+    private CancellationTokenSource _cts = new ();
     protected override async Task OnParametersSetAsync()
     {
         var puzzle = PuzzleHelper.Puzzles[PuzzleNumber];
@@ -36,29 +38,43 @@
         Input = (await Http.GetStringAsync($"sample-data/{puzzle.Type.Name}.txt")).Replace("\r", "");
     }
 
+    private void CancelComputation()
+    {
+        _cts.Cancel();        
+    }
+
+    public void Dispose()
+    {
+        _cts.Cancel();
+        _cts.Dispose();
+    }
+
     private async Task SolveFirstPart()
     {
-        IsTask1Running = true;
+        IsTaskRunning = true;
         Response = string.Empty;
         ViewData = string.Empty;
+        using (_cts = new CancellationTokenSource())
         Response = await _solver!.SolveFirstPart(Input!, async (string s) => { 
             ViewData = s; 
             StateHasChanged();
             await Task.Delay(1); 
-        });
-        IsTask1Running = false;
+        }, _cts.Token);
+        IsTaskRunning = false;
     }
 
     private async Task SolveSecondPart()
     {
-            IsTask2Running = true;
+            IsTaskRunning = true;
         Response = string.Empty;
         ViewData = string.Empty;
-        Response = await _solver!.SolveSecondPart(Input!, async (string s) => { 
+        using (_cts = new CancellationTokenSource())
+            Response = await _solver!.SolveSecondPart(Input!, async (string s) =>
+            {
             ViewData = s; 
             StateHasChanged();
             await Task.Delay(1);
-        });
-        IsTask2Running = false;
+        },_cts.Token);
+        IsTaskRunning = false;
     }
 }

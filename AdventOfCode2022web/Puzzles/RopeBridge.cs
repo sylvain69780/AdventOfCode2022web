@@ -30,7 +30,7 @@ namespace AdventOfCode2022web.Puzzles
             return newTail;
         }
 
-        public async Task<string> SolveFirstPart(string puzzleInput, Func<string, Task> func)
+        public async Task<string> SolveFirstPart(string puzzleInput, Func<string, Task> func, CancellationToken cancellationToken)
         {
             var seriesOfMotions = ToLines(puzzleInput)
                 .Select(x => x.Split(" "))
@@ -85,7 +85,7 @@ namespace AdventOfCode2022web.Puzzles
             }
         }
 
-        public async Task<string> SolveSecondPart(string puzzleInput, Func<string, Task> func)
+        public async Task<string> SolveSecondPart(string puzzleInput, Func<string, Task> func, CancellationToken cancellationToken)
         {
             var seriesOfMotions = ToLines(puzzleInput)
                 .Select(x => x.Split(" "))
