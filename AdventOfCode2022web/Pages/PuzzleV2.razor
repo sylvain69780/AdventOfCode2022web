@@ -11,12 +11,18 @@
     <pre><textarea class="form-control" rows="10" @bind="Input" maxlength="10000000"></textarea></pre>
 </div>
 <div class="mb-3">
-        <button class="btn btn-primary" disabled=@IsTaskRunning @onclick="SolveFirstPart">Solve First Part</button>
-        <button class="btn btn-primary" disabled=@IsTaskRunning @onclick="SolveSecondPart">Solve Second Part</button>
+    <button class="btn btn-primary" disabled=@IsTaskRunning @onclick="SolveFirstPart">Solve First Part</button>
+    <button class="btn btn-primary" disabled=@IsTaskRunning @onclick="SolveSecondPart">Solve Second Part</button>
     <button class="btn btn-secondary" disabled=@( !IsTaskRunning ) @onclick="CancelComputation">Cancel</button>
 </div>
 <div class="p-3 mb-2 bg-primary text-white">@Response</div>
 <div class="p-3 mb-2 bg-secondary text-white"><pre>@ViewData</pre></div>
+<div class="p-3 mb-2 bg-secondary text-white">
+    @if (Image64 != null)
+    {
+        <img src=@Image64 />
+    }
+</div>
 
 @code {
     private IPuzzleSolverV2? _solver;
@@ -26,8 +32,9 @@
     private string? Input;
     private string? Response;
     private string? ViewData;
+    protected string? Image64 { get; set; }
     private bool IsTaskRunning;
-    private CancellationTokenSource _cts = new ();
+    private CancellationTokenSource _cts = new();
     protected override async Task OnParametersSetAsync()
     {
         var puzzle = PuzzleHelper.Puzzles[PuzzleNumber];
@@ -40,7 +47,7 @@
 
     private void CancelComputation()
     {
-        _cts.Cancel();        
+        _cts.Cancel();
     }
 
     public void Dispose()
@@ -55,26 +62,33 @@
         Response = string.Empty;
         ViewData = string.Empty;
         using (_cts = new CancellationTokenSource())
-        Response = await _solver!.SolveFirstPart(Input!, async (string s) => { 
-            ViewData = s; 
-            StateHasChanged();
-            await Task.Delay(1); 
-        }, _cts.Token);
+            Response = await _solver!.SolveFirstPart(Input!, async (string s) =>
+            {
+                if (s[..22] == "data:image/png;base64, ")
+                    ViewData = s;
+                else
+                    Image64 = s;
+                StateHasChanged();
+                await Task.Delay(1);
+            }, _cts.Token);
         IsTaskRunning = false;
     }
 
     private async Task SolveSecondPart()
     {
-            IsTaskRunning = true;
+        IsTaskRunning = true;
         Response = string.Empty;
         ViewData = string.Empty;
         using (_cts = new CancellationTokenSource())
             Response = await _solver!.SolveSecondPart(Input!, async (string s) =>
             {
-            ViewData = s; 
-            StateHasChanged();
-            await Task.Delay(1);
-        },_cts.Token);
+                if (s[..22] == "data:image/png;base64, ")
+                    ViewData = s;
+                else
+                    Image64 = s;
+                StateHasChanged();
+                await Task.Delay(1);
+            }, _cts.Token);
         IsTaskRunning = false;
     }
 }

@@ -1,5 +1,6 @@
-﻿using System.Diagnostics;
-using System.Runtime.InteropServices;
+﻿using SixLabors.ImageSharp.Drawing;
+using SixLabors.ImageSharp.Drawing.Processing;
+using System.Diagnostics;
 
 namespace AdventOfCode2022web.Puzzles
 {
@@ -8,9 +9,55 @@ namespace AdventOfCode2022web.Puzzles
     {
         private static readonly (int x, int y)[] Directions = new (int x, int y)[] { (0, 1), (-1, 1), (1, 1) };
 
-        public static string Visualize(int iterations)
+        private class Map
         {
-            return iterations.ToString();
+            public readonly HashSet<(int x, int y)>? OccupiedPositions;
+            public int xMin;
+            public int yMin;
+            public int xMax;
+            public int yMax;
+            public Map()
+            {
+                OccupiedPositions = new HashSet<(int x, int y)>();
+            }
+            public void SetOccupied((int x, int y) position)
+            {
+                OccupiedPositions!.Add(position);
+                xMin = Math.Min(xMin, position.x);
+                yMin = Math.Min(yMin, position.y);
+                xMax = Math.Max(xMax, position.x);
+                yMax = Math.Max(yMax, position.y);
+            }
+        }
+
+        private static string Visualize(Map map)
+        {
+            var Width = map.xMax-map.xMin;
+            var Height = map.yMax-map.yMin;
+            var response = string.Empty;
+            using (MemoryStream outStream = new())
+            {
+                using (Image<Rgba32> img = new(Width, Height))
+                {
+                    img.ProcessPixelRows(accessor =>
+                    {
+                        for (int y = 0; y < accessor.Height; y++)
+                        {
+                            Span<Rgba32> pixelRow = accessor.GetRowSpan(y);
+                            for (int x = 0; x < pixelRow.Length; x++)
+                            {
+                                ref Rgba32 pixel = ref pixelRow[x];
+                                if (map.OccupiedPositions!.Contains((map.xMin + x, map.yMin + y)))
+                                    pixel = Color.White;
+                            }
+                        }
+                    });
+                    img.SaveAsPng(outStream);
+                }
+
+                response = "data:image/png;base64, " + Convert.ToBase64String(outStream.ToArray());
+            }
+            return response;
         }
 
         public async Task<string> SolveFirstPart(string puzzleInput, Func<string, Task> update, CancellationToken cancellationToken)
@@ -20,7 +67,7 @@ namespace AdventOfCode2022web.Puzzles
                 .Select(y => (x: int.Parse(y[0]), y: int.Parse(y[1]))).ToList())
                 .ToList();
             var floorPosition = paths.SelectMany(x => x).Select(x => x.y).Max() + 2;
-            var occupiedPositions = new HashSet<(int x, int y)>();
+            var map = new Map();
             foreach (var rocks in paths)
             {
                 for (var i = 0; i < rocks.Count - 1; i++)
@@ -29,10 +76,10 @@ namespace AdventOfCode2022web.Puzzles
                     var endRock = rocks[i + 1];
                     if (beginRock.y == endRock.y)
                         for (var x = Math.Min(beginRock.x, endRock.x); x <= Math.Max(beginRock.x, endRock.x); x++)
-                            occupiedPositions.Add((x, beginRock.y));
+                            map.SetOccupied((x, beginRock.y));
                     if (beginRock.x == endRock.x)
                         for (var y = Math.Min(beginRock.y, endRock.y); y <= Math.Max(beginRock.y, endRock.y); y++)
-                            occupiedPositions.Add((beginRock.x,y));
+                            map.SetOccupied((beginRock.x,y));
                 }
             }
 
@@ -49,7 +96,7 @@ namespace AdventOfCode2022web.Puzzles
                     foreach (var (dx, dy) in Directions)
                     {
                         var (x, y) = (sandPosition.x + dx, sandPosition.y + dy);
-                        if (!occupiedPositions.Contains((x, y)))
+                        if (!map.OccupiedPositions!.Contains((x, y)))
                         {
                             newSandPosition = (x, y);
                             break;
@@ -62,16 +109,17 @@ namespace AdventOfCode2022web.Puzzles
                 }
                 if (sandPosition.y >= floorPosition) 
                     break;
-                occupiedPositions.Add(sandPosition);
+                map.SetOccupied(sandPosition);
                 iterations++;
                 if (stopwatch.ElapsedMilliseconds > 1000)
                 {
                     stopwatch.Restart();
-                    await update(Visualize(iterations));
+                    await update(Visualize(map));
                     if (cancellationToken.IsCancellationRequested)
                         break;
                 }
             }
+            await update(Visualize(map));
             return iterations.ToString();
         }
         public async Task<string> SolveSecondPart(string puzzleInput, Func<string, Task> update, CancellationToken cancellationToken)
@@ -81,7 +129,7 @@ namespace AdventOfCode2022web.Puzzles
                 .Select(y => (x: int.Parse(y[0]), y: int.Parse(y[1]))).ToList())
                 .ToList();
             var floorPosition = paths.SelectMany(x => x).Select(x => x.y).Max() + 2;
-            var occupiedPositions = new HashSet<(int x, int y)>();
+            var map = new Map();
             foreach (var rocks in paths)
             {
                 for (var i = 0; i < rocks.Count - 1; i++)
@@ -90,10 +138,10 @@ namespace AdventOfCode2022web.Puzzles
                     var endRock = rocks[i + 1];
                     if (beginRock.y == endRock.y)
                         for (var x = Math.Min(beginRock.x, endRock.x); x <= Math.Max(beginRock.x, endRock.x); x++)
-                            occupiedPositions.Add((x, beginRock.y));
+                            map.SetOccupied((x, beginRock.y));
                     if (beginRock.x == endRock.x)
                         for (var y = Math.Min(beginRock.y, endRock.y); y <= Math.Max(beginRock.y, endRock.y); y++)
-                            occupiedPositions.Add((beginRock.x, y));
+                            map.SetOccupied((beginRock.x, y));
                 }
             }
             var iterations = 0;
@@ -109,7 +157,7 @@ namespace AdventOfCode2022web.Puzzles
                     foreach (var (dx, dy) in Directions)
                     {
                         var (x, y) = (sandPosition.x + dx, sandPosition.y + dy);
-                        if (y < floorPosition && !occupiedPositions.Contains((x, y)))
+                        if (y < floorPosition && !map.OccupiedPositions!.Contains((x, y)))
                         {
                             newSandPosition = (x, y);
                             break;
@@ -123,15 +171,16 @@ namespace AdventOfCode2022web.Puzzles
                 iterations++;
                 if (sandPosition == (500,0))
                     break;
-                occupiedPositions.Add(sandPosition);
+                map.SetOccupied(sandPosition);
                 if (stopwatch.ElapsedMilliseconds > 1000)
                 {
                     stopwatch.Restart();
-                    await update(Visualize(iterations));
+                    await update(Visualize(map));
                     if (cancellationToken.IsCancellationRequested)
                         break;
                 }
             }
+            await update(Visualize(map));
             stopwatch.Stop();
             return iterations.ToString();
         }
