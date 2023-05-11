@@ -12,9 +12,9 @@ namespace AdventOfCode2022web.Puzzles
         private class Map
         {
             public readonly HashSet<(int x, int y)>? OccupiedPositions;
-            public int xMin;
+            public int xMin = 500;
             public int yMin;
-            public int xMax;
+            public int xMax = 500;
             public int yMax;
             public Map()
             {

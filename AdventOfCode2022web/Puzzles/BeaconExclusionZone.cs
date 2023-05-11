@@ -5,55 +5,63 @@ namespace AdventOfCode2022web.Puzzles
     [Puzzle(15, "Beacon Exclusion Zone")]
     public class BeaconExclusionZone : IPuzzleSolver
     {
-        struct Pt
+        private class SensorPositionAndClosestBeacon
         {
-            public int x;
-            public int y;
+            public (int x, int y) Sensor;
+            public (int x, int y) Beacon;
+            public int ManhattanDistance;
         }
 
-        public string SolveFirstPart(string inp)
+        private static int ManhattanDistance((int x, int y) a, (int x, int y) b) => Math.Abs(a.x - b.x) + Math.Abs(a.y - b.y);
+
+        private List<SensorPositionAndClosestBeacon> GetSensorPositionAndClosestBeacons(string puzzleInput)
         {
-            var r = new Regex(@"x=(-?\d+), y=(-?\d+)");
-            var input = inp.Split("\n")
-                .Select(x => r.Matches(x))
+            var coordinatesRegex = new Regex(@"x=(-?\d+), y=(-?\d+)", RegexOptions.Compiled);
+            return puzzleInput.Split("\n")
+                .Select(x => coordinatesRegex.Matches(x))
                 .Select(x => new
                 {
-                    Sensor = new Pt
-                    {
-                        x = int.Parse(x[0].Groups[1].Value),
-                        y = int.Parse(x[0].Groups[2].Value)
-                    },
-                    Beacon = new Pt
-                    {
-                        x = int.Parse(x[1].Groups[1].Value),
-                        y = int.Parse(x[1].Groups[2].Value)
-                    }
+                    Sensor = (x: int.Parse(x[0].Groups[1].Value), y: int.Parse(x[0].Groups[2].Value)),
+                    Beacon = (x: int.Parse(x[1].Groups[1].Value), y: int.Parse(x[1].Groups[2].Value)),
+                })
+                .Select(x => new SensorPositionAndClosestBeacon
+                {
+                    Sensor = x.Sensor,
+                    Beacon = x.Beacon,
+                    ManhattanDistance = ManhattanDistance(x.Sensor, x.Beacon)
                 })
                 .ToList();
-            var covered = new HashSet<(int, int)>();
-            var discard = input.Select(x => (x.Beacon.x, x.Beacon.y)).ToHashSet();
-            discard.UnionWith(input.Select(x => (x.Sensor.x, x.Sensor.y)).ToHashSet());
-            var h = input.Count <= 14 ? 10 : 2000000; // looking at this row
-            var inters = new List<(int xmin, int xmax)>();
-            foreach (var x in input)
+        }
+
+        public string SolveFirstPart(string puzzleInput)
+        {
+            var sensorsPositionsAndClosestBeacon = GetSensorPositionAndClosestBeacons(puzzleInput);
+            var verticalPositionOfRowToAnalyze = sensorsPositionsAndClosestBeacon.Count <= 14 ? 10 : 2000000; 
+            var horizontalIntervalsOnRowToAnalyze = new List<(int begin, int end)>();
+            foreach (var record in sensorsPositionsAndClosestBeacon)
             {
-                var dist = Math.Abs(x.Sensor.x - x.Beacon.x) + Math.Abs(x.Sensor.y - x.Beacon.y);
-                var dh = Math.Abs(x.Sensor.y - h);
-                if (dh > dist) continue;
-                dist -= dh;
-                var inter = (xmin: x.Sensor.x - dist, xmax: x.Sensor.x + dist);
-                inters.Add(inter);
-            }
-            var start = inters.Select(x => x.xmin).Min(); //  not tested
-            var end = inters.Select(x => x.xmax).Max();
-            var score = 0;
-            for (var i = start; i <= end; i++)
-            {
-                var p = (i, h);
-                if (discard.Contains(p)) continue;
-                foreach (var inter in inters)
+                var distanceOfSensorToRowToAnalyze = Math.Abs(record.Sensor.y - verticalPositionOfRowToAnalyze);
+                if (distanceOfSensorToRowToAnalyze <= record.ManhattanDistance)
                 {
-                    if (inter.Item1 <= i && inter.Item2 >= i)
+                    var d = record.ManhattanDistance - distanceOfSensorToRowToAnalyze;
+                    horizontalIntervalsOnRowToAnalyze.Add((record.Sensor.x - d, record.Sensor.x + d));
+                }
+            }
+            var start = horizontalIntervalsOnRowToAnalyze.Select(x => x.begin).Min(); 
+            var end = horizontalIntervalsOnRowToAnalyze.Select(x => x.end).Max();
+            var score = 0;
+            var discard = sensorsPositionsAndClosestBeacon
+                .Select(x => (x.Beacon.x, x.Beacon.y))
+                .Concat(sensorsPositionsAndClosestBeacon
+                .Select(x => (x.Sensor.x, x.Sensor.y)))
+                .ToHashSet();
+            for (var x = start; x <= end; x++)
+            {
+                var p = (x : x, y: verticalPositionOfRowToAnalyze);
+                if (discard.Contains(p)) continue;
+                foreach (var inter in horizontalIntervalsOnRowToAnalyze)
+                {
+                    if (x >= inter.begin && x <= inter.end)
                     {
                         score++;
                         break;
@@ -62,67 +70,46 @@ namespace AdventOfCode2022web.Puzzles
             }
             return score.ToString();
         }
-        public string SolveSecondPart(string inp)
+        public string SolveSecondPart(string puzzleInput)
         {
-            var r = new Regex(@"x=(-?\d+), y=(-?\d+)");
-            var input = inp.Split("\n")
-                .Select(x => r.Matches(x))
-                .Select(x => new
-                {
-                    Sensor = new Pt
-                    {
-                        x = int.Parse(x[0].Groups[1].Value),
-                        y = int.Parse(x[0].Groups[2].Value)
-                    },
-                    Beacon = new Pt
-                    {
-                        x = int.Parse(x[1].Groups[1].Value),
-                        y = int.Parse(x[1].Groups[2].Value)
-                    }
-                })
-                .ToList();
-            var discard = input.Select(x => (x.Beacon.x, x.Beacon.y)).ToHashSet();
-            discard.UnionWith(input.Select(x => (x.Sensor.x, x.Sensor.y)).ToHashSet());
-            var q = new Queue<(int, int, int, int)>();
-            var cmax = 4000000;
-            var cnt = (int)Math.Sqrt(cmax) + 3;
-            q.Enqueue((0, 0, cmax, cmax));
+            var sensorsPositionsAndClosestBeacon = GetSensorPositionAndClosestBeacons(puzzleInput);
+            var discard = sensorsPositionsAndClosestBeacon
+                .Select(x => (x.Beacon.x, x.Beacon.y))
+                .Concat(sensorsPositionsAndClosestBeacon
+                .Select(x => (x.Sensor.x, x.Sensor.y)))
+                .ToHashSet();
+            var zones = new Queue<(int xMin, int yMin, int xMax, int yMax)>();
+            var mapMaxSize = sensorsPositionsAndClosestBeacon.Count <= 14 ? 20 : 4000000;
+            var maxIterations = (int)Math.Sqrt(mapMaxSize) + 3;
+            zones.Enqueue((0, 0, mapMaxSize, mapMaxSize));
             do
             {
-                var nq = new Queue<(int, int, int, int)>();
-                while (q.Count > 0)
+                var newZones = new Queue<(int xMin, int yMin, int xMax, int yMax)>();
+                while (zones.Count > 0)
                 {
-                    var square = q.Dequeue();
-                    var (ax, ay, bx, by) = square;
-                    var ps = new (int, int)[] { (ax, ay), (ax, by), (bx, by), (bx, ay) };
+                    var (ax, ay, bx, by) = zones.Dequeue();
+                    var corners = new (int x, int y)[] { (ax, ay), (ax, by), (bx, by), (bx, ay) };
                     // intersection test
-                    bool isCandidate = true;
-                    foreach (var data in input)
-                    {
-                        var dist = Math.Abs(data.Sensor.x - data.Beacon.x) + Math.Abs(data.Sensor.y - data.Beacon.y);
-                        isCandidate = ps.Any(y => Math.Abs(data.Sensor.x - y.Item1) + Math.Abs(data.Sensor.y - y.Item2) > dist);
-                        if (!isCandidate) break;
-                    }
-                    if (isCandidate)
+                    var isFullyCoveredBySensor = sensorsPositionsAndClosestBeacon.Any(x => corners.All(y => ManhattanDistance(x.Sensor, y) <= x.ManhattanDistance));
+                    if (!isFullyCoveredBySensor)
                     {
                         var (dx, dy) = ((bx - ax + 1) / 2, (by - ay + 1) / 2);
                         if (dx > 0 || dy > 0)
                         {
-                            nq.Enqueue((ax, ay, bx - dx, by - dy));
-                            nq.Enqueue((ax + dx, ay, bx, by - dy));
-                            nq.Enqueue((ax, ay + dy, bx - dx, by));
-                            nq.Enqueue((ax + dx, ay + dy, bx, by));
+                            newZones.Enqueue((ax, ay, bx - dx, by - dy));
+                            newZones.Enqueue((ax + dx, ay, bx, by - dy));
+                            newZones.Enqueue((ax, ay + dy, bx - dx, by));
+                            newZones.Enqueue((ax + dx, ay + dy, bx, by));
                         }
                         else
-                            if (!discard.Contains((ax, ay))) nq.Enqueue((ax, ay, ax, ay));
+                            if (!discard.Contains((ax, ay))) newZones.Enqueue((ax, ay, ax, ay));
                     }
                 }
-                q = nq;
-                // yield return "Queue lenght = " + q.Count.ToString();
-            } while (q.Count > 1 && cnt-- != 0);
-            var res = q.Dequeue();
+                zones = newZones;
+            } while (zones.Count > 1 && maxIterations-- != 0);
+            var res = zones.Dequeue();
             // too big for int
-            return ((long)res.Item1 * 4000000 + res.Item2).ToString();
+            return ((long)res.xMin * 4000000 + res.yMin).ToString();
         }
     }
 }
