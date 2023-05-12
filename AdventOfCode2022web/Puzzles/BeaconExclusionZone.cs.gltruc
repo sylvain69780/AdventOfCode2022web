@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using GlmSharp;
+using System.Text.RegularExpressions;
 
 namespace AdventOfCode2022web.Puzzles
 {
@@ -7,22 +8,22 @@ namespace AdventOfCode2022web.Puzzles
     {
         private class SensorPositionAndClosestBeacon
         {
-            public (int x, int y) Sensor;
-            public (int x, int y) Beacon;
+            public ivec2 Sensor;
+            public ivec2 Beacon;
             public int ManhattanDistance;
         }
 
-        private static int ManhattanDistance((int x, int y) a, (int x, int y) b) => Math.Abs(a.x - b.x) + Math.Abs(a.y - b.y);
+        private static int ManhattanDistance(ivec2 a, ivec2 b) => Math.Abs(a.x - b.x) + Math.Abs(a.y - b.y);
 
-        private List<SensorPositionAndClosestBeacon> GetSensorPositionAndClosestBeacons(string puzzleInput)
+        private static List<SensorPositionAndClosestBeacon> GetSensorPositionAndClosestBeacons(string puzzleInput)
         {
             var coordinatesRegex = new Regex(@"x=(-?\d+), y=(-?\d+)", RegexOptions.Compiled);
             return puzzleInput.Split("\n")
                 .Select(x => coordinatesRegex.Matches(x))
                 .Select(x => new
                 {
-                    Sensor = (x: int.Parse(x[0].Groups[1].Value), y: int.Parse(x[0].Groups[2].Value)),
-                    Beacon = (x: int.Parse(x[1].Groups[1].Value), y: int.Parse(x[1].Groups[2].Value)),
+                    Sensor = new ivec2(int.Parse(x[0].Groups[1].Value),int.Parse(x[0].Groups[2].Value)),
+                    Beacon = new ivec2(int.Parse(x[1].Groups[1].Value),int.Parse(x[1].Groups[2].Value)),
                 })
                 .Select(x => new SensorPositionAndClosestBeacon
                 {
@@ -57,7 +58,7 @@ namespace AdventOfCode2022web.Puzzles
                 .ToHashSet();
             for (var x = start; x <= end; x++)
             {
-                var p = (x: x, y: verticalPositionOfRowToAnalyze);
+                var p = (x, y: verticalPositionOfRowToAnalyze);
                 if (discard.Contains(p)) continue;
                 foreach (var inter in horizontalIntervalsOnRowToAnalyze)
                 {
@@ -78,53 +79,35 @@ namespace AdventOfCode2022web.Puzzles
                 .Concat(sensorsPositionsAndClosestBeacon
                 .Select(x => (x.Sensor.x, x.Sensor.y)))
                 .ToHashSet();
-            var squares = new Queue<((int X, int Y) Min, (int X, int Y) Max)>();
+            var squares = new Queue<ivec4>();
             var mapMaxSize = sensorsPositionsAndClosestBeacon.Count <= 14 ? 20 : 4000000;
-            var maxIterations = (int)Math.Log2(mapMaxSize)+1; 
-            squares.Enqueue(((0, 0), (mapMaxSize, mapMaxSize)));
+            var maxIterations = (int)Math.Sqrt(mapMaxSize) + 3;
+            squares.Enqueue(new ivec4(0, 0, mapMaxSize, mapMaxSize));
             do
             {
-                var smallerSquares = new Queue<((int X, int Y) Min, (int X, int Y) Max)>();
+                var smallerSquares = new Queue<ivec4>();
                 while (squares.Count > 0)
                 {
-                    var (min, max) = squares.Dequeue();
-                    var corners = new (int x, int y)[] { (min.X, min.Y), (min.X, max.Y), (max.X, max.Y), (max.X, min.Y) };
+                    var square = squares.Dequeue();
                     var isFullyCoveredBySensor = sensorsPositionsAndClosestBeacon
-                        .Any(x => corners.All(y => ManhattanDistance(x.Sensor, y) <= x.ManhattanDistance));
+                        .Any(x => ManhattanDistance(x.Sensor, square.swizzle.xy) <= x.ManhattanDistance
+                            && ManhattanDistance(x.Sensor, square.swizzle.xw) <= x.ManhattanDistance
+                            && ManhattanDistance(x.Sensor, square.swizzle.zy) <= x.ManhattanDistance
+                            && ManhattanDistance(x.Sensor, square.swizzle.zw) <= x.ManhattanDistance);
                     if (!isFullyCoveredBySensor)
                     {
-                        var (width, height) = ((max.X - min.X), (max.Y - min.Y));
-                        var (firstHalfX, firstHalfY) = (width / 2, height / 2);
-                        var (secondHalfX, secondHalfY) = (width - firstHalfX, height - firstHalfY );
-                        if (width == 0 && height == 0)
-                        {
-                            // success
-                            if (!discard.Contains((min.X, min.Y)))
+                        var width = square.swizzle.zw - square.xy;
+                        var firstHalf = width /2;
+                        var secondHalf = width - firstHalf;
+                        if (width == new vec2(0, 0))
+                            if (!discard.Contains((square.x, square.y))) 
+                                smallerSquares.Enqueue(square);
+                            else
                             {
-                                smallerSquares.Clear();
-                                smallerSquares.Enqueue((min, min));
-                                break;
-                            }
-                                
-                        }
-                        else
-                            {
-                                smallerSquares.Enqueue(
-                                    (min, 
-                                    (min.X + firstHalfX, min.Y + firstHalfY)
-                                    ));
-                                smallerSquares.Enqueue(
-                                    ((min.X+secondHalfX,min.Y+secondHalfY),
-                                    (max.X, max.Y)
-                                    ));
-                                smallerSquares.Enqueue(
-                                    ((min.X + secondHalfX, min.Y ),
-                                    (max.X, min.Y + firstHalfY)
-                                    ));
-                                smallerSquares.Enqueue(
-                                    ((min.X , min.Y + secondHalfY),
-                                    (min.X + firstHalfX, max.Y)
-                                    ));
+                                smallerSquares.Enqueue(square + new ivec4(0,0,firstHalf.x,firstHalf.y));
+                                smallerSquares.Enqueue(square + new ivec4(secondHalf.x, 0, width.x, firstHalf.y));
+                                smallerSquares.Enqueue(square + new ivec4(secondHalf.x, secondHalf.y, width.x, width.y));
+                                smallerSquares.Enqueue(square + new ivec4(0, secondHalf.y, 0, width.y));
                             }
                     }
                 }
@@ -132,7 +115,7 @@ namespace AdventOfCode2022web.Puzzles
             } while (squares.Count > 1 && maxIterations-- != 0);
             var res = squares.Dequeue();
             // too big for int
-            return ((long)res.Min.X * 4000000 + res.Min.Y).ToString();
+            return ((long)res.x * 4000000 + res.y).ToString();
         }
     }
 }
