@@ -33,11 +33,15 @@
       "url": "_framework\/icudt.dat"
     },
     {
-      "hash": "sha256-WKRvxPTeTA3IcrNe\/eOYMjSmxn7DhDJWrV2pGgkGeBw=",
+      "hash": "sha256-W\/6nM3x3KPpZmTfgfZoBFh0gCu55WdpBGVY6cCtL1Eg=",
       "url": "_framework\/blazor.boot.json"
     },
     {
-      "hash": "sha256-Uincpgv8Uz+Oo9umfkXUsv\/MMLcy\/Z1ZwAbBz8WxiDo=",
+      "hash": "sha256-UyMUjvuicPrHgIta8aRDvIQhJGuN\/gBL1JIq3p9cCpI=",
+      "url": "_framework\/AdventOfCode2022.dll"
+    },
+    {
+      "hash": "sha256-e7NL3CsNY57rfVkOoqaLYHFhckOv8WkwVJDepgN0of4=",
       "url": "_framework\/AdventOfCode2022web.dll"
     },
     {
@@ -149,7 +153,7 @@
       "url": "_framework\/System.IO.FileSystem.dll"
     },
     {
-      "hash": "sha256-Gx1HelIHx7TMDMILGpkntgY4z0PW9HG98uuxEP\/da54=",
+      "hash": "sha256-pW3D4PzVJM3NEKYY5e+0AAsaCzej+qWNi1jfK4gR6jI=",
       "url": "_framework\/System.Linq.dll"
     },
     {
@@ -173,7 +177,7 @@
       "url": "_framework\/System.ObjectModel.dll"
     },
     {
-      "hash": "sha256-7x+11HAzx8BNYcEY8VpV89UY5KpkczAN6lkKpu93MR4=",
+      "hash": "sha256-FIoTG+EFylqLCWnnVcuXWvtASBnBkIbjv21J2Hscbik=",
       "url": "_framework\/System.Private.CoreLib.dll"
     },
     {
@@ -193,7 +197,7 @@
       "url": "_framework\/System.Runtime.CompilerServices.Unsafe.dll"
     },
     {
-      "hash": "sha256-AkGSVAYldyJE8+tGnDiDGFukXm3AmNlEXMc0GLIVCBk=",
+      "hash": "sha256-lG461qJyIEXvYvX\/vkAfpZfNrRafulIUUtAc1Lgh0p8=",
       "url": "_framework\/System.Runtime.dll"
     },
     {
@@ -417,5 +421,5 @@
       "url": "sample-data\/UnstableDiffusion.txt"
     }
   ],
-  "version": "liVDBxzu"
+  "version": "IkuovAQc"
 };
