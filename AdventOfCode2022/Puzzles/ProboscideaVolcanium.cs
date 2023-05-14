@@ -138,8 +138,7 @@ namespace AdventOfCode2022web.Puzzles
                     if (pressureReleasedPrimary > minPressureReleaseExpected)
                     {
                         var (pressureReleasedSecondary, secondaryFlow) = ComputeOptimalFlow(valves, distancesBetweenValves, valvesRemainingToVisit, minutesAllowed, minPressureReleaseExpected);
-                        if (pressureReleasedSecondary < pressureReleasedPrimary 
-                            && pressureReleasedSecondary >= minPressureReleaseExpected
+                        if ( pressureReleasedSecondary >= minPressureReleaseExpected
                             && pressureReleasedPrimary + pressureReleasedSecondary >= bestPressureReleased)
                         {
                             bestSecondaryFlow = secondaryFlow;
