@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace AdventOfCode2022web.Puzzles
@@ -77,10 +78,9 @@ namespace AdventOfCode2022web.Puzzles
             return (timeElapsed, pressureReleased);
         }
 
-        private static (int BestPressure, string OptimalFlow) ComputeOptimalFlow(Dictionary<string, Valve> valves, Dictionary<(string a, string b), int> distancesBetweenValves, string[] valvesToVisit, int minutesAllowed, int minPressureReleaseExpected)
+        private static IEnumerable<(int BestPressure, string OptimalFlow)> ComputeOptimalFlow(Dictionary<string, Valve> valves, Dictionary<(string a, string b), int> distancesBetweenValves, string[] valvesToVisit, int minutesAllowed)
         {
             var queue = new Queue<string>();
-            var (bestPressureReleased, bestFlow) = (minPressureReleaseExpected, "");
             queue.Enqueue(StartingValve);
             while (queue.Count > 0)
             {
@@ -90,70 +90,15 @@ namespace AdventOfCode2022web.Puzzles
                     var currentFlow = currentFlowString.Split(',');
                     var (timeElapsed, pressureReleased) = ComputeTimeElapsedAndPressureReleased(currentFlow, valves, distancesBetweenValves, minutesAllowed);
                     var minutesRemaining = minutesAllowed - timeElapsed - 2;
-                    var valvesRemainingToVisit = valvesToVisit.Where(x => Array.IndexOf(currentFlow, x) == -1);
-                    var maxPressurePossibleToRelease = valvesRemainingToVisit.Select(x => valves[x])
-                        .Sum(x => x.Rate * minutesRemaining);
-                    if (pressureReleased + maxPressurePossibleToRelease < bestPressureReleased)
-                        continue;
                     var currentValve = currentFlow[^1];
-                    if (!valvesRemainingToVisit.Any(x => distancesBetweenValves[(currentValve, x)] < minutesRemaining))
-                    {
-                        if (bestPressureReleased <= pressureReleased)
-                        {
-                            bestPressureReleased = pressureReleased;
-                            bestFlow = currentFlowString;
-                        }
-                    }
+                    var valvesRemainingToVisit = valvesToVisit
+                        .Where(x => Array.IndexOf(currentFlow, x) == -1 && distancesBetweenValves[(currentValve, x)] < minutesRemaining).ToArray();
+                    yield return (pressureReleased, currentFlowString);
                     foreach (var valve in valvesRemainingToVisit)
                         newQueue.Enqueue(currentFlowString + ',' + valve);
                 }
                 queue = newQueue;
             }
-            return (bestPressureReleased, bestFlow);
-        }
-
-        private static (int OptimalPressureReleased, string OptimalPrimaryFlow, string OptimalSecondaryFlow) ComputeOptimalPrimaryAndSecondaryFlows(Dictionary<string, Valve> valves, Dictionary<(string a, string b), int> distancesBetweenValves, string[] valvesToVisit, int minutesAllowed)
-        {
-            var queue = new Queue<string>();
-            var (optimalPressureReleased, optimalFlow) = ComputeOptimalFlow(valves, distancesBetweenValves, valvesToVisit, minutesAllowed, 0);
-            var optimalFlowSplit = optimalFlow.Split(',');
-            var valvesToVisitRemaining = valvesToVisit.Where(x => Array.IndexOf(optimalFlowSplit, x) == -1).ToArray();
-            var (minPressureReleaseExpected, optimalFlowRemaining) = ComputeOptimalFlow(valves, distancesBetweenValves, valvesToVisitRemaining, minutesAllowed, 0);
-            var (bestPressureReleased, bestPrimaryFlow) = (optimalPressureReleased, "");
-            var (bestPressureReleasedSecondary, bestSecondaryFlow) = (0, "");
-            queue.Enqueue(StartingValve + ',' + optimalFlowSplit[1]);
-            while (queue.Count > 0)
-            {
-                var newQueue = new Queue<string>();
-                while (queue.TryDequeue(out var CurrentPrimaryFlowString))
-                {
-                    var currentPrimaryFlow = CurrentPrimaryFlowString.Split(',');
-                    var valvesRemainingToVisit = valvesToVisit
-                        .Where(x => Array.IndexOf(currentPrimaryFlow, x) == -1).ToArray();
-                    var (timeElapsedPrimary, pressureReleasedPrimary) = ComputeTimeElapsedAndPressureReleased(currentPrimaryFlow, valves, distancesBetweenValves, minutesAllowed);
-                    var minutesRemainingPrimary = minutesAllowed - timeElapsedPrimary - 2;
-                    var valvesRemainingToVisitPrimary = valvesRemainingToVisit
-                        .Where(x => distancesBetweenValves[(currentPrimaryFlow[^1], x)] <= minutesRemainingPrimary)
-                        .ToArray();
-                    if (pressureReleasedPrimary > minPressureReleaseExpected)
-                    {
-                        var (pressureReleasedSecondary, secondaryFlow) = ComputeOptimalFlow(valves, distancesBetweenValves, valvesRemainingToVisit, minutesAllowed, minPressureReleaseExpected);
-                        if ( pressureReleasedSecondary >= minPressureReleaseExpected
-                            && pressureReleasedPrimary + pressureReleasedSecondary >= bestPressureReleased)
-                        {
-                            bestSecondaryFlow = secondaryFlow;
-                            bestPressureReleasedSecondary = pressureReleasedSecondary;
-                            bestPrimaryFlow = CurrentPrimaryFlowString;
-                            bestPressureReleased = pressureReleasedPrimary + pressureReleasedSecondary;
-                        }
-                    }
-                    foreach (var valve in valvesRemainingToVisitPrimary)
-                        newQueue.Enqueue(CurrentPrimaryFlowString + ',' + valve);
-                }
-                queue = newQueue;
-                Console.WriteLine(queue.Count.ToString());
-            }
-            return (bestPressureReleased, bestPrimaryFlow, bestSecondaryFlow);
         }
 
         private const string StartingValve = "AA";
@@ -165,7 +110,12 @@ namespace AdventOfCode2022web.Puzzles
             var valves = GetValves(puzzleInput);
             var valvesToVisit = valves.Values.Where(x => x.Rate > 0).Select(x => x.Name).ToArray();
             var distancesBetweenValves = ComputeDistanceBetweenAllValves(valves, valvesToVisit);
-            var (optimalPressureReleased, optimalFlow) = ComputeOptimalFlow(valves, distancesBetweenValves, valvesToVisit, MinutesAllowedFirstPart, 0);
+            var (optimalPressureReleased, optimalFlow) = (0, "");
+            foreach (var (pressureReleased, flow) in ComputeOptimalFlow(valves, distancesBetweenValves, valvesToVisit, MinutesAllowedFirstPart))
+            {
+                if (pressureReleased > optimalPressureReleased)
+                    (optimalPressureReleased, optimalFlow) = (pressureReleased, flow);
+            }
             return optimalFlow + '\n' + optimalPressureReleased.ToString();
         }
         public string SolveSecondPart(string puzzleInput)
@@ -173,8 +123,48 @@ namespace AdventOfCode2022web.Puzzles
             var valves = GetValves(puzzleInput);
             var valvesToVisit = valves.Values.Where(x => x.Rate > 0).Select(x => x.Name).ToArray();
             var distancesBetweenValves = ComputeDistanceBetweenAllValves(valves, valvesToVisit);
-            var (optimalPressureReleased, optimalPrimaryFlow, optimalSecondaryFlow) = ComputeOptimalPrimaryAndSecondaryFlows(valves, distancesBetweenValves, valvesToVisit, MinutesAllowedSecondPart);
-            return optimalPrimaryFlow + '\n' + optimalSecondaryFlow + '\n' + optimalPressureReleased.ToString();
+
+            var (optimalPressureReleasedSingle, optimalFlowSingle) = (0, string.Empty);
+            foreach (var (pressureReleased, flow) in ComputeOptimalFlow(valves, distancesBetweenValves, valvesToVisit, MinutesAllowedSecondPart))
+            {
+                if (pressureReleased > optimalPressureReleasedSingle)
+                    (optimalPressureReleasedSingle, optimalFlowSingle) = (pressureReleased, flow);
+            }
+
+            var (optimalPressureReleasedRemaining, optimalFlowRemaining) = (0, string.Empty);
+            {
+                var split = optimalFlowSingle.Split(',');
+                var valvesToVisitRemaining = valvesToVisit.Where(x => Array.IndexOf(split, x) == -1).ToArray();
+                foreach (var (pressureReleased, flow) in ComputeOptimalFlow(valves, distancesBetweenValves, valvesToVisitRemaining, MinutesAllowedSecondPart))
+                {
+                    if (pressureReleased > optimalPressureReleasedRemaining)
+                        (optimalPressureReleasedRemaining, optimalFlowRemaining) = (pressureReleased, flow);
+                }
+            }
+            // https://jactl.io/blog/2023/04/21/advent-of-code-2022-day16.html
+            var (optimalPressureReleasedPrimary, optimalFlowPrimary) = (0, string.Empty);
+            var (optimalPressureReleasedSecondary, optimalFlowSecondary) = (0, string.Empty);
+            var optimalPressureReleasedCombined = optimalPressureReleasedSingle;
+            foreach (var (pressureReleasedPrimary, flowPrimary) in ComputeOptimalFlow(valves, distancesBetweenValves, valvesToVisit, MinutesAllowedSecondPart))
+            {
+                if (pressureReleasedPrimary > optimalPressureReleasedRemaining)
+                {
+                    var split = flowPrimary.Split(',');
+                    var valvesToVisitSecondary = valvesToVisit.Where(x => Array.IndexOf(split, x) == -1).ToArray();
+                    foreach (var (pressureReleasedSecondary, flowSecondary) in ComputeOptimalFlow(valves, distancesBetweenValves, valvesToVisitSecondary, MinutesAllowedSecondPart))
+                    {
+                        if (pressureReleasedPrimary + pressureReleasedSecondary > optimalPressureReleasedCombined)
+                        {
+                            optimalPressureReleasedCombined = pressureReleasedPrimary + pressureReleasedSecondary;
+                            (optimalPressureReleasedPrimary, optimalFlowPrimary) = (pressureReleasedPrimary, flowPrimary);
+                            (optimalPressureReleasedSecondary, optimalFlowSecondary) = (pressureReleasedSecondary, flowSecondary);
+                        }
+                    }
+                }
+            }
+            return optimalFlowPrimary + "\n" + optimalPressureReleasedPrimary.ToString() + "\n"
+                + optimalFlowSecondary + "\n" + optimalPressureReleasedSecondary.ToString() + "\n"
+                + optimalPressureReleasedCombined.ToString();
         }
     }
 }

@@ -1,7 +1,6 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using AdventOfCode2022web.Puzzles;
 
-Console.WriteLine("Hello, World!");
 
 var puzzleInput = @"Valve AA has flow rate=0; tunnels lead to valves DD, II, BB
 Valve BB has flow rate=13; tunnels lead to valves CC, AA
@@ -69,9 +68,9 @@ Valve LZ has flow rate=0; tunnels lead to valves PL, MO".Replace("\r", "");
 
 var solver = new ProboscideaVolcanium();
 
-//Console.WriteLine(solver.SolveFirstPart(puzzleInput));
+Console.WriteLine(solver.SolveFirstPart(puzzleInput));
 
-//Console.WriteLine(solver.SolveFirstPart(puzzleInput2));
+Console.WriteLine(solver.SolveFirstPart(puzzleInput2));
 
 Console.WriteLine(solver.SolveSecondPart(puzzleInput));
 
