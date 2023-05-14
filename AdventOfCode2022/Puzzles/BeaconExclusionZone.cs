@@ -1,9 +1,10 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Diagnostics;
+using System.Text.RegularExpressions;
 
 namespace AdventOfCode2022web.Puzzles
 {
     [Puzzle(15, "Beacon Exclusion Zone")]
-    public class BeaconExclusionZone : IPuzzleSolver
+    public class BeaconExclusionZone : IPuzzleSolverV2
     {
         private class SensorPositionAndClosestBeacon
         {
@@ -33,7 +34,7 @@ namespace AdventOfCode2022web.Puzzles
                 .ToList();
         }
 
-        public string SolveFirstPart(string puzzleInput)
+        public async Task<string> SolveFirstPart(string puzzleInput, Func<string, Task> update, CancellationToken cancellationToken)
         {
             var sensorsPositionsAndClosestBeacon = GetSensorPositionAndClosestBeacons(puzzleInput);
             var verticalPositionOfRowToAnalyze = sensorsPositionsAndClosestBeacon.Count <= 14 ? 10 : 2000000;
@@ -70,7 +71,7 @@ namespace AdventOfCode2022web.Puzzles
             }
             return score.ToString();
         }
-        public string SolveSecondPart(string puzzleInput)
+        public async Task<string> SolveSecondPart(string puzzleInput, Func<string, Task> update, CancellationToken cancellationToken)
         {
             var sensorsPositionsAndClosestBeacon = GetSensorPositionAndClosestBeacons(puzzleInput);
             var discard = sensorsPositionsAndClosestBeacon
@@ -82,18 +83,22 @@ namespace AdventOfCode2022web.Puzzles
             var mapMaxSize = sensorsPositionsAndClosestBeacon.Count <= 14 ? 20 : 4000000;
             var maxIterations = (int)Math.Log2(mapMaxSize)+1; 
             squares.Enqueue(((0, 0), (mapMaxSize, mapMaxSize)));
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
             do
             {
-                var smallerSquares = new Queue<((int X, int Y) Min, (int X, int Y) Max)>();
+                var subdividedSquares = new Queue<((int X, int Y) Min, (int X, int Y) Max)>();
                 while (squares.Count > 0)
                 {
                     var (min, max) = squares.Dequeue();
-                    var corners = new (int x, int y)[] { (min.X, min.Y), (min.X, max.Y), (max.X, max.Y), (max.X, min.Y) };
                     var isFullyCoveredBySensor = sensorsPositionsAndClosestBeacon
-                        .Any(x => corners.All(y => ManhattanDistance(x.Sensor, y) <= x.ManhattanDistance));
+                        .Any(x => ManhattanDistance(x.Sensor, (min.X, min.Y)) <= x.ManhattanDistance
+                            && ManhattanDistance(x.Sensor, (min.X, max.Y)) <= x.ManhattanDistance
+                            && ManhattanDistance(x.Sensor, (max.X, max.Y)) <= x.ManhattanDistance
+                            && ManhattanDistance(x.Sensor, (max.X, min.Y)) <= x.ManhattanDistance);
                     if (!isFullyCoveredBySensor)
                     {
-                        var (width, height) = ((max.X - min.X), (max.Y - min.Y));
+                        var (width, height) = (max.X - min.X, max.Y - min.Y);
                         var (firstHalfX, firstHalfY) = (width / 2, height / 2);
                         var (secondHalfX, secondHalfY) = (width - firstHalfX, height - firstHalfY );
                         if (width == 0 && height == 0)
@@ -101,35 +106,48 @@ namespace AdventOfCode2022web.Puzzles
                             // success
                             if (!discard.Contains((min.X, min.Y)))
                             {
-                                smallerSquares.Clear();
-                                smallerSquares.Enqueue((min, min));
+                                subdividedSquares.Clear();
+                                subdividedSquares.Enqueue((min, min));
                                 break;
                             }
                                 
                         }
                         else
                             {
-                                smallerSquares.Enqueue(
+                                subdividedSquares.Enqueue(
                                     (min, 
                                     (min.X + firstHalfX, min.Y + firstHalfY)
                                     ));
-                                smallerSquares.Enqueue(
+                                if (secondHalfX > 0 && secondHalfY > 0)
+                                subdividedSquares.Enqueue(
                                     ((min.X+secondHalfX,min.Y+secondHalfY),
                                     (max.X, max.Y)
                                     ));
-                                smallerSquares.Enqueue(
+                                if (secondHalfX > 0)
+                                subdividedSquares.Enqueue(
                                     ((min.X + secondHalfX, min.Y ),
                                     (max.X, min.Y + firstHalfY)
                                     ));
-                                smallerSquares.Enqueue(
+                                if (secondHalfY > 0)
+                                subdividedSquares.Enqueue(
                                     ((min.X , min.Y + secondHalfY),
                                     (min.X + firstHalfX, max.Y)
                                     ));
                             }
                     }
                 }
-                squares = smallerSquares;
-            } while (squares.Count > 1 && maxIterations-- != 0);
+                squares = subdividedSquares;
+                if (stopwatch.ElapsedMilliseconds > 1000)
+                {
+                    stopwatch.Restart();
+                    var (Min, Max) = squares.Peek();
+                    var squareSize = Max.X - Min.X+1;
+                    await update($"Squares evaluated : {squares.Count} with square size of {squareSize}");
+                }
+
+            } while (squares.Count > 1 && maxIterations-- != 0 && !cancellationToken.IsCancellationRequested);
+            await update(string.Empty);
+            stopwatch.Stop();
             var res = squares.Dequeue();
             // too big for int
             return ((long)res.Min.X * 4000000 + res.Min.Y).ToString();

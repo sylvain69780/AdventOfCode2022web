@@ -60,7 +60,7 @@
     {
         IsTaskRunning = true;
         Response = string.Empty;
-        ViewData = string.Empty;
+        ViewData = null;
         using (_cts = new CancellationTokenSource())
             Response = await _solver!.SolveFirstPart(Input!, async (string s) =>
             {
@@ -78,14 +78,14 @@
     {
         IsTaskRunning = true;
         Response = string.Empty;
-        ViewData = string.Empty;
+        ViewData = null;
         using (_cts = new CancellationTokenSource())
             Response = await _solver!.SolveSecondPart(Input!, async (string s) =>
             {
-                if (s[..22] == "data:image/png;base64, ")
-                    ViewData = s;
-                else
+                if (s.Length > 25 && s[..23] == "data:image/png;base64, ")
                     Image64 = s;
+                else
+                    ViewData = s;
                 StateHasChanged();
                 await Task.Delay(1);
             }, _cts.Token);
