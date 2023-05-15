@@ -81,7 +81,7 @@ namespace AdventOfCode2022web.Puzzles
 
             }
             Console.WriteLine(Visualize(occupiedSlots, highestPoint));
-            return $"After {maxIterations} the Tower highest point is at y={highestPoint}";
+            return $"After {maxIterations} rocks fallen, the Tower highest point is at y={highestPoint}";
         }
         public string SolveSecondPart(string puzzleInput)
         {
@@ -107,8 +107,8 @@ namespace AdventOfCode2022web.Puzzles
                         break;
                     rockPosition.y--;
                 }
-                foreach (var p in rock)
-                    occupiedPositions.Add((p.x + rockPosition.x, p.y + rockPosition.y + highestPoint));
+                foreach (var (x, y) in rock)
+                    occupiedPositions.Add((x + rockPosition.x, y + rockPosition.y + highestPoint));
                 highestPoint = occupiedPositions.Select(x => x.y).Max() + 1;
                 fallenRocksRecording.Add((highestPoint, $"{rockGenerator.Counter} {jetGenerator.Counter} {rockPosition.x} {rockPosition.y}"));
                 // look for cycles aglorithm
@@ -130,7 +130,7 @@ namespace AdventOfCode2022web.Puzzles
                 // Console.WriteLine($"{countOfFallenRocks} key={key} top={highestPoint} starting {start} dist = {dist}.");
             }
             long numberOfExpectedFallenRocks = 1000000000000;
-            numberOfExpectedFallenRocks -= 1;
+            numberOfExpectedFallenRocks -= 1; // we are counting from zero
             var notCompletedCycle = (int)((numberOfExpectedFallenRocks - cycleStart) % slidingWindowSize);
             var heightAtCycleStart = fallenRocksRecording[cycleStart + notCompletedCycle].Height;
             var numberOfCycles = (numberOfExpectedFallenRocks - cycleStart) / slidingWindowSize;
