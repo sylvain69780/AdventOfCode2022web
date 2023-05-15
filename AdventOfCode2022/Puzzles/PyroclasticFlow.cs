@@ -1,127 +1,141 @@
-﻿namespace AdventOfCode2022web.Puzzles
+﻿using SixLabors.ImageSharp.ColorSpaces;
+using System.Text;
+
+namespace AdventOfCode2022web.Puzzles
 {
     [Puzzle(17, "Pyroclastic Flow")]
     public class PyroclasticFlow : IPuzzleSolver
     {
-        public string SolveFirstPart(string inp)
+        private class JetGenerator
         {
-            var input = inp;
-            var inputs = input.Length;
-            var blocks = new List<(int, int)>[]
+            public string JetPattern = "";
+            public int Counter;
+            public char FetchJetDirection()
             {
-        new List<(int,int)> { (0,0) , (1,0), (2,0), (3,0)},
-        new List<(int,int)> { (1,0) , (0,1), (1,1), (2,1), (1,2)},
-        new List<(int,int)> { (0,0) , (1,0), (2,0), (2,1), (2,2)},
-        new List<(int,int)> { (0,0) , (0,1), (0,2), (0,3)},
-        new List<(int,int)> { (0,0) , (1,0), (0,1), (1,1)}
-            };
-
-            var grid = new HashSet<(int, int)>();
-            var jetSequ = 0;
-            var rockSequ = 0;
-            var jetFunc = () => { var r = input[jetSequ]; jetSequ = (jetSequ + 1) % inputs; return r; };
-            var rockFunc = () => { var r = blocks[rockSequ]; rockSequ = (rockSequ + 1) % 5; return r; };
-            for (var i = 0; i <= 2022; i++)
-            {
-                var rock = rockFunc();
-                var stop = false;
-                var top = grid.Count == 0 ? 0 : grid.Select(x => x.Item2).Max() + 1;
-                Console.WriteLine($"{i}: Tower top is at {top}");
-                //yield return $"{i}: Tower top is at {top}";
-
-                var (px, py) = (2, top + 3);
-                while (!stop)
-                {
-                    var move = jetFunc() == '>' ? 1 : -1;
-                    if (!rock.Select(x => (x.Item1 + px + move, x.Item2 + py)).Any(x => x.Item1 < 0 || x.Item1 >= 7 || grid.Contains(x)))
-                        px += move;
-                    stop = rock.Select(x => (x.Item1 + px, x.Item2 + py - 1)).Any(x => x.Item2 < 0 || grid.Contains(x));
-                    if (!stop) py--;
-                    else
-                        foreach (var p in rock)
-                            grid.Add((p.Item1 + px, p.Item2 + py));
-                }
+                var counter = Counter;
+                Counter = (counter + 1) % JetPattern.Length;
+                return JetPattern[counter];
             }
-            return "bad";
         }
-        public string SolveSecondPart(string inp)
+        private class RockGenerator
         {
-            var input = inp;
-            var inputs = input.Length;
-            var blocks = new List<(int, int)>[]
-            {
-        new List<(int,int)> { (0,0) , (1,0), (2,0), (3,0)},
-        new List<(int,int)> { (1,0) , (0,1), (1,1), (2,1), (1,2)},
-        new List<(int,int)> { (0,0) , (1,0), (2,0), (2,1), (2,2)},
-        new List<(int,int)> { (0,0) , (0,1), (0,2), (0,3)},
-        new List<(int,int)> { (0,0) , (1,0), (0,1), (1,1)}
-            };
+            private static readonly (int x, int y)[][] BlockShapes = new (int x, int y)[][]
+                {
+                new (int x, int y)[] {(0,0), (1,0), (2,0), (3,0)},          // horizontal bar
+                new (int x, int y)[] {(1,0), (0,1), (1,1), (2,1), (1,2)},   // cross
+                new (int x, int y)[] {(0,0), (1,0), (2,0), (2,1), (2,2)},   // L
+                new (int x, int y)[] {(0,0), (0,1), (0,2), (0,3) },         // vertical bar
+                new (int x, int y)[] {(0,0), (1,0), (0,1), (1,1) }          // square
+                };
 
-            var grid = new HashSet<(int, int)>();
-            var jetSequ = 0;
-            var rockSequ = 0;
-            var jetFunc = () => { var r = input[jetSequ]; jetSequ = (jetSequ + 1) % inputs; return r; };
-            var rockFunc = () => { var r = blocks[rockSequ]; rockSequ = (rockSequ + 1) % 5; return r; };
-            var output = new List<string>();
-            var heights = new List<int>();
-            var outputIdx = new Dictionary<string, int>();
-            var found = false;
-            var i = 0;
-            var top = 0;
-            var (start, end) = (0, 1);
-            var dist = 1;
-            while (!found)
+            public int Counter;
+
+            public (int x, int y)[] FetchRockShape()
             {
-                var rock = rockFunc();
+                var counter = Counter;
+                Counter = (counter + 1) % 5;
+                return BlockShapes[counter];
+            }
+        }
+
+        private string Visualize(HashSet<(int x, int y)> occupiedSlots, int highestPoint)
+        {
+            var sb = new StringBuilder();
+            for (var y = 0; y < 10; y++)
+            {
+                sb.Append('#');
+                for (var x = 0; x < 7; x++)
+                {
+                    sb.Append(occupiedSlots.Contains((x, highestPoint - y)) ? '@' : ' ');
+                }
+                sb.Append("#\n");
+            }
+            return sb.ToString();
+        }
+
+        public string SolveFirstPart(string puzzleInput)
+        {
+            var jetGenerator = new JetGenerator { JetPattern = puzzleInput };
+            var rockGenerator = new RockGenerator();
+            var occupiedSlots = new HashSet<(int x, int y)>();
+            int highestPoint = 0;
+            const int maxIterations = 2022;
+            for (var i = 0; i <= maxIterations; i++)
+            {
+                var rock = rockGenerator.FetchRockShape();
+                highestPoint = occupiedSlots.Count == 0 ? 0 : occupiedSlots.Select(p => p.y).Max() + 1;
+                var rockPosition = (x: 2, y: highestPoint + 3);
                 var stop = false;
-                //        Console.WriteLine($"{i}: Tower top is at {top}");
-                var (px, py) = (2, 3);
                 while (!stop)
                 {
-                    var (j, r) = (jetSequ, rockSequ);
-                    var move = jetFunc() == '>' ? 1 : -1;
-                    if (!rock.Select(x => (x.Item1 + px + move, x.Item2 + py + top)).Any(x => x.Item1 < 0 || x.Item1 >= 7 || grid.Contains(x)))
-                        px += move;
-                    stop = rock.Select(x => (x.Item1 + px, x.Item2 + py + top - 1)).Any(x => x.Item2 < 0 || grid.Contains(x));
-                    if (!stop) py--;
+                    var direction = jetGenerator.FetchJetDirection() == '>' ? 1 : -1;
+                    if (!rock.Select(x => (x.Item1 + rockPosition.x + direction, x.Item2 + rockPosition.y)).Any(x => x.Item1 < 0 || x.Item1 >= 7 || occupiedSlots.Contains(x)))
+                        rockPosition.x += direction;
+                    if (rock.Select(p => (x: p.x + rockPosition.x, y: p.y + rockPosition.y - 1)).Any(p => p.y < 0 || occupiedSlots.Contains(p)))
+                        break;
+                    else
+                        rockPosition.y--;
+                }
+                foreach (var (x, y) in rock)
+                    occupiedSlots.Add((x + rockPosition.x, y + rockPosition.y));
 
+            }
+            Console.WriteLine(Visualize(occupiedSlots, highestPoint));
+            return $"After {maxIterations} the Tower highest point is at y={highestPoint}";
+        }
+        public string SolveSecondPart(string puzzleInput)
+        {
+            var jetGenerator = new JetGenerator { JetPattern = puzzleInput };
+            var rockGenerator = new RockGenerator();
+            var occupiedPositions = new HashSet<(int x, int y)>();
+            var fallenRocksRecording = new List<(int Height, string RockPosition)>();
+            var outputIdx = new Dictionary<string, int>();
+            var isCycleFound = false;
+            var highestPoint = 0;
+            var (cycleStart, cycleEnd) = (0, 1);
+            var slidingWindowSize = 1;
+            while (!isCycleFound)
+            {
+                var rock = rockGenerator.FetchRockShape();
+                var rockPosition = (x: 2, y: 3);
+                while (true)
+                {
+                    var direction = jetGenerator.FetchJetDirection() == '>' ? 1 : -1;
+                    if (!rock.Select(p => (x: p.x + rockPosition.x + direction, y: p.y + rockPosition.y + highestPoint)).Any(p => p.x < 0 || p.x >= 7 || occupiedPositions.Contains(p)))
+                        rockPosition.x += direction;
+                    if (rock.Select(p => (x: p.x + rockPosition.x, y: p.y + rockPosition.y + highestPoint - 1)).Any(x => x.y < 0 || occupiedPositions.Contains(x)))
+                        break;
+                    rockPosition.y--;
+                }
+                foreach (var p in rock)
+                    occupiedPositions.Add((p.x + rockPosition.x, p.y + rockPosition.y + highestPoint));
+                highestPoint = occupiedPositions.Select(x => x.y).Max() + 1;
+                fallenRocksRecording.Add((highestPoint, $"{rockGenerator.Counter} {jetGenerator.Counter} {rockPosition.x} {rockPosition.y}"));
+                // look for cycles aglorithm
+                if (fallenRocksRecording.Count > 1)
+                {
+                    if (fallenRocksRecording[^1].RockPosition == fallenRocksRecording[^(1 + slidingWindowSize)].RockPosition)
+                    {
+                        if (fallenRocksRecording.Count - cycleStart > slidingWindowSize * 2)
+                            isCycleFound = true;
+                    }
                     else
                     {
-                        foreach (var p in rock)
-                            grid.Add((p.Item1 + px, p.Item2 + py + top));
-                        top = grid.Select(x => x.Item2).Max() + 1;
-                        var key = $"{r} {j} {px} {py}";
-                        heights.Add(top);
-                        output.Add(key);
-                        // look for cycles
-                        if (output.Count > 1)
-                        {
-                            if (output[i] != output[i - dist])
-                            {
-                                for (dist = i; dist > 1; dist--)
-                                    if (output[i] == output[i - dist]) break;
-                                start = i - dist;
-                            }
-                            else
-                            {
-                                Console.WriteLine($"{i} starting {start} dist = {dist}.");
-                                if (i - start > dist * 2) found = true;
-                            }
-                        }
-                        Console.WriteLine($"{i} key={key} top={top} starting {start} dist = {dist}.");
-                        //yield return $"{i} key={key} top={top} starting {start} dist = {dist}.";
+                        for (slidingWindowSize = fallenRocksRecording.Count - 1; slidingWindowSize > 1; slidingWindowSize--)
+                            if (fallenRocksRecording[^1].RockPosition == fallenRocksRecording[^(1 + slidingWindowSize)].RockPosition)
+                                break;
+                        cycleStart = fallenRocksRecording.Count - slidingWindowSize;
                     }
                 }
-                i++;
+                // Console.WriteLine($"{countOfFallenRocks} key={key} top={highestPoint} starting {start} dist = {dist}.");
             }
-            long big = 1000000000000;
-            big -= 1;
-            var v1 = heights[start];
-            var v2 = (int)((big - start) % dist);
-            var v3 = heights[v2 + start] - heights[start];
-            var v4 = (big - start) / dist;
-            var v5 = heights[start + dist] - heights[start];
-            return $"{v1} + {v4}x{v5} + {v3} = {v1 + v4 * v5 + v3}";
+            long numberOfExpectedFallenRocks = 1000000000000;
+            numberOfExpectedFallenRocks -= 1;
+            var notCompletedCycle = (int)((numberOfExpectedFallenRocks - cycleStart) % slidingWindowSize);
+            var heightAtCycleStart = fallenRocksRecording[cycleStart + notCompletedCycle].Height;
+            var numberOfCycles = (numberOfExpectedFallenRocks - cycleStart) / slidingWindowSize;
+            var heightOfACycle = fallenRocksRecording[cycleStart + slidingWindowSize].Height - fallenRocksRecording[cycleStart].Height;
+            return $"{numberOfCycles} X {heightOfACycle} + {heightAtCycleStart} = {numberOfCycles * heightOfACycle + heightAtCycleStart}";
         }
     }
 }
