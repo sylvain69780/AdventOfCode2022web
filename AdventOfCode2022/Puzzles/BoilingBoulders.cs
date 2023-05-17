@@ -1,90 +1,79 @@
-﻿namespace AdventOfCode2022web.Puzzles
+﻿
+namespace AdventOfCode2022web.Puzzles
 {
     [Puzzle(18, "Boiling Boulders")]
     public class BoilingBoulders : IPuzzleSolver
     {
-        public string SolveFirstPart(string inp)
+        private static List<Point> GetVoxels(string puzzleInput)
         {
-            var input = inp.Split("\n").Select(x => x.Split(','))
+            return puzzleInput.Split("\n").Select(x => x.Split(','))
                 .Select(x => x.Select(y => int.Parse(y)).ToArray())
-                .Select(x => (x: x[0], y: x[1], z: x[2]));
-
-            var grid = input.ToHashSet();
-            var faces = new List<(int, int, int)>
-            {
-                (1,0,0),
-                (-1,0,0),
-                (0,1,0),
-                (0,-1,0),
-                (0,0,1),
-                (0,0,-1)
+                .Select(x => new Point(X: x[0],Y: x[1],Z: x[2])).ToList();
+        }
+        private static readonly List<Point> CubeFaces = new()
+        {
+                new Point(1,0,0),
+                new Point(-1,0,0),
+                new Point(0,1,0),
+                new Point(0,-1,0),
+                new Point(0,0,1),
+                new Point(0,0,-1)
             };
-            var score = 0;
-            foreach (var p in input)
+
+        public string SolveFirstPart(string puzzleInput)
+        {
+            var voxels = GetVoxels(puzzleInput);
+            var map = voxels.ToHashSet();
+            var CountOfFacesNotConnected = 0;
+            foreach (var cube in voxels)
             {
-                foreach (var f in faces)
+                foreach (var face in CubeFaces)
                 {
-                    if (!grid.Contains((p.x + f.Item1, p.y + f.Item2, p.z + f.Item3)))
-                        score++;
+                    if (!map.Contains(new Point(cube.X + face.X, cube.Y + face.Y, cube.Z + face.Z)))
+                        CountOfFacesNotConnected++;
                 }
             }
-            return score.ToString();
+            return CountOfFacesNotConnected.ToString();
         }
-        public string SolveSecondPart(string inp)
+        public string SolveSecondPart(string puzzleInput)
         {
-            var input = inp.Split("\n").Select(x => x.Split(','))
-                .Select(x => x.Select(y => int.Parse(y)).ToArray())
-                .Select(x => (x: x[0], y: x[1], z: x[2]));
+            var voxels = GetVoxels(puzzleInput);
+            var exteriorPoints = voxels.ToHashSet();
 
-            var grid = input.ToHashSet();
-            var faces = new List<(int x, int y, int z)>
-            {
-                (1,0,0),
-                (-1,0,0),
-                (0,1,0),
-                (0,-1,0),
-                (0,0,1),
-                (0,0,-1)
-            };
-
-            var minX = input.Select(x => x.x).Min() - 1;
-            var minY = input.Select(x => x.y).Min() - 1;
-            var minZ = input.Select(x => x.z).Min() - 1;
-            var maxX = input.Select(x => x.x).Max() + 1;
-            var maxY = input.Select(x => x.y).Max() + 1;
-            var maxZ = input.Select(x => x.z).Max() + 1;
-            var start = (minX, minY, minZ);
-            var queue = new Queue<(int x, int y, int z)>();
-            queue.Enqueue(start);
+            var (pMin, pMax) = (
+                new Point(voxels.Min(p => p.X) - 1, voxels.Min(p => p.Y) - 1, voxels.Min(p => p.Z) - 1),
+                new Point(voxels.Max(p => p.X) + 1, voxels.Max(p => p.Y) + 1, voxels.Max(p => p.Z) + 1)
+                );
+            var queue = new Queue<Point>();
+            queue.Enqueue(pMin);
             while (queue.Count > 0)
             {
-                var (x, y, z) = queue.Dequeue();
-                foreach (var f in faces)
+                var point = queue.Dequeue();
+                foreach (var cubeFace in CubeFaces)
                 {
-                    var (nx, ny, nz) = (x + f.x, y + f.y, z + f.z);
-                    if (nx > maxX || nx < minX || ny > maxY || ny < minY || nz > maxZ || nz < minZ || grid.Contains((nx, ny, nz)) || input.Contains((nx, ny, nz)))
+                    var newPoint = new Point(point.X + cubeFace.X, point.Y + cubeFace.Y, point.Z + cubeFace.Z);
+                    if (newPoint.X > pMax.X || newPoint.X < pMin.X || newPoint.Y > pMax.Y || newPoint.Y < pMin.Y || newPoint.Z > pMax.Z || newPoint.Z < pMin.Z || exteriorPoints.Contains(newPoint) || voxels.Contains(newPoint))
                         continue;
-                    grid.Add((nx, ny, nz));
-                    queue.Enqueue((nx, ny, nz));
+                    exteriorPoints.Add(newPoint);
+                    queue.Enqueue(newPoint);
                 }
             }
 
-            var score = 0;
-            foreach (var p in input)
+            var exteriorSurfaceArea = 0;
+            foreach (var point in voxels)
             {
-                foreach (var f in faces)
+                foreach (var face in CubeFaces)
                 {
-                    var pp = (p.x + f.x, p.y + f.y, p.z + f.z);
-                    if (grid.Contains(pp) && !input.Contains(pp))
+                    var newPoint = new Point(point.X + face.X, point.Y + face.Y, point.Z + face.Z);
+                    if (exteriorPoints.Contains(newPoint) && !voxels.Contains(newPoint))
                     {
-                        score++;
-                        Console.WriteLine(score);
-                        //return score.ToString();
+                        exteriorSurfaceArea++;
+                        Console.WriteLine(exteriorSurfaceArea);
                     }
                 }
             }
-            Console.WriteLine(score);
-            return score.ToString();
+            Console.WriteLine(exteriorSurfaceArea);
+            return exteriorSurfaceArea.ToString();
         }
     }
 }

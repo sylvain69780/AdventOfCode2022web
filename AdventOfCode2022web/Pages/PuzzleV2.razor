@@ -4,6 +4,7 @@
 @using AdventOfCode2022web.Puzzles;
 @inject HttpClient Http
 @implements IDisposable
+@inject PuzzleHelper puzzleHelper;
 
 <h1>@PuzzleTitle</h1>
 <div class="mb-3">
@@ -37,7 +38,7 @@
     private CancellationTokenSource _cts = new();
     protected override async Task OnParametersSetAsync()
     {
-        var puzzle = PuzzleHelper.Puzzles[PuzzleNumber];
+        var puzzle = puzzleHelper.Puzzles[PuzzleNumber];
         PuzzleTitle = puzzle.Title;
         _solver = (IPuzzleSolverV2)(Activator.CreateInstance(puzzle.Type))!;
         Response = "The solution will be displayed here.";

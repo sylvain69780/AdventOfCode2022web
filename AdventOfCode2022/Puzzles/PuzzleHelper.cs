@@ -22,12 +22,14 @@ namespace AdventOfCode2022web.Puzzles
         public PuzzleAttribute(int number, string title) => (Number, Title) = (number, title);
     }
 
-    public static class PuzzleHelper
+    public class PuzzleHelper
     {
-        public static readonly IReadOnlyDictionary<int, (Type Type, int Number, string Title)> Puzzles = Assembly.GetExecutingAssembly().GetTypes()
+        public readonly IReadOnlyDictionary<int, (Type Type, int Number, string Title)> Puzzles = Assembly.GetExecutingAssembly().GetTypes()
         .Where(x => x.IsClass && (typeof(IPuzzleSolver).IsAssignableFrom(x) || typeof(IPuzzleSolverV2).IsAssignableFrom(x)))
         .Select(x => (Type: x, Attr: x.GetCustomAttribute<PuzzleAttribute>()!))
         .Select(x => (x.Type, x.Attr.Number, x.Attr.Title))
         .ToDictionary(x => x.Number);
     }
+
+    public record struct Point(int X, int Y, int Z);
 }

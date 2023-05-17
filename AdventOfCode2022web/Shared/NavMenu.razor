@@ -1,5 +1,7 @@
 ﻿@using AdventOfCode2022web.Puzzles;
 @using System.Reflection;
+@inject PuzzleHelper puzzleHelper;
+
 <div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="">AdventOfCode2022web</a>
@@ -21,7 +23,7 @@
             <button class="btn btn-primary mb-2" @onclick="IncrementPage">Next</button>
         </div>
         @{
-            var puzzles = PuzzleHelper.Puzzles.Values.OrderBy(x => x.Number).ToList();
+            var puzzles = puzzleHelper.Puzzles.Values.OrderBy(x => x.Number).ToList();
             var first = puzzlePageNumber * 5 ;
             var last = Math.Min(puzzles.Count-1, first + 5 - 1);
             var v1 = "puzzle";
@@ -44,7 +46,7 @@
     private int puzzlePageNumber = 0;
     private void IncrementPage()
     {
-        if (puzzlePageNumber < (PuzzleHelper.Puzzles.Count-1)/5 )  
+        if (puzzlePageNumber < (puzzleHelper.Puzzles.Count - 1) / 5)
             puzzlePageNumber += 1;
     }
     private void DecrementPage()
