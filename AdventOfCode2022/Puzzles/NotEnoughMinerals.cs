@@ -5,149 +5,97 @@ namespace AdventOfCode2022web.Puzzles
     [Puzzle(19, "Not Enough Minerals")]
     public class NotEnoughMinerals : IPuzzleSolver
     {
-        public string SolveFirstPart(string inp)
+
+        private static List<BluePrint> GetBluePrints(string puzzleInput)
         {
-            var r = new Regex(@"Blueprint (\d+): Each ore robot costs (\d+) ore. Each clay robot costs (\d+) ore. Each obsidian robot costs (\d+) ore and (\d+) clay. Each geode robot costs (\d+) ore and (\d+) obsidian.");
-            var input = inp.Split("\n")
-                .Select(x => r.Match(x).Groups.Values.Skip(1).Select(x => int.Parse(x.Value)).ToArray())
+            var regex = new Regex(@"Blueprint (\d+): Each ore robot costs (\d+) ore. Each clay robot costs (\d+) ore. Each obsidian robot costs (\d+) ore and (\d+) clay. Each geode robot costs (\d+) ore and (\d+) obsidian.");
+            return puzzleInput.Split("\n")
+                .Select(x => regex.Match(x).Groups.Values.Skip(1).Select(x => int.Parse(x.Value)).ToArray())
                 .Select(x => new BluePrint
                 {
-                    Num = x[0],
-                    OreRobotCost = x[1],
-                    ClayRobotCost = x[2],
-                    ObsidianRobotCost = (x[3], x[4]),
-                    GeodeRobotCost = (x[5], x[6])
+                    BlueprintNumber = x[0],
+                    CostOfRobots = new Dictionary<RobotTypes, (int Ore, int Clay, int Obsidian)>()
+                    {
+                        {RobotTypes.OreRobot, (x[1], 0, 0) },
+                        {RobotTypes.ClayRobot, (x[2], 0, 0) },
+                        {RobotTypes.ObsidianRobot, (x[3],x[4], 0) },
+                        {RobotTypes.GeodeRobot, (x[5], 0, x[6]) }
+                    }
                 })
                 .ToList();
+        }
+
+        public string SolveFirstPart(string puzzleInput)
+        {
+            var bluePrints = GetBluePrints(puzzleInput);
             var quality = 0;
             var maxMinutes = 24;
-            foreach (var bp in input)
+            foreach (var bp in bluePrints)
             {
-                var score = bp.ComputeMaxGeodes(maxMinutes);
-                quality += score * bp.Num;
+                var maxGeodes = bp.ComputeMaxGeodes(maxMinutes);
+                quality += maxGeodes * bp.BlueprintNumber;
             }
             return $"{quality}";
         }
-        public string SolveSecondPart(string inp)
+        public string SolveSecondPart(string puzzleInput)
         {
-            var r = new Regex(@"Blueprint (\d+): Each ore robot costs (\d+) ore. Each clay robot costs (\d+) ore. Each obsidian robot costs (\d+) ore and (\d+) clay. Each geode robot costs (\d+) ore and (\d+) obsidian.");
-            var input = inp.Split("\n")
-                .Select(x => r.Match(x).Groups.Values.Skip(1).Select(x => int.Parse(x.Value)).ToArray())
-                .Select(x => new BluePrint
-                {
-                    Num = x[0],
-                    OreRobotCost = x[1],
-                    ClayRobotCost = x[2],
-                    ObsidianRobotCost = (x[3], x[4]),
-                    GeodeRobotCost = (x[5], x[6])
-                })
-                .ToList();
+            var blueprints = GetBluePrints(puzzleInput);
             var quality = 1;
-            foreach (var bp in input.Take(3))
+            foreach (var bp in blueprints.Take(3))
             {
-                var score = bp.ComputeMaxGeodes(32);
-                Console.WriteLine($"{bp.Num} Score = {score}");
-                quality *= score;
+                var maxGeodes = bp.ComputeMaxGeodes(32);
+                Console.WriteLine($"{bp.BlueprintNumber} Score = {maxGeodes}");
+                quality *= maxGeodes;
             }
             return $"{quality}";
         }
+
         struct BluePrint
         {
-            public int Num;
-            public int OreRobotCost;
-            public int ClayRobotCost;
-            public (int ore, int clay) ObsidianRobotCost;
-            public (int ore, int obsidian) GeodeRobotCost;
+            public int BlueprintNumber;
+            public IReadOnlyDictionary<RobotTypes, (int Ores, int Clays, int Obsidians)> CostOfRobots;
             public int ComputeMaxGeodes(int maxMinutes)
             {
-                var factory = new FactoryState
+                var factoryState = new FactoryState
                 {
                     Minutes = 1,
                     RobotToBuild = RobotTypes.OreRobot,
-                    OreRobots = 1
+                    OreRobots = 1,
+                    CostOfRobots = CostOfRobots
                 };
 
-                var search = new Stack<FactoryState>();
-                factory.BackTrack = "1 - OreRobot";
-                search.Push(factory);
-                factory.RobotToBuild = RobotTypes.ClayRobot;
-                factory.BackTrack = "1 - ClayRobot";
-                search.Push(factory);
+                var stack = new Stack<FactoryState>();
+                stack.Push(factoryState);
+                factoryState.RobotToBuild = RobotTypes.ClayRobot;
+                stack.Push(factoryState);
                 var bestScore = 0;
-                while (search.TryPop(out var state))
+                while (stack.TryPop(out var currentFactoryState))
                 {
-                    var timeRemaining = maxMinutes - state.Minutes + 1;
-                    var maxGeodesPossible = state.Geodes + state.GeodeRobots * timeRemaining + timeRemaining * (timeRemaining - 1) / 2;
+                    var timeRemaining = maxMinutes - currentFactoryState.Minutes + 1;
+                    var sumOfSecondsFromOneToTimeRemaining = timeRemaining * (timeRemaining - 1) / 2;
+                    var maxGeodesPossible = currentFactoryState.Geodes + currentFactoryState.GeodeRobots * timeRemaining + sumOfSecondsFromOneToTimeRemaining;
                     if (maxGeodesPossible < bestScore)
                         continue;
-                    if (state.RobotToBuild == RobotTypes.ObsidianRobot && state.ClayRobots == 0)
-                        continue;
-                    if (state.RobotToBuild == RobotTypes.GeodeRobot && state.ObsidianRobots == 0)
-                        continue;
-                    (int o, int c, int ob) cost = state.RobotToBuild == RobotTypes.OreRobot ? (OreRobotCost, 0, 0) :
-                        state.RobotToBuild == RobotTypes.ClayRobot ? (ClayRobotCost, 0, 0) :
-                        state.RobotToBuild == RobotTypes.ObsidianRobot ? (ObsidianRobotCost.ore, ObsidianRobotCost.clay, 0) :
-                        (GeodeRobotCost.ore, 0, GeodeRobotCost.obsidian);
-                    while ((state.Ores < cost.o || state.Clays < cost.c || state.Obsidians < cost.ob) && state.Minutes < maxMinutes)
+                    while (currentFactoryState.Minutes < maxMinutes && currentFactoryState.HasNotEnoughMinerals())
+                        currentFactoryState.CollectMinerals();
+                    currentFactoryState.CollectMinerals();
+                    if (currentFactoryState.Minutes == maxMinutes + 1)
                     {
-                        state.Minutes++;
-                        state.Ores += state.OreRobots;
-                        state.Clays += state.ClayRobots;
-                        state.Obsidians += state.ObsidianRobots;
-                        state.Geodes += state.GeodeRobots;
-                    }
-                    {
-                        state.Minutes++;
-                        state.Ores += state.OreRobots;
-                        state.Clays += state.ClayRobots;
-                        state.Obsidians += state.ObsidianRobots;
-                        state.Geodes += state.GeodeRobots;
-                    }
-                    if (state.Minutes == maxMinutes + 1)
-                    {
-                        if (state.Geodes > bestScore)
-                        {
-                            //Console.WriteLine($"{Num} {state.Ores} {state.Clays} {state.Obsidians} Geodes = {state.Geodes} ");
-                            //Console.WriteLine(state.BackTrack);
-                            bestScore = state.Geodes;
-                        }
+                        if (currentFactoryState.Geodes > bestScore)
+                            bestScore = currentFactoryState.Geodes;
                         continue;
                     }
-                    if (state.RobotToBuild == RobotTypes.OreRobot)
-                    {
-                        state.Ores -= OreRobotCost;
-                        state.OreRobots++;
-                    }
-                    if (state.RobotToBuild == RobotTypes.ClayRobot)
-                    {
-                        state.Ores -= ClayRobotCost;
-                        state.ClayRobots++;
-                    }
-                    if (state.RobotToBuild == RobotTypes.ObsidianRobot)
-                    {
-                        state.Ores -= ObsidianRobotCost.ore;
-                        state.Clays -= ObsidianRobotCost.clay;
-                        state.ObsidianRobots++;
-                    }
-                    if (state.RobotToBuild == RobotTypes.GeodeRobot)
-                    {
-                        state.Ores -= GeodeRobotCost.ore;
-                        state.Obsidians -= GeodeRobotCost.obsidian;
-                        state.GeodeRobots++;
-                    }
-                    var backTrack = state.BackTrack;
-                    state.RobotToBuild = RobotTypes.OreRobot;
-                    state.BackTrack = backTrack + $" - {state.Minutes} OreRobot";
-                    search.Push(state);
-                    state.RobotToBuild = RobotTypes.ClayRobot;
-                    state.BackTrack = backTrack + $" - {state.Minutes} ClayRobot";
-                    search.Push(state);
-                    state.RobotToBuild = RobotTypes.ObsidianRobot;
-                    state.BackTrack = backTrack + $" - {state.Minutes} ObsidianRobot";
-                    search.Push(state);
-                    state.RobotToBuild = RobotTypes.GeodeRobot;
-                    state.BackTrack = backTrack + $" - {state.Minutes} GeodeRobot";
-                    search.Push(state);
+                    currentFactoryState.BuildRobot();
+                    currentFactoryState.RobotToBuild = RobotTypes.OreRobot;
+                    stack.Push(currentFactoryState);
+                    currentFactoryState.RobotToBuild = RobotTypes.ClayRobot;
+                    stack.Push(currentFactoryState);
+                    currentFactoryState.RobotToBuild = RobotTypes.ObsidianRobot;
+                    if (currentFactoryState.ClayRobots > 0)
+                        stack.Push(currentFactoryState);
+                    currentFactoryState.RobotToBuild = RobotTypes.GeodeRobot;
+                    if (currentFactoryState.ObsidianRobots > 0)
+                        stack.Push(currentFactoryState);
                 }
                 return bestScore;
             }
@@ -169,7 +117,36 @@ namespace AdventOfCode2022web.Puzzles
             public int ClayRobots;
             public int ObsidianRobots;
             public int GeodeRobots;
-            public string BackTrack;
+            public IReadOnlyDictionary<RobotTypes, (int Ores, int Clays, int Obsidians)> CostOfRobots;
+            public void CollectMinerals()
+            {
+                Minutes++;
+                Ores += OreRobots;
+                Clays += ClayRobots;
+                Obsidians += ObsidianRobots;
+                Geodes += GeodeRobots;
+            }
+            public bool HasNotEnoughMinerals()
+            {
+                var cost = CostOfRobots[RobotToBuild];
+                return Ores < cost.Ores || Clays < cost.Clays || Obsidians < cost.Obsidians;
+            }
+
+            public void BuildRobot()
+            {
+                var cost = CostOfRobots[RobotToBuild];
+                if (RobotToBuild == RobotTypes.OreRobot)
+                    OreRobots++;
+                if (RobotToBuild == RobotTypes.ClayRobot)
+                    ClayRobots++;
+                if (RobotToBuild == RobotTypes.ObsidianRobot)
+                    ObsidianRobots++;
+                if (RobotToBuild == RobotTypes.GeodeRobot)
+                    GeodeRobots++;
+                Ores -= cost.Ores;
+                Clays -= cost.Clays;
+                Obsidians -= cost.Obsidians;
+            }
         }
     }
 }
