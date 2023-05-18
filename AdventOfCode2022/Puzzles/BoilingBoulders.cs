@@ -4,20 +4,20 @@ namespace AdventOfCode2022web.Puzzles
     [Puzzle(18, "Boiling Boulders")]
     public class BoilingBoulders : IPuzzleSolver
     {
-        private static List<Point> GetVoxels(string puzzleInput)
+        private static List<Voxel> GetVoxels(string puzzleInput)
         {
             return puzzleInput.Split("\n").Select(x => x.Split(','))
                 .Select(x => x.Select(y => int.Parse(y)).ToArray())
-                .Select(x => new Point(X: x[0],Y: x[1],Z: x[2])).ToList();
+                .Select(x => new Voxel(X: x[0], Y: x[1], Z: x[2])).ToList();
         }
-        private static readonly List<Point> CubeFaces = new()
+        private static readonly List<Voxel> CubeFaces = new()
         {
-                new Point(1,0,0),
-                new Point(-1,0,0),
-                new Point(0,1,0),
-                new Point(0,-1,0),
-                new Point(0,0,1),
-                new Point(0,0,-1)
+                new Voxel(1,0,0),
+                new Voxel(-1,0,0),
+                new Voxel(0,1,0),
+                new Voxel(0,-1,0),
+                new Voxel(0,0,1),
+                new Voxel(0,0,-1)
             };
 
         public string SolveFirstPart(string puzzleInput)
@@ -29,7 +29,7 @@ namespace AdventOfCode2022web.Puzzles
             {
                 foreach (var face in CubeFaces)
                 {
-                    if (!map.Contains(new Point(cube.X + face.X, cube.Y + face.Y, cube.Z + face.Z)))
+                    if (!map.Contains(cube.Plus(face)))
                         CountOfFacesNotConnected++;
                 }
             }
@@ -37,35 +37,38 @@ namespace AdventOfCode2022web.Puzzles
         }
         public string SolveSecondPart(string puzzleInput)
         {
-            var voxels = GetVoxels(puzzleInput);
-            var exteriorPoints = voxels.ToHashSet();
+            var dropletVoxels = GetVoxels(puzzleInput).ToHashSet();
 
-            var (pMin, pMax) = (
-                new Point(voxels.Min(p => p.X) - 1, voxels.Min(p => p.Y) - 1, voxels.Min(p => p.Z) - 1),
-                new Point(voxels.Max(p => p.X) + 1, voxels.Max(p => p.Y) + 1, voxels.Max(p => p.Z) + 1)
+            var rangeOfCoordinates = new RangeOfCoordinates(
+                LowerCoordinates: new Voxel(dropletVoxels.Min(p => p.X) - 1, dropletVoxels.Min(p => p.Y) - 1, dropletVoxels.Min(p => p.Z) - 1),
+                HigherCoordinates: new Voxel(dropletVoxels.Max(p => p.X) + 1, dropletVoxels.Max(p => p.Y) + 1, dropletVoxels.Max(p => p.Z) + 1)
                 );
-            var queue = new Queue<Point>();
-            queue.Enqueue(pMin);
+            var queue = new Queue<Voxel>();
+            queue.Enqueue(rangeOfCoordinates.LowerCoordinates);
+            var steamParticules = new HashSet<Voxel>();
             while (queue.Count > 0)
             {
-                var point = queue.Dequeue();
+                var steamParticule = queue.Dequeue();
                 foreach (var cubeFace in CubeFaces)
                 {
-                    var newPoint = new Point(point.X + cubeFace.X, point.Y + cubeFace.Y, point.Z + cubeFace.Z);
-                    if (newPoint.X > pMax.X || newPoint.X < pMin.X || newPoint.Y > pMax.Y || newPoint.Y < pMin.Y || newPoint.Z > pMax.Z || newPoint.Z < pMin.Z || exteriorPoints.Contains(newPoint) || voxels.Contains(newPoint))
+                    var expandedSteamParticule = steamParticule.Plus(cubeFace);
+                    if (
+                        rangeOfCoordinates.IsOutOfRange(expandedSteamParticule) 
+                        || steamParticules.Contains(expandedSteamParticule) 
+                        || dropletVoxels.Contains(expandedSteamParticule))
                         continue;
-                    exteriorPoints.Add(newPoint);
-                    queue.Enqueue(newPoint);
+                    steamParticules.Add(expandedSteamParticule);
+                    queue.Enqueue(expandedSteamParticule);
                 }
             }
 
             var exteriorSurfaceArea = 0;
-            foreach (var point in voxels)
+            foreach (var point in dropletVoxels)
             {
                 foreach (var face in CubeFaces)
                 {
-                    var newPoint = new Point(point.X + face.X, point.Y + face.Y, point.Z + face.Z);
-                    if (exteriorPoints.Contains(newPoint) && !voxels.Contains(newPoint))
+                    var newPoint = point.Plus(face);
+                    if (steamParticules.Contains(newPoint) && !dropletVoxels.Contains(newPoint))
                     {
                         exteriorSurfaceArea++;
                         Console.WriteLine(exteriorSurfaceArea);

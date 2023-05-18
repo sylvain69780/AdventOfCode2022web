@@ -31,5 +31,18 @@ namespace AdventOfCode2022web.Puzzles
         .ToDictionary(x => x.Number);
     }
 
-    public record struct Point(int X, int Y, int Z);
+    public record struct Voxel(int X, int Y, int Z);
+
+    public record struct RangeOfCoordinates(Voxel LowerCoordinates, Voxel HigherCoordinates);
+
+    public static class PointExtensions
+    {
+        public static Voxel Plus(this Voxel a, Voxel b) 
+            => new(a.X + b.X, a.Y + b.Y, a.Z + b.Z);
+
+        public static bool IsOutOfRange(this RangeOfCoordinates range, Voxel p)
+            => p.X > range.HigherCoordinates.X || p.X < range.LowerCoordinates.X
+            || p.Y > range.HigherCoordinates.Y || p.Y < range.LowerCoordinates.Y
+            || p.Z > range.HigherCoordinates.Z || p.Z < range.LowerCoordinates.Z;
+    }
 }
