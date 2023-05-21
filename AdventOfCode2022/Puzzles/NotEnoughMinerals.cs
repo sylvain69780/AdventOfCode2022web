@@ -27,18 +27,21 @@ namespace AdventOfCode2022web.Puzzles
 
         private static int ComputeMaxGeodes(BluePrint bluePrint, int maxMinutes)
         {
-            var factoryState = new FactoryState
+            var stack = new Stack<FactoryState>();
+            stack.Push(new FactoryState
             {
                 Minutes = 1,
                 RobotToBuild = RobotTypes.OreRobot,
                 OreRobots = 1,
                 CostOfRobots = bluePrint.CostOfRobots
-            };
-
-            var stack = new Stack<FactoryState>();
-            stack.Push(factoryState);
-            factoryState.RobotToBuild = RobotTypes.ClayRobot;
-            stack.Push(factoryState);
+            });
+            stack.Push(new FactoryState
+            {
+                Minutes = 1,
+                RobotToBuild = RobotTypes.ClayRobot,
+                OreRobots = 1,
+                CostOfRobots = bluePrint.CostOfRobots
+            });
             var bestScore = 0;
             while (stack.TryPop(out var currentFactoryState))
             {
