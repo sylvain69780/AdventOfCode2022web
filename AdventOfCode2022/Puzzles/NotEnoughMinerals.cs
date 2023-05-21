@@ -6,7 +6,7 @@ namespace AdventOfCode2022web.Puzzles
     public class NotEnoughMinerals : IPuzzleSolver
     {
 
-        private static List<BluePrint> GetBluePrints(string puzzleInput)
+        private static List<BluePrint> LoadBluePrints(string puzzleInput)
         {
             var regex = new Regex(@"Blueprint (\d+): Each ore robot costs (\d+) ore. Each clay robot costs (\d+) ore. Each obsidian robot costs (\d+) ore and (\d+) clay. Each geode robot costs (\d+) ore and (\d+) obsidian.");
             return puzzleInput.Split("\n")
@@ -25,25 +25,71 @@ namespace AdventOfCode2022web.Puzzles
                 .ToList();
         }
 
+        private int ComputeMaxGeodes(BluePrint bluePrint, int maxMinutes)
+        {
+            var factoryState = new FactoryState
+            {
+                Minutes = 1,
+                RobotToBuild = RobotTypes.OreRobot,
+                OreRobots = 1,
+                CostOfRobots = bluePrint.CostOfRobots
+            };
+
+            var stack = new Stack<FactoryState>();
+            stack.Push(factoryState);
+            factoryState.RobotToBuild = RobotTypes.ClayRobot;
+            stack.Push(factoryState);
+            var bestScore = 0;
+            while (stack.TryPop(out var currentFactoryState))
+            {
+                var timeRemaining = maxMinutes - currentFactoryState.Minutes + 1;
+                var sumOfSecondsFromOneToTimeRemaining = timeRemaining * (timeRemaining - 1) / 2;
+                var maxGeodesPossible = currentFactoryState.Geodes + currentFactoryState.GeodeRobots * timeRemaining + sumOfSecondsFromOneToTimeRemaining;
+                if (maxGeodesPossible < bestScore)
+                    continue;
+                while (currentFactoryState.Minutes < maxMinutes && currentFactoryState.HasNotEnoughMineralsToBuildTheRobot())
+                    currentFactoryState.CollectMinerals();
+                currentFactoryState.CollectMinerals();
+                if (currentFactoryState.Minutes == maxMinutes + 1)
+                {
+                    if (currentFactoryState.Geodes > bestScore)
+                        bestScore = currentFactoryState.Geodes;
+                    continue;
+                }
+                currentFactoryState.RobotIsNowBuilt();
+                currentFactoryState.RobotToBuild = RobotTypes.OreRobot;
+                stack.Push(currentFactoryState);
+                currentFactoryState.RobotToBuild = RobotTypes.ClayRobot;
+                stack.Push(currentFactoryState);
+                currentFactoryState.RobotToBuild = RobotTypes.ObsidianRobot;
+                if (currentFactoryState.ClayRobots > 0)
+                    stack.Push(currentFactoryState);
+                currentFactoryState.RobotToBuild = RobotTypes.GeodeRobot;
+                if (currentFactoryState.ObsidianRobots > 0)
+                    stack.Push(currentFactoryState);
+            }
+            return bestScore;
+        }
+
         public string SolveFirstPart(string puzzleInput)
         {
-            var bluePrints = GetBluePrints(puzzleInput);
+            var bluePrints = LoadBluePrints(puzzleInput);
             var quality = 0;
             var maxMinutes = 24;
             foreach (var bp in bluePrints)
             {
-                var maxGeodes = bp.ComputeMaxGeodes(maxMinutes);
+                var maxGeodes = ComputeMaxGeodes(bp,maxMinutes);
                 quality += maxGeodes * bp.BlueprintNumber;
             }
             return $"{quality}";
         }
         public string SolveSecondPart(string puzzleInput)
         {
-            var blueprints = GetBluePrints(puzzleInput);
+            var blueprints = LoadBluePrints(puzzleInput);
             var quality = 1;
             foreach (var bp in blueprints.Take(3))
             {
-                var maxGeodes = bp.ComputeMaxGeodes(32);
+                var maxGeodes = ComputeMaxGeodes(bp,32);
                 Console.WriteLine($"{bp.BlueprintNumber} Score = {maxGeodes}");
                 quality *= maxGeodes;
             }
@@ -54,51 +100,6 @@ namespace AdventOfCode2022web.Puzzles
         {
             public int BlueprintNumber;
             public IReadOnlyDictionary<RobotTypes, (int Ores, int Clays, int Obsidians)> CostOfRobots;
-            public int ComputeMaxGeodes(int maxMinutes)
-            {
-                var factoryState = new FactoryState
-                {
-                    Minutes = 1,
-                    RobotToBuild = RobotTypes.OreRobot,
-                    OreRobots = 1,
-                    CostOfRobots = CostOfRobots
-                };
-
-                var stack = new Stack<FactoryState>();
-                stack.Push(factoryState);
-                factoryState.RobotToBuild = RobotTypes.ClayRobot;
-                stack.Push(factoryState);
-                var bestScore = 0;
-                while (stack.TryPop(out var currentFactoryState))
-                {
-                    var timeRemaining = maxMinutes - currentFactoryState.Minutes + 1;
-                    var sumOfSecondsFromOneToTimeRemaining = timeRemaining * (timeRemaining - 1) / 2;
-                    var maxGeodesPossible = currentFactoryState.Geodes + currentFactoryState.GeodeRobots * timeRemaining + sumOfSecondsFromOneToTimeRemaining;
-                    if (maxGeodesPossible < bestScore)
-                        continue;
-                    while (currentFactoryState.Minutes < maxMinutes && currentFactoryState.HasNotEnoughMinerals())
-                        currentFactoryState.CollectMinerals();
-                    currentFactoryState.CollectMinerals();
-                    if (currentFactoryState.Minutes == maxMinutes + 1)
-                    {
-                        if (currentFactoryState.Geodes > bestScore)
-                            bestScore = currentFactoryState.Geodes;
-                        continue;
-                    }
-                    currentFactoryState.BuildRobot();
-                    currentFactoryState.RobotToBuild = RobotTypes.OreRobot;
-                    stack.Push(currentFactoryState);
-                    currentFactoryState.RobotToBuild = RobotTypes.ClayRobot;
-                    stack.Push(currentFactoryState);
-                    currentFactoryState.RobotToBuild = RobotTypes.ObsidianRobot;
-                    if (currentFactoryState.ClayRobots > 0)
-                        stack.Push(currentFactoryState);
-                    currentFactoryState.RobotToBuild = RobotTypes.GeodeRobot;
-                    if (currentFactoryState.ObsidianRobots > 0)
-                        stack.Push(currentFactoryState);
-                }
-                return bestScore;
-            }
         }
         public enum RobotTypes
         {
@@ -126,13 +127,13 @@ namespace AdventOfCode2022web.Puzzles
                 Obsidians += ObsidianRobots;
                 Geodes += GeodeRobots;
             }
-            public bool HasNotEnoughMinerals()
+            public bool HasNotEnoughMineralsToBuildTheRobot()
             {
                 var cost = CostOfRobots[RobotToBuild];
                 return Ores < cost.Ores || Clays < cost.Clays || Obsidians < cost.Obsidians;
             }
 
-            public void BuildRobot()
+            public void RobotIsNowBuilt()
             {
                 var cost = CostOfRobots[RobotToBuild];
                 if (RobotToBuild == RobotTypes.OreRobot)
