@@ -25,7 +25,7 @@ namespace AdventOfCode2022web.Puzzles
                 .ToList();
         }
 
-        private int ComputeMaxGeodes(BluePrint bluePrint, int maxMinutes)
+        private static int ComputeMaxGeodes(BluePrint bluePrint, int maxMinutes)
         {
             var factoryState = new FactoryState
             {
