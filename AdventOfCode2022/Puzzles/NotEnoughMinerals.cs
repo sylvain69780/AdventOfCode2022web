@@ -5,6 +5,39 @@ namespace AdventOfCode2022web.Puzzles
     [Puzzle(19, "Not Enough Minerals")]
     public class NotEnoughMinerals : IPuzzleSolver
     {
+        struct BluePrint
+        {
+            public int BlueprintNumber;
+            public IReadOnlyDictionary<RobotTypes, (int Ores, int Clays, int Obsidians)> CostOfRobots;
+        }
+
+        public enum RobotTypes { OreRobot, ClayRobot, ObsidianRobot, GeodeRobot }
+
+        public string SolveFirstPart(string puzzleInput)
+        {
+            var bluePrints = LoadBluePrints(puzzleInput);
+            var quality = 0;
+            var maxMinutes = 24;
+            foreach (var bp in bluePrints)
+            {
+                var maxGeodes = ComputeMaxGeodes(bp, maxMinutes);
+                quality += maxGeodes * bp.BlueprintNumber;
+            }
+            return $"{quality}";
+        }
+
+        public string SolveSecondPart(string puzzleInput)
+        {
+            var blueprints = LoadBluePrints(puzzleInput);
+            var quality = 1;
+            foreach (var bp in blueprints.Take(3))
+            {
+                var maxGeodes = ComputeMaxGeodes(bp, 32);
+                Console.WriteLine($"{bp.BlueprintNumber} Score = {maxGeodes}");
+                quality *= maxGeodes;
+            }
+            return $"{quality}";
+        }
 
         private static List<BluePrint> LoadBluePrints(string puzzleInput)
         {
@@ -28,20 +61,8 @@ namespace AdventOfCode2022web.Puzzles
         private static int ComputeMaxGeodes(BluePrint bluePrint, int maxMinutes)
         {
             var stack = new Stack<FactoryState>();
-            stack.Push(new FactoryState
-            {
-                Minutes = 1,
-                RobotToBuild = RobotTypes.OreRobot,
-                OreRobots = 1,
-                CostOfRobots = bluePrint.CostOfRobots
-            });
-            stack.Push(new FactoryState
-            {
-                Minutes = 1,
-                RobotToBuild = RobotTypes.ClayRobot,
-                OreRobots = 1,
-                CostOfRobots = bluePrint.CostOfRobots
-            });
+            stack.Push(FirstRobot(bluePrint, RobotTypes.OreRobot));
+            stack.Push(FirstRobot(bluePrint, RobotTypes.ClayRobot));
             var bestScore = 0;
             while (stack.TryPop(out var currentFactoryState))
             {
@@ -59,54 +80,36 @@ namespace AdventOfCode2022web.Puzzles
                         bestScore = currentFactoryState.Geodes;
                     continue;
                 }
-                currentFactoryState.RobotIsNowBuilt();
-                currentFactoryState.RobotToBuild = RobotTypes.OreRobot;
-                stack.Push(currentFactoryState);
-                currentFactoryState.RobotToBuild = RobotTypes.ClayRobot;
-                stack.Push(currentFactoryState);
-                currentFactoryState.RobotToBuild = RobotTypes.ObsidianRobot;
-                if (currentFactoryState.ClayRobots > 0)
-                    stack.Push(currentFactoryState);
-                currentFactoryState.RobotToBuild = RobotTypes.GeodeRobot;
-                if (currentFactoryState.ObsidianRobots > 0)
-                    stack.Push(currentFactoryState);
+                currentFactoryState.TargetRobotIsNowBuilt();
+                foreach (var factoryState in TargetNewRobots(currentFactoryState))
+                    stack.Push(factoryState);
             }
             return bestScore;
         }
 
-        public string SolveFirstPart(string puzzleInput)
+        private static FactoryState FirstRobot(BluePrint bluePrint, RobotTypes robotType)
         {
-            var bluePrints = LoadBluePrints(puzzleInput);
-            var quality = 0;
-            var maxMinutes = 24;
-            foreach (var bp in bluePrints)
+            return new FactoryState
             {
-                var maxGeodes = ComputeMaxGeodes(bp,maxMinutes);
-                quality += maxGeodes * bp.BlueprintNumber;
-            }
-            return $"{quality}";
-        }
-        public string SolveSecondPart(string puzzleInput)
-        {
-            var blueprints = LoadBluePrints(puzzleInput);
-            var quality = 1;
-            foreach (var bp in blueprints.Take(3))
-            {
-                var maxGeodes = ComputeMaxGeodes(bp,32);
-                Console.WriteLine($"{bp.BlueprintNumber} Score = {maxGeodes}");
-                quality *= maxGeodes;
-            }
-            return $"{quality}";
+                Minutes = 1,
+                RobotToBuild = robotType,
+                OreRobots = 1,
+                CostOfRobots = bluePrint.CostOfRobots
+            };
         }
 
-        struct BluePrint
+        private static IEnumerable<FactoryState> TargetNewRobots(FactoryState currentFactoryState)
         {
-            public int BlueprintNumber;
-            public IReadOnlyDictionary<RobotTypes, (int Ores, int Clays, int Obsidians)> CostOfRobots;
-        }
-        public enum RobotTypes
-        {
-            OreRobot, ClayRobot, ObsidianRobot, GeodeRobot
+            currentFactoryState.RobotToBuild = RobotTypes.OreRobot;
+            yield return currentFactoryState;
+            currentFactoryState.RobotToBuild = RobotTypes.ClayRobot;
+            yield return currentFactoryState;
+            currentFactoryState.RobotToBuild = RobotTypes.ObsidianRobot;
+            if (currentFactoryState.ClayRobots > 0)
+                yield return currentFactoryState;
+            currentFactoryState.RobotToBuild = RobotTypes.GeodeRobot;
+            if (currentFactoryState.ObsidianRobots > 0)
+                yield return currentFactoryState;
         }
 
         struct FactoryState
@@ -136,7 +139,7 @@ namespace AdventOfCode2022web.Puzzles
                 return Ores < cost.Ores || Clays < cost.Clays || Obsidians < cost.Obsidians;
             }
 
-            public void RobotIsNowBuilt()
+            public void TargetRobotIsNowBuilt()
             {
                 var cost = CostOfRobots[RobotToBuild];
                 if (RobotToBuild == RobotTypes.OreRobot)
