@@ -3,81 +3,66 @@
     [Puzzle(20, "Grove Positioning System")]
     public class GrovePositioningSystem : IPuzzleSolver
     {
-        public string SolveFirstPart(string inp)
+        public string SolveFirstPart(string puzzleInput)
         {
-            var c = 0;
-            var input = inp.Split("\n").Select(x => (Idx: c++, Value: int.Parse(x))).ToList();
-            foreach (var idx in Enumerable.Range(0, input.Count))
-            {
-                var elementIndex = input.FindIndex(x => x.Idx == idx);
-                var element = input[elementIndex];
-                Console.WriteLine($"Element {element.Value} at {elementIndex} moves now : " + string.Join(',', input.Select(x => x.Value)));
-                if (element.Value == 0) continue;
-                input.RemoveAt(elementIndex);
-                if (element.Value > 0)
-                {
-                    var pos = (elementIndex + element.Value) % input.Count;
-                    input.Insert(pos, element);
-                }
-                else
-                {
-                    var pos = (elementIndex + element.Value) % input.Count;
-                    if (pos < 0) pos += input.Count;
-                    if (pos == 0) input.Add(element);
-                    else
-                        input.Insert(pos, element);
-                }
-            }
-            Console.WriteLine("END " + string.Join(',', input.Select(x => x.Value)));
-            var selector = new int[3] { 1000, 2000, 3000 };
-            var score = 0;
-            foreach (var i in selector)
-            {
-                var zero = input.FindIndex(x => x.Value == 0);
-                var index = (i + zero) % input.Count;
-                score += input[index].Value;
-            }
-            return $"SCORE {score}";
+            var arrangement = LoadArrangement(puzzleInput);
+            Mix(arrangement);
+            var groveCoordinates = DecodeGroveCoordinates(arrangement);
+            return groveCoordinates.ToString();
         }
 
-        public string SolveSecondPart(string inp)
+        private static long DecodeGroveCoordinates(List<(int Id, long Number)> arrangement)
+        {
+            var groveCoordinates = 0L;
+            for (var position = 1000; position <= 3000; position += 1000)
+            {
+                var zero = arrangement.FindIndex(x => x.Number == 0);
+                var index = (position + zero) % arrangement.Count;
+                groveCoordinates += arrangement[index].Number;
+            }
+            return groveCoordinates;
+        }
+
+        public string SolveSecondPart(string puzzleInput)
+        {
+            var arrangement = LoadArrangement(puzzleInput);
+            const long decryptionKey = 811589153;
+            arrangement = arrangement.Select(x => (x.Id, x.Number * decryptionKey)).ToList();
+            for (var turns = 0; turns < 10; turns++)
+                Mix(arrangement);
+            var groveCoordinates = DecodeGroveCoordinates(arrangement);
+            return groveCoordinates.ToString();
+        }
+
+        private static List<(int Id, long Number)> LoadArrangement(string puzzleInput)
         {
             var c = 0;
-            var input = inp.Split("\n").Select(x => (Idx: c++, Value: 811589153 * long.Parse(x))).ToList();
-            for (var turns = 0; turns < 10; turns++)
+            var arrangement = puzzleInput.Split("\n").Select(x => (Id: c++, Number: long.Parse(x))).ToList();
+            return arrangement;
+        }
+
+        private static void Mix(List<(int Id, long Number)> arrangement)
+        {
+            for (var id = 0; id < arrangement.Count; id++)
             {
-                foreach (var idx in Enumerable.Range(0, input.Count))
+                var numberPosition = arrangement.FindIndex(x => x.Id == id);
+                var numberToMove = arrangement[numberPosition];
+                if (numberToMove.Number == 0)
+                    continue;
+                arrangement.RemoveAt(numberPosition);
+                var targetPosition = (int)((numberPosition + numberToMove.Number) % arrangement.Count);
+                if (numberToMove.Number > 0)
+                    arrangement.Insert(targetPosition, numberToMove);
+                else
                 {
-                    var elementIndex = input.FindIndex(x => x.Idx == idx);
-                    var element = input[elementIndex];
-                    //Console.WriteLine($"Element {element.Value} at {elementIndex} moves now : " + string.Join(',', input.Select(x => x.Value)));
-                    if (element.Value == 0) continue;
-                    input.RemoveAt(elementIndex);
-                    if (element.Value > 0)
-                    {
-                        var pos = (int)((elementIndex + element.Value) % input.Count);
-                        input.Insert(pos, element);
-                    }
+                    if (targetPosition < 0)
+                        targetPosition += arrangement.Count;
+                    if (targetPosition == 0)
+                        arrangement.Add(numberToMove);
                     else
-                    {
-                        var pos = (int)((elementIndex + element.Value) % input.Count);
-                        if (pos < 0) pos += input.Count;
-                        if (pos == 0) input.Add(element);
-                        else
-                            input.Insert(pos, element);
-                    }
+                        arrangement.Insert(targetPosition, numberToMove);
                 }
             }
-            Console.WriteLine("END " + string.Join(',', input.Select(x => x.Value)));
-            var selector = new int[3] { 1000, 2000, 3000 };
-            var score = 0L;
-            foreach (var i in selector)
-            {
-                var zero = input.FindIndex(x => x.Value == 0);
-                var index = (i + zero) % input.Count;
-                score += input[index].Value;
-            }
-            return $"SCORE {score}";
         }
     }
 }
