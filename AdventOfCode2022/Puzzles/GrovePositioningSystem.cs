@@ -11,18 +11,6 @@
             return groveCoordinates.ToString();
         }
 
-        private static long DecodeGroveCoordinates(List<(int Id, long Number)> arrangement)
-        {
-            var groveCoordinates = 0L;
-            for (var position = 1000; position <= 3000; position += 1000)
-            {
-                var zero = arrangement.FindIndex(x => x.Number == 0);
-                var index = (position + zero) % arrangement.Count;
-                groveCoordinates += arrangement[index].Number;
-            }
-            return groveCoordinates;
-        }
-
         public string SolveSecondPart(string puzzleInput)
         {
             var arrangement = LoadArrangement(puzzleInput);
@@ -63,6 +51,18 @@
                         arrangement.Insert(targetPosition, numberToMove);
                 }
             }
+        }
+
+        private static long DecodeGroveCoordinates(List<(int Id, long Number)> arrangement)
+        {
+            var groveCoordinates = 0L;
+            for (var position = 1000; position <= 3000; position += 1000)
+            {
+                var zero = arrangement.FindIndex(x => x.Number == 0);
+                var index = (position + zero) % arrangement.Count;
+                groveCoordinates += arrangement[index].Number;
+            }
+            return groveCoordinates;
         }
     }
 }
