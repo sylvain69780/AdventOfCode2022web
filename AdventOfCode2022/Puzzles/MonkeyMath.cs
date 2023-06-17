@@ -1,107 +1,93 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Diagnostics;
+using System.Text.RegularExpressions;
 
 namespace AdventOfCode2022web.Puzzles
 {
     [Puzzle(21, "Monkey Math")]
     public class MonkeyMath : IPuzzleSolver
     {
-        public string SolveFirstPart(string inp)
+        private class JobOfEachMonkey
         {
-            var input = inp.Split("\n");
-            var r1 = new Regex(@"([a-z]+): ([a-z]+) ([\+\-\/\*]) ([a-z]+)");
-            var r2 = new Regex(@"([a-z]+): (\d+)");
-            var nodes = input.Select(x => r1.Match(x))
+            public Dictionary<string, (string Left, string Operator, string Right)>? ComputingMonkeys;
+            public Dictionary<string, long>? NumberYellingMonkeys;
+        }
+
+        private static JobOfEachMonkey ReadPuzzleInput(string puzzleInput)
+        {
+            var input = puzzleInput.Split("\n");
+            var nodeRegex = new Regex(@"([a-z]+): ([a-z]+) ([\+\-\/\*]) ([a-z]+)");
+            var valueRegex = new Regex(@"([a-z]+): (\d+)");
+            var computingMonkeys = input.Select(x => nodeRegex.Match(x))
                 .Where(x => x.Success)
                 .ToDictionary(x => x.Groups[1].Value, x => (Left: x.Groups[2].Value, Operator: x.Groups[3].Value, Right: x.Groups[4].Value));
-            var values = input.Select(x => r2.Match(x))
+            var valueHoldingMonkeys = input.Select(x => valueRegex.Match(x))
                 .Where(x => x.Success)
                 .ToDictionary(x => x.Groups[1].Value, x => long.Parse(x.Groups[2].Value));
-            var search = new Stack<string>();
-            search.Push("root");
-            while (search.TryPop(out var element))
+            return new JobOfEachMonkey
             {
-                if (values.ContainsKey(element))
-                    continue;
-                else
-                    search.Push(element);
-                var (Left, Operator, Right) = nodes[element];
-                if (values.TryGetValue(Left, out var left))
-                    if (values.TryGetValue(Right, out var right))
-                    {
-                        var result =
-                            Operator == "+" ? left + right :
-                            Operator == "-" ? left - right :
-                            Operator == "*" ? left * right :
-                            Operator == "/" ? left / right : throw (new NotImplementedException());
-                        values.Add(element, result);
-                    }
-                    else
-                        search.Push(Right);
-                else
-                    search.Push(Left);
-            }
-            return $"Score : {values["root"]}";
+                ComputingMonkeys = computingMonkeys,
+                NumberYellingMonkeys = valueHoldingMonkeys
+            };
         }
-        public string SolveSecondPart(string inp)
+
+        private long GetYelledNumber(JobOfEachMonkey jobOfEachMonkey, string monkeyName)
         {
-            var input = inp.Split("\n");
-            var r1 = new Regex(@"([a-z]+): ([a-z]+) ([\+\-\/\*]) ([a-z]+)");
-            var r2 = new Regex(@"([a-z]+): (\d+)");
-            var nodes = input.Select(x => r1.Match(x))
-                .Where(x => x.Success)
-                .ToDictionary(x => x.Groups[1].Value, x => (Left: x.Groups[2].Value, Operator: x.Groups[3].Value, Right: x.Groups[4].Value));
-            var values = input.Select(x => r2.Match(x))
-                .Where(x => x.Success)
-                .Select(x => (Key: x.Groups[1].Value, Value: long.Parse(x.Groups[2].Value)))
-                .ToList();
+            if (jobOfEachMonkey.NumberYellingMonkeys!.TryGetValue(monkeyName, out var number))
+                return number;
+            var (monkeyA, Operator, monkeyB) = jobOfEachMonkey.ComputingMonkeys![monkeyName];
+            if (Operator == "+") return
+                    GetYelledNumber(jobOfEachMonkey, monkeyA) + GetYelledNumber(jobOfEachMonkey, monkeyB);
+            if (Operator == "-") return
+                    GetYelledNumber(jobOfEachMonkey, monkeyA) - GetYelledNumber(jobOfEachMonkey, monkeyB);
+            if (Operator == "*") return
+                    GetYelledNumber(jobOfEachMonkey, monkeyA) * GetYelledNumber(jobOfEachMonkey, monkeyB);
+            if (Operator == "/") return
+                    GetYelledNumber(jobOfEachMonkey, monkeyA) / GetYelledNumber(jobOfEachMonkey, monkeyB);
+            throw new NotImplementedException();
+        }
+
+        public string SolveFirstPart(string puzzleInput)
+        {
+            var jobOfEachMonkey = ReadPuzzleInput(puzzleInput);
+            return GetYelledNumber(jobOfEachMonkey, "root").ToString();
+        }
+        public string SolveSecondPart(string puzzleInput)
+        {
+            var jobOfEachMonkey = ReadPuzzleInput(puzzleInput);
             var compute = (long guess) =>
             {
-                var valuesFound = values.ToDictionary(x => x.Key, x => x.Value);
-                valuesFound["humn"] = guess;
-                var search = new Stack<string>();
-                search.Push("root");
-                while (search.TryPop(out var element))
-                {
-                    if (valuesFound.ContainsKey(element))
-                        continue;
-                    else
-                        search.Push(element);
-                    var (Left, Operator, Right) = nodes[element];
-                    if (valuesFound.TryGetValue(Left, out var left))
-                        if (valuesFound.TryGetValue(Right, out var right))
-                        {
-                            var result =
-                                Operator == "+" ? left + right :
-                                Operator == "-" ? left - right :
-                                Operator == "*" ? left * right :
-                                Operator == "/" ? left / right : throw (new NotImplementedException());
-                            valuesFound.Add(element, result);
-                        }
-                        else
-                            search.Push(Right);
-                    else
-                        search.Push(Left);
-                }
-                var root = nodes["root"];
-                return valuesFound[root.Left] - valuesFound[root.Right];
+                jobOfEachMonkey.NumberYellingMonkeys!["humn"] = guess;
+                var (monkeyA, _, monkeyB) = jobOfEachMonkey.ComputingMonkeys!["root"];
+                return Math.Abs(GetYelledNumber(jobOfEachMonkey, monkeyB) - GetYelledNumber(jobOfEachMonkey, monkeyA));
             };
 
-            var guessMin = 0L;
-            var guessMax = long.MaxValue / 1000000;
-            var guess = guessMax / 2;
-            var result = 1L;
-            do
+            var searchQueue = new PriorityQueue<(long Lower, long Upper), double>();
+            var start = (Lower : 0L,Upper : long.MaxValue / 1000000);
+            searchQueue.Enqueue(start, 0);
+            var bestScore = long.MaxValue;
+            var inputValuesGivingZero = new List<long>();
+            while ( searchQueue.TryDequeue(out var i,out _ ))
             {
-                result = compute(guess);
-                if (result < 0)
-                    guessMax = guess;
-                if (result > 0)
-                    guessMin = guess;
-                Console.WriteLine($"For {guess} => {result}");
-                //yield return $"For {guess} => {result}";
-                guess = guessMin + (guessMax - guessMin) / 2;
-            } while (result != 0 || guessMin == guess);
-            return $"value = {guess}";
+                var score = compute(i.Lower);
+                if ( score < bestScore)
+                {
+                    bestScore = score;
+                    Debug.WriteLine($"Best input {i.Lower} gives {score}");
+                }
+                if (score==0)
+                    inputValuesGivingZero.Add(i.Lower);
+                var d = i.Upper - i.Lower;
+                if (d == 0)
+                    continue;
+                double p = score / d;
+                if (bestScore == 0 && p > 100)
+                    break;
+                if (d > 1)
+                    searchQueue.Enqueue((i.Lower, i.Lower + d / 2), p);
+                searchQueue.Enqueue((i.Lower + d / 2+1,i.Upper),p);
+            }
+            // there is several values that get 0 at the end !
+            return inputValuesGivingZero.Min().ToString();
         }
     }
 }
