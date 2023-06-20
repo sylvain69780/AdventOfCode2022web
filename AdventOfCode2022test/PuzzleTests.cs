@@ -9625,5 +9625,26 @@ zfqn: zdcs * hvrb";
             Assert.That(solver.SolveSecondPart(input2), Is.EqualTo("3296135418820"));
 
         }
+        [Test]
+        public void Test22()
+        {
+            var solver = new MonkeyMap();
+            var input1 = @"        ...#
+        .#..
+        #...
+        ....
+...#.......#
+........#...
+..#....#....
+..........#.
+        ...#....
+        .....#..
+        .#......
+        ......#.
+
+10R5L5R10L4R5L5";
+            Assert.That(solver.SolveFirstPart(input1.Replace("\r", "")), Is.EqualTo("6032"));
+            Assert.That(solver.SolveSecondPart(input1.Replace("\r", "")), Is.EqualTo("5031"));
+        }
     }
 }

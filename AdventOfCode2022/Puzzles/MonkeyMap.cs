@@ -1,192 +1,221 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Diagnostics;
+using System.IO.MemoryMappedFiles;
+using System.Reflection.Metadata.Ecma335;
+using System.Text.RegularExpressions;
 
 namespace AdventOfCode2022web.Puzzles
 {
     [Puzzle(22, "Monkey Map")]
     public class MonkeyMap : IPuzzleSolver
     {
+        private struct Board
+        {
+            public string[] MapOfStrangelyShapedBoard;
+            public List<(int Move, string Rotation)> Instructions;
+            public (int X, int Y) Position;
+            public Direction Direction;
+            public int MaxY => MapOfStrangelyShapedBoard.Length - 1;
+            public int MaxX => MapOfStrangelyShapedBoard[Position.Y].Length - 1;
+            public int CubeFaceSize;
+        }
+
+        private static Board ProcessInput(string puzzleInput)
+        {
+            var input = puzzleInput.Split("\n");
+            var cubeFaceSize = input.Length > 50 ? 50 : 4;
+            var inputCommands = input[^1];
+            var regex = new Regex(@"(\d+)([L|R|E])");
+            var instructions = regex.Matches(inputCommands + "E").Select(x => (Move: int.Parse(x.Groups[1].Value), Rotate: x.Groups[2].Value)).ToList();
+            Array.Resize(ref input, input.Length - 2);
+            return new Board()
+            {
+                MapOfStrangelyShapedBoard = input,
+                Instructions = instructions,
+                Position = (input[0].IndexOf('.'), 0),
+                Direction = Direction.Right,
+                CubeFaceSize = cubeFaceSize
+            };
+        }
+        private enum Direction
+        {
+            Right = 0,
+            Down = 1,
+            Left = 2,
+            Up = 3
+        }
+
+
+        private static char QueryMap(Board board, (int X, int Y) pos)
+        {
+            if (pos.X < 0 || pos.Y < 0 || pos.Y > board.MaxY || pos.X > board.MapOfStrangelyShapedBoard[pos.Y].Length - 1)
+                return ' ';
+            else
+                return board.MapOfStrangelyShapedBoard[pos.Y][pos.X];
+        }
+
+        private static bool IsWallBlockingOnCube(Board board)
+        {
+            var (pos, _) = ComputeNextPositionOnCube(board);
+            return QueryMap(board, pos) == '#';
+        }
+
+        private static bool IsWallBlockingOnDevelopedCube(Board board)
+        {
+            var pos = ComputeNextPositionOnDevelopedCube(board);
+            return QueryMap(board, pos) == '#';
+        }
+
+        private static ((int X, int Y) Position, Direction D) ComputeNextPositionOnCube(Board board)
+        {
+            var pos = board.Position;
+            var direction = board.Direction;
+            var currentCubeFace = (X: (pos.X / board.CubeFaceSize) % 4, Y: pos.Y / board.CubeFaceSize);
+            if (board.Direction == Direction.Right)
+                pos.X += 1;
+            if (board.Direction == Direction.Left)
+                pos.X -= 1;
+            if (board.Direction == Direction.Down)
+                pos.Y += 1;
+            if (board.Direction == Direction.Up)
+                pos.Y -= 1;
+            if (QueryMap(board, pos) == ' ')
+            {
+                var pathsToAdjacentFace = new Direction[][]
+                {
+                    // first is the rotation needed, other the traversal on the cube flat map
+                    // todo : find the rule between them
+                        new Direction[] { Direction.Down,         Direction.Down, Direction.Right },
+                        new Direction[] { Direction.Left,       Direction.Down, Direction.Down, Direction.Right },
+                        new Direction[] { Direction.Up,       Direction.Up, Direction.Right },
+                        new Direction[] { Direction.Left,       Direction.Up, Direction.Up, Direction.Right },
+                        new Direction[] { Direction.Right,      Direction.Left, Direction.Left, Direction.Left },
+                        new Direction[] { Direction.Left,       Direction.Left, Direction.Down, Direction.Down },
+                        new Direction[] { Direction.Left,       Direction.Left, Direction.Up, Direction.Up },
+                };
+                var posInFace = (X: pos.X % board.CubeFaceSize, Y: pos.Y % board.CubeFaceSize);
+                foreach (var traversal in pathsToAdjacentFace)
+                {
+                    var (X, Y) = currentCubeFace;
+                    foreach (var m in traversal.Skip(1))
+                    {
+                        var move = (Direction)(((int)m + (int)direction) %4);
+                        if (move == Direction.Up)
+                                Y--;
+                        if (move == Direction.Down)
+                            Y++;
+                        if (move == Direction.Right)
+                            X++;
+                        if (move == Direction.Left)
+                            X--;
+                        if (QueryMap(board, (X * board.CubeFaceSize, Y * board.CubeFaceSize)) == ' ')
+                            break;
+                    }
+                    if (QueryMap(board, (X * board.CubeFaceSize, Y * board.CubeFaceSize)) != ' ')
+                    {
+                        var rotation = traversal.First();
+                        if (rotation == Direction.Down)
+                            posInFace = (board.CubeFaceSize - posInFace.Y - 1, posInFace.X);
+                        if (rotation == Direction.Left)
+                            posInFace = (board.CubeFaceSize - posInFace.X - 1, board.CubeFaceSize - posInFace.Y - 1);
+                        if (rotation == Direction.Up)
+                            posInFace = (posInFace.Y, board.CubeFaceSize - posInFace.X - 1);
+                        direction = (Direction)(((int)direction + (int)rotation) % 4);
+                        pos = (X * board.CubeFaceSize + posInFace.X, Y * board.CubeFaceSize + posInFace.Y);
+                        break;
+                    } // todo no error if nothing found
+                }
+            }
+            return (pos, direction);
+        }
+
+        private static (int X, int Y) ComputeNextPositionOnDevelopedCube(Board board)
+        {
+            var pos = board.Position;
+            if (board.Direction == Direction.Right)
+            {
+                while (true)
+                {
+                    pos.X += 1;
+                    if (pos.X > board.MaxX)
+                        pos.X = 0;
+                    if (QueryMap(board, pos) != ' ')
+                        break;
+                }
+            }
+            if (board.Direction == Direction.Left)
+            {
+                while (true)
+                {
+                    pos.X -= 1;
+                    if (pos.X < 1)
+                        pos.X = board.MaxX;
+                    if (QueryMap(board, pos) != ' ')
+                        break;
+                }
+            }
+            if (board.Direction == Direction.Down)
+            {
+                while (true)
+                {
+                    pos.Y += 1;
+                    if (pos.Y > board.MaxY)
+                        pos.Y = 0;
+                    if (QueryMap(board, pos) != ' ')
+                        break;
+                }
+            }
+            if (board.Direction == Direction.Up)
+            {
+                while (true)
+                {
+                    pos.Y -= 1;
+                    if (pos.Y < 1)
+                        pos.Y = board.MaxY;
+                    if (QueryMap(board, pos) != ' ')
+                        break;
+                }
+            }
+            return pos;
+        }
+
         public string SolveFirstPart(string inp)
         {
-            var input = inp.Split("\n");
-            var inputCommands = input[^1];
-            var r = new Regex(@"(\d+)([L|R|E])");
-            var commands = r.Matches(inputCommands + "E").Select(x => (Move: int.Parse(x.Groups[1].Value), Rotate: x.Groups[2].Value)).ToList();
-            var rotations = new List<(int dx, int dy)>()
-    {
-        (1,0),
-        (0,1),
-        (-1,0),
-        (0,-1)
-    };
-            var maxY = input.Length - 2;
-            var facing = 0;
-            var (x, y) = (input[0].IndexOf('.') + 1, 1);
-            var grid = (int x, int y) => input[y - 1][x - 1];
-            foreach (var (move, rot) in commands)
+            var strangelyShapedBoard = ProcessInput(inp);
+            foreach (var (move, rotation) in strangelyShapedBoard.Instructions)
             {
-                for (var c = 0; c < move; c++)
+                Debug.WriteLine($"{move} {rotation}");
+                for (var step = 0; step < move; step++)
                 {
-                    var (dx, dy) = rotations[facing];
-                    var (nx, ny) = (x + dx, y + dy);
-                    if (dy == 1)
-                    {
-                        if (ny > maxY || nx > input[ny - 1].Length || grid(nx, ny) == ' ')
-                        {
-                            ny = 1;
-                            while (grid(nx, ny) == ' ')
-                                ny++;
-                        }
-                    }
-                    else if (dy == -1)
-                    {
-                        if (ny < 1 || nx > input[ny - 1].Length || grid(nx, ny) == ' ')
-                        {
-                            ny = maxY;
-                            while (nx > input[ny - 1].Length || grid(nx, ny) == ' ')
-                                ny--;
-                        }
-                    }
-                    var maxX = input[ny - 1].Length;
-                    if (dx == 1)
-                    {
-                        if (nx > maxX || grid(nx, ny) == ' ')
-                        {
-                            nx = 1;
-                            while (grid(nx, ny) == ' ')
-                                nx++;
-                        }
-                    }
-                    else if (dx == -1)
-                    {
-                        if (nx < 1 || grid(nx, ny) == ' ')
-                        {
-                            nx = maxX;
-                            while (grid(nx, ny) == ' ')
-                                nx--;
-                        }
-                    }
-                    var tile = grid(nx, ny);
-                    if (tile == '#') break;
-                    (x, y) = (nx, ny);
+                    if (IsWallBlockingOnDevelopedCube(strangelyShapedBoard))
+                        break;
+                    strangelyShapedBoard.Position = ComputeNextPositionOnDevelopedCube(strangelyShapedBoard);
                 }
-                if (rot == "R")
-                    facing = (facing + 1) % 4;
-                if (rot == "L")
-                    facing = (facing - 1 + 4) % 4;
+                if (rotation == "R")
+                    strangelyShapedBoard.Direction = (Direction)(((int)strangelyShapedBoard.Direction + 1) % 4);
+                if (rotation == "L")
+                    strangelyShapedBoard.Direction = (Direction)(((int)strangelyShapedBoard.Direction - 1 + 4) % 4);
             }
-            Console.WriteLine($"({x},{y}) {facing}");
-            var score = 1000 * y + 4 * x + facing;
-            return $"SCORE {score}";
+            return (1000 * (strangelyShapedBoard.Position.Y + 1) + 4 * (strangelyShapedBoard.Position.X + 1) + (int)strangelyShapedBoard.Direction).ToString();
         }
+
         public string SolveSecondPart(string inp)
         {
-            var input = inp.Split("\n");
-            var inputCommands = input[^1];
-            var r = new Regex(@"(\d+)([L|R|E])");
-            var commands = r.Matches(inputCommands + "E").Select(x => (Move: int.Parse(x.Groups[1].Value), Rotate: x.Groups[2].Value)).ToList();
-            var rotations = new List<(int dx, int dy)>()
-    {
-        (1,0),
-        (0,1),
-        (-1,0),
-        (0,-1)
-    };
-            var cubeFaceSize = 50;
-            var cubeFaces = new (int x, int y)[] {
-        (1,0),
-        (2,0),
-        (1,1),
-        (0,2),
-        (1,2),
-        (0,3)
-    };
-            // borders are 0 right, 1 down, 2 left, 3 up
-            var connexions = new List<(int face1, int face2, int border1, int border2)>()
-    {
-        (0,3,2,2),
-        (3,0,2,2),
-        (0,5,3,2),
-        (5,0,2,3),
-        (1,4,0,0),
-        (4,1,0,0),
-        (1,2,1,0),
-        (2,1,0,1),
-        (1,5,3,1),
-        (5,1,1,3),
-        (2,3,2,3),
-        (3,2,3,2),
-        (4,5,1,0),
-        (5,4,0,1)
-    };
-
-            var maxY = input.Length - 2;
-            var facing = 0;
-            var (x, y) = (input[0].IndexOf('.') + 1, 1);
-            var grid = (int x, int y) => input[y - 1][x - 1];
-            var rotateRight = (int facing) => (facing + 1) % 4;
-            var rotateLeft = (int facing) => (facing - 1 + 4) % 4;
-            var cmdCount = 0;
-            foreach (var (move, rot) in commands)
+            var strangelyShapedBoard = ProcessInput(inp);
+            foreach (var (move, rotation) in strangelyShapedBoard.Instructions)
             {
-                cmdCount++;
-                for (var c = 0; c < move; c++)
+                Debug.WriteLine($"{move} {rotation}");
+                for (var step = 0; step < move; step++)
                 {
-                    var (dx, dy) = rotations[facing];
-                    var faceCoord = (x: (x - 1) / cubeFaceSize, y: (y - 1) / cubeFaceSize);
-                    var (nx, ny) = (x + dx, y + dy);
-                    var newFaceCoord = (x: nx == 0 ? -1 : (nx - 1) / cubeFaceSize, y: ny == 0 ? -1 : (ny - 1) / cubeFaceSize);
-                    var nfacing = facing;
-                    if (ny > maxY || ny < 1 || nx > input[ny - 1].Length || nx < 1 || grid(nx, ny) == ' ')
-                    {
-                        var face1 = Array.IndexOf(cubeFaces, faceCoord);
-                        var border =
-                            newFaceCoord.x - faceCoord.x == 1 ? 0 :
-                            newFaceCoord.x - faceCoord.x == -1 ? 2 :
-                            newFaceCoord.y - faceCoord.y == 1 ? 1 : 3;
-                        var connection = connexions.Single(x => x.face1 == face1 && x.border1 == border);
-                        newFaceCoord = cubeFaces[connection.face2];
-                        nfacing = (connection.border2 + 2) % 4;
-                        var (lx, ly) = ((x - 1) % cubeFaceSize, (y - 1) % cubeFaceSize);
-                        var rightBorder = (newFaceCoord.x + 1) * cubeFaceSize;
-                        var lowBorder = (newFaceCoord.y + 1) * cubeFaceSize;
-                        var leftBorder = newFaceCoord.x * cubeFaceSize + 1;
-                        var topBorder = newFaceCoord.y * cubeFaceSize + 1;
-                        if (connection.border1 == 2 && connection.border2 == 2)
-                            (nx, ny) = (leftBorder, lowBorder - ly);
-                        else if (connection.border1 == 3 && connection.border2 == 2)
-                            (nx, ny) = (leftBorder, topBorder + lx);
-                        else if (connection.border1 == 2 && connection.border2 == 3)
-                            (nx, ny) = (leftBorder + ly, topBorder);
-                        else if (connection.border1 == 0 && connection.border2 == 0)
-                            (nx, ny) = (rightBorder, lowBorder - ly);
-                        else if (connection.border1 == 1 && connection.border2 == 0)
-                            (nx, ny) = (rightBorder, topBorder + lx);
-                        else if (connection.border1 == 0 && connection.border2 == 1)
-                            (nx, ny) = (leftBorder + ly, lowBorder);
-                        else if (connection.border1 == 3 && connection.border2 == 1)
-                            (nx, ny) = (leftBorder + lx, lowBorder);
-                        else if (connection.border1 == 1 && connection.border2 == 3)
-                            (nx, ny) = (leftBorder + lx, topBorder);
-                        else if (connection.border1 == 2 && connection.border2 == 3)
-                            (nx, ny) = (leftBorder + ly, topBorder);
-                        else if (connection.border1 == 3 && connection.border2 == 2)
-                            (nx, ny) = (leftBorder, topBorder + lx);
-                        else
-                            throw new NotImplementedException();
-                    }
-                    var tile = grid(nx, ny);
-                    if (tile == '#') break;
-                    (x, y) = (nx, ny);
-                    facing = nfacing;
+                    if (IsWallBlockingOnCube(strangelyShapedBoard))
+                        break;
+                    (strangelyShapedBoard.Position, strangelyShapedBoard.Direction) = ComputeNextPositionOnCube(strangelyShapedBoard);
                 }
-                if (rot == "R")
-                    facing = rotateRight(facing);
-                if (rot == "L")
-                    facing = rotateLeft(facing);
+                if (rotation == "R")
+                    strangelyShapedBoard.Direction = (Direction)(((int)strangelyShapedBoard.Direction + 1) % 4);
+                if (rotation == "L")
+                    strangelyShapedBoard.Direction = (Direction)(((int)strangelyShapedBoard.Direction - 1 + 4) % 4);
             }
-            Console.WriteLine($"({x},{y}) {facing}");
-            var score = 1000 * y + 4 * x + facing;
-            return $"SCORE {score}";
+            return (1000 * (strangelyShapedBoard.Position.Y+1) + 4 * (strangelyShapedBoard.Position.X+1) + (int)strangelyShapedBoard.Direction).ToString();
         }
     }
 }
