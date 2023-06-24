@@ -51,21 +51,11 @@ namespace AdventOfCode2022web.Puzzles
                 return board.Map[pos.Y][pos.X];
         }
 
-        private static readonly (int X, int Y)[] Directions2D = new (int X, int Y)[] { (1, 0), (0, 1), (-1, 0), (0, -1) };
-
-        private static (int X, int Y) MoveInDirection((int X, int Y) pos, OrientationName orientationName)
-        {
-            var dir = Directions2D[(int)orientationName];
-            pos = (pos.X + dir.X, pos.Y + dir.Y);
-            return pos;
-        }
-
         public string SolveFirstPart(string inp)
         {
             var board = ProcessInput(inp);
             foreach (var (move, rotation) in board.Instructions)
             {
-                Debug.WriteLine($"{move} {rotation}");
                 for (var step = 0; step < move; step++)
                 {
                     var tmp = ComputeNextPositionOnDevelopedCube(board);
@@ -78,6 +68,32 @@ namespace AdventOfCode2022web.Puzzles
                     board.OrientationName = (OrientationName)(((int)board.OrientationName - 1 + 4) % 4);
             }
             return (1000 * (board.PositionOnMap.Y + 1) + 4 * (board.PositionOnMap.X + 1) + (int)board.OrientationName).ToString();
+        }
+
+        private static readonly (int X, int Y)[] Directions2D = new (int X, int Y)[] { (1, 0), (0, 1), (-1, 0), (0, -1) };
+
+        private static (int X, int Y) MoveInDirection((int X, int Y) pos, OrientationName orientationName)
+        {
+            var (x, y) = Directions2D[(int)orientationName];
+            return (pos.X + x, pos.Y + y);
+        }
+
+        private static (int X, int Y) ComputeNextPositionOnDevelopedCube(Board board)
+        {
+            var pos = board.PositionOnMap;
+            do
+            {
+                pos = MoveInDirection(pos, board.OrientationName);
+                if (pos.X > board.MaxX)
+                    pos.X = 0;
+                else if (pos.Y > board.MaxY)
+                    pos.Y = 0;
+                else if (pos.X < 0)
+                    pos.X = board.MaxX;
+                else if (pos.Y < 0)
+                    pos.Y = board.MaxY;
+            } while (Map(board, pos) == ' ');
+            return pos;
         }
 
         public string SolveSecondPart(string inp)
@@ -101,31 +117,13 @@ namespace AdventOfCode2022web.Puzzles
             return (1000 * (board.PositionOnMap.Y + 1) + 4 * (board.PositionOnMap.X + 1) + (int)board.OrientationName).ToString();
         }
 
-        private static (int X, int Y) ComputeNextPositionOnDevelopedCube(Board board)
-        {
-            var pos = board.PositionOnMap;
-            do
-            {
-                pos = MoveInDirection(pos, board.OrientationName);
-                if (pos.X > board.MaxX)
-                    pos.X = 0;
-                else if (pos.Y > board.MaxY)
-                    pos.Y = 0;
-                else if (pos.X < 0)
-                    pos.X = board.MaxX;
-                else if (pos.Y < 0)
-                    pos.Y = board.MaxY;
-            } while (Map(board, pos) == ' ');
-            return pos;
-        }
-
-        static (int X, int Y, int Z) Rot3DFace90XClockWise((int X, int Y, int Z) p)
+        static (int X, int Y, int Z) RotXClockWise((int X, int Y, int Z) p)
             => (p.X, -p.Z, p.Y);
-        static (int X, int Y, int Z) Rot3DFace90XAntiClockWise((int X, int Y, int Z) p)
+        static (int X, int Y, int Z) RotXAntiClockWise((int X, int Y, int Z) p)
             => (p.X, p.Z, -p.Y);
-        static (int X, int Y, int Z) Rot3DFace90YClockWise((int X, int Y, int Z) p)
+        static (int X, int Y, int Z) RotYClockWise((int X, int Y, int Z) p)
             => (-p.Z, p.Y, p.X);
-        static (int X, int Y, int Z) Rot3DFace90YAntiClockWise((int X, int Y, int Z) p)
+        static (int X, int Y, int Z) RotYAntiClockWise((int X, int Y, int Z) p)
             => (p.Z, p.Y, -p.X);
 
         private static ((int X, int Y) Position, OrientationName D) ComputeNextPositionOnCube(Board board)
@@ -154,24 +152,24 @@ namespace AdventOfCode2022web.Puzzles
                             x.border.y == -1 ? 2 : 
                             x.border.x == -1 ? 3 :
                             x.border.x == 1 ? 1 :0);
-                        var c = (X:x.CellId2D.X * board.CubeFaceSize, Y:x.CellId2D.Y * board.CubeFaceSize);
-                        pos2D = (c.X+posInFace.X, c.Y+ posInFace.Y);
+                        var cell = (X:x.CellId2D.X * board.CubeFaceSize, Y:x.CellId2D.Y * board.CubeFaceSize);
+                        pos2D = (cell.X+posInFace.X, cell.Y+ posInFace.Y);
                         if (rotation == OrientationName.Left)
-                            pos2D = (c.X + board.CubeFaceSize - posInFace.X - 1, c.Y + board.CubeFaceSize - posInFace.Y - 1);
+                            pos2D = (cell.X + board.CubeFaceSize - posInFace.X - 1, cell.Y + board.CubeFaceSize - posInFace.Y - 1);
                         if (rotation == OrientationName.Up)
-                            pos2D = (c.X + posInFace.Y, c.Y + board.CubeFaceSize - posInFace.X - 1);
+                            pos2D = (cell.X + posInFace.Y, cell.Y + board.CubeFaceSize - posInFace.X - 1);
                         if (rotation == OrientationName.Down)
-                            pos2D = (c.X + board.CubeFaceSize - posInFace.Y - 1, c.Y + posInFace.X);
+                            pos2D = (cell.X + board.CubeFaceSize - posInFace.Y - 1, cell.Y + posInFace.X);
                         orientationName = (OrientationName)(((int)orientationName+(int)rotation)%4);
                         break;
                     }
                     else
                     {
                         explored.Add(x.CellId2D);
-                        bfs.Enqueue(((x.CellId2D.X + dir2D.X, x.CellId2D.Y + dir2D.Y), Rot3DFace90YClockWise(x.border), Rot3DFace90YClockWise(x.face)));
-                        bfs.Enqueue(((x.CellId2D.X - dir2D.X, x.CellId2D.Y - dir2D.Y), Rot3DFace90YAntiClockWise(x.border), Rot3DFace90YAntiClockWise(x.face)));
-                        bfs.Enqueue(((x.CellId2D.X + dir2D.Y, x.CellId2D.Y - dir2D.X), Rot3DFace90XClockWise(x.border), Rot3DFace90XClockWise(x.face)));
-                        bfs.Enqueue(((x.CellId2D.X - dir2D.Y, x.CellId2D.Y + dir2D.X), Rot3DFace90XAntiClockWise(x.border), Rot3DFace90XAntiClockWise(x.face)));
+                        bfs.Enqueue(((x.CellId2D.X + dir2D.X, x.CellId2D.Y + dir2D.Y), RotYClockWise(x.border), RotYClockWise(x.face)));
+                        bfs.Enqueue(((x.CellId2D.X - dir2D.X, x.CellId2D.Y - dir2D.Y), RotYAntiClockWise(x.border), RotYAntiClockWise(x.face)));
+                        bfs.Enqueue(((x.CellId2D.X + dir2D.Y, x.CellId2D.Y - dir2D.X), RotXClockWise(x.border), RotXClockWise(x.face)));
+                        bfs.Enqueue(((x.CellId2D.X - dir2D.Y, x.CellId2D.Y + dir2D.X), RotXAntiClockWise(x.border), RotXAntiClockWise(x.face)));
                     }
                 }
             }
