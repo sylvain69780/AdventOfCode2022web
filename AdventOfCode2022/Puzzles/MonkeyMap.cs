@@ -180,6 +180,8 @@ namespace AdventOfCode2022web.Puzzles
 
         private static void DisplayMap(Board board)
         {
+            if (board.CubeFaceSize == 50)
+                return;
             var sb = new StringBuilder();
             for (var row = 0; row<board.Map.Length;row++)
             {
