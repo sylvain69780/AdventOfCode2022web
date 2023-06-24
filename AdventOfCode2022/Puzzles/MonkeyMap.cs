@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics;
-using System.IO.MemoryMappedFiles;
-using System.Reflection.Metadata.Ecma335;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace AdventOfCode2022web.Puzzles
@@ -10,12 +9,12 @@ namespace AdventOfCode2022web.Puzzles
     {
         private struct Board
         {
-            public string[] MapOfStrangelyShapedBoard;
+            public string[] Map;
             public List<(int Move, string Rotation)> Instructions;
-            public (int X, int Y) Position;
-            public Direction Direction;
-            public int MaxY => MapOfStrangelyShapedBoard.Length - 1;
-            public int MaxX => MapOfStrangelyShapedBoard[Position.Y].Length - 1;
+            public (int X, int Y) PositionOnMap;
+            public OrientationName OrientationName;
+            public int MaxY => Map.Length - 1;
+            public int MaxX => Map[PositionOnMap.Y].Length - 1;
             public int CubeFaceSize;
         }
 
@@ -29,14 +28,14 @@ namespace AdventOfCode2022web.Puzzles
             Array.Resize(ref input, input.Length - 2);
             return new Board()
             {
-                MapOfStrangelyShapedBoard = input,
+                Map = input,
                 Instructions = instructions,
-                Position = (input[0].IndexOf('.'), 0),
-                Direction = Direction.Right,
+                PositionOnMap = (input[0].IndexOf('.'), 0),
+                OrientationName = OrientationName.Right,
                 CubeFaceSize = cubeFaceSize
             };
         }
-        private enum Direction
+        private enum OrientationName
         {
             Right = 0,
             Down = 1,
@@ -44,178 +43,160 @@ namespace AdventOfCode2022web.Puzzles
             Up = 3
         }
 
-
-        private static char QueryMap(Board board, (int X, int Y) pos)
+        private static char Map(Board board, (int X, int Y) pos)
         {
-            if (pos.X < 0 || pos.Y < 0 || pos.Y > board.MaxY || pos.X > board.MapOfStrangelyShapedBoard[pos.Y].Length - 1)
+            if (pos.X < 0 || pos.Y < 0 || pos.Y > board.MaxY || pos.X > board.Map[pos.Y].Length - 1)
                 return ' ';
             else
-                return board.MapOfStrangelyShapedBoard[pos.Y][pos.X];
+                return board.Map[pos.Y][pos.X];
         }
 
-        private static bool IsWallBlockingOnCube(Board board)
-        {
-            var (pos, _) = ComputeNextPositionOnCube(board);
-            return QueryMap(board, pos) == '#';
-        }
+        private static readonly (int X, int Y)[] Directions2D = new (int X, int Y)[] { (1, 0), (0, 1), (-1, 0), (0, -1) };
 
-        private static bool IsWallBlockingOnDevelopedCube(Board board)
+        private static (int X, int Y) MoveInDirection((int X, int Y) pos, OrientationName orientationName)
         {
-            var pos = ComputeNextPositionOnDevelopedCube(board);
-            return QueryMap(board, pos) == '#';
-        }
-
-        private static ((int X, int Y) Position, Direction D) ComputeNextPositionOnCube(Board board)
-        {
-            var pos = board.Position;
-            var direction = board.Direction;
-            var currentCubeFace = (X: (pos.X / board.CubeFaceSize) % 4, Y: pos.Y / board.CubeFaceSize);
-            if (board.Direction == Direction.Right)
-                pos.X += 1;
-            if (board.Direction == Direction.Left)
-                pos.X -= 1;
-            if (board.Direction == Direction.Down)
-                pos.Y += 1;
-            if (board.Direction == Direction.Up)
-                pos.Y -= 1;
-            if (QueryMap(board, pos) == ' ')
-            {
-                var pathsToAdjacentFace = new Direction[][]
-                {
-                    // first is the rotation needed, other the traversal on the cube flat map
-                    // todo : find the rule between them
-                        new Direction[] { Direction.Down,         Direction.Down, Direction.Right },
-                        new Direction[] { Direction.Left,       Direction.Down, Direction.Down, Direction.Right },
-                        new Direction[] { Direction.Up,       Direction.Up, Direction.Right },
-                        new Direction[] { Direction.Left,       Direction.Up, Direction.Up, Direction.Right },
-                        new Direction[] { Direction.Right,      Direction.Left, Direction.Left, Direction.Left },
-                        new Direction[] { Direction.Left,       Direction.Left, Direction.Down, Direction.Down },
-                        new Direction[] { Direction.Left,       Direction.Left, Direction.Up, Direction.Up },
-                };
-                var posInFace = (X: pos.X % board.CubeFaceSize, Y: pos.Y % board.CubeFaceSize);
-                foreach (var traversal in pathsToAdjacentFace)
-                {
-                    var (X, Y) = currentCubeFace;
-                    foreach (var m in traversal.Skip(1))
-                    {
-                        var move = (Direction)(((int)m + (int)direction) %4);
-                        if (move == Direction.Up)
-                                Y--;
-                        if (move == Direction.Down)
-                            Y++;
-                        if (move == Direction.Right)
-                            X++;
-                        if (move == Direction.Left)
-                            X--;
-                        if (QueryMap(board, (X * board.CubeFaceSize, Y * board.CubeFaceSize)) == ' ')
-                            break;
-                    }
-                    if (QueryMap(board, (X * board.CubeFaceSize, Y * board.CubeFaceSize)) != ' ')
-                    {
-                        var rotation = traversal.First();
-                        if (rotation == Direction.Down)
-                            posInFace = (board.CubeFaceSize - posInFace.Y - 1, posInFace.X);
-                        if (rotation == Direction.Left)
-                            posInFace = (board.CubeFaceSize - posInFace.X - 1, board.CubeFaceSize - posInFace.Y - 1);
-                        if (rotation == Direction.Up)
-                            posInFace = (posInFace.Y, board.CubeFaceSize - posInFace.X - 1);
-                        direction = (Direction)(((int)direction + (int)rotation) % 4);
-                        pos = (X * board.CubeFaceSize + posInFace.X, Y * board.CubeFaceSize + posInFace.Y);
-                        break;
-                    } // todo no error if nothing found
-                }
-            }
-            return (pos, direction);
-        }
-
-        private static (int X, int Y) ComputeNextPositionOnDevelopedCube(Board board)
-        {
-            var pos = board.Position;
-            if (board.Direction == Direction.Right)
-            {
-                while (true)
-                {
-                    pos.X += 1;
-                    if (pos.X > board.MaxX)
-                        pos.X = 0;
-                    if (QueryMap(board, pos) != ' ')
-                        break;
-                }
-            }
-            if (board.Direction == Direction.Left)
-            {
-                while (true)
-                {
-                    pos.X -= 1;
-                    if (pos.X < 1)
-                        pos.X = board.MaxX;
-                    if (QueryMap(board, pos) != ' ')
-                        break;
-                }
-            }
-            if (board.Direction == Direction.Down)
-            {
-                while (true)
-                {
-                    pos.Y += 1;
-                    if (pos.Y > board.MaxY)
-                        pos.Y = 0;
-                    if (QueryMap(board, pos) != ' ')
-                        break;
-                }
-            }
-            if (board.Direction == Direction.Up)
-            {
-                while (true)
-                {
-                    pos.Y -= 1;
-                    if (pos.Y < 1)
-                        pos.Y = board.MaxY;
-                    if (QueryMap(board, pos) != ' ')
-                        break;
-                }
-            }
+            var dir = Directions2D[(int)orientationName];
+            pos = (pos.X + dir.X, pos.Y + dir.Y);
             return pos;
         }
 
         public string SolveFirstPart(string inp)
         {
-            var strangelyShapedBoard = ProcessInput(inp);
-            foreach (var (move, rotation) in strangelyShapedBoard.Instructions)
+            var board = ProcessInput(inp);
+            foreach (var (move, rotation) in board.Instructions)
             {
                 Debug.WriteLine($"{move} {rotation}");
                 for (var step = 0; step < move; step++)
                 {
-                    if (IsWallBlockingOnDevelopedCube(strangelyShapedBoard))
-                        break;
-                    strangelyShapedBoard.Position = ComputeNextPositionOnDevelopedCube(strangelyShapedBoard);
+                    var tmp = ComputeNextPositionOnDevelopedCube(board);
+                    if (Map(board, tmp) == '.')
+                        board.PositionOnMap = tmp;
                 }
                 if (rotation == "R")
-                    strangelyShapedBoard.Direction = (Direction)(((int)strangelyShapedBoard.Direction + 1) % 4);
+                    board.OrientationName = (OrientationName)(((int)board.OrientationName + 1) % 4);
                 if (rotation == "L")
-                    strangelyShapedBoard.Direction = (Direction)(((int)strangelyShapedBoard.Direction - 1 + 4) % 4);
+                    board.OrientationName = (OrientationName)(((int)board.OrientationName - 1 + 4) % 4);
             }
-            return (1000 * (strangelyShapedBoard.Position.Y + 1) + 4 * (strangelyShapedBoard.Position.X + 1) + (int)strangelyShapedBoard.Direction).ToString();
+            return (1000 * (board.PositionOnMap.Y + 1) + 4 * (board.PositionOnMap.X + 1) + (int)board.OrientationName).ToString();
         }
 
         public string SolveSecondPart(string inp)
         {
-            var strangelyShapedBoard = ProcessInput(inp);
-            foreach (var (move, rotation) in strangelyShapedBoard.Instructions)
+            var board = ProcessInput(inp);
+            foreach (var (move, rotation) in board.Instructions)
             {
                 Debug.WriteLine($"{move} {rotation}");
                 for (var step = 0; step < move; step++)
                 {
-                    if (IsWallBlockingOnCube(strangelyShapedBoard))
-                        break;
-                    (strangelyShapedBoard.Position, strangelyShapedBoard.Direction) = ComputeNextPositionOnCube(strangelyShapedBoard);
+                    var tmp = ComputeNextPositionOnCube(board);
+                    if (Map(board, tmp.Position) == '.')
+                        (board.PositionOnMap, board.OrientationName) = tmp;
+                    DisplayMap(board);
                 }
                 if (rotation == "R")
-                    strangelyShapedBoard.Direction = (Direction)(((int)strangelyShapedBoard.Direction + 1) % 4);
+                    board.OrientationName = (OrientationName)(((int)board.OrientationName + 1) % 4);
                 if (rotation == "L")
-                    strangelyShapedBoard.Direction = (Direction)(((int)strangelyShapedBoard.Direction - 1 + 4) % 4);
+                    board.OrientationName = (OrientationName)(((int)board.OrientationName - 1 + 4) % 4);
             }
-            return (1000 * (strangelyShapedBoard.Position.Y+1) + 4 * (strangelyShapedBoard.Position.X+1) + (int)strangelyShapedBoard.Direction).ToString();
+            return (1000 * (board.PositionOnMap.Y + 1) + 4 * (board.PositionOnMap.X + 1) + (int)board.OrientationName).ToString();
+        }
+
+        private static (int X, int Y) ComputeNextPositionOnDevelopedCube(Board board)
+        {
+            var pos = board.PositionOnMap;
+            do
+            {
+                pos = MoveInDirection(pos, board.OrientationName);
+                if (pos.X > board.MaxX)
+                    pos.X = 0;
+                else if (pos.Y > board.MaxY)
+                    pos.Y = 0;
+                else if (pos.X < 0)
+                    pos.X = board.MaxX;
+                else if (pos.Y < 0)
+                    pos.Y = board.MaxY;
+            } while (Map(board, pos) == ' ');
+            return pos;
+        }
+
+        static (int X, int Y, int Z) Rot3DFace90XClockWise((int X, int Y, int Z) p)
+            => (p.X, -p.Z, p.Y);
+        static (int X, int Y, int Z) Rot3DFace90XAntiClockWise((int X, int Y, int Z) p)
+            => (p.X, p.Z, -p.Y);
+        static (int X, int Y, int Z) Rot3DFace90YClockWise((int X, int Y, int Z) p)
+            => (-p.Z, p.Y, p.X);
+        static (int X, int Y, int Z) Rot3DFace90YAntiClockWise((int X, int Y, int Z) p)
+            => (p.Z, p.Y, -p.X);
+
+        private static ((int X, int Y) Position, OrientationName D) ComputeNextPositionOnCube(Board board)
+        {
+            var pos2D = board.PositionOnMap;
+            var orientationName = board.OrientationName;
+            var faceId2D = (X: pos2D.X / board.CubeFaceSize, Y: pos2D.Y / board.CubeFaceSize);
+            pos2D = MoveInDirection(pos2D, board.OrientationName);
+            if (Map(board, pos2D) == ' ')
+            {
+                var dir2D = Directions2D[(int)orientationName];
+                var cubeFaceFront = (0, 0, 1);
+                var cubeFaceRight = (1, 0, 0);
+                var cubeFaceBorder = (0, 1, 0);
+                var explored = new HashSet<(int X, int Y)>();
+                var bfs = new Queue<((int X, int Y) CellId2D, (int x, int y, int z) border, (int x, int y, int z) face)>();
+                bfs.Enqueue((faceId2D, cubeFaceBorder, cubeFaceRight));
+                while (bfs.TryDequeue(out var x))
+                {
+                    if (Map(board, (x.CellId2D.X * board.CubeFaceSize, x.CellId2D.Y * board.CubeFaceSize)) == ' ' || explored.Contains(x.CellId2D))
+                        continue;
+                    if (x.face == cubeFaceFront)
+                    {
+                        var posInFace = (X: (pos2D.X + board.CubeFaceSize) % board.CubeFaceSize, Y: (pos2D.Y + board.CubeFaceSize) % board.CubeFaceSize);
+                        var rotation = (OrientationName)(
+                            x.border.y == -1 ? 2 : 
+                            x.border.x == -1 ? 3 :
+                            x.border.x == 1 ? 1 :0);
+                        var c = (X:x.CellId2D.X * board.CubeFaceSize, Y:x.CellId2D.Y * board.CubeFaceSize);
+                        pos2D = (c.X+posInFace.X, c.Y+ posInFace.Y);
+                        if (rotation == OrientationName.Left)
+                            pos2D = (c.X + board.CubeFaceSize - posInFace.X - 1, c.Y + board.CubeFaceSize - posInFace.Y - 1);
+                        if (rotation == OrientationName.Up)
+                            pos2D = (c.X + posInFace.Y, c.Y + board.CubeFaceSize - posInFace.X - 1);
+                        if (rotation == OrientationName.Down)
+                            pos2D = (c.X + board.CubeFaceSize - posInFace.Y - 1, c.Y + posInFace.X);
+                        orientationName = (OrientationName)(((int)orientationName+(int)rotation)%4);
+                        break;
+                    }
+                    else
+                    {
+                        explored.Add(x.CellId2D);
+                        bfs.Enqueue(((x.CellId2D.X + dir2D.X, x.CellId2D.Y + dir2D.Y), Rot3DFace90YClockWise(x.border), Rot3DFace90YClockWise(x.face)));
+                        bfs.Enqueue(((x.CellId2D.X - dir2D.X, x.CellId2D.Y - dir2D.Y), Rot3DFace90YAntiClockWise(x.border), Rot3DFace90YAntiClockWise(x.face)));
+                        bfs.Enqueue(((x.CellId2D.X + dir2D.Y, x.CellId2D.Y - dir2D.X), Rot3DFace90XClockWise(x.border), Rot3DFace90XClockWise(x.face)));
+                        bfs.Enqueue(((x.CellId2D.X - dir2D.Y, x.CellId2D.Y + dir2D.X), Rot3DFace90XAntiClockWise(x.border), Rot3DFace90XAntiClockWise(x.face)));
+                    }
+                }
+            }
+            return (pos2D, orientationName);
+        }
+
+        private static void DisplayMap(Board board)
+        {
+            var sb = new StringBuilder();
+            for (var row = 0; row<board.Map.Length;row++)
+            {
+                for (var col = 0; col < board.Map[row].Length; col++)
+                {
+                    if (board.PositionOnMap == (col, row))
+                        sb.Append(
+                            board.OrientationName == OrientationName.Right ? '>' :
+                            board.OrientationName == OrientationName.Left ? '<' :
+                            board.OrientationName == OrientationName.Up ? '^' : 'v'
+                            );
+                    else
+                        sb.Append(board.Map[row][col]);
+                }
+                sb.Append('\n');
+            }
+            Debug.WriteLine(sb.ToString());
         }
     }
 }
