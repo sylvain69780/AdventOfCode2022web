@@ -64,7 +64,7 @@ else
 
     private async Task UpdateView(Func<string> fs)
     {
-        if (stopwatch.ElapsedMilliseconds > 100)
+        if (stopwatch.ElapsedMilliseconds > 100 || !stopwatch.IsRunning || DelayVisulalization)
         {
             var s = fs();
             if (s.Length > 25 && s[..23] == "data:image/png;base64, ")
@@ -87,7 +87,6 @@ else
         Response = string.Empty;
         ViewData = null;
         Image64 = null;
-        stopwatch.Start();
         using (_cts = new CancellationTokenSource())
             Response = await _solver!.SolveFirstPart(Input!, UpdateView, _cts.Token);
         IsTaskRunning = false;
@@ -100,7 +99,6 @@ else
         Response = string.Empty;
         ViewData = null;
         Image64 = null;
-        stopwatch.Start();
         using (_cts = new CancellationTokenSource())
             Response = await _solver!.SolveSecondPart(Input!, UpdateView, _cts.Token);
         IsTaskRunning = false;
