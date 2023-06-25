@@ -9,6 +9,7 @@ namespace AdventOfCode2022web.Puzzles
 
         private class Map
         {
+            public (int x, int y) SandPosition;
             public readonly HashSet<(int x, int y)>? OccupiedPositions;
             public int xMin = 500;
             public int yMin;
@@ -47,6 +48,8 @@ namespace AdventOfCode2022web.Puzzles
                                 ref Rgba32 pixel = ref pixelRow[x];
                                 if (map.OccupiedPositions!.Contains((map.xMin + x, map.yMin + y)))
                                     pixel = Color.White;
+                                if (map.SandPosition == (map.xMin + x, map.yMin + y))
+                                    pixel = Color.Red;
                             }
                         }
                     });
@@ -86,36 +89,37 @@ namespace AdventOfCode2022web.Puzzles
             stopwatch.Start();
             while (true)
             {
-                var sandPosition = (x: 500, y: 0);
+                map.SandPosition = (500,0);
                 var isFreeToMove = true;
-                while (isFreeToMove && sandPosition.y < floorPosition)
+                while (isFreeToMove && map.SandPosition.y < floorPosition)
                 {
-                    var newSandPosition = sandPosition;
+                    //if (stopwatch.ElapsedMilliseconds > 20)
+                    //{
+                        stopwatch.Restart();
+                        await update(Visualize(map));
+                        if (cancellationToken.IsCancellationRequested)
+                            return "";
+                    //}
+
+                    var newSandPosition = map.SandPosition;
                     foreach (var (dx, dy) in Directions)
                     {
-                        var (x, y) = (sandPosition.x + dx, sandPosition.y + dy);
+                        var (x, y) = (map.SandPosition.x + dx, map.SandPosition.y + dy);
                         if (!map.OccupiedPositions!.Contains((x, y)))
                         {
                             newSandPosition = (x, y);
                             break;
                         }
                     }
-                    if (newSandPosition == sandPosition)
+                    if (newSandPosition == map.SandPosition)
                         isFreeToMove = false;
                     else
-                        sandPosition = newSandPosition;
+                        map.SandPosition = newSandPosition;
                 }
-                if (sandPosition.y >= floorPosition) 
+                if (map.SandPosition.y >= floorPosition) 
                     break;
-                map.SetOccupied(sandPosition);
+                map.SetOccupied(map.SandPosition);
                 iterations++;
-                if (stopwatch.ElapsedMilliseconds > 1000)
-                {
-                    stopwatch.Restart();
-                    await update(Visualize(map));
-                    if (cancellationToken.IsCancellationRequested)
-                        break;
-                }
             }
             await update(Visualize(map));
             return iterations.ToString();
@@ -147,36 +151,36 @@ namespace AdventOfCode2022web.Puzzles
             stopwatch.Start();
             while (true)
             {
-                var sandPosition = (x: 500, y: 0);
+                map.SandPosition = (500,0);
                 var isFreeToMove = true;
                 while (isFreeToMove)
                 {
-                    var newSandPosition = sandPosition;
+                    //if (stopwatch.ElapsedMilliseconds > 1000)
+                    //{
+                        stopwatch.Restart();
+                        await update(Visualize(map));
+                        if (cancellationToken.IsCancellationRequested)
+                            break;
+                    //}
+                    var newSandPosition = map.SandPosition;
                     foreach (var (dx, dy) in Directions)
                     {
-                        var (x, y) = (sandPosition.x + dx, sandPosition.y + dy);
+                        var (x, y) = (map.SandPosition.x + dx, map.SandPosition.y + dy);
                         if (y < floorPosition && !map.OccupiedPositions!.Contains((x, y)))
                         {
                             newSandPosition = (x, y);
                             break;
                         }
                     }
-                    if (newSandPosition == sandPosition)
+                    if (newSandPosition == map.SandPosition)
                         isFreeToMove = false;
                     else
-                        sandPosition = newSandPosition;
+                        map.SandPosition = newSandPosition;
                 }
                 iterations++;
-                if (sandPosition == (500,0))
+                if (map.SandPosition == (500,0))
                     break;
-                map.SetOccupied(sandPosition);
-                if (stopwatch.ElapsedMilliseconds > 1000)
-                {
-                    stopwatch.Restart();
-                    await update(Visualize(map));
-                    if (cancellationToken.IsCancellationRequested)
-                        break;
-                }
+                map.SetOccupied(map.SandPosition);
             }
             await update(Visualize(map));
             stopwatch.Stop();
