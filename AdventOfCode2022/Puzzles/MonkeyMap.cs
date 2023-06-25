@@ -130,28 +130,28 @@ namespace AdventOfCode2022web.Puzzles
         {
             var pos2D = board.PositionOnMap;
             var orientationName = board.OrientationName;
-            var faceId2D = (X: pos2D.X / board.CubeFaceSize, Y: pos2D.Y / board.CubeFaceSize);
-            pos2D = MoveInDirection(pos2D, board.OrientationName);
+            pos2D = MoveInDirection(pos2D, orientationName);
             if (Map(board, pos2D) == ' ')
             {
+                var cellId2D = (X: board.PositionOnMap.X / board.CubeFaceSize, Y: board.PositionOnMap.Y / board.CubeFaceSize);
                 var dir2D = Directions2D[(int)orientationName];
                 var cubeFaceFront = (0, 0, 1);
                 var cubeFaceRight = (1, 0, 0);
                 var cubeFaceBorder = (0, 1, 0);
                 var explored = new HashSet<(int X, int Y)>();
-                var bfs = new Queue<((int X, int Y) CellId2D, (int x, int y, int z) border, (int x, int y, int z) face)>();
-                bfs.Enqueue((faceId2D, cubeFaceBorder, cubeFaceRight));
+                var bfs = new Queue<((int X, int Y) CellId2D, (int x, int y, int z) Border, (int x, int y, int z) Face)>();
+                bfs.Enqueue((CellId2D: cellId2D, Border: cubeFaceBorder, Face: cubeFaceRight));
                 while (bfs.TryDequeue(out var x))
                 {
                     if (Map(board, (x.CellId2D.X * board.CubeFaceSize, x.CellId2D.Y * board.CubeFaceSize)) == ' ' || explored.Contains(x.CellId2D))
                         continue;
-                    if (x.face == cubeFaceFront)
+                    if (x.Face == cubeFaceFront)
                     {
                         var posInFace = (X: (pos2D.X + board.CubeFaceSize) % board.CubeFaceSize, Y: (pos2D.Y + board.CubeFaceSize) % board.CubeFaceSize);
                         var rotation = (OrientationName)(
-                            x.border.y == -1 ? 2 : 
-                            x.border.x == -1 ? 3 :
-                            x.border.x == 1 ? 1 :0);
+                            x.Border.y == -1 ? 2 : 
+                            x.Border.x == -1 ? 3 :
+                            x.Border.x == 1 ? 1 :0);
                         var cell = (X:x.CellId2D.X * board.CubeFaceSize, Y:x.CellId2D.Y * board.CubeFaceSize);
                         pos2D = (cell.X+posInFace.X, cell.Y+ posInFace.Y);
                         if (rotation == OrientationName.Left)
@@ -166,10 +166,10 @@ namespace AdventOfCode2022web.Puzzles
                     else
                     {
                         explored.Add(x.CellId2D);
-                        bfs.Enqueue(((x.CellId2D.X + dir2D.X, x.CellId2D.Y + dir2D.Y), RotYClockWise(x.border), RotYClockWise(x.face)));
-                        bfs.Enqueue(((x.CellId2D.X - dir2D.X, x.CellId2D.Y - dir2D.Y), RotYAntiClockWise(x.border), RotYAntiClockWise(x.face)));
-                        bfs.Enqueue(((x.CellId2D.X + dir2D.Y, x.CellId2D.Y - dir2D.X), RotXClockWise(x.border), RotXClockWise(x.face)));
-                        bfs.Enqueue(((x.CellId2D.X - dir2D.Y, x.CellId2D.Y + dir2D.X), RotXAntiClockWise(x.border), RotXAntiClockWise(x.face)));
+                        bfs.Enqueue(((x.CellId2D.X + dir2D.X, x.CellId2D.Y + dir2D.Y), RotYClockWise(x.Border), RotYClockWise(x.Face)));
+                        bfs.Enqueue(((x.CellId2D.X - dir2D.X, x.CellId2D.Y - dir2D.Y), RotYAntiClockWise(x.Border), RotYAntiClockWise(x.Face)));
+                        bfs.Enqueue(((x.CellId2D.X + dir2D.Y, x.CellId2D.Y - dir2D.X), RotXClockWise(x.Border), RotXClockWise(x.Face)));
+                        bfs.Enqueue(((x.CellId2D.X - dir2D.Y, x.CellId2D.Y + dir2D.X), RotXAntiClockWise(x.Border), RotXAntiClockWise(x.Face)));
                     }
                 }
             }
