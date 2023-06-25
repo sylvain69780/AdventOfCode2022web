@@ -182,8 +182,8 @@ namespace AdventOfCode2022web.Puzzles
 
         private static string DisplayMap(Board board)
         {
-            if (board.CubeFaceSize == 50)
-                return "too large";
+            //if (board.CubeFaceSize == 50)
+            //    return "too large";
             var sb = new StringBuilder();
             for (var row = 0; row<board.Map.Length;row++)
             {

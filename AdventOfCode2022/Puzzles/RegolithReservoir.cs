@@ -11,6 +11,7 @@ namespace AdventOfCode2022web.Puzzles
         {
             public (int x, int y) SandPosition;
             public readonly HashSet<(int x, int y)>? OccupiedPositions;
+            public readonly HashSet<(int x, int y)>? InitialPositions;
             public int xMin = 500;
             public int yMin;
             public int xMax = 500;
@@ -18,6 +19,16 @@ namespace AdventOfCode2022web.Puzzles
             public Map()
             {
                 OccupiedPositions = new HashSet<(int x, int y)>();
+                InitialPositions = new HashSet<(int x, int y)>();
+            }
+            public void SetOccupiedInitial((int x, int y) position)
+            {
+                OccupiedPositions!.Add(position);
+                InitialPositions!.Add(position);
+                xMin = Math.Min(xMin, position.x);
+                yMin = Math.Min(yMin, position.y);
+                xMax = Math.Max(xMax, position.x);
+                yMax = Math.Max(yMax, position.y);
             }
             public void SetOccupied((int x, int y) position)
             {
@@ -46,9 +57,11 @@ namespace AdventOfCode2022web.Puzzles
                             for (int x = 0; x < pixelRow.Length; x++)
                             {
                                 ref Rgba32 pixel = ref pixelRow[x];
-                                if (map.OccupiedPositions!.Contains((map.xMin + x, map.yMin + y)))
+                                if (map.InitialPositions!.Contains((map.xMin + x, map.yMin + y)))
+                                    pixel = Color.Blue;
+                                else if (map.OccupiedPositions!.Contains((map.xMin + x, map.yMin + y)))
                                     pixel = Color.White;
-                                if (map.SandPosition == (map.xMin + x, map.yMin + y))
+                                else if (map.SandPosition == (map.xMin + x, map.yMin + y))
                                     pixel = Color.Red;
                             }
                         }
@@ -77,10 +90,10 @@ namespace AdventOfCode2022web.Puzzles
                     var endRock = rocks[i + 1];
                     if (beginRock.y == endRock.y)
                         for (var x = Math.Min(beginRock.x, endRock.x); x <= Math.Max(beginRock.x, endRock.x); x++)
-                            map.SetOccupied((x, beginRock.y));
+                            map.SetOccupiedInitial((x, beginRock.y));
                     if (beginRock.x == endRock.x)
                         for (var y = Math.Min(beginRock.y, endRock.y); y <= Math.Max(beginRock.y, endRock.y); y++)
-                            map.SetOccupied((beginRock.x,y));
+                            map.SetOccupiedInitial((beginRock.x,y));
                 }
             }
 
@@ -140,10 +153,10 @@ namespace AdventOfCode2022web.Puzzles
                     var endRock = rocks[i + 1];
                     if (beginRock.y == endRock.y)
                         for (var x = Math.Min(beginRock.x, endRock.x); x <= Math.Max(beginRock.x, endRock.x); x++)
-                            map.SetOccupied((x, beginRock.y));
+                            map.SetOccupiedInitial((x, beginRock.y));
                     if (beginRock.x == endRock.x)
                         for (var y = Math.Min(beginRock.y, endRock.y); y <= Math.Max(beginRock.y, endRock.y); y++)
-                            map.SetOccupied((beginRock.x, y));
+                            map.SetOccupiedInitial((beginRock.x, y));
                 }
             }
             var iterations = 0;
