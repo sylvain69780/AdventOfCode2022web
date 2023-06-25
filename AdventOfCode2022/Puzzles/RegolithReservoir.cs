@@ -95,7 +95,7 @@ namespace AdventOfCode2022web.Puzzles
                 {
                     //if (stopwatch.ElapsedMilliseconds > 20)
                     //{
-                        stopwatch.Restart();
+                   //     stopwatch.Restart();
                         await update(Visualize(map));
                         if (cancellationToken.IsCancellationRequested)
                             return "";
@@ -157,10 +157,10 @@ namespace AdventOfCode2022web.Puzzles
                 {
                     //if (stopwatch.ElapsedMilliseconds > 1000)
                     //{
-                        stopwatch.Restart();
+                    //    stopwatch.Restart();
                         await update(Visualize(map));
                         if (cancellationToken.IsCancellationRequested)
-                            break;
+                            return "";
                     //}
                     var newSandPosition = map.SandPosition;
                     foreach (var (dx, dy) in Directions)
