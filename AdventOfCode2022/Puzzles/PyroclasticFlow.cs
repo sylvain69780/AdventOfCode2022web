@@ -1,5 +1,4 @@
-﻿using SixLabors.ImageSharp.ColorSpaces;
-using System.Text;
+﻿using System.Text;
 
 namespace AdventOfCode2022web.Puzzles
 {

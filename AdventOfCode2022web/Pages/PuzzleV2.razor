@@ -3,7 +3,6 @@
 @using System.Text.RegularExpressions;
 @using AdventOfCode2022web.Puzzles;
 @inject HttpClient Http
-@implements IDisposable
 @inject PuzzleHelper puzzleHelper;
 
 <h1>@PuzzleTitle</h1>
@@ -15,20 +14,24 @@
     <button class="btn btn-primary" disabled=@IsTaskRunning @onclick="SolveFirstPart">Solve First Part</button>
     <button class="btn btn-primary" disabled=@IsTaskRunning @onclick="SolveSecondPart">Solve Second Part</button>
     <button class="btn btn-secondary" disabled=@( !IsTaskRunning ) @onclick="CancelComputation">Cancel</button>
+    <label><input type="checkbox" @bind="DelayVisulalization" />Delay visualization</label>
 </div>
 <div class="p-3 mb-2 bg-primary text-white">@Response</div>
-<div class="p-3 mb-2 bg-secondary text-white"><pre>@ViewData</pre></div>
-<div class="p-3 mb-2 bg-secondary text-white">
     @if (Image64 != null)
     {
-        <img src=@Image64 class="puzzle-image"/>
-    }
-</div>
+    <div class="p-3 mb-2 bg-secondary text-white">
+        <img src=@Image64 class="puzzle-image" style="image-rendering: pixelated" />
+    </div>
+} else
+{
+    <div class="p-3 mb-2 bg-secondary text-white"><pre>@ViewData</pre></div>
+}
 
 @code {
     private IPuzzleSolverV2? _solver;
     [Parameter]
     public int PuzzleNumber { get; set; }
+    private bool DelayVisulalization = true;
     private string? PuzzleTitle;
     private string? Input;
     private string? Response;
@@ -51,11 +54,11 @@
         _cts.Cancel();
     }
 
-    public void Dispose()
-    {
-        _cts.Cancel();
-        _cts.Dispose();
-    }
+    //public void Dispose()
+    //{
+    //    _cts.Cancel();
+    //    _cts.Dispose();
+    //}
 
     private async Task UpdateView(string s) 
     {
@@ -65,6 +68,8 @@
             ViewData = s;
         StateHasChanged();
         await Task.Delay(1);
+        if (DelayVisulalization)
+            await Task.Delay(1000);    
     }
 
     private async Task SolveFirstPart()

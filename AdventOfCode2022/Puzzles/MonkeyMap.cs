@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 namespace AdventOfCode2022web.Puzzles
 {
     [Puzzle(22, "Monkey Map")]
-    public class MonkeyMap : IPuzzleSolver
+    public class MonkeyMap : IPuzzleSolverV2
     {
         private struct Board
         {
@@ -16,6 +16,7 @@ namespace AdventOfCode2022web.Puzzles
             public int MaxY => Map.Length - 1;
             public int MaxX => Map[PositionOnMap.Y].Length - 1;
             public int CubeFaceSize;
+            public int Step;
         }
 
         private static Board ProcessInput(string puzzleInput)
@@ -51,7 +52,7 @@ namespace AdventOfCode2022web.Puzzles
                 return board.Map[pos.Y][pos.X];
         }
 
-        public string SolveFirstPart(string inp)
+        public async Task<string> SolveFirstPart(string inp, Func<string, Task> update, CancellationToken token)
         {
             var board = ProcessInput(inp);
             foreach (var (move, rotation) in board.Instructions)
@@ -61,6 +62,8 @@ namespace AdventOfCode2022web.Puzzles
                     var tmp = ComputeNextPositionOnDevelopedCube(board);
                     if (Map(board, tmp) == '.')
                         board.PositionOnMap = tmp;
+                    board.Step++;
+                    await update(DisplayMap(board));
                 }
                 if (rotation == "R")
                     board.OrientationName = (OrientationName)(((int)board.OrientationName + 1) % 4);
@@ -96,7 +99,7 @@ namespace AdventOfCode2022web.Puzzles
             return pos;
         }
 
-        public string SolveSecondPart(string inp)
+        public async Task<string> SolveSecondPart(string inp, Func<string, Task> update, CancellationToken token)
         {
             var board = ProcessInput(inp);
             foreach (var (move, rotation) in board.Instructions)
@@ -107,7 +110,8 @@ namespace AdventOfCode2022web.Puzzles
                     var tmp = ComputeNextPositionOnCube(board);
                     if (Map(board, tmp.Position) == '.')
                         (board.PositionOnMap, board.OrientationName) = tmp;
-                    DisplayMap(board);
+                    board.Step++;
+                    await update(DisplayMap(board));
                 }
                 if (rotation == "R")
                     board.OrientationName = (OrientationName)(((int)board.OrientationName + 1) % 4);
@@ -176,10 +180,10 @@ namespace AdventOfCode2022web.Puzzles
             return (pos2D, orientationName);
         }
 
-        private static void DisplayMap(Board board)
+        private static string DisplayMap(Board board)
         {
             if (board.CubeFaceSize == 50)
-                return;
+                return "too large";
             var sb = new StringBuilder();
             for (var row = 0; row<board.Map.Length;row++)
             {
@@ -196,7 +200,8 @@ namespace AdventOfCode2022web.Puzzles
                 }
                 sb.Append('\n');
             }
-            Debug.WriteLine(sb.ToString());
+            sb.Append($"Step {board.Step}\n");
+            return  sb.ToString();
         }
     }
 }

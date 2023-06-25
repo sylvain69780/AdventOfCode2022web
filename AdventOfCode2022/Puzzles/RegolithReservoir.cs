@@ -1,6 +1,4 @@
-﻿using SixLabors.ImageSharp.Drawing;
-using SixLabors.ImageSharp.Drawing.Processing;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 
 namespace AdventOfCode2022web.Puzzles
 {
