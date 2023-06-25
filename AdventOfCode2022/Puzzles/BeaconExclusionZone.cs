@@ -34,7 +34,7 @@ namespace AdventOfCode2022web.Puzzles
                 .ToList();
         }
 
-        public async Task<string> SolveFirstPart(string puzzleInput, Func<string, Task> update, CancellationToken cancellationToken)
+        public async Task<string> SolveFirstPart(string puzzleInput, Func<Func<string>, Task> update, CancellationToken cancellationToken)
         {
             var sensorsPositionsAndClosestBeacon = GetSensorPositionAndClosestBeacons(puzzleInput);
             var verticalPositionOfRowToAnalyze = sensorsPositionsAndClosestBeacon.Count <= 14 ? 10 : 2000000;
@@ -71,7 +71,7 @@ namespace AdventOfCode2022web.Puzzles
             }
             return score.ToString();
         }
-        public async Task<string> SolveSecondPart(string puzzleInput, Func<string, Task> update, CancellationToken cancellationToken)
+        public async Task<string> SolveSecondPart(string puzzleInput, Func<Func<string>, Task> update, CancellationToken cancellationToken)
         {
             var sensorsPositionsAndClosestBeacon = GetSensorPositionAndClosestBeacons(puzzleInput);
             var discard = sensorsPositionsAndClosestBeacon
@@ -142,11 +142,11 @@ namespace AdventOfCode2022web.Puzzles
                     stopwatch.Restart();
                     var (Min, Max) = squares.Peek();
                     var squareSize = Max.X - Min.X+1;
-                    await update($"Squares evaluated : {squares.Count} with square size of {squareSize}");
+                    await update(() => $"Squares evaluated : {squares.Count} with square size of {squareSize}");
                 }
 
             } while (squares.Count > 1 && maxIterations-- != 0 && !cancellationToken.IsCancellationRequested);
-            await update(string.Empty);
+            await update(() => string.Empty);
             stopwatch.Stop();
             var res = squares.Dequeue();
             // too big for int

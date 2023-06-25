@@ -30,7 +30,7 @@ namespace AdventOfCode2022web.Puzzles
             return newTail;
         }
 
-        public async Task<string> SolveFirstPart(string puzzleInput, Func<string, Task> func, CancellationToken cancellationToken)
+        public async Task<string> SolveFirstPart(string puzzleInput, Func<Func<string>, Task> func, CancellationToken cancellationToken)
         {
             var seriesOfMotions = ToLines(puzzleInput)
                 .Select(x => x.Split(" "))
@@ -47,7 +47,7 @@ namespace AdventOfCode2022web.Puzzles
                 tail = MoveTailPosition(tail, head);
                 visitedPositions.Add(tail);
             }
-            await func("No visualization available.");
+            await func(() => "No visualization available.");
             return Format(visitedPositions.Count);
         }
 
@@ -85,7 +85,7 @@ namespace AdventOfCode2022web.Puzzles
             }
         }
 
-        public async Task<string> SolveSecondPart(string puzzleInput, Func<string, Task> func, CancellationToken cancellationToken)
+        public async Task<string> SolveSecondPart(string puzzleInput, Func<Func<string>, Task> func, CancellationToken cancellationToken)
         {
             var seriesOfMotions = ToLines(puzzleInput)
                 .Select(x => x.Split(" "))
@@ -111,7 +111,7 @@ namespace AdventOfCode2022web.Puzzles
                 }
                 if (count++ < 200)
                 {
-                    await func(visualizer.Visualize(head, tails, visited));
+                    await func(() => visualizer.Visualize(head, tails, visited));
                     await Task.Delay(100);
                 }
                 visited.Add(tails[8]);

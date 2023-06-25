@@ -74,7 +74,7 @@ namespace AdventOfCode2022web.Puzzles
             return response;
         }
 
-        public async Task<string> SolveFirstPart(string puzzleInput, Func<string, Task> update, CancellationToken cancellationToken)
+        public async Task<string> SolveFirstPart(string puzzleInput, Func<Func<string>, Task> update, CancellationToken cancellationToken)
         {
             var paths = puzzleInput.Split("\n").Select(x => x.Replace(" -> ", "#").Split('#')
                 .Select(y => y.Split(','))
@@ -109,7 +109,7 @@ namespace AdventOfCode2022web.Puzzles
                     //if (stopwatch.ElapsedMilliseconds > 20)
                     //{
                    //     stopwatch.Restart();
-                        await update(Visualize(map));
+                        await update(() => Visualize(map));
                         if (cancellationToken.IsCancellationRequested)
                             return "";
                     //}
@@ -134,10 +134,10 @@ namespace AdventOfCode2022web.Puzzles
                 map.SetOccupied(map.SandPosition);
                 iterations++;
             }
-            await update(Visualize(map));
+            await update(() => Visualize(map));
             return iterations.ToString();
         }
-        public async Task<string> SolveSecondPart(string puzzleInput, Func<string, Task> update, CancellationToken cancellationToken)
+        public async Task<string> SolveSecondPart(string puzzleInput, Func<Func<string>, Task> update, CancellationToken cancellationToken)
         {
             var paths = puzzleInput.Split("\n").Select(x => x.Replace(" -> ", "#").Split('#')
                 .Select(y => y.Split(','))
@@ -171,7 +171,7 @@ namespace AdventOfCode2022web.Puzzles
                     //if (stopwatch.ElapsedMilliseconds > 1000)
                     //{
                     //    stopwatch.Restart();
-                        await update(Visualize(map));
+                        await update(() => Visualize(map));
                         if (cancellationToken.IsCancellationRequested)
                             return "";
                     //}
@@ -195,7 +195,7 @@ namespace AdventOfCode2022web.Puzzles
                     break;
                 map.SetOccupied(map.SandPosition);
             }
-            await update(Visualize(map));
+            await update(() => Visualize(map));
             stopwatch.Stop();
             return iterations.ToString();
         }

@@ -10,8 +10,8 @@ namespace AdventOfCode2022web.Puzzles
 
     public interface IPuzzleSolverV2
     {
-        Task<string> SolveFirstPart(string input, Func<string, Task> update, CancellationToken cancellationToken);
-        Task<string> SolveSecondPart(string input, Func<string, Task> update, CancellationToken cancellationToken);
+        Task<string> SolveFirstPart(string input, Func<Func<string>, Task> update, CancellationToken cancellationToken);
+        Task<string> SolveSecondPart(string input, Func<Func<string>, Task> update, CancellationToken cancellationToken);
     }
 
     [AttributeUsage(AttributeTargets.Class)]

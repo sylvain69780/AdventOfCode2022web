@@ -52,7 +52,7 @@ namespace AdventOfCode2022web.Puzzles
                 return board.Map[pos.Y][pos.X];
         }
 
-        public async Task<string> SolveFirstPart(string inp, Func<string, Task> update, CancellationToken token)
+        public async Task<string> SolveFirstPart(string inp, Func<Func<string>, Task> update, CancellationToken token)
         {
             var board = ProcessInput(inp);
             foreach (var (move, rotation) in board.Instructions)
@@ -63,7 +63,7 @@ namespace AdventOfCode2022web.Puzzles
                     if (Map(board, tmp) == '.')
                         board.PositionOnMap = tmp;
                     board.Step++;
-                    await update(DisplayMap(board));
+                    await update(() => DisplayMap(board));
                 }
                 if (rotation == "R")
                     board.OrientationName = (OrientationName)(((int)board.OrientationName + 1) % 4);
@@ -99,7 +99,7 @@ namespace AdventOfCode2022web.Puzzles
             return pos;
         }
 
-        public async Task<string> SolveSecondPart(string inp, Func<string, Task> update, CancellationToken token)
+        public async Task<string> SolveSecondPart(string inp, Func<Func<string>, Task> update, CancellationToken token)
         {
             var board = ProcessInput(inp);
             foreach (var (move, rotation) in board.Instructions)
@@ -111,7 +111,7 @@ namespace AdventOfCode2022web.Puzzles
                     if (Map(board, tmp.Position) == '.')
                         (board.PositionOnMap, board.OrientationName) = tmp;
                     board.Step++;
-                    await update(DisplayMap(board));
+                    await update(() => DisplayMap(board));
                 }
                 if (rotation == "R")
                     board.OrientationName = (OrientationName)(((int)board.OrientationName + 1) % 4);

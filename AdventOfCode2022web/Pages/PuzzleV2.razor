@@ -17,12 +17,13 @@
     <label><input type="checkbox" @bind="DelayVisulalization" />Click here for slower visualization</label>
 </div>
 <div class="p-3 mb-2 bg-primary text-white">@Response</div>
-    @if (Image64 != null)
-    {
+@if (Image64 != null)
+{
     <div class="p-3 mb-2 bg-secondary text-white">
         <img src=@Image64 class="puzzle-image" style="image-rendering: pixelated" />
     </div>
-} else
+}
+else
 {
     <div class="p-3 mb-2 bg-secondary text-white"><pre>@ViewData</pre></div>
 }
@@ -39,6 +40,7 @@
     protected string? Image64 { get; set; }
     private bool IsTaskRunning;
     private CancellationTokenSource _cts = new();
+    private Stopwatch stopwatch = new Stopwatch();
     protected override async Task OnParametersSetAsync()
     {
         var puzzle = puzzleHelper.Puzzles[PuzzleNumber];
@@ -60,16 +62,22 @@
     //    _cts.Dispose();
     //}
 
-    private async Task UpdateView(string s) 
+    private async Task UpdateView(Func<string> fs)
     {
-        if (s.Length > 25 && s[..23] == "data:image/png;base64, ")
-            Image64 = s;
-        else
-            ViewData = s;
-        StateHasChanged();
-        await Task.Delay(1);
-        if (DelayVisulalization)
-            await Task.Delay(500);    
+        if (stopwatch.ElapsedMilliseconds > 100)
+        {
+            var s = fs();
+            if (s.Length > 25 && s[..23] == "data:image/png;base64, ")
+                Image64 = s;
+            else
+                ViewData = s;
+            StateHasChanged();
+            if (DelayVisulalization)
+                await Task.Delay(500);
+            else
+                await Task.Delay(1);
+            stopwatch.Restart();
+        }
     }
 
     private async Task SolveFirstPart()
@@ -79,9 +87,11 @@
         Response = string.Empty;
         ViewData = null;
         Image64 = null;
+        stopwatch.Start();
         using (_cts = new CancellationTokenSource())
             Response = await _solver!.SolveFirstPart(Input!, UpdateView, _cts.Token);
         IsTaskRunning = false;
+        stopwatch.Stop();
     }
 
     private async Task SolveSecondPart()
@@ -90,8 +100,10 @@
         Response = string.Empty;
         ViewData = null;
         Image64 = null;
+        stopwatch.Start();
         using (_cts = new CancellationTokenSource())
             Response = await _solver!.SolveSecondPart(Input!, UpdateView, _cts.Token);
         IsTaskRunning = false;
+        stopwatch.Stop();
     }
 }
