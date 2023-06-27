@@ -95,37 +95,35 @@ namespace AdventOfCode2022web.Puzzles
         }
 
         /// <summary>
-        /// Represent the current box on the map as the front face of a 3D cube, normal vector (x:0,y:0,z:1)<br/>
-        /// One thing to realize is that when we move to a next box on the map we are rotating this cube at 90 degres on ether X or Y axis.<br/>
-        /// Select a target face. Using symetry we need only to compute the path to the right face, normal vector (x:1,y:0,z:0).<br/>
-        /// Start a Broard First Search algorithm tracking the rotation of the right face of the cube and the orientation vector (x:0,y:1;z:0)
-        /// as we are moving on the 2D map.<br/>
-        /// Stop the BFS and return the boxId when the target face becomes the front face.<br/>
-        /// Deduce the rotation from the change of the orientation vector during these rotations.
-        /// We can in face use a single vector and use the value 1 for tracking the face and the value 2 for tracking the orientation.
+        /// Represent the current box on the map as a face of a 3D cube.<br/>
+        /// One thing to realize is that when we move to a next box on the map we are rotating this cube at 90 degres on ether a vertical or horizontal axis.<br/>
+        /// Using symetry we need only to compute the 2D path on the map in order to have the to the neighbouging face on the right to take the place of the current face.<br/>
+        /// Start a Broard First Search (BFS) algorithm tracking the rotation of the cube using a single vector (1,2,3) as we are moving on the 2D map.<br/>
+        /// Stop the BFS and return the boxId when the face 1 is moved at the position of the face 3.<br/>
+        /// Deduce the rotation from the position of the face 2.
         /// </summary>
         /// <param name="simulation"></param>
         /// <returns>Target boxId and rotation</returns>
         private static ((int X, int Y) boxId, int rotation) TargetBoxAndRotation(Simulation simulation)
         {
             var explored = new HashSet<(int X, int Y)>();
-            var bfs = new Queue<((int X, int Y) BoxId, (int x, int y, int z) Face)>();
+            var bfs = new Queue<((int X, int Y) BoxId, (int x, int y, int z) Cube)>();
             var boxId = (X: simulation.Position.X / simulation.Side, Y: simulation.Position.Y / simulation.Side);
-            bfs.Enqueue((boxId, (1, 2, 0)));
+            bfs.Enqueue((boxId, (1, 2, 3)));
             while (bfs.TryDequeue(out var item))
             {
                 if (Map(simulation, (item.BoxId.X * simulation.Side, item.BoxId.Y * simulation.Side)) == ' ' || explored.Contains(item.BoxId))
                     continue;
-                if (item.Face.z == 1)
-                    return (item.BoxId, item.Face.y == 2 ? 0 : item.Face.y == -2 ? 2 : item.Face.x == 2 ? 1 : 3);
+                if (item.Cube.z == 1)
+                    return (item.BoxId, item.Cube.y == 2 ? 0 : item.Cube.y == -2 ? 2 : item.Cube.x == 2 ? 1 : 3);
                 else
                 {
                     explored.Add(item.BoxId);
                     var (dirX, dirY) = Directions2D[(int)simulation.Direction];
-                    bfs.Enqueue(((item.BoxId.X + dirX, item.BoxId.Y + dirY), RotCubeLeft(item.Face)));
-                    bfs.Enqueue(((item.BoxId.X - dirX, item.BoxId.Y - dirY), RotCubeRight(item.Face)));
-                    bfs.Enqueue(((item.BoxId.X + dirY, item.BoxId.Y - dirX), RotCubeDown(item.Face)));
-                    bfs.Enqueue(((item.BoxId.X - dirY, item.BoxId.Y + dirX), RotCubeUp(item.Face)));
+                    bfs.Enqueue(((item.BoxId.X + dirX, item.BoxId.Y + dirY), RotCubeLeft(item.Cube)));
+                    bfs.Enqueue(((item.BoxId.X - dirX, item.BoxId.Y - dirY), RotCubeRight(item.Cube)));
+                    bfs.Enqueue(((item.BoxId.X + dirY, item.BoxId.Y - dirX), RotCubeDown(item.Cube)));
+                    bfs.Enqueue(((item.BoxId.X - dirY, item.BoxId.Y + dirX), RotCubeUp(item.Cube)));
                 }
             }
             throw new NotSupportedException("Target box not found on the map.");
