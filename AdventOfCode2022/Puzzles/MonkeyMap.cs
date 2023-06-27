@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using SixLabors.Fonts;
+using System.Diagnostics;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -95,12 +96,39 @@ namespace AdventOfCode2022web.Puzzles
         }
 
         /// <summary>
-        /// Represent the current box on the map as a face of a 3D cube.<br/>
-        /// One thing to realize is that when we move to a next box on the map we are rotating this cube at 90 degres on ether a vertical or horizontal axis.<br/>
-        /// Using symetry we need only to compute the 2D path on the map in order to have the neighbouring face on the right to take the place of the current face.<br/>
-        /// Start a Broard First Search (BFS) algorithm, keeping track of the boxId on the map and the corresponding Cube configuration.<br/>
-        /// When the face 1 is moved at the position of the face 3 we acheived the good movement.<br/>
-        /// Deduce the rotation from the position of the face 2.
+        /// Le problème posé par ce puzzle est simple en apparence. On dispose en entrée du patron d'un cube avec des obstacles dessinés dessus. 
+        /// Il y a plusieurs façons de dessiner le patron d'un cube, faire une forme en croix avec 6 carrés accolés est la façon la plus commune. 
+        /// Mais ici les formes données sont plus biscornues et compliquées. Pour pouvoir résoudre le puzzle il faut se représenter chaque face 
+        /// du cube et d’en déterminer les faces voisines ainsi que leur emplacement sur le patron. C'est une première difficulté, la seconde 
+        /// étant que l’orientation des carrés entre eux change lorsque l'on enroule le patron pour en faire un cube. 
+        /// Il me semble que c'est un problème finalement assez diabolique.
+        /// La fonction ci-dessus est le fruit de nombreuses heures d'essais et d'erreurs. Une chose à réaliser est qu’un déplacement de 1 carré 
+        /// sur le patron correspond à une rotation d’un quart de tour qu’on effectuerait sur le cube afin de conserver la face courante en face de soi.
+        /// Une première astuce et de simplifier le problème à la recherche du voisin de droite de la face courante. Les autres voisins (droite, haut, bas)
+        /// sont obtenus en changeant par rotation la direction de la recherche sur le patron.
+        /// Pour trouver ce carré du patron qui est le voisin de droite sur le cube on fait tourner un algorithme de type recherche en largeur, 
+        /// en se déplacent de carré voisin en carré voisin sur le patron tout en déterminant à chaque fois la nouvelle position du cube dans l’espace.
+        /// Cette position peut être représenter par un vecteur en 3 dimensions, chaque dimension étant occupée par une valeur spécifiques 1,2,3 
+        /// permettant d’identifier les 3 faces orthogonales « right », « up » et « front ».
+        /// Lorsque la valeur 1 qui correspond initialement à la face de droit se retrouve à la place de la valeur 3, on sait qu'on a atteint 
+        /// la position souhaitées. L'orientation de la face est alors determinée par la position et le signe de la valeur 2.
+        /// 
+        /// The problem posed by this puzzle is seemingly simple. We are given a template of a cube with obstacles drawn on it as input. 
+        /// There are several ways to draw the template of a cube, such as creating a cross shape with 6 adjacent squares, which is the most common way. 
+        /// But here, the given shapes are more irregular and complicated. 
+        /// To solve the puzzle, one needs to visualize each face of the cube and determine their neighboring faces and their positions on the template. 
+        /// This is the first challenge, and the second challenge is that the orientation of the squares relative to each other changes when we wrap 
+        /// the template to form a cube. It seems to me that this is ultimately quite a devilish problem.
+        /// The above function is the result of many hours of trial and error.
+        /// One thing to realize is that moving 1 square on the template corresponds to a quarter turn rotation that we would perform on the cube to keep 
+        /// the current face facing us. One trick is to simplify the problem by searching for the right neighbor of the current face. 
+        /// The other cases (left, top, bottom) can be obtained by rotating the search direction on the template.
+        /// To find the square on the template that is the right neighbor on the cube, we rotate a breadth-first search algorithm, moving from one 
+        /// neighboring square to another on the template while determining the new position of the cube in space each time.
+        /// This position can be represented by a 3-dimensional vector, where each dimension is occupied by a specific value: 1, 2, or 3, 
+        /// which identify the three orthogonal faces "right," "up," and "front."
+        /// When the value 1, which initially corresponds to the right face, ends up in the position of the value 3, we know that we have reached 
+        /// the desired position. The orientation of the face is then determined by the position and the sign of the value 2 in the vector.
         /// </summary>
         /// <param name="simulation"></param>
         /// <returns>Target boxId and rotation</returns>
