@@ -97,9 +97,9 @@ namespace AdventOfCode2022web.Puzzles
         /// <summary>
         /// Represent the current box on the map as a face of a 3D cube.<br/>
         /// One thing to realize is that when we move to a next box on the map we are rotating this cube at 90 degres on ether a vertical or horizontal axis.<br/>
-        /// Using symetry we need only to compute the 2D path on the map in order to have the to the neighbouging face on the right to take the place of the current face.<br/>
-        /// Start a Broard First Search (BFS) algorithm tracking the rotation of the cube using a single vector (1,2,3) as we are moving on the 2D map.<br/>
-        /// Stop the BFS and return the boxId when the face 1 is moved at the position of the face 3.<br/>
+        /// Using symetry we need only to compute the 2D path on the map in order to have the neighbouring face on the right to take the place of the current face.<br/>
+        /// Start a Broard First Search (BFS) algorithm, keeping track of the boxId on the map and the corresponding Cube configuration.<br/>
+        /// When the face 1 is moved at the position of the face 3 we acheived the good movement.<br/>
         /// Deduce the rotation from the position of the face 2.
         /// </summary>
         /// <param name="simulation"></param>
