@@ -2,7 +2,9 @@
 .puzzle-image[b-zqkgmh7c0a] {
     height: 200px;
     image-rendering: pixelated;
-
+}
+.custom-range[b-zqkgmh7c0a] {
+    width: calc(20%); /* Ajuste la valeur en fonction de tes besoins */
 }
 /* /Shared/MainLayout.razor.rz.scp.css */
 
