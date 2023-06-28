@@ -20,7 +20,7 @@ namespace AdventOfCode2022web.Puzzles
             public int Step;
         }
 
-        public async Task<string> SolveFirstPart(string inp, Func<Func<string>, Task> update, CancellationToken token)
+        public async Task<string> SolveFirstPart(string inp, Func<Func<string>,bool, Task> update, CancellationToken token)
         {
             var simulation = ProcessInput(inp);
             foreach (var (move, rotation) in simulation.Instructions)
@@ -31,17 +31,18 @@ namespace AdventOfCode2022web.Puzzles
                     if (Map(simulation, tmp) != '#')
                         simulation.Position = tmp;
                     simulation.Step++;
-                    await update(() => DisplayMap(simulation));
+                    await update(() => DisplayMap(simulation),false);
                 }
                 if (rotation == "R")
                     simulation.Direction = (Direction)(((int)simulation.Direction + 1) % 4);
                 if (rotation == "L")
                     simulation.Direction = (Direction)(((int)simulation.Direction - 1 + 4) % 4);
             }
+            await update(() => DisplayMap(simulation), true);
             return (1000 * (simulation.Position.Y + 1) + 4 * (simulation.Position.X + 1) + (int)simulation.Direction).ToString();
         }
 
-        public async Task<string> SolveSecondPart(string inp, Func<Func<string>, Task> update, CancellationToken token)
+        public async Task<string> SolveSecondPart(string inp, Func<Func<string>,bool, Task> update, CancellationToken token)
         {
             var simulation = ProcessInput(inp);
             foreach (var (move, rotation) in simulation.Instructions)
@@ -52,13 +53,14 @@ namespace AdventOfCode2022web.Puzzles
                     if (Map(simulation, tmp.Position) != '#')
                         (simulation.Position, simulation.Direction) = tmp;
                     simulation.Step++;
-                    await update(() => DisplayMap(simulation));
+                    await update(() => DisplayMap(simulation),false);
                 }
                 if (rotation == "R")
                     simulation.Direction = (Direction)(((int)simulation.Direction + 1) % 4);
                 if (rotation == "L")
                     simulation.Direction = (Direction)(((int)simulation.Direction - 1 + 4) % 4);
             }
+            await update(() => DisplayMap(simulation), true);
             return (1000 * (simulation.Position.Y + 1) + 4 * (simulation.Position.X + 1) + (int)simulation.Direction).ToString();
         }
 

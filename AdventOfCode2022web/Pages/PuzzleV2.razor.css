@@ -1,5 +1,7 @@
 ﻿.puzzle-image {
     height: 200px;
     image-rendering: pixelated;
-
+}
+.custom-range {
+    width: calc(20%); /* Ajuste la valeur en fonction de tes besoins */
 }

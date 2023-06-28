@@ -34,7 +34,7 @@ namespace AdventOfCode2022web.Puzzles
                 .ToList();
         }
 
-        public async Task<string> SolveFirstPart(string puzzleInput, Func<Func<string>, Task> update, CancellationToken cancellationToken)
+        public async Task<string> SolveFirstPart(string puzzleInput, Func<Func<string>,bool, Task> update, CancellationToken cancellationToken)
         {
             var sensorsPositionsAndClosestBeacon = GetSensorPositionAndClosestBeacons(puzzleInput);
             var verticalPositionOfRowToAnalyze = sensorsPositionsAndClosestBeacon.Count <= 14 ? 10 : 2000000;
@@ -71,7 +71,7 @@ namespace AdventOfCode2022web.Puzzles
             }
             return score.ToString();
         }
-        public async Task<string> SolveSecondPart(string puzzleInput, Func<Func<string>, Task> update, CancellationToken cancellationToken)
+        public async Task<string> SolveSecondPart(string puzzleInput, Func<Func<string>,bool, Task> update, CancellationToken cancellationToken)
         {
             var sensorsPositionsAndClosestBeacon = GetSensorPositionAndClosestBeacons(puzzleInput);
             var discard = sensorsPositionsAndClosestBeacon
@@ -83,8 +83,6 @@ namespace AdventOfCode2022web.Puzzles
             var mapMaxSize = sensorsPositionsAndClosestBeacon.Count <= 14 ? 20 : 4000000;
             var maxIterations = (int)Math.Log2(mapMaxSize)+1; 
             squares.Enqueue(((0, 0), (mapMaxSize, mapMaxSize)));
-            var stopwatch = new Stopwatch();
-            stopwatch.Start();
             do
             {
                 var subdividedSquares = new Queue<((int X, int Y) Min, (int X, int Y) Max)>();
@@ -137,17 +135,12 @@ namespace AdventOfCode2022web.Puzzles
                     }
                 }
                 squares = subdividedSquares;
-                if (stopwatch.ElapsedMilliseconds > 1000)
-                {
-                    stopwatch.Restart();
-                    var (Min, Max) = squares.Peek();
-                    var squareSize = Max.X - Min.X+1;
-                    await update(() => $"Squares evaluated : {squares.Count} with square size of {squareSize}");
-                }
+                var (Min, Max) = squares.Peek();
+                var squareSize = Max.X - Min.X+1;
+                await update(() => $"Squares evaluated : {squares.Count} with square size of {squareSize}",false);
 
             } while (squares.Count > 1 && maxIterations-- != 0 && !cancellationToken.IsCancellationRequested);
-            await update(() => string.Empty);
-            stopwatch.Stop();
+            await update(() => string.Empty,true);
             var res = squares.Dequeue();
             // too big for int
             return ((long)res.Min.X * 4000000 + res.Min.Y).ToString();

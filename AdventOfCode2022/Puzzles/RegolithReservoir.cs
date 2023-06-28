@@ -74,7 +74,7 @@ namespace AdventOfCode2022web.Puzzles
             return response;
         }
 
-        public async Task<string> SolveFirstPart(string puzzleInput, Func<Func<string>, Task> update, CancellationToken cancellationToken)
+        public async Task<string> SolveFirstPart(string puzzleInput, Func<Func<string>,bool, Task> update, CancellationToken cancellationToken)
         {
             var paths = puzzleInput.Split("\n").Select(x => x.Replace(" -> ", "#").Split('#')
                 .Select(y => y.Split(','))
@@ -106,14 +106,9 @@ namespace AdventOfCode2022web.Puzzles
                 var isFreeToMove = true;
                 while (isFreeToMove && map.SandPosition.y < floorPosition)
                 {
-                    //if (stopwatch.ElapsedMilliseconds > 20)
-                    //{
-                   //     stopwatch.Restart();
-                        await update(() => Visualize(map));
+                        await update(() => Visualize(map),false);
                         if (cancellationToken.IsCancellationRequested)
                             return "";
-                    //}
-
                     var newSandPosition = map.SandPosition;
                     foreach (var (dx, dy) in Directions)
                     {
@@ -134,10 +129,10 @@ namespace AdventOfCode2022web.Puzzles
                 map.SetOccupied(map.SandPosition);
                 iterations++;
             }
-            await update(() => Visualize(map));
+            await update(() => Visualize(map),true);
             return iterations.ToString();
         }
-        public async Task<string> SolveSecondPart(string puzzleInput, Func<Func<string>, Task> update, CancellationToken cancellationToken)
+        public async Task<string> SolveSecondPart(string puzzleInput, Func<Func<string>,bool, Task> update, CancellationToken cancellationToken)
         {
             var paths = puzzleInput.Split("\n").Select(x => x.Replace(" -> ", "#").Split('#')
                 .Select(y => y.Split(','))
@@ -168,13 +163,9 @@ namespace AdventOfCode2022web.Puzzles
                 var isFreeToMove = true;
                 while (isFreeToMove)
                 {
-                    //if (stopwatch.ElapsedMilliseconds > 1000)
-                    //{
-                    //    stopwatch.Restart();
-                        await update(() => Visualize(map));
+                        await update(() => Visualize(map),false);
                         if (cancellationToken.IsCancellationRequested)
                             return "";
-                    //}
                     var newSandPosition = map.SandPosition;
                     foreach (var (dx, dy) in Directions)
                     {
@@ -195,7 +186,7 @@ namespace AdventOfCode2022web.Puzzles
                     break;
                 map.SetOccupied(map.SandPosition);
             }
-            await update(() => Visualize(map));
+            await update(() => Visualize(map),true);
             stopwatch.Stop();
             return iterations.ToString();
         }

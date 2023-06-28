@@ -30,7 +30,7 @@ namespace AdventOfCode2022web.Puzzles
             return newTail;
         }
 
-        public async Task<string> SolveFirstPart(string puzzleInput, Func<Func<string>, Task> func, CancellationToken cancellationToken)
+        public async Task<string> SolveFirstPart(string puzzleInput, Func<Func<string>,bool, Task> func, CancellationToken cancellationToken)
         {
             var seriesOfMotions = ToLines(puzzleInput)
                 .Select(x => x.Split(" "))
@@ -47,7 +47,7 @@ namespace AdventOfCode2022web.Puzzles
                 tail = MoveTailPosition(tail, head);
                 visitedPositions.Add(tail);
             }
-            await func(() => "No visualization available.");
+            await func(() => "No visualization available.",true);
             return Format(visitedPositions.Count);
         }
 
@@ -85,7 +85,7 @@ namespace AdventOfCode2022web.Puzzles
             }
         }
 
-        public async Task<string> SolveSecondPart(string puzzleInput, Func<Func<string>, Task> func, CancellationToken cancellationToken)
+        public async Task<string> SolveSecondPart(string puzzleInput, Func<Func<string>,bool, Task> func, CancellationToken cancellationToken)
         {
             var seriesOfMotions = ToLines(puzzleInput)
                 .Select(x => x.Split(" "))
@@ -97,7 +97,7 @@ namespace AdventOfCode2022web.Puzzles
             visited.Add((0, 0));
 
             var visualizer = new Visualizer();
-            var count = 0;
+ //           var count = 0;
             foreach (var move in seriesOfMotions)
             {
                 var (x, y) = Directions[move];
@@ -109,13 +109,11 @@ namespace AdventOfCode2022web.Puzzles
                     tails[i] = MoveTailPosition(tails[i], previous);
                     previous = tails[i];
                 }
-                if (count++ < 200)
-                {
-                    await func(() => visualizer.Visualize(head, tails, visited));
-                    await Task.Delay(100);
-                }
+//                if (count++ < 200)
+                    await func(() => visualizer.Visualize(head, tails, visited),false);
                 visited.Add(tails[8]);
             }
+            await func(() => visualizer.Visualize(head, tails, visited), true);
             return visited.Count.ToString();
         }
     }
