@@ -111,6 +111,8 @@ namespace AdventOfCode2022web.Puzzles
                 }
 //                if (count++ < 200)
                     await func(() => visualizer.Visualize(head, tails, visited),false);
+                    if (cancellationToken.IsCancellationRequested)
+                        return "Cancelled";
                 visited.Add(tails[8]);
             }
             await func(() => visualizer.Visualize(head, tails, visited), true);

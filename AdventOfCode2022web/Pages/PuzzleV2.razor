@@ -16,7 +16,7 @@
             <div class="btn-group" role="group">
                 <button class="btn btn-primary" disabled="@IsTaskRunning" @onclick="SolveFirstPart">Solve First Part</button>
                 <button class="btn btn-primary" disabled="@IsTaskRunning" @onclick="SolveSecondPart">Solve Second Part</button>
-                <button class="btn btn-secondary" disabled="!IsTaskRunning" @onclick="CancelComputation">Cancel</button>
+                <button class="btn btn-secondary" disabled="@(!IsTaskRunning)" @onclick="CancelComputation">Cancel</button>
             </div>
         </div>
     </div>
