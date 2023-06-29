@@ -5,75 +5,6 @@ namespace AdventOfCode2022web.Puzzles
     [Puzzle(14, "Regolith Reservoir")]
     public class RegolithReservoir : IPuzzleSolverV2
     {
-        private static readonly (int x, int y)[] Directions = new (int x, int y)[] { (0, 1), (-1, 1), (1, 1) };
-
-        private class Map
-        {
-            public (int x, int y) SandPosition;
-            public readonly HashSet<(int x, int y)>? OccupiedPositions;
-            public readonly HashSet<(int x, int y)>? InitialPositions;
-            public int xMin = 500;
-            public int yMin;
-            public int xMax = 500;
-            public int yMax;
-            public Map()
-            {
-                OccupiedPositions = new HashSet<(int x, int y)>();
-                InitialPositions = new HashSet<(int x, int y)>();
-            }
-            public void SetOccupiedInitial((int x, int y) position)
-            {
-                OccupiedPositions!.Add(position);
-                InitialPositions!.Add(position);
-                xMin = Math.Min(xMin, position.x);
-                yMin = Math.Min(yMin, position.y);
-                xMax = Math.Max(xMax, position.x);
-                yMax = Math.Max(yMax, position.y);
-            }
-            public void SetOccupied((int x, int y) position)
-            {
-                OccupiedPositions!.Add(position);
-                xMin = Math.Min(xMin, position.x);
-                yMin = Math.Min(yMin, position.y);
-                xMax = Math.Max(xMax, position.x);
-                yMax = Math.Max(yMax, position.y);
-            }
-        }
-
-        private static string Visualize(Map map)
-        {
-            var Width = map.xMax-map.xMin;
-            var Height = map.yMax-map.yMin;
-            var response = string.Empty;
-            using (MemoryStream outStream = new())
-            {
-                using (Image<Rgba32> img = new(Width, Height))
-                {
-                    img.ProcessPixelRows(accessor =>
-                    {
-                        for (int y = 0; y < accessor.Height; y++)
-                        {
-                            Span<Rgba32> pixelRow = accessor.GetRowSpan(y);
-                            for (int x = 0; x < pixelRow.Length; x++)
-                            {
-                                ref Rgba32 pixel = ref pixelRow[x];
-                                if (map.InitialPositions!.Contains((map.xMin + x, map.yMin + y)))
-                                    pixel = Color.Blue;
-                                else if (map.OccupiedPositions!.Contains((map.xMin + x, map.yMin + y)))
-                                    pixel = Color.White;
-                                else if (map.SandPosition == (map.xMin + x, map.yMin + y))
-                                    pixel = Color.Red;
-                            }
-                        }
-                    });
-                    img.SaveAsPng(outStream);
-                }
-
-                response = "data:image/png;base64, " + Convert.ToBase64String(outStream.ToArray());
-            }
-            return response;
-        }
-
         public async Task<string> SolveFirstPart(string puzzleInput, Func<Func<string>,bool, Task> update, CancellationToken cancellationToken)
         {
             var paths = puzzleInput.Split("\n").Select(x => x.Replace(" -> ", "#").Split('#')
@@ -98,8 +29,6 @@ namespace AdventOfCode2022web.Puzzles
             }
 
             var iterations = 0;
-            var stopwatch = new Stopwatch();
-            stopwatch.Start();
             while (true)
             {
                 map.SandPosition = (500,0);
@@ -155,8 +84,6 @@ namespace AdventOfCode2022web.Puzzles
                 }
             }
             var iterations = 0;
-            var stopwatch = new Stopwatch();
-            stopwatch.Start();
             while (true)
             {
                 map.SandPosition = (500,0);
@@ -187,8 +114,75 @@ namespace AdventOfCode2022web.Puzzles
                 map.SetOccupied(map.SandPosition);
             }
             await update(() => Visualize(map),true);
-            stopwatch.Stop();
             return iterations.ToString();
+        }
+        private static readonly (int x, int y)[] Directions = new (int x, int y)[] { (0, 1), (-1, 1), (1, 1) };
+
+        private class Map
+        {
+            public (int x, int y) SandPosition;
+            public readonly HashSet<(int x, int y)>? OccupiedPositions;
+            public readonly HashSet<(int x, int y)>? InitialPositions;
+            public int xMin = 500;
+            public int yMin;
+            public int xMax = 500;
+            public int yMax;
+            public Map()
+            {
+                OccupiedPositions = new HashSet<(int x, int y)>();
+                InitialPositions = new HashSet<(int x, int y)>();
+            }
+            public void SetOccupiedInitial((int x, int y) position)
+            {
+                OccupiedPositions!.Add(position);
+                InitialPositions!.Add(position);
+                xMin = Math.Min(xMin, position.x);
+                yMin = Math.Min(yMin, position.y);
+                xMax = Math.Max(xMax, position.x);
+                yMax = Math.Max(yMax, position.y);
+            }
+            public void SetOccupied((int x, int y) position)
+            {
+                OccupiedPositions!.Add(position);
+                xMin = Math.Min(xMin, position.x);
+                yMin = Math.Min(yMin, position.y);
+                xMax = Math.Max(xMax, position.x);
+                yMax = Math.Max(yMax, position.y);
+            }
+        }
+
+        private static string Visualize(Map map)
+        {
+            var Width = map.xMax - map.xMin;
+            var Height = map.yMax - map.yMin;
+            var response = string.Empty;
+            using (MemoryStream outStream = new())
+            {
+                using (Image<Rgba32> img = new(Width, Height))
+                {
+                    img.ProcessPixelRows(accessor =>
+                    {
+                        for (int y = 0; y < accessor.Height; y++)
+                        {
+                            Span<Rgba32> pixelRow = accessor.GetRowSpan(y);
+                            for (int x = 0; x < pixelRow.Length; x++)
+                            {
+                                ref Rgba32 pixel = ref pixelRow[x];
+                                if (map.InitialPositions!.Contains((map.xMin + x, map.yMin + y)))
+                                    pixel = Color.Blue;
+                                else if (map.OccupiedPositions!.Contains((map.xMin + x, map.yMin + y)))
+                                    pixel = Color.White;
+                                else if (map.SandPosition == (map.xMin + x, map.yMin + y))
+                                    pixel = Color.Red;
+                            }
+                        }
+                    });
+                    img.SaveAsPng(outStream);
+                }
+
+                response = "data:image/png;base64, " + Convert.ToBase64String(outStream.ToArray());
+            }
+            return response;
         }
     }
 }
