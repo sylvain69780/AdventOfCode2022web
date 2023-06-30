@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 
 namespace AdventOfCode2022web.Puzzles
 {
@@ -20,7 +21,7 @@ namespace AdventOfCode2022web.Puzzles
             public int Step;
         }
 
-        public async Task<string> SolveFirstPart(string inp, Func<Func<string>,bool, Task> update, CancellationToken token)
+        public async Task<string> SolveFirstPart(string inp, Func<Func<string>,bool, Task> update, CancellationToken cancellationToken)
         {
             var simulation = ProcessInput(inp);
             foreach (var (move, rotation) in simulation.Instructions)
@@ -31,6 +32,8 @@ namespace AdventOfCode2022web.Puzzles
                     if (Map(simulation, tmp) != '#')
                         simulation.Position = tmp;
                     simulation.Step++;
+                    if (cancellationToken.IsCancellationRequested)
+                        return "";
                     await update(() => DisplayMap(simulation),false);
                 }
                 if (rotation == "R")
@@ -42,7 +45,7 @@ namespace AdventOfCode2022web.Puzzles
             return (1000 * (simulation.Position.Y + 1) + 4 * (simulation.Position.X + 1) + (int)simulation.Direction).ToString();
         }
 
-        public async Task<string> SolveSecondPart(string inp, Func<Func<string>,bool, Task> update, CancellationToken token)
+        public async Task<string> SolveSecondPart(string inp, Func<Func<string>,bool, Task> update, CancellationToken cancellationToken)
         {
             var simulation = ProcessInput(inp);
             foreach (var (move, rotation) in simulation.Instructions)
@@ -53,6 +56,8 @@ namespace AdventOfCode2022web.Puzzles
                     if (Map(simulation, tmp.Position) != '#')
                         (simulation.Position, simulation.Direction) = tmp;
                     simulation.Step++;
+                    if (cancellationToken.IsCancellationRequested)
+                        return "";
                     await update(() => DisplayMap(simulation),false);
                 }
                 if (rotation == "R")
