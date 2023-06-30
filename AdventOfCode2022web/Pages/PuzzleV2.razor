@@ -17,7 +17,7 @@
             <div class="btn-group" role="group">
                 <button class="btn btn-primary" disabled="@IsTaskRunning" @onclick="SolveFirstPart">Solve First Part</button>
                 <button class="btn btn-primary" disabled="@IsTaskRunning" @onclick="SolveSecondPart">Solve Second Part</button>
-                <button class="btn btn-secondary" disabled="@(!IsTaskRunning)" @onclick="CancelComputation">Cancel</button>
+                <button class="btn btn-primary" disabled="@(!IsTaskRunning)" @onclick="CancelComputation">Cancel</button>
             </div>
         </div>
     </div>
@@ -31,22 +31,25 @@
         <div class="row">
             <div class="col-sm">
                 <div class="mb-3">
-                    <input type="range" class="form-range" @bind="DelayVisualizationValue" min="100" max="1000">
+                    <input type="range" class="form-range" @bind="DelayVisualizationValue" min="100" max="1000" step="100">
                 </div>
             </div>
         </div>
     </div>
 </div>
-<div class="p-3 mb-2 bg-primary text-white">@Response</div>
+@if (@Response != string.Empty)
+{
+    <div class="p-3 mb-2 bg-primary text-white">@Response</div>
+}
 @if (Image64 != null)
 {
-    <div class="p-3 mb-2 bg-secondary text-white">
+    <div class="p-3 mb-2 bg-dark text-white">
         <img src=@Image64 class="puzzle-image" style="image-rendering: pixelated" />
     </div>
 }
-else
+else if (ViewData != string.Empty)
 {
-    <div class="p-3 mb-2 bg-secondary text-white"><pre>@ViewData</pre></div>
+    <div class="p-3 mb-2 bg-dark text-white"><pre>The answer of the puzzle is : @ViewData</pre></div>
 }
 
 @code {
@@ -54,11 +57,11 @@ else
     [Parameter]
     public int PuzzleNumber { get; set; }
     private bool DelayVisualization = true;
-    private int DelayVisualizationValue = 1000;
+    private int DelayVisualizationValue = 500;
     private string? PuzzleTitle;
     private string? Input;
-    private string? Response;
-    private string? ViewData;
+    private string? Response = string.Empty;
+    private string? ViewData = string.Empty;
     protected string? Image64 { get; set; }
     private bool IsTaskRunning;
     private CancellationTokenSource _cts = new();
@@ -68,7 +71,7 @@ else
         var puzzle = puzzleHelper.Puzzles[PuzzleNumber];
         PuzzleTitle = puzzle.Title;
         _solver = (IPuzzleSolverV2)(Activator.CreateInstance(puzzle.Type))!;
-        Response = "The solution will be displayed here.";
+        Response = string.Empty;
         ViewData = string.Empty;
         Input = (await Http.GetStringAsync($"sample-data/{puzzle.Type.Name}.txt")).Replace("\r", "");
     }
@@ -98,7 +101,7 @@ else
 
         IsTaskRunning = true;
         Response = string.Empty;
-        ViewData = null;
+        ViewData = string.Empty;
         Image64 = null;
         using (_cts = new CancellationTokenSource())
             Response = await _solver!.SolveFirstPart(Input!, UpdateView, _cts.Token);
@@ -110,7 +113,7 @@ else
     {
         IsTaskRunning = true;
         Response = string.Empty;
-        ViewData = null;
+        ViewData = string.Empty;
         Image64 = null;
         using (_cts = new CancellationTokenSource())
             Response = await _solver!.SolveSecondPart(Input!, UpdateView, _cts.Token);
