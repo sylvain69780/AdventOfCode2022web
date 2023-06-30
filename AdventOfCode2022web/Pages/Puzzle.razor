@@ -6,6 +6,7 @@
 @inject PuzzleHelper puzzleHelper;
 
 <h1>@PuzzleTitle</h1>
+<div class="mb-3">The code for this solution on <a href="https://github.com/sylvain69780/AdventOfCode2022web/blob/master/AdventOfCode2022/Puzzles/@(puzzleHelper.Puzzles[PuzzleNumber].Type.Name).cs">GitHub</a></div>
 <div class="mb-3">
     <label class="form-label">The data below is that provided for example. Paste your own user input from <a href="https://adventofcode.com/2022/day/@PuzzleNumber">Advent Of Code</a></label>
     <pre><textarea class="form-control" rows="10" @bind="Input" maxlength="10000000"></textarea></pre>
