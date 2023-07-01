@@ -1,0 +1,122 @@
+﻿@page "/puzzleV3/{PuzzleNumber:int}"
+@using System.Diagnostics;
+@using System.Text.RegularExpressions;
+@using AdventOfCode2022web.Puzzles;
+@inject HttpClient Http
+@inject PuzzleHelper puzzleHelper;
+
+<h1>@PuzzleTitle</h1>
+<p>The code for this solution on <a href="https://github.com/sylvain69780/AdventOfCode2022web/blob/master/AdventOfCode2022/Puzzles/@(puzzleHelper.Puzzles[PuzzleNumber].Type.Name).cs">GitHub</a></p>
+<div class="mb-3 form-check form-switch">
+    <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" @bind="collapsePuzzleInput">
+    <label class="form-check-label" for="flexSwitchCheckChecked">Enter your own puzzle input</label>
+</div>
+@if (collapsePuzzleInput)
+{
+    <div>
+        <label class="form-label">The data below is that provided for example. Paste your own user input from <a href="https://adventofcode.com/2022/day/@PuzzleNumber">Advent Of Code</a>.</label>
+        <pre><textarea class="form-control" aria-label="Puzzle Input" rows="10" @bind="Input" maxlength="10000000"></textarea></pre>
+    </div>
+}
+<div class="btn-group mb-3" role="group">
+    <button class="btn btn-primary" disabled="@IsTaskRunning" @onclick="SolveFirstPart">Solve First Part</button>
+    <button class="btn btn-primary" disabled="@IsTaskRunning" @onclick="SolveSecondPart">Solve Second Part</button>
+    <button class="btn btn-primary" disabled="@(!IsTaskRunning)" @onclick="CancelComputation">Cancel</button>
+</div>
+<div class="mb-3 d-flex align-items-center">
+    <input type="range" class="form-range me-3" style="width: 200px;" @bind="DelayVisualizationValue" min="0" max="1000" step="50">
+    <label class="form-check-label">Delay between steps @DelayVisualizationValue</label>
+</div>
+@if (IsTaskRunning)
+{
+    <div class="spinner-grow text-primary" role="status">
+        <span class="visually-hidden">Simulation in progress...</span>
+    </div>
+}
+@if (Response != string.Empty)
+{
+    <div class="p-3 mb-2 bg-primary text-white">@((IsTaskRunning ? string.Empty : "The answer of the puzzle is : ") + Response)</div>
+}
+@if (Image64 != null)
+{
+    <div class="p-3 mb-2 bg-dark text-white">
+        <img src=@Image64 class="puzzle-image" style="image-rendering: pixelated" />
+    </div>
+}
+else if (ViewData != string.Empty)
+{
+    <div class=""><pre>@ViewData</pre></div>
+}
+
+@code {
+    bool collapsePuzzleInput = false;
+    private IPuzzleSolverV3? _solver;
+    [Parameter]
+    public int PuzzleNumber { get; set; }
+    private bool DelayVisualization => DelayVisualizationValue > 0;
+    private int DelayVisualizationValue = 500;
+    private string? PuzzleTitle;
+    private string? Input;
+    private string? Response = string.Empty;
+    private string? ViewData = string.Empty;
+    protected string? Image64 { get; set; }
+    private bool IsTaskRunning;
+    private CancellationTokenSource _cts = new();
+    private Stopwatch _stopwatch = new Stopwatch();
+    protected override async Task OnParametersSetAsync()
+    {
+        var puzzle = puzzleHelper.Puzzles[PuzzleNumber];
+        PuzzleTitle = puzzle.Title;
+        _solver = (IPuzzleSolverV3)(Activator.CreateInstance(puzzle.Type))!;
+        Response = string.Empty;
+        ViewData = string.Empty;
+        Input = (await Http.GetStringAsync($"sample-data/{puzzle.Type.Name}.txt")).Replace("\r", "");
+    }
+
+    private void CancelComputation() => _cts.Cancel();
+
+    private async Task UpdateView()
+    {
+        if (DelayVisualization || _stopwatch.ElapsedMilliseconds > 1000 )
+        {
+            var s = _solver.Visualize();
+            if (s.Length > 25 && s[..23] == "data:image/png;base64, ")
+                Image64 = s;
+            else
+                ViewData = s;
+            StateHasChanged();
+            if (DelayVisualization)
+                await Task.Delay(DelayVisualizationValue);
+            else
+                await Task.Delay(1);
+            _stopwatch.Restart();
+        }
+    }
+
+    private async Task SolveFirstPart() => await Solve(_solver.SolveFirstPart);
+    private async Task SolveSecondPart() => await Solve(_solver.SolveSecondPart);
+
+    private async Task Solve(Func<IEnumerable<string>> part)
+    {
+
+        IsTaskRunning = true;
+        Response = string.Empty;
+        ViewData = string.Empty;
+        Image64 = null;
+        _stopwatch.Start();
+        using (_cts = new CancellationTokenSource())
+        {
+            _solver.Setup(Input);
+            foreach (var s in part())
+            {
+                Response = s;
+                await UpdateView();
+                if (_cts.IsCancellationRequested)
+                    break;
+            }
+            await UpdateView();
+        }
+        IsTaskRunning = false;
+        _stopwatch.Stop();
+    }
+}

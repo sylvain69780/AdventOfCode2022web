@@ -14,6 +14,14 @@ namespace AdventOfCode2022web.Puzzles
         Task<string> SolveSecondPart(string input, Func<Func<string>, bool, Task> update, CancellationToken cancellationToken);
     }
 
+    public interface IPuzzleSolverV3
+    {
+        void Setup(string puzzleInput);
+        IEnumerable<string> SolveFirstPart();
+        IEnumerable<string> SolveSecondPart();
+        string Visualize();
+    }
+
     [AttributeUsage(AttributeTargets.Class)]
     public class PuzzleAttribute : Attribute
     {
@@ -25,7 +33,7 @@ namespace AdventOfCode2022web.Puzzles
     public class PuzzleHelper
     {
         public readonly IReadOnlyDictionary<int, (Type Type, int Number, string Title)> Puzzles = Assembly.GetExecutingAssembly().GetTypes()
-        .Where(x => x.IsClass && (typeof(IPuzzleSolver).IsAssignableFrom(x) || typeof(IPuzzleSolverV2).IsAssignableFrom(x)))
+        .Where(x => x.IsClass && (typeof(IPuzzleSolver).IsAssignableFrom(x) || typeof(IPuzzleSolverV2).IsAssignableFrom(x) || typeof(IPuzzleSolverV3).IsAssignableFrom(x)))
         .Select(x => (Type: x, Attr: x.GetCustomAttribute<PuzzleAttribute>()!))
         .Select(x => (x.Type, x.Attr.Number, x.Attr.Title))
         .ToDictionary(x => x.Number);

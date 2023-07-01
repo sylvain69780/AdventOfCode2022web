@@ -1,70 +1,97 @@
-﻿namespace AdventOfCode2022web.Puzzles
+﻿using System.Text;
+
+namespace AdventOfCode2022web.Puzzles
 {
     [Puzzle(23, "Unstable Diffusion")]
-    public class UnstableDiffusion : IPuzzleSolver
+    public class UnstableDiffusion : IPuzzleSolverV3
     {
-        public string SolveFirstPart(string inp)
+        private HashSet<(int X, int Y)> ElvesPosition;
+
+        private static readonly Dictionary<string, (int dx, int dy)> EightDirections = new()
         {
-            var input = inp.Split("\n");
+            {"N",(0,-1) },
+            {"S",(0,1) },
+            {"E",(1,0) },
+            {"W",(-1,0) },
+            {"NE",(1,-1) },
+            { "SE",(1,1)},
+            {"SW",(-1,1) },
+            {"NW",(-1,-1) }
+        };
+
+        private static readonly Dictionary<string, List<string>> directionsToMoveIfNoElveNearby = new()
+        {
+            { "N", new List<string> {"N","NE","NW"} },
+            { "S", new List<string> {"S","SE","SW"} },
+            { "W", new List<string> {"W","NW","SW"} },
+            { "E", new List<string> {"E","NE","SE"} }
+        };
+
+        public void Setup(string puzzleInput)
+        {
+            ElvesPosition = new HashSet<(int X, int Y)>();
+            var input = puzzleInput.Split("\n");
             var row = 0;
-            var elves = input
+            ElvesPosition = input
                 .Select(x => (line: x, row: row++))
                 .SelectMany(x => Enumerable.Range(0, x.line.Length).Where(col => x.line[col] == '#')
                 .Select(col => (x: col, y: x.row)))
                 .ToHashSet();
 
-            var directions = new Dictionary<string, (int dx, int dy)>()
-    {
-        {"N",(0,-1) },
-        {"S",(0,1) },
-        {"E",(1,0) },
-        {"W",(-1,0) },
-        {"NE",(1,-1) },
-        { "SE",(1,1)},
-        {"SW",(-1,1) },
-        {"NW",(-1,-1) }
-    };
-            var lookAt = new Queue<string>();
-            lookAt.Enqueue("N");
-            lookAt.Enqueue("S");
-            lookAt.Enqueue("W");
-            lookAt.Enqueue("E");
+        }
 
-            var lookAtDir = new Dictionary<string, List<string>>()
-    {
-        { "N", new List<string> {"N","NE","NW"} },
-        { "S", new List<string> {"S","SE","SW"} },
-        { "W", new List<string> {"W","NW","SW"} },
-        { "E", new List<string> {"E","NE","SE"} }
-    };
+        public string Visualize()
+        {
+            var xmin = ElvesPosition.Min(e => e.X);
+            var ymin = ElvesPosition.Min(e => e.Y);
+            var xmax = ElvesPosition.Max(e => e.X);
+            var ymax = ElvesPosition.Max(e => e.Y);
+            var sb = new StringBuilder();
+            for ( var y = ymin; y<=ymax; y++)
+            {
+                for (var x = xmin; x <= xmax; x++) 
+                {
+                    sb.Append(ElvesPosition.Contains((x, y)) ? '#' : '.');
+                }
+                sb.Append('\n');
+            }
+            return sb.ToString();
+        }
 
+        public IEnumerable<string> SolveFirstPart()
+        {
+            var directionPreferedOrder = new Queue<string>();
+            directionPreferedOrder.Enqueue("N");
+            directionPreferedOrder.Enqueue("S");
+            directionPreferedOrder.Enqueue("W");
+            directionPreferedOrder.Enqueue("E");
             var rounds = 10;
 
             for (var round = 1; round <= rounds; round++)
             {
                 var elvesMoves = new Dictionary<(int x, int y), (int nextX, int nextY)>();
-                foreach (var elve in elves)
+                foreach (var elve in ElvesPosition)
                 {
-                    var neighbourgs = directions.Values
-                        .Select(x => (elve.x + x.dx, elve.y + x.dy))
-                        .Where(x => elves.Contains(x)).Count();
-                    if (neighbourgs == 0)
+                    var neighbourgs = EightDirections.Values
+                        .Select(x => (elve.X + x.dx, elve.Y + x.dy))
+                        .Where(x => ElvesPosition.Contains(x)).ToList();
+                    if (neighbourgs.Count == 0)
                     {
                         elvesMoves.Add(elve, elve);
                         continue;
                     }
-                    foreach (var look in lookAt)
+                    foreach (var dir in directionPreferedOrder)
                     {
                         if (
-                            !lookAtDir[look]
-                            .Select(x => directions[x])
-                            .Select(x => (elve.x + x.dx, elve.y + x.dy))
-                            .Where(x => elves.Contains(x))
+                            !directionsToMoveIfNoElveNearby[dir]
+                            .Select(x => EightDirections[x])
+                            .Select(x => (elve.X + x.dx, elve.Y + x.dy))
+                            .Where(x => ElvesPosition.Contains(x))
                             .Any()
                             )
                         {
-                            var move = directions[look];
-                            elvesMoves.Add(elve, (elve.x + move.dx, elve.y + move.dy));
+                            var move = EightDirections[dir];
+                            elvesMoves.Add(elve, (elve.X + move.dx, elve.Y + move.dy));
                             break;
                         }
                     }
@@ -77,82 +104,57 @@
                 {
                     elvesMoves[elve] = elve;
                 }
-                elves = elvesMoves.Values.ToHashSet();
-                var v = lookAt.Dequeue();
-                lookAt.Enqueue(v);
+                ElvesPosition = elvesMoves.Values.ToHashSet();
+                var v = directionPreferedOrder.Dequeue();
+                directionPreferedOrder.Enqueue(v);
+                yield return $"Round {round}";
             }
             var (x1, y1, x2, y2) = (
-                elves.Select(x => x.x).Min(),
-                elves.Select(x => x.y).Min(),
-                elves.Select(x => x.x).Max(),
-                elves.Select(x => x.y).Max()
+                ElvesPosition.Select(e => e.X).Min(),
+                ElvesPosition.Select(e => e.Y).Min(),
+                ElvesPosition.Select(e => e.X).Max(),
+                ElvesPosition.Select(e => e.Y).Max()
                 );
-            var score = (x2 - x1 + 1) * (y2 - y1 + 1) - elves.Count;
-            return $"SCORE = {score}";
+            var score = (x2 - x1 + 1) * (y2 - y1 + 1) - ElvesPosition.Count;
+            yield return $"{score}";
         }
-        public string SolveSecondPart(string inp)
+        public IEnumerable<string> SolveSecondPart()
         {
-            var input = inp.Split("\n");
-            var row = 0;
-            var elves = input
-                .Select(x => (line: x, row: row++))
-                .SelectMany(x => Enumerable.Range(0, x.line.Length).Where(col => x.line[col] == '#')
-                .Select(col => (x: col, y: x.row)))
-                .ToHashSet();
 
-            var directions = new Dictionary<string, (int dx, int dy)>()
-    {
-        {"N",(0,-1) },
-        {"S",(0,1) },
-        {"E",(1,0) },
-        {"W",(-1,0) },
-        {"NE",(1,-1) },
-        { "SE",(1,1)},
-        {"SW",(-1,1) },
-        {"NW",(-1,-1) }
-    };
-            var lookAt = new Queue<string>();
-            lookAt.Enqueue("N");
-            lookAt.Enqueue("S");
-            lookAt.Enqueue("W");
-            lookAt.Enqueue("E");
+            var directionPreferedOrder = new Queue<string>();
+            directionPreferedOrder.Enqueue("N");
+            directionPreferedOrder.Enqueue("S");
+            directionPreferedOrder.Enqueue("W");
+            directionPreferedOrder.Enqueue("E");
 
-            var lookAtDir = new Dictionary<string, List<string>>()
-    {
-        { "N", new List<string> {"N","NE","NW"} },
-        { "S", new List<string> {"S","SE","SW"} },
-        { "W", new List<string> {"W","NW","SW"} },
-        { "E", new List<string> {"E","NE","SE"} }
-    };
-
-            var noMove = false;
+            var noMoveDone = false;
             var round = 0;
-            while (!noMove)
+            while (!noMoveDone)
             {
                 round++;
                 var elvesMoves = new Dictionary<(int x, int y), (int nextX, int nextY)>();
-                foreach (var elve in elves)
+                foreach (var elve in ElvesPosition)
                 {
-                    var neighbourgs = directions.Values
-                        .Select(x => (elve.x + x.dx, elve.y + x.dy))
-                        .Where(x => elves.Contains(x)).Count();
+                    var neighbourgs = EightDirections.Values
+                        .Select(x => (elve.X + x.dx, elve.Y + x.dy))
+                        .Where(x => ElvesPosition.Contains(x)).Count();
                     if (neighbourgs == 0)
                     {
                         elvesMoves.Add(elve, elve);
                         continue;
                     }
-                    foreach (var look in lookAt)
+                    foreach (var look in directionPreferedOrder)
                     {
                         if (
-                            !lookAtDir[look]
-                            .Select(x => directions[x])
-                            .Select(x => (elve.x + x.dx, elve.y + x.dy))
-                            .Where(x => elves.Contains(x))
+                            !directionsToMoveIfNoElveNearby[look]
+                            .Select(x => EightDirections[x])
+                            .Select(x => (elve.X + x.dx, elve.Y + x.dy))
+                            .Where(x => ElvesPosition.Contains(x))
                             .Any()
                             )
                         {
-                            var move = directions[look];
-                            elvesMoves.Add(elve, (elve.x + move.dx, elve.y + move.dy));
+                            var move = EightDirections[look];
+                            elvesMoves.Add(elve, (elve.X + move.dx, elve.Y + move.dy));
                             break;
                         }
                     }
@@ -165,21 +167,22 @@
                 {
                     elvesMoves[elve] = elve;
                 }
-                var v = lookAt.Dequeue();
-                lookAt.Enqueue(v);
+                var v = directionPreferedOrder.Dequeue();
+                directionPreferedOrder.Enqueue(v);
                 var newElves = elvesMoves.Values.ToHashSet();
-                if (noMove = newElves.SetEquals(elves))
+                if (noMoveDone = newElves.SetEquals(ElvesPosition))
                     break;
-                elves = newElves;
+                ElvesPosition = newElves;
+                yield return $"Round {round}";
             }
             var (x1, y1, x2, y2) = (
-                elves.Select(x => x.x).Min(),
-                elves.Select(x => x.y).Min(),
-                elves.Select(x => x.x).Max(),
-                elves.Select(x => x.y).Max()
+                ElvesPosition.Select(x => x.X).Min(),
+                ElvesPosition.Select(x => x.Y).Min(),
+                ElvesPosition.Select(x => x.X).Max(),
+                ElvesPosition.Select(x => x.Y).Max()
                 );
-            var score = (x2 - x1 + 1) * (y2 - y1 + 1) - elves.Count;
-            return $"SCORE = {round}";
+            var score = (x2 - x1 + 1) * (y2 - y1 + 1) - ElvesPosition.Count;
+            yield return $"{round}";
         }
     }
 }
