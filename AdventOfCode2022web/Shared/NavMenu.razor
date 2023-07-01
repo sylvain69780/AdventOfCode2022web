@@ -19,8 +19,8 @@
             </NavLink>
         </div>
         <div class="nav-item px-3">
-            <button class="btn btn-primary mb-2" @onclick="DecrementPage">Prev</button>
-            <button class="btn btn-primary mb-2" @onclick="IncrementPage">Next</button>
+            <button class="btn btn-primary" @onclick="DecrementPage">Prev</button>
+            <button class="btn btn-primary" @onclick="IncrementPage">Next</button>
         </div>
         @{
             var puzzles = puzzleHelper.Puzzles.Values.OrderBy(x => x.Number).ToList();
