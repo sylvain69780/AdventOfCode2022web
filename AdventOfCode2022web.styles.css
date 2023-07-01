@@ -1,10 +1,10 @@
 /* /Pages/PuzzleV2.razor.rz.scp.css */
 .puzzle-image[b-zqkgmh7c0a] {
     height: 200px;
-    image-rendering: pixelated;
 }
-.custom-range[b-zqkgmh7c0a] {
-    width: calc(20%); /* Ajuste la valeur en fonction de tes besoins */
+/* /Pages/PuzzleV3.razor.rz.scp.css */
+.puzzle-image[b-6a2irla2dv] {
+    height: 200px;
 }
 /* /Shared/MainLayout.razor.rz.scp.css */
 
