@@ -33,15 +33,15 @@
       "url": "_framework\/icudt.dat"
     },
     {
-      "hash": "sha256-BWz95MZjb0i71udZxwzAbDIlEGSxWPgE1Ui0U0WYPHM=",
+      "hash": "sha256-kZO67DUhV9MGglpPUM5RshU4q5HwFcTOegLouwjGBZ8=",
       "url": "_framework\/blazor.boot.json"
     },
     {
-      "hash": "sha256-IOBmGy5\/Su3tS+SLeSzWCfWNTY6B\/qcE+KVex9Bysxg=",
+      "hash": "sha256-P67KZikgKzxw1J9tYJXnQMi5tZTDsRLObd\/YSy+ZISc=",
       "url": "_framework\/AdventOfCode2022.dll"
     },
     {
-      "hash": "sha256-UR\/i37GQmqIwlM4FzO4GAhImXyWm\/0ZlI95lqDkgUh4=",
+      "hash": "sha256-FgHt3r9zZOdEBuD5aNCsNlLaoyuRm0tE+YLobtw3fcM=",
       "url": "_framework\/AdventOfCode2022web.dll"
     },
     {
@@ -309,6 +309,14 @@
       "url": "icon-512.png"
     },
     {
+      "hash": "sha256-lwJwgrl8zUC5VdUT1JtTYks\/FVnVM5HvmktA8UIF\/1Y=",
+      "url": "images\/elf-christmas-svgrepo-com.svg"
+    },
+    {
+      "hash": "sha256-0cD9VzqduuBGO8ZQhZOBAQFi4UKVj5qmVVKwWJvty+0=",
+      "url": "images\/elf-svgrepo-com.svg"
+    },
+    {
       "hash": "sha256-4FiLUAIWfoUpgBy1d5NAnfGuEh1kVZpCWjEh1lipZ8k=",
       "url": "index.html"
     },
@@ -421,5 +429,5 @@
       "url": "sample-data\/UnstableDiffusion.txt"
     }
   ],
-  "version": "Ombh6v70"
+  "version": "lBojCaDS"
 };
