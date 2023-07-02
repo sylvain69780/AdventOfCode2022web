@@ -22,17 +22,17 @@
     <button class="btn btn-primary" disabled="@IsTaskRunning" @onclick="SolveFirstPart">Solve First Part</button>
     <button class="btn btn-primary" disabled="@IsTaskRunning" @onclick="SolveSecondPart">Solve Second Part</button>
     <button class="btn btn-primary" disabled="@(!IsTaskRunning)" @onclick="CancelComputation">Cancel</button>
+    @if (IsTaskRunning)
+    {
+        <span class="spinner-grow text-primary ms-2" role="status">
+            <span class="visually-hidden">Simulation in progress...</span>
+        </span>
+    }
 </div>
 <div class="mb-3 d-flex align-items-center">
     <input type="range" class="form-range me-3" style="width: 200px;" @bind="DelayVisualizationValue" min="0" max="1000" step="50">
-    <label class="form-check-label">Delay between steps @DelayVisualizationValue</label>
+    <label class="form-check-label">Delay @DelayVisualizationValue ms</label>
 </div>
-@if (IsTaskRunning)
-{
-    <div class="spinner-grow text-primary" role="status">
-        <span class="visually-hidden">Simulation in progress...</span>
-    </div>
-}
 @if (Response != string.Empty)
 {
     <div class="p-3 mb-2 bg-primary text-white">@((IsTaskRunning ? string.Empty : "The answer of the puzzle is : ") + Response)</div>
@@ -43,16 +43,47 @@
         <img src=@Image64 class="puzzle-image" style="image-rendering: pixelated" />
     </div>
 }
-else if (ViewData != string.Empty)
+else if (ViewData != string.Empty && !(_solver is UnstableDiffusion))
 {
     <div class=""><pre>@ViewData</pre></div>
 }
+@if (ViewData != string.Empty && (_solver is UnstableDiffusion))
+{
+    UnstableDiffusion? a = _solver as UnstableDiffusion;
+    var positions = a.ElvesPosition;
+    var xmin = positions.Min(e => e.X) - 1;
+    var ymin = positions.Min(e => e.Y) - 1;
+    var xmax = positions.Max(e => e.X) + 4;
+    var ymax = positions.Max(e => e.Y) + 4;
+    <svg viewBox="@xmin @ymin @xmax @ymax" class="img-fluid">
+        <pattern id="gridPattern" width="1" height="1" patternUnits="userSpaceOnUse">
+            <rect width="1" height="1" fill="white" stroke="gray" stroke-width="0.1" />
+        </pattern>
+        <rect x="@xmin" y="@ymin" width="@(xmax-xmin)" height="@(ymax-ymin)" fill="url(#gridPattern)" />
+        <g id="myImage">
+            <g transform="translate(0.5,0.5)">
+                <circle r="0.5" fill="green" />
+                <g transform="translate(0, -0.05)">
+                    <g id="eye">
+                        <circle cx="0.15" r="0.1" fill="white" />
+                        <circle cx="0.10" r="0.05" fill="black" />
+                    </g>
+                    <use transform="scale(-1, 1)" href="#eye" />
+                </g>
+            </g>
+        </g>
+        @foreach (var p in positions)
+        {
+                <use href="#myImage" x="@(p.X)" y="@(p.Y)"/>
+        }
+    </svg>
+}
 
 @code {
-    bool collapsePuzzleInput = false;
-    private IPuzzleSolverV3? _solver;
     [Parameter]
     public int PuzzleNumber { get; set; }
+    bool collapsePuzzleInput = false;
+    private IPuzzleSolverV3? _solver;
     private bool DelayVisualization => DelayVisualizationValue > 0;
     private int DelayVisualizationValue = 500;
     private string? PuzzleTitle;
@@ -77,9 +108,9 @@ else if (ViewData != string.Empty)
 
     private async Task UpdateView()
     {
-        if (DelayVisualization || _stopwatch.ElapsedMilliseconds > 1000 )
+        if (DelayVisualization || _stopwatch.ElapsedMilliseconds > 1000)
         {
-            var s = _solver.Visualize();
+            var s = _solver!.Visualize();
             if (s.Length > 25 && s[..23] == "data:image/png;base64, ")
                 Image64 = s;
             else
@@ -93,8 +124,8 @@ else if (ViewData != string.Empty)
         }
     }
 
-    private async Task SolveFirstPart() => await Solve(_solver.SolveFirstPart);
-    private async Task SolveSecondPart() => await Solve(_solver.SolveSecondPart);
+    private async Task SolveFirstPart() => await Solve(_solver!.SolveFirstPart);
+    private async Task SolveSecondPart() => await Solve(_solver!.SolveSecondPart);
 
     private async Task Solve(Func<IEnumerable<string>> part)
     {

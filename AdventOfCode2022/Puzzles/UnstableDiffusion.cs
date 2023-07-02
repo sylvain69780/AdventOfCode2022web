@@ -5,7 +5,7 @@ namespace AdventOfCode2022web.Puzzles
     [Puzzle(23, "Unstable Diffusion")]
     public class UnstableDiffusion : IPuzzleSolverV3
     {
-        private HashSet<(int X, int Y)> ElvesPosition;
+        public HashSet<(int X, int Y)>? ElvesPosition;
 
         private static readonly Dictionary<string, (int dx, int dy)> EightDirections = new()
         {
