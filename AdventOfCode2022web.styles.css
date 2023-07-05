@@ -6,6 +6,69 @@
 .puzzle-image[b-6a2irla2dv] {
     height: 200px;
 }
+
+.elf-move-right[b-6a2irla2dv] {
+    animation-name: elf-move-right-anim-b-6a2irla2dv;
+    animation-fill-mode: forwards;
+    animation-iteration-count: infinite;
+}
+
+@keyframes elf-move-right-anim-b-6a2irla2dv {
+    from {
+        transform: translate(0px,0px);
+    }
+    to {
+        transform: translate(1px,0px);
+    }
+}
+
+.elf-move-left[b-6a2irla2dv] {
+    animation-name: elf-move-left-anim-b-6a2irla2dv;
+    animation-fill-mode: forwards;
+    animation-iteration-count: infinite;
+}
+
+@keyframes elf-move-left-anim-b-6a2irla2dv {
+    from {
+        transform: translate(0px,0px);
+    }
+
+    to {
+        transform: translate(-1px,0px);
+    }
+}
+
+.elf-move-down[b-6a2irla2dv] {
+    animation-name: elf-move-down-anim-b-6a2irla2dv;
+    animation-fill-mode: forwards;
+    animation-iteration-count: infinite;
+}
+
+@keyframes elf-move-down-anim-b-6a2irla2dv {
+    from {
+        transform: translate(0px,0px);
+    }
+
+    to {
+        transform: translate(0px,1px);
+    }
+}
+
+.elf-move-up[b-6a2irla2dv] {
+    animation-name: elf-move-up-anim-b-6a2irla2dv;
+    animation-fill-mode: forwards;
+    animation-iteration-count: infinite;
+}
+
+@keyframes elf-move-up-anim-b-6a2irla2dv {
+    from {
+        transform: translate(0px,0px);
+    }
+
+    to {
+        transform: translate(0px,-1px);
+    }
+}
 /* /Shared/MainLayout.razor.rz.scp.css */
 
 .page[b-qs7qgbma46] {
