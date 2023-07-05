@@ -10,7 +10,7 @@
 .elf-move-right[b-6a2irla2dv] {
     animation-name: elf-move-right-anim-b-6a2irla2dv;
     animation-fill-mode: forwards;
-    animation-iteration-count: infinite;
+    animation-iteration-count: 1;
 }
 
 @keyframes elf-move-right-anim-b-6a2irla2dv {
@@ -25,7 +25,7 @@
 .elf-move-left[b-6a2irla2dv] {
     animation-name: elf-move-left-anim-b-6a2irla2dv;
     animation-fill-mode: forwards;
-    animation-iteration-count: infinite;
+    animation-iteration-count: 1;
 }
 
 @keyframes elf-move-left-anim-b-6a2irla2dv {
@@ -41,7 +41,7 @@
 .elf-move-down[b-6a2irla2dv] {
     animation-name: elf-move-down-anim-b-6a2irla2dv;
     animation-fill-mode: forwards;
-    animation-iteration-count: infinite;
+    animation-iteration-count: 1;
 }
 
 @keyframes elf-move-down-anim-b-6a2irla2dv {
@@ -57,7 +57,7 @@
 .elf-move-up[b-6a2irla2dv] {
     animation-name: elf-move-up-anim-b-6a2irla2dv;
     animation-fill-mode: forwards;
-    animation-iteration-count: infinite;
+    animation-iteration-count: 1;
 }
 
 @keyframes elf-move-up-anim-b-6a2irla2dv {
