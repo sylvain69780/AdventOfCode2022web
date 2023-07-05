@@ -101,7 +101,7 @@ else if (ViewData != string.Empty && !(_solver is UnstableDiffusion))
                     if (d == (0, -1))
                         anim = "elf-move-up";
                 }
-                <use href="#myImage" x="@(p.X)" y="@(p.Y)" class="@anim" style="animation-duration : @(DelayVisualizationValue)ms;" />
+                <use href="#myImage" x="@(p.X)" y="@(p.Y)" class="@anim" style="animation-duration : @(DelayVisualizationValue *80 / 100)ms;" />
             }
         </svg>
     }

@@ -5,7 +5,7 @@
 .elf-move-right {
     animation-name: elf-move-right-anim;
     animation-fill-mode: forwards;
-    animation-iteration-count: infinite;
+    animation-iteration-count: 1;
 }
 
 @keyframes elf-move-right-anim {
@@ -20,7 +20,7 @@
 .elf-move-left {
     animation-name: elf-move-left-anim;
     animation-fill-mode: forwards;
-    animation-iteration-count: infinite;
+    animation-iteration-count: 1;
 }
 
 @keyframes elf-move-left-anim {
@@ -36,7 +36,7 @@
 .elf-move-down {
     animation-name: elf-move-down-anim;
     animation-fill-mode: forwards;
-    animation-iteration-count: infinite;
+    animation-iteration-count: 1;
 }
 
 @keyframes elf-move-down-anim {
@@ -52,7 +52,7 @@
 .elf-move-up {
     animation-name: elf-move-up-anim;
     animation-fill-mode: forwards;
-    animation-iteration-count: infinite;
+    animation-iteration-count: 1;
 }
 
 @keyframes elf-move-up-anim {
