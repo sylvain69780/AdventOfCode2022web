@@ -124,6 +124,7 @@ namespace AdventOfCode2022web.Puzzles
                 Elves.Select(e => e.X).Max(),
                 Elves.Select(e => e.Y).Max()
                 );
+            ElvesPrevPosition = Elves;
             var score = (x2 - x1 + 1) * (y2 - y1 + 1) - Elves.Length;
             yield return $"{score}";
         }

@@ -90,14 +90,17 @@ else if (ViewData != string.Empty && !(_solver is UnstableDiffusion))
                 var p = prevPositions[i];
                 var d = (positions[i].X - p.X, positions[i].Y - p.Y);
                 var anim = string.Empty;
-                if (d == (1, 0))
-                    anim = "elf-move-right";
-                if (d == (-1, 0))
-                    anim = "elf-move-left";
-                if (d == (0, 1))
-                    anim = "elf-move-down";
-                if (d == (0, -1))
-                    anim = "elf-move-up";
+                if ( runAnimation)
+                {
+                    if (d == (1, 0))
+                        anim = "elf-move-right";
+                    if (d == (-1, 0))
+                        anim = "elf-move-left";
+                    if (d == (0, 1))
+                        anim = "elf-move-down";
+                    if (d == (0, -1))
+                        anim = "elf-move-up";
+                }
                 <use href="#myImage" x="@(p.X)" y="@(p.Y)" class="@anim" style="animation-duration : @(DelayVisualizationValue)ms;" />
             }
         </svg>
@@ -109,6 +112,7 @@ else if (ViewData != string.Empty && !(_solver is UnstableDiffusion))
     public int PuzzleNumber { get; set; }
 
     (int xMin, int yMin, int xMax, int yMax) ViewBox = (-4, -4, 4, 4);
+    bool runAnimation = false;
     bool collapsePuzzleInput = false;
     private IPuzzleSolverV3? _solver;
     private bool DelayVisualization => DelayVisualizationValue > 0;
@@ -142,11 +146,20 @@ else if (ViewData != string.Empty && !(_solver is UnstableDiffusion))
                 Image64 = s;
             else
                 ViewData = s;
-            StateHasChanged();
+            runAnimation = false;
             if (DelayVisualization)
-                await Task.Delay(DelayVisualizationValue);
-            else
+            {
+                StateHasChanged();
                 await Task.Delay(1);
+                runAnimation = true;
+                StateHasChanged();
+                await Task.Delay(DelayVisualizationValue);
+            }
+            else
+            {
+                StateHasChanged();
+                await Task.Delay(1);
+            }
             _stopwatch.Restart();
         }
     }
