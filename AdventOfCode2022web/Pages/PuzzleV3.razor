@@ -67,6 +67,12 @@ else if (ViewData != string.Empty && !(_solver is UnstableDiffusion))
         if (ymax > ViewBox.yMax)
             ViewBox.yMax *= 2;
         <svg viewBox="@ViewBox.xMin @ViewBox.yMin @ViewBox.xMax @ViewBox.yMax" class="img-fluid">
+            <defs>
+                <radialGradient id="myGradient">
+                    <stop offset="10%" stop-color="chartreuse" />
+                    <stop offset="80%" stop-color="green" />
+                </radialGradient>
+            </defs>
             <pattern id="gridPattern" width="1" height="1" patternUnits="userSpaceOnUse">
                 <rect width="1" height="1" fill="white" stroke="gray" stroke-width="0.1" />
             </pattern>
@@ -74,11 +80,14 @@ else if (ViewData != string.Empty && !(_solver is UnstableDiffusion))
             <g visibility="hidden">
                 <g id="myImage">
                     <g transform="translate(0.5,0.5)">
-                        <circle r="0.5" fill="green" />
+                        <circle r="0.5" fill="url('#myGradient')" />
                         <g transform="translate(0, -0.05)">
                             <g id="eye">
+                                <circle cx="0.15" r="0.13" fill="green" />
                                 <circle cx="0.15" r="0.1" fill="white" />
-                                <circle cx="0.10" r="0.05" fill="black" />
+                                <circle cx="0.12" r="0.05" fill="black" >
+@*                                    <animate dur="1s" attributeName="cx" repeatCount="indefinite" values="0.12; 0.15; 0.12" />
+*@                                </circle>
                             </g>
                             <use transform="scale(-1, 1)" href="#eye" />
                         </g>
