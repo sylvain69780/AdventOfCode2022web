@@ -6,12 +6,10 @@ namespace AdventOfCode2022web.Puzzles
     public class UnstableDiffusion : IPuzzleSolverV3
     {
 
-        // public (int xMin, int yMin, int xMax, int yMax) ViewBox = (-4, -4, 4, 4);
+        public (int X, int Y)[] Elves = Array.Empty<(int X, int Y)>();
+        public (int X, int Y)[] ElvesPrevPosition = Array.Empty<(int X, int Y)>();
 
-        public (int X, int Y)[] Elves;
-        public (int X, int Y)[] ElvesPrevPosition;
-
-        private static readonly Dictionary<string, (int dx, int dy)> EightDirections = new()
+        private static readonly Dictionary<string, (int dx, int dy)> DirectionsToLookAround = new()
         {
             {"N",(0,-1) },
             {"S",(0,1) },
@@ -23,7 +21,7 @@ namespace AdventOfCode2022web.Puzzles
             {"NW",(-1,-1) }
         };
 
-        private static readonly (string Dir, List<string> Near)[] directionsToMoveIfNoElveNearby = new (string Dir, List<string> Near)[]
+        private static readonly (string Dir, List<string> Near)[] directionsToMoveAndProximityCheck = new (string Dir, List<string> Near)[]
         {
             ("N", new List<string> {"N","NE","NW"} ),
             ( "S", new List<string> {"S","SE","SW"} ),
@@ -43,25 +41,6 @@ namespace AdventOfCode2022web.Puzzles
             ElvesPrevPosition = Elves.ToArray();
         }
 
-        public string Visualize()
-        {
-            return string.Empty;
-            //var xmin = ElvesPosition.Min(e => e.X);
-            //var ymin = ElvesPosition.Min(e => e.Y);
-            //var xmax = ElvesPosition.Max(e => e.X);
-            //var ymax = ElvesPosition.Max(e => e.Y);
-            //var sb = new StringBuilder();
-            //for ( var y = ymin; y<=ymax; y++)
-            //{
-            //    for (var x = xmin; x <= xmax; x++) 
-            //    {
-            //        sb.Append(ElvesPosition.Contains((x, y)) ? '#' : '.');
-            //    }
-            //    sb.Append('\n');
-            //}
-            //return sb.ToString();
-        }
-
         public IEnumerable<string> SolveFirstPart()
         {
             var rounds = 10;
@@ -69,52 +48,7 @@ namespace AdventOfCode2022web.Puzzles
 
             for (var round = 1; round <= rounds; round++)
             {
-                var elvesPosition = Elves.ToHashSet();
-                Array.Copy(Elves, ElvesPrevPosition, Elves.Length);
-                var elvesCollisions = new Dictionary<(int X, int Y), int>();
-                for (var id = 0; id < Elves.Length; id++)
-                {
-                    var elve = Elves[id];
-                    var neighbourgs = EightDirections.Values
-                        .Select(x => (elve.X + x.dx, elve.Y + x.dy))
-                        .Where(x => elvesPosition.Contains(x)).ToList();
-                    if (neighbourgs.Count == 0)
-                        continue;
-                    for (var i = 0; i < 4; i++)
-                    {
-                        var dirIndex = (directionIndex + i) % 4;
-                        var dirName = directionsToMoveIfNoElveNearby[dirIndex].Dir;
-                        var dirNeighbourgs = directionsToMoveIfNoElveNearby[dirIndex].Near;
-                        if (!dirNeighbourgs
-                            .Select(s => EightDirections[s])
-                            .Select(x => (elve.X + x.dx, elve.Y + x.dy))
-                            .Where(x => elvesPosition.Contains(x))
-                            .Any()
-                            )
-                        {
-                            var (dx, dy) = EightDirections[dirName];
-                            elve = (elve.X + dx, elve.Y + dy);
-                            break;
-                        }
-                    }
-                    if (Elves[id] != elve)
-                    {
-                        if (elvesCollisions.ContainsKey(elve))
-                            elvesCollisions[elve] = id;
-                        else
-                        {
-                            Elves[id] = elve;
-                            elvesCollisions.Add(elve, id);
-                        }
-                    }
-                }
-                for (var id = 0; id < Elves.Length; id++)
-                {
-                    var elve = Elves[id];
-                    if (elvesCollisions.TryGetValue(elve,out var cid))
-                        if ( cid != id )
-                            Elves[id] = ElvesPrevPosition[id];
-                }
+                SimulateDiffusion(directionIndex);
                 directionIndex++;
                 yield return $"Round {round}";
             }
@@ -128,6 +62,7 @@ namespace AdventOfCode2022web.Puzzles
             var score = (x2 - x1 + 1) * (y2 - y1 + 1) - Elves.Length;
             yield return $"{score}";
         }
+
         public IEnumerable<string> SolveSecondPart()
         {
             var round = 0;
@@ -136,52 +71,7 @@ namespace AdventOfCode2022web.Puzzles
             while (someElevesMoved)
             {
                 round++;
-                var elvesPosition = Elves.ToHashSet();
-                Array.Copy(Elves, ElvesPrevPosition, Elves.Length);
-                var elvesCollisions = new Dictionary<(int X, int Y), int>();
-                for (var id = 0; id < Elves.Length; id++)
-                {
-                    var elve = Elves[id];
-                    var neighbourgs = EightDirections.Values
-                        .Select(x => (elve.X + x.dx, elve.Y + x.dy))
-                        .Where(x => elvesPosition.Contains(x)).ToList();
-                    if (neighbourgs.Count == 0)
-                        continue;
-                    for (var i = 0; i < 4; i++)
-                    {
-                        var dirIndex = (directionIndex + i) % 4;
-                        var dirName = directionsToMoveIfNoElveNearby[dirIndex].Dir;
-                        var dirNeighbourgs = directionsToMoveIfNoElveNearby[dirIndex].Near;
-                        if (!dirNeighbourgs
-                            .Select(s => EightDirections[s])
-                            .Select(x => (elve.X + x.dx, elve.Y + x.dy))
-                            .Where(x => elvesPosition.Contains(x))
-                            .Any()
-                            )
-                        {
-                            var (dx, dy) = EightDirections[dirName];
-                            elve = (elve.X + dx, elve.Y + dy);
-                            break;
-                        }
-                    }
-                    if (Elves[id] != elve)
-                    {
-                        if (elvesCollisions.ContainsKey(elve))
-                            elvesCollisions[elve] = id;
-                        else
-                        {
-                            Elves[id] = elve;
-                            elvesCollisions.Add(elve, id);
-                        }
-                    }
-                }
-                for (var id = 0; id < Elves.Length; id++)
-                {
-                    var elve = Elves[id];
-                    if (elvesCollisions.TryGetValue(elve, out var cid))
-                        if (cid != id)
-                            Elves[id] = ElvesPrevPosition[id];
-                }
+                SimulateDiffusion(directionIndex);
                 directionIndex++;
                 yield return $"Round {round}";
                 someElevesMoved = !Enumerable.SequenceEqual(ElvesPrevPosition, Elves);
@@ -189,5 +79,58 @@ namespace AdventOfCode2022web.Puzzles
             ElvesPrevPosition = Elves;
             yield return $"{round}";
         }
+
+        private void SimulateDiffusion(int directionIndex)
+        {
+            var elvesPosition = Elves.ToHashSet();
+            Array.Copy(Elves, ElvesPrevPosition, Elves.Length);
+            var elvesCollisions = new Dictionary<(int X, int Y), int>();
+            for (var id = 0; id < Elves.Length; id++)
+            {
+                var elve = Elves[id];
+                var neighbours = DirectionsToLookAround.Values
+                    .Select(x => (elve.X + x.dx, elve.Y + x.dy))
+                    .Where(x => elvesPosition.Contains(x)).ToList();
+                if (neighbours.Count == 0)
+                    continue;
+                for (var i = 0; i < 4; i++)
+                {
+                    var dirIndex = (directionIndex + i) % 4;
+                    var dirName = directionsToMoveAndProximityCheck[dirIndex].Dir;
+                    var dirNeighbourgs = directionsToMoveAndProximityCheck[dirIndex].Near;
+                    if (!dirNeighbourgs
+                        .Select(s => DirectionsToLookAround[s])
+                        .Select(x => (elve.X + x.dx, elve.Y + x.dy))
+                        .Where(x => elvesPosition.Contains(x))
+                        .Any()
+                        )
+                    {
+                        var (dx, dy) = DirectionsToLookAround[dirName];
+                        elve = (elve.X + dx, elve.Y + dy);
+                        break;
+                    }
+                }
+                if (Elves[id] != elve)
+                {
+                    if (elvesCollisions.ContainsKey(elve))
+                        elvesCollisions[elve] = id;
+                    else
+                    {
+                        Elves[id] = elve;
+                        elvesCollisions.Add(elve, id);
+                    }
+                }
+            }
+            for (var id = 0; id < Elves.Length; id++)
+            {
+                var elve = Elves[id];
+                if (elvesCollisions.TryGetValue(elve, out var cid))
+                    if (cid != id)
+                        Elves[id] = ElvesPrevPosition[id];
+            }
+        }
+
+        public string Visualize() => string.Empty;
+
     }
 }
