@@ -37,20 +37,53 @@
 {
     <div class="p-3 mb-2 bg-primary text-white">@((IsTaskRunning ? string.Empty : "The answer of the puzzle is : ") + Response)</div>
 }
-@if (Image64 != null)
+
+@if ((_solver is BlizzardBasin))
 {
-    <div class="p-3 mb-2 bg-dark text-white">
-        <img src=@Image64 class="puzzle-image" style="image-rendering: pixelated" />
-    </div>
+    BlizzardBasin? a = _solver as BlizzardBasin;
+    if (a!.Prev != null)
+    {
+        ViewBox = (-1, -1, a.Width + 2, a.Height + 2);
+        var finished = (a.Arrival.x, a.Arrival.y, t:a.Minute);
+        <svg viewBox="@ViewBox.xMin @ViewBox.yMin @ViewBox.xMax @ViewBox.yMax" class="img-fluid">
+            <defs>
+                <radialGradient id="myGradient">
+                    <stop offset="10%" stop-color="chartreuse" />
+                    <stop offset="80%" stop-color="green" />
+                </radialGradient>
+            </defs>
+            <pattern id="gridPattern" width="1" height="1" patternUnits="userSpaceOnUse">
+                <rect width="1" height="1" fill="white" stroke="gray" stroke-width="0.1" />
+            </pattern>
+            <rect x="@ViewBox.xMin" y="@ViewBox.yMin" width="@(ViewBox.xMax-ViewBox.xMin)" height="@(ViewBox.yMax-ViewBox.yMin)" fill="grey" />
+            <rect x="@(ViewBox.xMin+1)" y="@(ViewBox.yMin+1)" width="@(ViewBox.xMax-ViewBox.xMin-3)" height="@(ViewBox.yMax-ViewBox.yMin-3)" fill="url(#gridPattern)" />
+            <rect x="@(a.Start.x-1)" y="@(a.Start.y-1)" width="1" height="1" fill="blue"/>
+            <rect x="@(a.Arrival.x-1)" y="@(a.Arrival.y-1)" width="1" height="1" fill="red" />
+
+            @if ( a.Prev.ContainsKey(finished))
+            {
+                var np = finished;
+                while (a.Prev.TryGetValue(np, out np))
+                {
+                    <use href="#myImage" x="@(np.x-1)" y="@(np.y-1)" />
+                }
+            }
+            else
+            {
+                foreach (var p in a.Prev.Keys.Where(p => p.t == a.Minute).Select(p => (p.x, p.y)))
+                {
+                    <use href="#myImage" x="@(p.x-1)" y="@(p.y-1)" />
+                }
+            }
+
+        </svg>
+    }
 }
-else if (ViewData != string.Empty && !(_solver is UnstableDiffusion))
-{
-    <div class=""><pre>@ViewData</pre></div>
-}
+
 @if ((_solver is UnstableDiffusion))
 {
     UnstableDiffusion? a = _solver as UnstableDiffusion;
-    if (a.Elves != null)
+    if (a!.Elves.Length > 0)
     {
         var positions = a!.Elves;
         var prevPositions = a!.ElvesPrevPosition;
@@ -126,7 +159,7 @@ else if (ViewData != string.Empty && !(_solver is UnstableDiffusion))
     [Parameter]
     public int PuzzleNumber { get; set; }
 
-    (int xMin, int yMin, int xMax, int yMax) ViewBox = (-4, -4, 4, 4);
+    (int xMin, int yMin, int xMax, int yMax) ViewBox;
     bool runAnimation = false;
     bool collapsePuzzleInput = false;
     private IPuzzleSolverV3? _solver;
@@ -148,6 +181,9 @@ else if (ViewData != string.Empty && !(_solver is UnstableDiffusion))
         Response = string.Empty;
         ViewData = string.Empty;
         Input = (await Http.GetStringAsync($"sample-data/{puzzle.Type.Name}.txt")).Replace("\r", "");
+        if ((_solver is UnstableDiffusion))
+            ViewBox = (-4, -4, 4, 4);
+        _cts = new CancellationTokenSource();
     }
 
     private void CancelComputation() => _cts.Cancel();
@@ -156,11 +192,6 @@ else if (ViewData != string.Empty && !(_solver is UnstableDiffusion))
     {
         if (DelayVisualization || _stopwatch.ElapsedMilliseconds > 1000)
         {
-            var s = _solver!.Visualize();
-            if (s.Length > 25 && s[..23] == "data:image/png;base64, ")
-                Image64 = s;
-            else
-                ViewData = s;
             if (DelayVisualization)
             {
                 runAnimation = true;
