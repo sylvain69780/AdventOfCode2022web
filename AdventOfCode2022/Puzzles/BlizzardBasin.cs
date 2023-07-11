@@ -39,14 +39,15 @@ namespace AdventOfCode2022web.Puzzles
         public (int x, int y) Start;
         public (int x, int y) Arrival;
         public int Minute;
-        private List<(int x, int y, char c)> BlizzardsRight;
-        private List<(int x, int y, char c)> BlizzardsLeft;
-        private List<(int x, int y, char c)> BlizzardsUp;
-        private List<(int x, int y, char c)> BlizzardsDown;
+        public List<(int x, int y, char c)> BlizzardsRight;
+        public List<(int x, int y, char c)> BlizzardsLeft;
+        public List<(int x, int y, char c)> BlizzardsUp;
+        public List<(int x, int y, char c)> BlizzardsDown;
         public int Width;
         public int Height;
         private HashSet<(int x, int y)> Walls;
         public Dictionary<(int x, int y, int t), (int x, int y, int t)>? Prev;
+        public bool ComputingCompleted;
 
         private static readonly char[] BlizzardsTypes = new char[] { '>', '<', '^', 'v' };
 
@@ -64,9 +65,13 @@ namespace AdventOfCode2022web.Puzzles
         public IEnumerable<string> SolveFirstPart()
         {
             Minute = 0;
+            var newPrev = new Dictionary<(int x, int y, int t), (int x, int y, int t)>();
+            ComputingCompleted = false;
             var search = new Queue<(int x, int y)>();
             Prev = new Dictionary<(int x, int y, int t), (int x, int y, int t)>();
             search.Enqueue(Start);
+
+        
             bool found;
             do
             {
@@ -77,6 +82,22 @@ namespace AdventOfCode2022web.Puzzles
                 yield return $"{Minute}";
                 search = newSearch;
             } while (search.Count > 0 && !found);
+            var p = (Arrival.x, Arrival.y, Minute);
+            if (!Prev.ContainsKey(p))
+                throw new InvalidDataException("No solution found");
+            while (Prev.TryGetValue(p, out var np))
+            {
+                newPrev.Add(p, np);
+                p = np;
+            }
+            Prev = newPrev;
+            ComputingCompleted = true;
+            var minute = Minute;
+            for (var i = 1; i <= minute; i++) 
+            {
+                Minute = i;
+                yield return $"Replay step {i}";
+            }
         }
 
         private bool SearchForNextMove(Queue<(int x, int y)> search, Queue<(int x, int y)> newSearch, HashSet<(int, int y)> blizzardsPos,(int x,int y) arrival)
@@ -123,6 +144,7 @@ namespace AdventOfCode2022web.Puzzles
         public IEnumerable<string> SolveSecondPart()
         {
             Minute = 0;
+            ComputingCompleted = false;
             var newPrev = new Dictionary<(int x, int y, int t), (int x, int y, int t)>();
             var stages = new ((int x, int y), (int x, int y))[]
             {
@@ -155,6 +177,13 @@ namespace AdventOfCode2022web.Puzzles
                 }
             }
             Prev = newPrev;
+            ComputingCompleted = true;
+            var minute = Minute;
+            for (var i = 1; i <= minute; i++)
+            {
+                Minute = i;
+                yield return $"Replay step {i}";
+            }
         }
     }
 }

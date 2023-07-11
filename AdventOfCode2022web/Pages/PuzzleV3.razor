@@ -51,6 +51,19 @@
                     <stop offset="10%" stop-color="chartreuse" />
                     <stop offset="80%" stop-color="green" />
                 </radialGradient>
+                <g id="myImage">
+                    <g transform="translate(0.5,0.5)">
+                        <circle r="0.5" fill="url('#myGradient')" />
+                        <g transform="translate(0, -0.05)">
+                            <g id="eye">
+                                <circle cx="0.15" r="0.13" fill="green" />
+                                <circle cx="0.15" r="0.1" fill="white" />
+                                <circle cx="0.12" r="0.05" fill="black" />
+                            </g>
+                            <use transform="scale(-1, 1)" href="#eye" />
+                        </g>
+                    </g>
+                </g>
             </defs>
             <pattern id="gridPattern" width="1" height="1" patternUnits="userSpaceOnUse">
                 <rect width="1" height="1" fill="white" stroke="gray" stroke-width="0.1" />
@@ -60,17 +73,16 @@
             <rect x="@(a.Start.x-1)" y="@(a.Start.y-1)" width="1" height="1" fill="blue"/>
             <rect x="@(a.Arrival.x-1)" y="@(a.Arrival.y-1)" width="1" height="1" fill="red" />
 
-            @if ( a.Prev.ContainsKey(finished))
+            @if (a.ComputingCompleted)
             {
-                var np = finished;
-                while (a.Prev.TryGetValue(np, out np))
+                var np = a.Prev.Single(x => x.Key.t == a.Minute).Key;
                 {
                     <use href="#myImage" x="@(np.x-1)" y="@(np.y-1)" />
                 }
             }
             else
             {
-                foreach (var p in a.Prev.Keys.Where(p => p.t == a.Minute).Select(p => (p.x, p.y)))
+                foreach (var p in a.Prev.Keys.Select(p => (p.x, p.y)))
                 {
                     <use href="#myImage" x="@(p.x-1)" y="@(p.y-1)" />
                 }
