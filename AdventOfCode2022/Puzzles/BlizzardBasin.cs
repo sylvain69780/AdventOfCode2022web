@@ -98,6 +98,7 @@ namespace AdventOfCode2022web.Puzzles
                 Minute = i;
                 yield return $"Replay step {i}";
             }
+            yield return $"{Minute}";
         }
 
         private bool SearchForNextMove(Queue<(int x, int y)> search, Queue<(int x, int y)> newSearch, HashSet<(int, int y)> blizzardsPos,(int x,int y) arrival)
@@ -184,6 +185,7 @@ namespace AdventOfCode2022web.Puzzles
                 Minute = i;
                 yield return $"Replay step {i}";
             }
+            yield return $"{Minute}";
         }
     }
 }
