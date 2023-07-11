@@ -82,7 +82,7 @@
             }
             else
             {
-                foreach (var p in a.Prev.Keys.Select(p => (p.x, p.y)))
+                foreach (var p in a.Prev.Keys.Where(p => p.t == a.Minute).Select(p => (p.x, p.y)))
                 {
                     <use href="#myImage" x="@(p.x-1)" y="@(p.y-1)" />
                 }
