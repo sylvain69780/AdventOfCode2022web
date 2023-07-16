@@ -10,8 +10,8 @@
   "linkerEnabled": true,
   "resources": {
     "assembly": {
-      "AdventOfCode2022.dll": "sha256-TrRlF45qqqWtc\/EiMkkTnDQkYWdxqTQMnLKuLLaQUR0=",
-      "AdventOfCode2022web.dll": "sha256-hwovskRQqWIqMNlVK5IPlSfNxioyRDVtjPy7wnw51vc=",
+      "AdventOfCode2022.dll": "sha256-qg+1D7Hm4AzZdfyi9NWFnE\/uWAHG+Su6P+rMRFVfXjE=",
+      "AdventOfCode2022web.dll": "sha256-ZCuo75hncUY8XNERDcu32Og1T0nnheTjioO9s+vkI8M=",
       "Microsoft.AspNetCore.Components.dll": "sha256-gRhDkY3isbHpw8OWlPcEyaCITKRMIfRN1pxVpbmBSYw=",
       "Microsoft.AspNetCore.Components.Web.dll": "sha256-V85w+qPAX8WZzQnb26YGwsox0D9tdm8\/EoclVLSv7Ws=",
       "Microsoft.AspNetCore.Components.WebAssembly.dll": "sha256-k5luRRQL9VtNvTTnhxeiUgCRzfmIhKou4imsKZzkKoY=",

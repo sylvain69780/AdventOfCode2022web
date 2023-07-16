@@ -1,3 +1,70 @@
+/* /Pages/BlizzardBasinView.razor.rz.scp.css */
+.puzzle-image[b-rcuh15abw5] {
+    height: 200px;
+}
+
+.elf-move-right[b-rcuh15abw5] {
+    animation-name: elf-move-right-anim-b-rcuh15abw5;
+    animation-fill-mode: forwards;
+    animation-iteration-count: 1;
+}
+
+@keyframes elf-move-right-anim-b-rcuh15abw5 {
+    from {
+        transform: translate(0px,0px);
+    }
+    to {
+        transform: translate(1px,0px);
+    }
+}
+
+.elf-move-left[b-rcuh15abw5] {
+    animation-name: elf-move-left-anim-b-rcuh15abw5;
+    animation-fill-mode: forwards;
+    animation-iteration-count: 1;
+}
+
+@keyframes elf-move-left-anim-b-rcuh15abw5 {
+    from {
+        transform: translate(0px,0px);
+    }
+
+    to {
+        transform: translate(-1px,0px);
+    }
+}
+
+.elf-move-down[b-rcuh15abw5] {
+    animation-name: elf-move-down-anim-b-rcuh15abw5;
+    animation-fill-mode: forwards;
+    animation-iteration-count: 1;
+}
+
+@keyframes elf-move-down-anim-b-rcuh15abw5 {
+    from {
+        transform: translate(0px,0px);
+    }
+
+    to {
+        transform: translate(0px,1px);
+    }
+}
+
+.elf-move-up[b-rcuh15abw5] {
+    animation-name: elf-move-up-anim-b-rcuh15abw5;
+    animation-fill-mode: forwards;
+    animation-iteration-count: 1;
+}
+
+@keyframes elf-move-up-anim-b-rcuh15abw5 {
+    from {
+        transform: translate(0px,0px);
+    }
+
+    to {
+        transform: translate(0px,-1px);
+    }
+}
 /* /Pages/PuzzleV2.razor.rz.scp.css */
 .puzzle-image[b-zqkgmh7c0a] {
     height: 200px;
