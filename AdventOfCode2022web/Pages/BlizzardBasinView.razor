@@ -1,0 +1,77 @@
+﻿@page "/BlizzardBasinView"
+@using System.Diagnostics;
+@using AdventOfCode2022web.Puzzles;
+@inject PuzzleHelper puzzleHelper;
+@inject HttpClient Http
+
+@if ( _solver != null ) {
+    if (_solver.Prev != null)
+    {
+        ViewBox = (-1, -1, _solver.Width + 2, _solver.Height + 2);
+        <svg viewBox="@ViewBox.xMin @ViewBox.yMin @ViewBox.xMax @ViewBox.yMax" class="img-fluid">
+            <defs>
+                <radialGradient id="myGradient">
+                    <stop offset="10%" stop-color="chartreuse" />
+                    <stop offset="80%" stop-color="green" />
+                </radialGradient>
+                <g id="myImage">
+                    <g transform="translate(0.5,0.5)">
+                        <circle r="0.5" fill="url('#myGradient')" />
+                        <g transform="translate(0, -0.05)">
+                            <g id="eye">
+                                <circle cx="0.15" r="0.13" fill="green" />
+                                <circle cx="0.15" r="0.1" fill="white" />
+                                <circle cx="0.12" r="0.05" fill="black" />
+                            </g>
+                            <use transform="scale(-1, 1)" href="#eye" />
+                        </g>
+                    </g>
+                </g>
+            </defs>
+            <pattern id="gridPattern" width="1" height="1" patternUnits="userSpaceOnUse">
+                <rect width="1" height="1" fill="white" stroke="gray" stroke-width="0.1" />
+            </pattern>
+            <rect x="@ViewBox.xMin" y="@ViewBox.yMin" width="@(ViewBox.xMax-ViewBox.xMin)" height="@(ViewBox.yMax-ViewBox.yMin)" fill="grey" />
+            <rect x="@(ViewBox.xMin+1)" y="@(ViewBox.yMin+1)" width="@(ViewBox.xMax-ViewBox.xMin-3)" height="@(ViewBox.yMax-ViewBox.yMin-3)" fill="url(#gridPattern)" />
+            <rect x="@(_solver.Start.x-1)" y="@(_solver.Start.y-1)" width="1" height="1" fill="blue"/>
+            <rect x="@(_solver.Arrival.x-1)" y="@(_solver.Arrival.y-1)" width="1" height="1" fill="red" />
+
+            @if (_solver.ComputingCompleted)
+            {
+                var np = _solver.Prev.Single(x => x.Key.t == _solver.Minute).Key;
+                {
+                    <use href="#myImage" x="@(np.x-1)" y="@(np.y-1)" />
+                }
+            }
+            else
+            {
+                foreach (var p in _solver.Prev.Keys.Where(p => p.t == _solver.Minute).Select(p => (p.x, p.y)))
+                {
+                    <use href="#myImage" x="@(p.x-1)" y="@(p.y-1)" />
+                }
+            }
+
+        </svg>
+    }
+}
+
+<PuzzleInput PuzzleSolver="_solver" PuzzleNumber="24" Changed="@UpdateView" Input="@_input"/>
+
+@code {
+    [Parameter]
+    public int PuzzleNumber { get; set; }
+    private string? _input;
+    (int xMin, int yMin, int xMax, int yMax) ViewBox;
+    private BlizzardBasin _solver = new BlizzardBasin();
+    private int _animationDuration = 500;
+    public void UpdateView(int animationDuration)
+    {
+        _animationDuration = animationDuration;
+        StateHasChanged();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        _input = (await Http.GetStringAsync($"sample-data/BlizzardBasin.txt")).Replace("\r", "");
+    }
+}

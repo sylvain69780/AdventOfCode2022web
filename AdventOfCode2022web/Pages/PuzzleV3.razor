@@ -1,42 +1,8 @@
 ﻿@page "/puzzleV3/{PuzzleNumber:int}"
 @using System.Diagnostics;
-@using System.Text.RegularExpressions;
 @using AdventOfCode2022web.Puzzles;
-@inject HttpClient Http
 @inject PuzzleHelper puzzleHelper;
-
-<h1>@PuzzleTitle</h1>
-<p>The code for this solution on <a href="https://github.com/sylvain69780/AdventOfCode2022web/blob/master/AdventOfCode2022/Puzzles/@(puzzleHelper.Puzzles[PuzzleNumber].Type.Name).cs">GitHub</a></p>
-<div class="mb-3 form-check form-switch">
-    <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" @bind="collapsePuzzleInput">
-    <label class="form-check-label" for="flexSwitchCheckChecked">View puzzle input</label>
-</div>
-@if (collapsePuzzleInput)
-{
-    <div>
-        <label class="form-label">The data below is that provided for example. Paste your own user input from <a href="https://adventofcode.com/2022/day/@PuzzleNumber">Advent Of Code</a>.</label>
-        <pre><textarea class="form-control" aria-label="Puzzle Input" rows="10" @bind="Input" maxlength="10000000"></textarea></pre>
-    </div>
-}
-<div class="btn-group mb-3" role="group">
-    <button class="btn btn-primary" disabled="@IsTaskRunning" @onclick="SolveFirstPart">Solve First Part</button>
-    <button class="btn btn-primary" disabled="@IsTaskRunning" @onclick="SolveSecondPart">Solve Second Part</button>
-    <button class="btn btn-primary" disabled="@(!IsTaskRunning)" @onclick="CancelComputation">Cancel</button>
-    @if (IsTaskRunning)
-    {
-        <span class="spinner-grow text-primary ms-2" role="status">
-            <span class="visually-hidden">Simulation in progress...</span>
-        </span>
-    }
-</div>
-<div class="mb-3 d-flex align-items-center">
-    <input type="range" class="form-range me-3" style="width: 200px;" @bind="DelayVisualizationValue" min="0" max="1000" step="50">
-    <label class="form-check-label">Delay @DelayVisualizationValue ms</label>
-</div>
-@if (Response != string.Empty)
-{
-    <div class="p-3 mb-2 bg-primary text-white">@((IsTaskRunning ? string.Empty : "The answer of the puzzle is : ") + Response)</div>
-}
+@inject HttpClient Http
 
 @if ((_solver is BlizzardBasin))
 {
@@ -44,7 +10,6 @@
     if (a!.Prev != null)
     {
         ViewBox = (-1, -1, a.Width + 2, a.Height + 2);
-        var finished = (a.Arrival.x, a.Arrival.y, t:a.Minute);
         <svg viewBox="@ViewBox.xMin @ViewBox.yMin @ViewBox.xMax @ViewBox.yMax" class="img-fluid">
             <defs>
                 <radialGradient id="myGradient">
@@ -144,9 +109,9 @@
                 var d = (pp.X - p.X, pp.Y - p.Y);
                 var anim = string.Empty;
                 var style = string.Empty;
-                if (runAnimation)
+                if (_animationDuration > 0)
                 {
-                    style = $"animation-duration : {DelayVisualizationValue * 80 / 100}ms;";
+                    style = $"animation-duration : {_animationDuration * 80 / 100}ms;";
                     if (d == (1, 0))
                         anim = "elf-move-right";
                     if (d == (-1, 0))
@@ -167,86 +132,27 @@
     }
 }
 
+<PuzzleInput PuzzleSolver="_solver" PuzzleNumber="@PuzzleNumber" Changed="@UpdateView" Input="@_input"/>
+
 @code {
     [Parameter]
     public int PuzzleNumber { get; set; }
-
+    private string? _input;
     (int xMin, int yMin, int xMax, int yMax) ViewBox;
-    bool runAnimation = false;
-    bool collapsePuzzleInput = false;
     private IPuzzleSolverV3? _solver;
-    private bool DelayVisualization => DelayVisualizationValue > 0;
-    private int DelayVisualizationValue = 500;
-    private string? PuzzleTitle;
-    private string? Input;
-    private string? Response = string.Empty;
-    private string? ViewData = string.Empty;
-    protected string? Image64 { get; set; }
-    private bool IsTaskRunning;
-    private CancellationTokenSource _cts = new();
-    private Stopwatch _stopwatch = new Stopwatch();
+    private int _animationDuration = 500;
+    public void UpdateView(int animationDuration)
+    {
+        _animationDuration = animationDuration;
+        StateHasChanged();
+    }
+
     protected override async Task OnParametersSetAsync()
     {
+        _input = (await Http.GetStringAsync($"sample-data/{puzzleHelper.Puzzles[PuzzleNumber].Type.Name}.txt")).Replace("\r", "");
         var puzzle = puzzleHelper.Puzzles[PuzzleNumber];
-        PuzzleTitle = puzzle.Title;
         _solver = (IPuzzleSolverV3)(Activator.CreateInstance(puzzle.Type))!;
-        Response = string.Empty;
-        ViewData = string.Empty;
-        Input = (await Http.GetStringAsync($"sample-data/{puzzle.Type.Name}.txt")).Replace("\r", "");
         if ((_solver is UnstableDiffusion))
             ViewBox = (-4, -4, 4, 4);
-        _cts = new CancellationTokenSource();
-    }
-
-    private void CancelComputation() => _cts.Cancel();
-
-    private async Task UpdateView()
-    {
-        if (DelayVisualization || _stopwatch.ElapsedMilliseconds > 1000)
-        {
-            if (DelayVisualization)
-            {
-                runAnimation = true;
-                StateHasChanged();
-                await Task.Delay(DelayVisualizationValue);
-                runAnimation = false;
-                StateHasChanged();
-                await Task.Delay(1);
-            }
-            else
-            {
-                runAnimation = false;
-                StateHasChanged();
-                await Task.Delay(1);
-            }
-            _stopwatch.Restart();
-        }
-    }
-
-    private async Task SolveFirstPart() => await Solve(_solver!.SolveFirstPart);
-    private async Task SolveSecondPart() => await Solve(_solver!.SolveSecondPart);
-
-    private async Task Solve(Func<IEnumerable<string>> part)
-    {
-
-        IsTaskRunning = true;
-        Response = string.Empty;
-        ViewData = string.Empty;
-        Image64 = null;
-        _stopwatch.Start();
-        using (_cts = new CancellationTokenSource())
-        {
-            _solver.Setup(Input);
-            foreach (var s in part())
-            {
-                Response = s;
-                await UpdateView();
-                if (_cts.IsCancellationRequested)
-                    break;
-            }
-            await UpdateView();
-        }
-        IsTaskRunning = false;
-        _stopwatch.Stop();
     }
 }

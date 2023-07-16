@@ -1,0 +1,66 @@
+﻿.puzzle-image {
+    height: 200px;
+}
+
+.elf-move-right {
+    animation-name: elf-move-right-anim;
+    animation-fill-mode: forwards;
+    animation-iteration-count: 1;
+}
+
+@keyframes elf-move-right-anim {
+    from {
+        transform: translate(0px,0px);
+    }
+    to {
+        transform: translate(1px,0px);
+    }
+}
+
+.elf-move-left {
+    animation-name: elf-move-left-anim;
+    animation-fill-mode: forwards;
+    animation-iteration-count: 1;
+}
+
+@keyframes elf-move-left-anim {
+    from {
+        transform: translate(0px,0px);
+    }
+
+    to {
+        transform: translate(-1px,0px);
+    }
+}
+
+.elf-move-down {
+    animation-name: elf-move-down-anim;
+    animation-fill-mode: forwards;
+    animation-iteration-count: 1;
+}
+
+@keyframes elf-move-down-anim {
+    from {
+        transform: translate(0px,0px);
+    }
+
+    to {
+        transform: translate(0px,1px);
+    }
+}
+
+.elf-move-up {
+    animation-name: elf-move-up-anim;
+    animation-fill-mode: forwards;
+    animation-iteration-count: 1;
+}
+
+@keyframes elf-move-up-anim {
+    from {
+        transform: translate(0px,0px);
+    }
+
+    to {
+        transform: translate(0px,-1px);
+    }
+}
