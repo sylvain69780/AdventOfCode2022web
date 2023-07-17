@@ -4,7 +4,8 @@
 @inject PuzzleHelper puzzleHelper;
 @inject HttpClient Http
 
-@if ( _solver != null ) {
+@if (_solver != null)
+{
     if (_solver.Prev != null)
     {
         ViewBox = (-1, -1, _solver.Width + 2, _solver.Height + 2);
@@ -16,15 +17,22 @@
                 </radialGradient>
                 <g id="myImage">
                     <g transform="translate(0.5,0.5)">
-                        <circle r="0.5" fill="url('#myGradient')" />
-                        <g transform="translate(0, -0.05)">
-                            <g id="eye">
-                                <circle cx="0.15" r="0.13" fill="green" />
-                                <circle cx="0.15" r="0.1" fill="white" />
-                                <circle cx="0.12" r="0.05" fill="black" />
+                        <g transform="scale(.5)">
+                            <circle r="0.5" fill="url('#myGradient')" />
+                            <g transform="translate(0, -0.05)">
+                                <g id="eye">
+                                    <circle cx="0.15" r="0.13" fill="green" />
+                                    <circle cx="0.15" r="0.1" fill="white" />
+                                    <circle cx="0.12" r="0.05" fill="black" />
+                                </g>
+                                <use transform="scale(-1, 1)" href="#eye" />
                             </g>
-                            <use transform="scale(-1, 1)" href="#eye" />
                         </g>
+                    </g>
+                </g>
+                <g id="blizzard">
+                    <g transform="translate(0.5,0.5)">
+                        <circle r="0.15" fill="black" />
                     </g>
                 </g>
             </defs>
@@ -33,9 +41,16 @@
             </pattern>
             <rect x="@ViewBox.xMin" y="@ViewBox.yMin" width="@(ViewBox.xMax-ViewBox.xMin)" height="@(ViewBox.yMax-ViewBox.yMin)" fill="grey" />
             <rect x="@(ViewBox.xMin+1)" y="@(ViewBox.yMin+1)" width="@(ViewBox.xMax-ViewBox.xMin-3)" height="@(ViewBox.yMax-ViewBox.yMin-3)" fill="url(#gridPattern)" />
-            <rect x="@(_solver.Start.x-1)" y="@(_solver.Start.y-1)" width="1" height="1" fill="blue"/>
+            <rect x="@(_solver.Start.x-1)" y="@(_solver.Start.y-1)" width="1" height="1" fill="blue" />
             <rect x="@(_solver.Arrival.x-1)" y="@(_solver.Arrival.y-1)" width="1" height="1" fill="red" />
 
+            @{
+                var blizzards = _solver.ComputeBlizzardsPos();
+                foreach (var blizzard in blizzards)
+                {
+                    <use href="#blizzard" x="@(blizzard.x-1)" y="@(blizzard.y-1)" />
+                }
+            }
             @if (_solver.ComputingCompleted)
             {
                 var np = _solver.Prev.Single(x => x.Key.t == _solver.Minute).Key;
@@ -43,11 +58,30 @@
                     <use href="#myImage" x="@(np.x-1)" y="@(np.y-1)" />
                 }
             }
-            else
+            else if (_animationDuration == 0)
             {
-                foreach (var p in _solver.Prev.Keys.Where(p => p.t == _solver.Minute).Select(p => (p.x, p.y)))
+                foreach (var p in _solver.Prev.Keys.Where(p => p.t == _solver.Minute))
                 {
                     <use href="#myImage" x="@(p.x-1)" y="@(p.y-1)" />
+                }
+            }
+            else
+            {
+                var style = $"animation-duration : {_animationDuration * 80 / 100}ms;";
+                foreach (var p in _solver.Prev.Keys.Where(p => p.t == _solver.Minute))
+                {
+                    var pr = _solver.Prev[p];
+                    var anim = string.Empty;
+                    var d = (p.x - pr.x, p.y - pr.y);
+                    if (d == (1, 0))
+                        anim = "elf-move-right";
+                    if (d == (-1, 0))
+                        anim = "elf-move-left";
+                    if (d == (0, 1))
+                        anim = "elf-move-down";
+                    if (d == (0, -1))
+                        anim = "elf-move-up";
+                    <use href="#myImage" x="@(pr.x-1)" y="@(pr.y-1)" class="@anim" style="@style" />
                 }
             }
 
@@ -55,7 +89,7 @@
     }
 }
 
-<PuzzleInput PuzzleSolver="_solver" PuzzleNumber="24" Changed="@UpdateView" Input="@_input"/>
+<PuzzleInput PuzzleSolver="_solver" PuzzleNumber="24" Changed="@UpdateView" Input="@_input" />
 
 @code {
     [Parameter]

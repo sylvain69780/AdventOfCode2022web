@@ -11,18 +11,17 @@
     {
         var positions = _solver.Elves;
         var prevPositions = _solver.ElvesPrevPosition;
-        var xmin = positions.Min(e => e.X) - 1;
-        var ymin = positions.Min(e => e.Y) - 1;
-        var xmax = positions.Max(e => e.X) + 4;
-        var ymax = positions.Max(e => e.Y) + 4;
-        if (xmin < ViewBox.xMin)
-            ViewBox.xMin *= 2;
-        if (ymin < ViewBox.yMin)
-            ViewBox.yMin *= 2;
-        if (xmax > ViewBox.xMax)
-            ViewBox.xMax *= 2;
-        if (ymax > ViewBox.yMax)
-            ViewBox.yMax *= 2;
+        foreach (var p in positions)
+        {
+            if (p.X < ViewBox.xMin)
+                ViewBox.xMin *= 2;
+            if (p.Y < ViewBox.yMin)
+                ViewBox.yMin *= 2;
+            if (p.X >= ViewBox.xMax)
+                ViewBox.xMax *= 2;
+            if (p.Y >= ViewBox.yMax)
+                ViewBox.yMax *= 2;
+        }
         <svg viewBox="@ViewBox.xMin @ViewBox.yMin @ViewBox.xMax @ViewBox.yMax" class="img-fluid">
             <defs>
                 <radialGradient id="myGradient">
@@ -49,31 +48,36 @@
                     </g>
                 </g>
             </g>
-            @for (var i = 0; i < positions.Length; i++)
+            @if (_animationDuration > 0)
             {
-                var p = prevPositions[i];
-                var pp = positions[i];
-                var d = (pp.X - p.X, pp.Y - p.Y);
-                var anim = string.Empty;
-                var style = string.Empty;
-                if (_animationDuration > 0)
+                var style = $"animation-duration : {_animationDuration * 80 / 100}ms;";
+                for (var i = 0; i < positions.Length; i++)
                 {
-                    style = $"animation-duration : {_animationDuration * 80 / 100}ms;";
-                    if (d == (1, 0))
-                        anim = "elf-move-right";
-                    if (d == (-1, 0))
-                        anim = "elf-move-left";
-                    if (d == (0, 1))
-                        anim = "elf-move-down";
-                    if (d == (0, -1))
-                        anim = "elf-move-up";
-                    <use href="#myImage" x="@(p.X)" y="@(p.Y)" class="@anim" style="@style" />
+                    var p = prevPositions[i];
+                    var pp = positions[i];
+                    var d = (pp.X - p.X, pp.Y - p.Y);
+                    var anim = string.Empty;
+                    if (_animationDuration > 0)
+                    {
+                        if (d == (1, 0))
+                            anim = "elf-move-right";
+                        if (d == (-1, 0))
+                            anim = "elf-move-left";
+                        if (d == (0, 1))
+                            anim = "elf-move-down";
+                        if (d == (0, -1))
+                            anim = "elf-move-up";
+                        <use href="#myImage" x="@(p.X)" y="@(p.Y)" class="@anim" style="@style" />
+                    }
                 }
-                else
+            }
+            else
+            {
+                for (var i = 0; i < positions.Length; i++)
                 {
-                    <use href="#myImage" x="@(pp.X)" y="@(pp.Y)" class="" style="" />
+                    var pp = positions[i];
+                    <use href="#myImage" x="@(pp.X)" y="@(pp.Y)" />
                 }
-
             }
         </svg>
     }
@@ -84,7 +88,7 @@
 @code {
     private string? _input;
     (int xMin, int yMin, int xMax, int yMax) ViewBox;
-    private UnstableDiffusion? _solver;
+    private UnstableDiffusion _solver = new UnstableDiffusion();
     private int _animationDuration = 500;
     public void UpdateView(int animationDuration)
     {
@@ -92,11 +96,9 @@
         StateHasChanged();
     }
 
-    protected override async Task OnParametersSetAsync()
+    protected override async Task OnInitializedAsync()
     {
         _input = (await Http.GetStringAsync($"sample-data/UnstableDiffusion.txt")).Replace("\r", "");
-        var puzzle = puzzleHelper.Puzzles[23];
-        _solver = new UnstableDiffusion();
         ViewBox = (-4, -4, 4, 4);
     }
 }

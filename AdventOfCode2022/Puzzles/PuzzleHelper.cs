@@ -19,7 +19,6 @@ namespace AdventOfCode2022web.Puzzles
         void Setup(string puzzleInput);
         IEnumerable<string> SolveFirstPart();
         IEnumerable<string> SolveSecondPart();
-        string Visualize();
     }
 
     [AttributeUsage(AttributeTargets.Class)]

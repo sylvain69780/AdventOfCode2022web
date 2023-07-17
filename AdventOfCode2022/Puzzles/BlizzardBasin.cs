@@ -8,11 +8,6 @@ namespace AdventOfCode2022web.Puzzles
     [Puzzle(24, "Blizzard Basin")]
     public class BlizzardBasin : IPuzzleSolverV3
     {
-        public string Visualize()
-        {
-            return string.Empty;
-        }
-
         public void Setup(string puzzleInput)
         {
             var input = puzzleInput.Split("\n");
@@ -60,7 +55,7 @@ namespace AdventOfCode2022web.Puzzles
             (0,-1)
         };
 
-        private int Mod(int x, int m) => (x % m + m) % m;
+        private static int Mod(int x, int m) => (x % m + m) % m;
 
         public IEnumerable<string> SolveFirstPart()
         {
@@ -77,7 +72,7 @@ namespace AdventOfCode2022web.Puzzles
             {
                 Minute++;
                 var newSearch = new Queue<(int x, int y)>();
-                HashSet<(int, int y)> blizzardsPos = computeBlizzardsPos();
+                HashSet<(int, int y)> blizzardsPos = ComputeBlizzardsPos();
                 found = SearchForNextMove(search,newSearch, blizzardsPos,Arrival);
                 yield return $"{Minute}";
                 search = newSearch;
@@ -91,13 +86,13 @@ namespace AdventOfCode2022web.Puzzles
                 p = np;
             }
             Prev = newPrev;
-            ComputingCompleted = true;
             var minute = Minute;
             for (var i = 1; i <= minute; i++) 
             {
                 Minute = i;
                 yield return $"Replay step {i}";
             }
+            ComputingCompleted = true;
             yield return $"{Minute}";
         }
 
@@ -132,7 +127,7 @@ namespace AdventOfCode2022web.Puzzles
             return found;
         }
 
-        private HashSet<(int, int y)> computeBlizzardsPos()
+        public HashSet<(int x, int y)> ComputeBlizzardsPos()
         {
             // compute blizzards positions
             var blizzardsPos = BlizzardsRight.Select(e => ((e.x - 1 + Minute) % Width + 1, e.y)).ToHashSet();
@@ -163,7 +158,7 @@ namespace AdventOfCode2022web.Puzzles
                 {
                     Minute++;
                     var newSearch = new Queue<(int x, int y)>();
-                    HashSet<(int, int y)> blizzardsPos = computeBlizzardsPos();
+                    HashSet<(int, int y)> blizzardsPos = ComputeBlizzardsPos();
                     found = SearchForNextMove(search, newSearch, blizzardsPos, arrival);
                     yield return $"{Minute}";
                     search = newSearch;
@@ -178,13 +173,13 @@ namespace AdventOfCode2022web.Puzzles
                 }
             }
             Prev = newPrev;
-            ComputingCompleted = true;
             var minute = Minute;
             for (var i = 1; i <= minute; i++)
             {
                 Minute = i;
                 yield return $"Replay step {i}";
             }
+            ComputingCompleted = true;
             yield return $"{Minute}";
         }
     }

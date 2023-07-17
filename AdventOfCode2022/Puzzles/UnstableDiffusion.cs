@@ -129,8 +129,5 @@ namespace AdventOfCode2022web.Puzzles
                         Elves[id] = ElvesPrevPosition[id];
             }
         }
-
-        public string Visualize() => string.Empty;
-
     }
 }
