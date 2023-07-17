@@ -1,7 +1,4 @@
-﻿.puzzle-image {
-    height: 200px;
-}
-
+﻿
 .elf-move-right {
     animation-name: elf-move-right-anim;
     animation-fill-mode: forwards;
