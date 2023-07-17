@@ -76,13 +76,13 @@
                     Changed!(_delayVisualizationValue);
                     await Task.Delay(_delayVisualizationValue);
                 }
+                Changed!(0);
+                await Task.Delay(1);
                 _stopwatch.Restart();
             }
             if (_cancel)
                 break;
         }
-        Changed!(0);
-        await Task.Delay(1);
         _isTaskRunning = false;
         _stopwatch.Stop();
     }
