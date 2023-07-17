@@ -1,69 +1,16 @@
-﻿@page "/puzzleV3/{PuzzleNumber:int}"
+﻿@page "/UnstableDiffusionView"
 @using System.Diagnostics;
 @using AdventOfCode2022web.Puzzles;
 @inject PuzzleHelper puzzleHelper;
 @inject HttpClient Http
 
-@if ((_solver is BlizzardBasin))
+
+@if ((_solver != null))
 {
-    BlizzardBasin? a = _solver as BlizzardBasin;
-    if (a!.Prev != null)
+    if (_solver.Elves.Length > 0)
     {
-        ViewBox = (-1, -1, a.Width + 2, a.Height + 2);
-        <svg viewBox="@ViewBox.xMin @ViewBox.yMin @ViewBox.xMax @ViewBox.yMax" class="img-fluid">
-            <defs>
-                <radialGradient id="myGradient">
-                    <stop offset="10%" stop-color="chartreuse" />
-                    <stop offset="80%" stop-color="green" />
-                </radialGradient>
-                <g id="myImage">
-                    <g transform="translate(0.5,0.5)">
-                        <circle r="0.5" fill="url('#myGradient')" />
-                        <g transform="translate(0, -0.05)">
-                            <g id="eye">
-                                <circle cx="0.15" r="0.13" fill="green" />
-                                <circle cx="0.15" r="0.1" fill="white" />
-                                <circle cx="0.12" r="0.05" fill="black" />
-                            </g>
-                            <use transform="scale(-1, 1)" href="#eye" />
-                        </g>
-                    </g>
-                </g>
-            </defs>
-            <pattern id="gridPattern" width="1" height="1" patternUnits="userSpaceOnUse">
-                <rect width="1" height="1" fill="white" stroke="gray" stroke-width="0.1" />
-            </pattern>
-            <rect x="@ViewBox.xMin" y="@ViewBox.yMin" width="@(ViewBox.xMax-ViewBox.xMin)" height="@(ViewBox.yMax-ViewBox.yMin)" fill="grey" />
-            <rect x="@(ViewBox.xMin+1)" y="@(ViewBox.yMin+1)" width="@(ViewBox.xMax-ViewBox.xMin-3)" height="@(ViewBox.yMax-ViewBox.yMin-3)" fill="url(#gridPattern)" />
-            <rect x="@(a.Start.x-1)" y="@(a.Start.y-1)" width="1" height="1" fill="blue"/>
-            <rect x="@(a.Arrival.x-1)" y="@(a.Arrival.y-1)" width="1" height="1" fill="red" />
-
-            @if (a.ComputingCompleted)
-            {
-                var np = a.Prev.Single(x => x.Key.t == a.Minute).Key;
-                {
-                    <use href="#myImage" x="@(np.x-1)" y="@(np.y-1)" />
-                }
-            }
-            else
-            {
-                foreach (var p in a.Prev.Keys.Where(p => p.t == a.Minute).Select(p => (p.x, p.y)))
-                {
-                    <use href="#myImage" x="@(p.x-1)" y="@(p.y-1)" />
-                }
-            }
-
-        </svg>
-    }
-}
-
-@if ((_solver is UnstableDiffusion))
-{
-    UnstableDiffusion? a = _solver as UnstableDiffusion;
-    if (a!.Elves.Length > 0)
-    {
-        var positions = a!.Elves;
-        var prevPositions = a!.ElvesPrevPosition;
+        var positions = _solver.Elves;
+        var prevPositions = _solver.ElvesPrevPosition;
         var xmin = positions.Min(e => e.X) - 1;
         var ymin = positions.Min(e => e.Y) - 1;
         var xmax = positions.Max(e => e.X) + 4;
@@ -132,14 +79,12 @@
     }
 }
 
-<PuzzleInput PuzzleSolver="_solver" PuzzleNumber="@PuzzleNumber" Changed="@UpdateView" Input="@_input"/>
+<PuzzleInput PuzzleSolver="_solver" PuzzleNumber="23" Changed="@UpdateView" Input="@_input"/>
 
 @code {
-    [Parameter]
-    public int PuzzleNumber { get; set; }
     private string? _input;
     (int xMin, int yMin, int xMax, int yMax) ViewBox;
-    private IPuzzleSolverV3? _solver;
+    private UnstableDiffusion? _solver;
     private int _animationDuration = 500;
     public void UpdateView(int animationDuration)
     {
@@ -149,10 +94,9 @@
 
     protected override async Task OnParametersSetAsync()
     {
-        _input = (await Http.GetStringAsync($"sample-data/{puzzleHelper.Puzzles[PuzzleNumber].Type.Name}.txt")).Replace("\r", "");
-        var puzzle = puzzleHelper.Puzzles[PuzzleNumber];
-        _solver = (IPuzzleSolverV3)(Activator.CreateInstance(puzzle.Type))!;
-        if ((_solver is UnstableDiffusion))
-            ViewBox = (-4, -4, 4, 4);
+        _input = (await Http.GetStringAsync($"sample-data/UnstableDiffusion.txt")).Replace("\r", "");
+        var puzzle = puzzleHelper.Puzzles[23];
+        _solver = new UnstableDiffusion();
+        ViewBox = (-4, -4, 4, 4);
     }
 }

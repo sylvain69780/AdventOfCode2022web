@@ -35,6 +35,8 @@
                 var pageName = $"{(typeof(IPuzzleSolverV3).IsAssignableFrom(item.Type) ? v3 : typeof(IPuzzleSolverV2).IsAssignableFrom(item.Type) ? v2 : v1)}/{item.Number}";
                 if (item.Type == typeof(BlizzardBasin))
                     pageName = "BlizzardBasinView";
+                if (item.Type == typeof(UnstableDiffusion))
+                    pageName = "UnstableDiffusionView";
                 <div class="nav-item px-3" @onclick="ToggleNavMenu">
                     <NavLink class="nav-link" href="@(pageName)">
                         <span class="oi oi-puzzle-piece" aria-hidden="true"></span>
