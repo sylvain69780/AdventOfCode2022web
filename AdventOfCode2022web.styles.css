@@ -4,21 +4,19 @@
 }
 
 .blizzard-animation[b-rcuh15abw5] {
-    animation:grow-b-rcuh15abw5 var(--blizzard-animation-duration) ease-in-out 1 forwards;
+    animation-name:grow-b-rcuh15abw5;
+    animation-duration: var(--blizzard-animation-duration);
+    animation-fill-mode:forwards;
+    animation-iteration-count:1;
+    animation-timing-function:linear;
 }
 
 @keyframes grow-b-rcuh15abw5 {
     from {
         opacity : 0;
     }
-    25% {
-        opacity: 1;
-    }
-    75% {
-        opacity: 1;
-    }
     to {
-        opacity: 0;
+        opacity: 1;
     }
 }
 
