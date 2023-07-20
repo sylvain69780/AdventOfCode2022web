@@ -31,9 +31,7 @@
                     </g>
                 </g>
                 <g id="blizzard">
-                    <g transform="translate(0.5,0.5)">
-                        <circle r="0.15" fill="black" />
-                    </g>
+                        <circle r="0.15" fill="blue" />
                 </g>
             </defs>
             <pattern id="gridPattern" width="1" height="1" patternUnits="userSpaceOnUse">
@@ -45,10 +43,24 @@
             <rect x="@(_solver.Arrival.x-1)" y="@(_solver.Arrival.y-1)" width="1" height="1" fill="red" />
 
             @{
-                var blizzards = _solver.ComputeBlizzardsPos();
-                foreach (var blizzard in blizzards)
+                if (_animationDuration == 0)
                 {
-                    <use href="#blizzard" x="@(blizzard.x-1)" y="@(blizzard.y-1)" />
+                    var blizzards = _solver.ComputeBlizzardsPos();
+                    foreach (var blizzard in blizzards)
+                    {
+                        <use href="#blizzard" x="@((blizzard.x-0.5).ToStringCSS())" y="@((blizzard.y-0.5).ToStringCSS())" />
+                    }
+                }
+                else
+                {
+                    var blizzards = _solver.ComputeBlizzardsPos();
+                    var style = $"animation-duration : {_animationDuration * 80 / 100}ms;";
+                    foreach (var blizzard in blizzards)
+                    {
+                        <g transform="translate(@((blizzard.x-0.5).ToStringCSS()),@((blizzard.y-0.5).ToStringCSS()))">
+                        <use href="#blizzard" class="blizzard-animation" style="--blizzard-animation-duration: @((_animationDuration*0.9).ToStringCSS())ms;" />
+                        </g>
+                    }
                 }
             }
             @if (_solver.ComputingCompleted)

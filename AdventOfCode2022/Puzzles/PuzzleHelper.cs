@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Globalization;
+using System.Reflection;
 
 namespace AdventOfCode2022web.Puzzles
 {
@@ -52,4 +53,13 @@ namespace AdventOfCode2022web.Puzzles
             || p.Y > range.HigherCoordinates.Y || p.Y < range.LowerCoordinates.Y
             || p.Z > range.HigherCoordinates.Z || p.Z < range.LowerCoordinates.Z;
     }
+
+    public static class DoubleExtensions
+    {
+        public static string ToStringCSS(this double value)
+        {
+            return value.ToString(CultureInfo.GetCultureInfo("en-GB"));
+        }
+    }
+
 }

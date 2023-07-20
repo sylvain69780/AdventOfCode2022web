@@ -1,4 +1,26 @@
-﻿
+﻿:root {
+    --blizzard-animation-duration: 0;
+}
+
+.blizzard-animation {
+    animation:grow var(--blizzard-animation-duration) ease-in-out 1 forwards;
+}
+
+@keyframes grow {
+    from {
+        opacity : 0;
+    }
+    25% {
+        opacity: 1;
+    }
+    75% {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
 .elf-move-right {
     animation-name: elf-move-right-anim;
     animation-fill-mode: forwards;
