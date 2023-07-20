@@ -1,4 +1,26 @@
 /* /Pages/BlizzardBasinView.razor.rz.scp.css */
+:root[b-rcuh15abw5] {
+    --blizzard-animation-duration: 0;
+}
+
+.blizzard-animation[b-rcuh15abw5] {
+    animation:grow-b-rcuh15abw5 var(--blizzard-animation-duration) ease-in-out 1 forwards;
+}
+
+@keyframes grow-b-rcuh15abw5 {
+    from {
+        opacity : 0;
+    }
+    25% {
+        opacity: 1;
+    }
+    75% {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
 
 .elf-move-right[b-rcuh15abw5] {
     animation-name: elf-move-right-anim-b-rcuh15abw5;
@@ -63,6 +85,7 @@
         transform: translate(0px,-1px);
     }
 }
+/* /Pages/DefaultPuzzleView.razor.rz.scp.css */
 /* /Pages/PuzzleV2.razor.rz.scp.css */
 .puzzle-image[b-zqkgmh7c0a] {
     height: 200px;
