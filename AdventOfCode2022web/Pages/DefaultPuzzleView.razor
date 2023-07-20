@@ -1,0 +1,30 @@
+﻿@page "/DefaultPuzzleView/{PuzzleNumber:int}"
+@using System.Diagnostics;
+@using AdventOfCode2022web.Puzzles;
+@inject PuzzleHelper puzzleHelper;
+@inject HttpClient Http
+
+<PuzzleInput PuzzleSolver="_solver" PuzzleNumber="@PuzzleNumber" Changed="@UpdateView" Input="@_input" />
+
+<p>
+    You have to find the shortest way from one point to another, avoiding the "blizzards".<br />
+    I'm using a breadth-search algorithm here, the difficulty being that the pattern of "blizzards" changes over time.
+</p>
+
+@code {
+    [Parameter]
+    public int PuzzleNumber { get; set; }
+    private string? _input;
+    private IPuzzleSolverV3? _solver;
+    private int _animationDuration = 500;
+    public void UpdateView(int animationDuration)
+    {
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var puzzle = puzzleHelper.Puzzles[PuzzleNumber];
+        _solver = (IPuzzleSolverV3)(Activator.CreateInstance(puzzle.Type))!;
+        _input = (await Http.GetStringAsync($"sample-data/{puzzle.Type.Name}.txt")).Replace("\r", "");
+    }
+}

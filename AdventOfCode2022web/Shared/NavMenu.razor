@@ -31,7 +31,7 @@
             for (var puzzleIndex = first; puzzleIndex <= last; puzzleIndex++)
             {
                 var item = puzzles[puzzleIndex];
-                var pageName = $"{(typeof(IPuzzleSolverV2).IsAssignableFrom(item.Type) ? v2 : v1)}/{item.Number}";
+                var pageName = $"{(typeof(IPuzzleSolverV2).IsAssignableFrom(item.Type) ? v2 : typeof(IPuzzleSolverV3).IsAssignableFrom(item.Type) ? "DefaultPuzzleView" : v1)}/{item.Number}";
                 if (item.Type == typeof(BlizzardBasin))
                     pageName = "BlizzardBasinView";
                 if (item.Type == typeof(UnstableDiffusion))

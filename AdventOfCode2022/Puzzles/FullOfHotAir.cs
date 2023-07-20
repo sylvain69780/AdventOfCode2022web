@@ -1,14 +1,21 @@
 ﻿namespace AdventOfCode2022web.Puzzles
 {
     [Puzzle(25, "Full of Hot Air")]
-    public class FullOfHotAir : IPuzzleSolver
+    public class FullOfHotAir : IPuzzleSolverV3
     {
-        public string SolveFirstPart(string inp)
+        public void Setup(string inp)
         {
-            var input = inp.Split("\n");
-            var values = new char[] { '=', '-', '0', '1', '2' };
+            input = inp.Split("\n");
+        }
+
+        private string[]? input;
+
+        private static readonly char[] values = new char[] { '=', '-', '0', '1', '2' };
+
+        public IEnumerable<string> SolveFirstPart()
+        {
             var result = 0L;
-            foreach (var line in input)
+            foreach (var line in input!)
             {
                 var b = 1L;
                 var res = 0L;
@@ -31,11 +38,11 @@
                 num /= 5L;
                 num += addUp;
             }
-            return string.Concat(snafu);
+            yield return string.Concat(snafu);
         }
-        public string SolveSecondPart(string inp)
+        public IEnumerable<string> SolveSecondPart()
         {
-            return "The second part of the Challenge was to solve all Puzzles !";
+            yield return "The second part of the Challenge was to solve all Puzzles !";
         }
     }
 }
