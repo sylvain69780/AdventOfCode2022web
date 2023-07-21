@@ -1,6 +1,8 @@
 /* /Pages/BlizzardBasinView.razor.rz.scp.css */
 :root[b-rcuh15abw5] {
     --blizzard-animation-duration: 0;
+    --dx: 0px;
+    --dy: 0px;
 }
 
 .blizzard-animation[b-rcuh15abw5] {
@@ -20,67 +22,35 @@
     }
 }
 
-.elf-move-right[b-rcuh15abw5] {
-    animation-name: elf-move-right-anim-b-rcuh15abw5;
+.elf-move[b-rcuh15abw5] {
+    animation-name: elf-move-anim-b-rcuh15abw5;
     animation-fill-mode: forwards;
     animation-iteration-count: 1;
 }
 
-@keyframes elf-move-right-anim-b-rcuh15abw5 {
+@keyframes elf-move-anim-b-rcuh15abw5 {
     from {
         transform: translate(0px,0px);
     }
 
     to {
-        transform: translate(1px,0px);
+        transform: translate(var(--dx),var(--dy));
     }
 }
 
-.elf-move-left[b-rcuh15abw5] {
-    animation-name: elf-move-left-anim-b-rcuh15abw5;
+.elf-destroyed[b-rcuh15abw5] {
+    animation-name: elf-destroyed-anim-b-rcuh15abw5;
     animation-fill-mode: forwards;
     animation-iteration-count: 1;
 }
 
-@keyframes elf-move-left-anim-b-rcuh15abw5 {
+@keyframes elf-destroyed-anim-b-rcuh15abw5 {
     from {
-        transform: translate(0px,0px);
+        opacity: 1;
     }
 
     to {
-        transform: translate(-1px,0px);
-    }
-}
-
-.elf-move-down[b-rcuh15abw5] {
-    animation-name: elf-move-down-anim-b-rcuh15abw5;
-    animation-fill-mode: forwards;
-    animation-iteration-count: 1;
-}
-
-@keyframes elf-move-down-anim-b-rcuh15abw5 {
-    from {
-        transform: translate(0px,0px);
-    }
-
-    to {
-        transform: translate(0px,1px);
-    }
-}
-
-.elf-move-up[b-rcuh15abw5] {
-    animation-name: elf-move-up-anim-b-rcuh15abw5;
-    animation-fill-mode: forwards;
-    animation-iteration-count: 1;
-}
-
-@keyframes elf-move-up-anim-b-rcuh15abw5 {
-    from {
-        transform: translate(0px,0px);
-    }
-
-    to {
-        transform: translate(0px,-1px);
+        opacity: 0;
     }
 }
 /* /Pages/DefaultPuzzleView.razor.rz.scp.css */
