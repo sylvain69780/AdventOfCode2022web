@@ -4,11 +4,6 @@
 
 <PuzzleInput PuzzleSolver="_solver" PuzzleNumber="@PuzzleNumber" Changed="@UpdateView" Input="@_input" />
 
-<p>
-    You have to find the shortest way from one point to another, avoiding the "blizzards".<br />
-    I'm using a breadth-search algorithm here, the difficulty being that the pattern of "blizzards" changes over time.
-</p>
-
 @code {
     [Parameter]
     public int PuzzleNumber { get; set; }
