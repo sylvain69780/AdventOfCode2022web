@@ -1,30 +1,14 @@
 ﻿:root {
-    --blizzard-animation-duration: 0;
+    --elf-animation-duration: 0;
     --dx: 0px;
     --dy: 0px;
-}
-
-.blizzard-animation {
-    animation-name:grow;
-    animation-duration: var(--blizzard-animation-duration);
-    animation-fill-mode:forwards;
-    animation-iteration-count:1;
-    animation-timing-function:linear;
-}
-
-@keyframes grow {
-    from {
-        opacity : 0;
-    }
-    to {
-        opacity: 1;
-    }
 }
 
 .elf-move {
     animation-name: elf-move-anim;
     animation-fill-mode: forwards;
     animation-iteration-count: 1;
+    animation-duration: var(--elf-animation-duration);
 }
 
 @keyframes elf-move-anim {
@@ -41,6 +25,7 @@
     animation-name: elf-destroyed-anim;
     animation-fill-mode: forwards;
     animation-iteration-count: 1;
+    animation-duration: var(--elf-animation-duration);
 }
 
 @keyframes elf-destroyed-anim {

@@ -29,7 +29,7 @@
                     </g>
                 </g>
                 <g id="blizzard">
-                        <circle r="0.15" fill="blue" />
+                    <rect x="-0.2" y="-0.2"  width="0.4" height="0.4" fill="gray" />
                 </g>
             </defs>
             <pattern id="gridPattern" width="1" height="1" patternUnits="userSpaceOnUse">
@@ -41,26 +41,13 @@
             <rect x="@(_solver.Arrival.x-1)" y="@(_solver.Arrival.y-1)" width="1" height="1" fill="red" />
 
             @{
-                if (_animationDuration == 0)
-                {
                     var blizzards = _solver.ComputeBlizzardsPos();
                     foreach (var blizzard in blizzards)
                     {
                         <use href="#blizzard" x="@((blizzard.x-0.5).ToStringCSS())" y="@((blizzard.y-0.5).ToStringCSS())" />
                     }
-                }
-                else
-                {
-                    var blizzards = _solver.ComputeBlizzardsPos();
-                    var style = $"animation-duration : {_animationDuration * 80 / 100}ms;";
-                    foreach (var blizzard in blizzards)
-                    {
-                        <g transform="translate(@((blizzard.x-0.5).ToStringCSS()),@((blizzard.y-0.5).ToStringCSS()))">
-                        <use href="#blizzard" class="blizzard-animation" style="--blizzard-animation-duration: @((_animationDuration*0.9).ToStringCSS())ms;" />
-                        </g>
-                    }
-                }
             }
+            <g style="--elf-animation-duration: @(_animationDuration * 80 / 100)ms;">
             @if (_solver.ComputingCompleted)
             {
                 var np = _solver.Prev.Single(x => x.Key.t == _solver.Minute).Key;
@@ -82,15 +69,15 @@
                     var pr = _solver.Prev[p];
                     var anim = string.Empty;
                     var d = (x:p.x - pr.x,y: p.y - pr.y);
-                    var style = $"animation-duration : {_animationDuration * 80 / 100}ms;--dx:{d.x}px;--dy:{d.y}px;";
+                    var style = $"--dx:{d.x}px;--dy:{d.y}px;";
                     <use href="#myImage" x="@(pr.x-1)" y="@(pr.y-1)" class="elf-move" style="@style" />
                 }
-                foreach (var p in _solver!.DeadEnds)
+                foreach (var p in _solver.DeadEnds!)
                 {
-                    var style = $"animation-duration : {_animationDuration * 80 / 100}ms;";
-                    <use href="#myImage" x="@(p.x-1)" y="@(p.y-1)" class="elf-destroyed" style="@style" />
+                    <use href="#myImage" x="@(p.x-1)" y="@(p.y-1)" class="elf-destroyed" />
                 }
             }
+            </g>
 
         </svg>
     }
