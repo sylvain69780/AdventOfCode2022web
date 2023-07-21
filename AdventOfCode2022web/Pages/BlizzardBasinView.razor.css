@@ -1,5 +1,7 @@
 ﻿:root {
     --blizzard-animation-duration: 0;
+    --dx: 0px;
+    --dy: 0px;
 }
 
 .blizzard-animation {
@@ -19,66 +21,34 @@
     }
 }
 
-.elf-move-right {
-    animation-name: elf-move-right-anim;
+.elf-move {
+    animation-name: elf-move-anim;
     animation-fill-mode: forwards;
     animation-iteration-count: 1;
 }
 
-@keyframes elf-move-right-anim {
+@keyframes elf-move-anim {
     from {
         transform: translate(0px,0px);
     }
 
     to {
-        transform: translate(1px,0px);
+        transform: translate(var(--dx),var(--dy));
     }
 }
 
-.elf-move-left {
-    animation-name: elf-move-left-anim;
+.elf-destroyed {
+    animation-name: elf-destroyed-anim;
     animation-fill-mode: forwards;
     animation-iteration-count: 1;
 }
 
-@keyframes elf-move-left-anim {
+@keyframes elf-destroyed-anim {
     from {
-        transform: translate(0px,0px);
+        opacity: 1;
     }
 
     to {
-        transform: translate(-1px,0px);
-    }
-}
-
-.elf-move-down {
-    animation-name: elf-move-down-anim;
-    animation-fill-mode: forwards;
-    animation-iteration-count: 1;
-}
-
-@keyframes elf-move-down-anim {
-    from {
-        transform: translate(0px,0px);
-    }
-
-    to {
-        transform: translate(0px,1px);
-    }
-}
-
-.elf-move-up {
-    animation-name: elf-move-up-anim;
-    animation-fill-mode: forwards;
-    animation-iteration-count: 1;
-}
-
-@keyframes elf-move-up-anim {
-    from {
-        transform: translate(0px,0px);
-    }
-
-    to {
-        transform: translate(0px,-1px);
+        opacity: 0;
     }
 }

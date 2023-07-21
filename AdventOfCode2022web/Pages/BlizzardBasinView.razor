@@ -77,21 +77,18 @@
             }
             else
             {
-                var style = $"animation-duration : {_animationDuration * 80 / 100}ms;";
                 foreach (var p in _solver.Prev.Keys.Where(p => p.t == _solver.Minute))
                 {
                     var pr = _solver.Prev[p];
                     var anim = string.Empty;
-                    var d = (p.x - pr.x, p.y - pr.y);
-                    if (d == (1, 0))
-                        anim = "elf-move-right";
-                    if (d == (-1, 0))
-                        anim = "elf-move-left";
-                    if (d == (0, 1))
-                        anim = "elf-move-down";
-                    if (d == (0, -1))
-                        anim = "elf-move-up";
-                    <use href="#myImage" x="@(pr.x-1)" y="@(pr.y-1)" class="@anim" style="@style" />
+                    var d = (x:p.x - pr.x,y: p.y - pr.y);
+                    var style = $"animation-duration : {_animationDuration * 80 / 100}ms;--dx:{d.x}px;--dy:{d.y}px;";
+                    <use href="#myImage" x="@(pr.x-1)" y="@(pr.y-1)" class="elf-move" style="@style" />
+                }
+                foreach (var p in _solver!.DeadEnds)
+                {
+                    var style = $"animation-duration : {_animationDuration * 80 / 100}ms;";
+                    <use href="#myImage" x="@(p.x-1)" y="@(p.y-1)" class="elf-destroyed" style="@style" />
                 }
             }
 

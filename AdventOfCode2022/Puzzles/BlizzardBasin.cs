@@ -34,14 +34,15 @@ namespace AdventOfCode2022web.Puzzles
         public (int x, int y) Start;
         public (int x, int y) Arrival;
         public int Minute;
-        public List<(int x, int y, char c)> BlizzardsRight;
-        public List<(int x, int y, char c)> BlizzardsLeft;
-        public List<(int x, int y, char c)> BlizzardsUp;
-        public List<(int x, int y, char c)> BlizzardsDown;
+        private List<(int x, int y, char c)>? BlizzardsRight;
+        private List<(int x, int y, char c)>? BlizzardsLeft;
+        private List<(int x, int y, char c)>? BlizzardsUp;
+        private List<(int x, int y, char c)>? BlizzardsDown;
         public int Width;
         public int Height;
         private HashSet<(int x, int y)> Walls;
         public Dictionary<(int x, int y, int t), (int x, int y, int t)>? Prev;
+        public List<(int x, int y)>? DeadEnds;
         public bool ComputingCompleted;
 
         private static readonly char[] BlizzardsTypes = new char[] { '>', '<', '^', 'v' };
@@ -99,8 +100,10 @@ namespace AdventOfCode2022web.Puzzles
         private bool SearchForNextMove(Queue<(int x, int y)> search, Queue<(int x, int y)> newSearch, HashSet<(int, int y)> blizzardsPos,(int x,int y) arrival)
         {
             bool found = false;
+            DeadEnds = new List<(int x, int y)>();
             while (search.TryDequeue(out var head))
             {
+                var branches = 0;
                 foreach (var (dx, dy) in Moves)
                 {
                     if (head == Start && dy == -1)
@@ -111,15 +114,20 @@ namespace AdventOfCode2022web.Puzzles
                     var pos = (x: head.x + dx, y: head.y + dy);
                     if (pos == arrival)
                     {
-                        Prev.Add((pos.x, pos.y, Minute), (head.x, head.y, Minute - 1));
+                        Prev!.Add((pos.x, pos.y, Minute), (head.x, head.y, Minute - 1));
                         found = true;
                         break;
                     }
                     if ( !blizzardsPos.Contains(pos) && !Walls.Contains(pos) && !newSearch.Contains(pos))
                     {
-                        Prev.Add((pos.x, pos.y, Minute), (head.x, head.y, Minute - 1));
+                        Prev!.Add((pos.x, pos.y, Minute), (head.x, head.y, Minute - 1));
                         newSearch.Enqueue(pos);
+                        branches++;
                     }
+                }
+                if (branches == 0)
+                {
+                    DeadEnds.Add(head);
                 }
                 if (found)
                     break;
