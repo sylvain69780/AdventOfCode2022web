@@ -4,7 +4,7 @@
 
 @if (Response != string.Empty)
 {
-    <div class="p-3 mb-2 bg-primary text-white">@((_isTaskRunning ? string.Empty : "The answer of the puzzle is : ") + Response)</div>
+    <div class="p-3 mb-2 bg-primary text-white">@(_isTaskRunning ? string.Empty : "The answer of the puzzle is : ")@Response</div>
 }
 <h1>@(PuzzleInfo.Title)</h1>
 <p>The code for this solution on <a href="https://github.com/sylvain69780/AdventOfCode2022web/blob/master/AdventOfCode2022/Puzzles/@(PuzzleInfo.Type.Name).cs">GitHub</a></p>
@@ -45,7 +45,7 @@
     public Action<int>? Changed { get; set; }
     [Parameter]
     public string? Input { get; set; }
-    private string? Response = string.Empty;
+    private string? Response { get; set; } = string.Empty;
 
     (Type Type, int Number, string Title) PuzzleInfo => puzzleHelper.Puzzles[PuzzleNumber];
     bool _collapsePuzzleInput = false;

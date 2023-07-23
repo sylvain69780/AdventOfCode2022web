@@ -2,14 +2,17 @@
 namespace AdventOfCode2022web.Puzzles
 {
     [Puzzle(18, "Boiling Boulders")]
-    public class BoilingBoulders : IPuzzleSolver
+    public class BoilingBoulders : IPuzzleSolverV3
     {
-        private static List<Voxel> GetVoxels(string puzzleInput)
+        private List<Voxel>? Voxels;
+
+        public void Setup (string puzzleInput)
         {
-            return puzzleInput.Split("\n").Select(x => x.Split(','))
+            Voxels = puzzleInput.Split("\n").Select(x => x.Split(','))
                 .Select(x => x.Select(y => int.Parse(y)).ToArray())
                 .Select(x => new Voxel(X: x[0], Y: x[1], Z: x[2])).ToList();
         }
+
         private static readonly List<Voxel> CubeFaces = new()
         {
                 new Voxel(1,0,0),
@@ -20,12 +23,11 @@ namespace AdventOfCode2022web.Puzzles
                 new Voxel(0,0,-1)
             };
 
-        public string SolveFirstPart(string puzzleInput)
+        public IEnumerable<string> SolveFirstPart()
         {
-            var voxels = GetVoxels(puzzleInput);
-            var map = voxels.ToHashSet();
+            var map = Voxels!.ToHashSet();
             var CountOfFacesNotConnected = 0;
-            foreach (var cube in voxels)
+            foreach (var cube in Voxels!)
             {
                 foreach (var face in CubeFaces)
                 {
@@ -33,12 +35,11 @@ namespace AdventOfCode2022web.Puzzles
                         CountOfFacesNotConnected++;
                 }
             }
-            return CountOfFacesNotConnected.ToString();
+            yield return CountOfFacesNotConnected.ToString();
         }
-        public string SolveSecondPart(string puzzleInput)
+        public IEnumerable<string> SolveSecondPart()
         {
-            var dropletVoxels = GetVoxels(puzzleInput).ToHashSet();
-
+            var dropletVoxels = Voxels!.ToHashSet();
             var rangeOfCoordinates = new RangeOfCoordinates(
                 LowerCoordinates: new Voxel(dropletVoxels.Min(p => p.X) - 1, dropletVoxels.Min(p => p.Y) - 1, dropletVoxels.Min(p => p.Z) - 1),
                 HigherCoordinates: new Voxel(dropletVoxels.Max(p => p.X) + 1, dropletVoxels.Max(p => p.Y) + 1, dropletVoxels.Max(p => p.Z) + 1)
@@ -71,12 +72,10 @@ namespace AdventOfCode2022web.Puzzles
                     if (steamParticules.Contains(newPoint) && !dropletVoxels.Contains(newPoint))
                     {
                         exteriorSurfaceArea++;
-                        Console.WriteLine(exteriorSurfaceArea);
                     }
                 }
             }
-            Console.WriteLine(exteriorSurfaceArea);
-            return exteriorSurfaceArea.ToString();
+            yield return exteriorSurfaceArea.ToString();
         }
     }
 }

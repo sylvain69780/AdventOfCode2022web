@@ -1,10 +1,9 @@
-﻿using System.Diagnostics;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 
 namespace AdventOfCode2022web.Puzzles
 {
     [Puzzle(15, "Beacon Exclusion Zone")]
-    public class BeaconExclusionZone : IPuzzleSolverV2
+    public class BeaconExclusionZone : IPuzzleSolverV3
     {
         private class SensorPositionAndClosestBeacon
         {
@@ -34,12 +33,18 @@ namespace AdventOfCode2022web.Puzzles
                 .ToList();
         }
 
-        public async Task<string> SolveFirstPart(string puzzleInput, Func<Func<string>,bool, Task> update, CancellationToken cancellationToken)
+        private List<SensorPositionAndClosestBeacon>? SensorsPositionsAndClosestBeacon;
+
+        public void Setup(string puzzleInput)
         {
-            var sensorsPositionsAndClosestBeacon = GetSensorPositionAndClosestBeacons(puzzleInput);
-            var verticalPositionOfRowToAnalyze = sensorsPositionsAndClosestBeacon.Count <= 14 ? 10 : 2000000;
+            SensorsPositionsAndClosestBeacon = GetSensorPositionAndClosestBeacons(puzzleInput);
+        }
+
+        public IEnumerable<string> SolveFirstPart()
+        {
+            var verticalPositionOfRowToAnalyze = SensorsPositionsAndClosestBeacon!.Count <= 14 ? 10 : 2000000;
             var horizontalIntervalsOnRowToAnalyze = new List<(int begin, int end)>();
-            foreach (var record in sensorsPositionsAndClosestBeacon)
+            foreach (var record in SensorsPositionsAndClosestBeacon)
             {
                 var distanceOfSensorToRowToAnalyze = Math.Abs(record.Sensor.y - verticalPositionOfRowToAnalyze);
                 if (distanceOfSensorToRowToAnalyze <= record.ManhattanDistance)
@@ -51,9 +56,9 @@ namespace AdventOfCode2022web.Puzzles
             var start = horizontalIntervalsOnRowToAnalyze.Select(x => x.begin).Min();
             var end = horizontalIntervalsOnRowToAnalyze.Select(x => x.end).Max();
             var score = 0;
-            var discard = sensorsPositionsAndClosestBeacon
+            var discard = SensorsPositionsAndClosestBeacon
                 .Select(x => (x.Beacon.x, x.Beacon.y))
-                .Concat(sensorsPositionsAndClosestBeacon
+                .Concat(SensorsPositionsAndClosestBeacon
                 .Select(x => (x.Sensor.x, x.Sensor.y)))
                 .ToHashSet();
             for (var x = start; x <= end; x++)
@@ -69,18 +74,17 @@ namespace AdventOfCode2022web.Puzzles
                     }
                 }
             }
-            return score.ToString();
+            yield return score.ToString();
         }
-        public async Task<string> SolveSecondPart(string puzzleInput, Func<Func<string>,bool, Task> update, CancellationToken cancellationToken)
+        public IEnumerable<string> SolveSecondPart()
         {
-            var sensorsPositionsAndClosestBeacon = GetSensorPositionAndClosestBeacons(puzzleInput);
-            var discard = sensorsPositionsAndClosestBeacon
+            var discard = SensorsPositionsAndClosestBeacon!
                 .Select(x => (x.Beacon.x, x.Beacon.y))
-                .Concat(sensorsPositionsAndClosestBeacon
+                .Concat(SensorsPositionsAndClosestBeacon!
                 .Select(x => (x.Sensor.x, x.Sensor.y)))
                 .ToHashSet();
             var squares = new Queue<((int X, int Y) Min, (int X, int Y) Max)>();
-            var mapMaxSize = sensorsPositionsAndClosestBeacon.Count <= 14 ? 20 : 4000000;
+            var mapMaxSize = SensorsPositionsAndClosestBeacon!.Count <= 14 ? 20 : 4000000;
             var maxIterations = (int)Math.Log2(mapMaxSize)+1; 
             squares.Enqueue(((0, 0), (mapMaxSize, mapMaxSize)));
             do
@@ -89,7 +93,7 @@ namespace AdventOfCode2022web.Puzzles
                 while (squares.Count > 0)
                 {
                     var (min, max) = squares.Dequeue();
-                    var isFullyCoveredBySensor = sensorsPositionsAndClosestBeacon
+                    var isFullyCoveredBySensor = SensorsPositionsAndClosestBeacon
                         .Any(x => ManhattanDistance(x.Sensor, (min.X, min.Y)) <= x.ManhattanDistance
                             && ManhattanDistance(x.Sensor, (min.X, max.Y)) <= x.ManhattanDistance
                             && ManhattanDistance(x.Sensor, (max.X, max.Y)) <= x.ManhattanDistance
@@ -137,13 +141,12 @@ namespace AdventOfCode2022web.Puzzles
                 squares = subdividedSquares;
                 var (Min, Max) = squares.Peek();
                 var squareSize = Max.X - Min.X+1;
-                await update(() => $"Squares evaluated : {squares.Count} with square size of {squareSize}",false);
+                yield return $"{squares.Count} quads evaluated with a side size of {squareSize}";
 
-            } while (squares.Count > 1 && maxIterations-- != 0 && !cancellationToken.IsCancellationRequested);
-            await update(() => string.Empty,true);
+            } while (squares.Count > 1 && maxIterations-- != 0 );
             var res = squares.Dequeue();
             // too big for int
-            return ((long)res.Min.X * 4000000 + res.Min.Y).ToString();
+            yield return ((long)res.Min.X * 4000000 + res.Min.Y).ToString();
         }
     }
 }

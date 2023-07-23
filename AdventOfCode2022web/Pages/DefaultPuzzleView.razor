@@ -7,11 +7,12 @@
 @code {
     [Parameter]
     public int PuzzleNumber { get; set; }
-    private string? _input;
+    private string? _input { get; set; }
     private IPuzzleSolverV3? _solver;
     private int _animationDuration = 500;
     public void UpdateView(int animationDuration)
     {
+        StateHasChanged();
     }
 
     protected override async Task OnInitializedAsync()
