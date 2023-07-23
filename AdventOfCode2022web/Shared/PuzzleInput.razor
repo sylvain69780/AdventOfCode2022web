@@ -16,7 +16,7 @@
 {
     <div>
         <label class="form-label">The data below is that provided for example. Paste your own user input from <a href="https://adventofcode.com/2022/day/@PuzzleNumber">Advent Of Code</a>.</label>
-        <pre><textarea class="form-control" aria-label="Puzzle Input" rows="10" @bind="Input" maxlength="10000000"></textarea></pre>
+        <pre><textarea class="form-control" aria-label="Puzzle Input" rows="10" @bind="CurrentInput" maxlength="10000000"></textarea></pre>
     </div>
 }
 
@@ -45,7 +45,10 @@
     public Action<int>? Changed { get; set; }
     [Parameter]
     public string? Input { get; set; }
-    private string? Response { get; set; } = string.Empty;
+
+    private string CurrentInput { get; set; } = string.Empty;
+
+    private string Response { get; set; } = string.Empty;
 
     (Type Type, int Number, string Title) PuzzleInfo => puzzleHelper.Puzzles[PuzzleNumber];
     bool _collapsePuzzleInput = false;
@@ -61,8 +64,10 @@
 
     private async Task Solve(Func<IEnumerable<string>> part)
     {
+        if (CurrentInput == string.Empty)
+            CurrentInput = Input!;
         Response = string.Empty;
-        PuzzleSolver!.Setup(Input!);
+        PuzzleSolver!.Setup(CurrentInput);
         _isTaskRunning = true;
         _cancel = false;
         _stopwatch.Start();
