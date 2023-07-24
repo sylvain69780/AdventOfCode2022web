@@ -3,9 +3,16 @@
 namespace AdventOfCode2022web.Puzzles
 {
     [Puzzle(4, "Camp Cleanup")]
-    public class CampCleanup : IPuzzleSolver
+    public class CampCleanup : IPuzzleSolverV3
     {
-        private static string[] ToLines(string s) => s.Split("\n");
+
+        private string[] _lines = Array.Empty<string>();
+
+        public void Setup(string s)
+        {
+            _lines = s.Split("\n");
+        }
+
         private static string Format(int v) => v.ToString();
 
         private readonly struct Interval
@@ -42,22 +49,22 @@ namespace AdventOfCode2022web.Puzzles
             }
         }
 
-        public string SolveFirstPart(string puzzleInput)
+        public IEnumerable<string> SolveFirstPart()
         {
             var score = 0;
-            foreach (var (interval1, interval2) in ListOfSectionAssignmentPairs(ToLines(puzzleInput)))
+            foreach (var (interval1, interval2) in ListOfSectionAssignmentPairs(_lines))
                 if (interval1.Contains(interval2) || interval2.Contains(interval1))
                     score++;
-             return Format(score);
+             yield return Format(score);
         }
 
-        public string SolveSecondPart(string puzzleInput)
+        public IEnumerable<string> SolveSecondPart()
         {
             var score = 0;
-            foreach (var (interval1, interval2) in ListOfSectionAssignmentPairs(ToLines(puzzleInput)))
+            foreach (var (interval1, interval2) in ListOfSectionAssignmentPairs(_lines))
                 if (interval1.Overlaps(interval2))
                     score++;
-             return Format(score);
+             yield return Format(score);
         }
     }
 }
