@@ -33,7 +33,7 @@
                 var item = puzzles[puzzleIndex];
                 var pageName = $"{(typeof(IPuzzleSolverV2).IsAssignableFrom(item.Type) ? v2 : typeof(IPuzzleSolverV3).IsAssignableFrom(item.Type) ? "DefaultPuzzleView" : v1)}/{item.Number}";
                 if (item.Type == typeof(BlizzardBasin))
-                    pageName = "BlizzardBasinView";
+                    pageName = $"BlizzardBasinView/{item.Number}";
                 if (item.Type == typeof(UnstableDiffusion))
                     pageName = "UnstableDiffusionView";
                 <div class="nav-item px-3" @onclick="ToggleNavMenu">

@@ -1,0 +1,39 @@
+﻿:root {
+    --elf-animation-duration: 0;
+    --dx: 0px;
+    --dy: 0px;
+}
+
+.elf-move {
+    animation-name: elf-move-anim;
+    animation-fill-mode: forwards;
+    animation-iteration-count: 1;
+    animation-duration: var(--elf-animation-duration);
+}
+
+@keyframes elf-move-anim {
+    from {
+        transform: translate(0px,0px);
+    }
+
+    to {
+        transform: translate(var(--dx),var(--dy));
+    }
+}
+
+.elf-destroyed {
+    animation-name: elf-destroyed-anim;
+    animation-fill-mode: forwards;
+    animation-iteration-count: 1;
+    animation-duration: var(--elf-animation-duration);
+}
+
+@keyframes elf-destroyed-anim {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
+}
