@@ -3,16 +3,22 @@
 namespace AdventOfCode2022web.Puzzles
 {
     [Puzzle(10, "Cathode Ray Tube")]
-    public class CathodeRayTube : IPuzzleSolver
+    public class CathodeRayTube : IPuzzleSolverV3
     {
         private static string Format(int v) => v.ToString();
+
         private static string[] ToLines(string s) => s.Split("\n");
 
-        public string SolveFirstPart(string puzzleInput)
+        private string[] program = Array.Empty<string>();
+
+        public void Setup(string s)
         {
-            var program = ToLines(puzzleInput);
-            var numsToAdd = program.Select(x => x.Split(" "))
-                .SelectMany(x => x[0] == "noop" ? new int[] { 0 } : new int[] { 0, int.Parse(x[1]) });
+            program = ToLines(s);
+        }
+
+        public IEnumerable<string> SolveFirstPart()
+        {
+            var numsToAdd = program.Select(x => x.Split(" ")).SelectMany(x => x[0] == "noop" ? new int[] { 0 } : new int[] { 0, int.Parse(x[1]) });
             var valueOfXregister = 1;
             var cycleToRecord = 20;
             var currentCycle = 0;
@@ -27,7 +33,7 @@ namespace AdventOfCode2022web.Puzzles
                 }
                 valueOfXregister += value;
             }
-            return Format(sumOfSixSignalStrengths);
+            yield return Format(sumOfSixSignalStrengths);
         }
 
         private static IEnumerable<int> ComputeValuesOfXRegister(IEnumerable<int> numsToAdd)
@@ -42,9 +48,8 @@ namespace AdventOfCode2022web.Puzzles
             }
         }
 
-        public string SolveSecondPart(string puzzleInput)
+        public IEnumerable<string> SolveSecondPart()
         {
-            var program = ToLines(puzzleInput);
             var numsToAdd = program.Select(x => x.Split(" "))
                 .SelectMany(x => x[0] == "noop" ? new int[] { 0 } : new int[] { 0, int.Parse(x[1]) });
             var valuesOfXRegister = ComputeValuesOfXRegister(numsToAdd).GetEnumerator();
@@ -60,7 +65,7 @@ namespace AdventOfCode2022web.Puzzles
                         messageLine.Append('.');
                 message.Add(messageLine.ToString());
             }
-            return string.Join("\n", message);
+            yield return string.Join("\n", message);
         }
     }
 }
