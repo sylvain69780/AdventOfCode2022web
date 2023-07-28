@@ -33,15 +33,15 @@
       "url": "_framework\/icudt.dat"
     },
     {
-      "hash": "sha256-xEsLOW1sMddRvicA8AA3xfs+tIVetGJvtX2vnPcni2g=",
+      "hash": "sha256-qLUgk198INKrXM0BFCbKAwXG3FtVmi1IkD3dcVnewoE=",
       "url": "_framework\/blazor.boot.json"
     },
     {
-      "hash": "sha256-7vN\/J+v+pu0aahwZ8MwfuSryBfT3xwvalXl7vUYGd8E=",
+      "hash": "sha256-C8WqX51AX03J8WmOWgtPMBBYEvtqAj7BD7aWSaMWrc4=",
       "url": "_framework\/AdventOfCode2022.dll"
     },
     {
-      "hash": "sha256-CuLZWXBzXy79jnmNUcfeTBBDyv6HeBuPqQMHF+zCibI=",
+      "hash": "sha256-cpYIgewofN5szAGTKlbGJsN8zmRrd8Fxr1Hi8c9roPo=",
       "url": "_framework\/AdventOfCode2022web.dll"
     },
     {
@@ -241,7 +241,7 @@
       "url": "_framework\/System.Threading.Tasks.Parallel.dll"
     },
     {
-      "hash": "sha256-pAEdNlectcUiCQmvUSO2GRmdHo+7mKgmQge9LwhVwIk=",
+      "hash": "sha256-mEE0twZkcRYqcJyW06RnrN+2Yf0gZEbRtvY6nZQsBng=",
       "url": "AdventOfCode2022web.styles.css"
     },
     {
@@ -297,6 +297,18 @@
       "url": "css\/open-iconic\/README.md"
     },
     {
+      "hash": "sha256-RCBAGyE52uZI\/W3TdQ6HDuR0j9DYfZPaSrHKfs5B6mg=",
+      "url": "elf-192.png"
+    },
+    {
+      "hash": "sha256-WNXAHIu3\/xMQ5RtXF+2zMxWE5kxZYZ57X9maPxSavS8=",
+      "url": "elf-512.png"
+    },
+    {
+      "hash": "sha256-L3kPEw4Y7P2C4AliRC0G9X6PbCEfdUNxdMz9zB4vSy4=",
+      "url": "elf.svg"
+    },
+    {
       "hash": "sha256-Jtxf9L+5ITKRc1gIRl4VbUpGkRNfOBXjYTdhJD4facM=",
       "url": "favicon.ico"
     },
@@ -309,19 +321,11 @@
       "url": "icon-512.png"
     },
     {
-      "hash": "sha256-lwJwgrl8zUC5VdUT1JtTYks\/FVnVM5HvmktA8UIF\/1Y=",
-      "url": "images\/elf-christmas-svgrepo-com.svg"
-    },
-    {
-      "hash": "sha256-0cD9VzqduuBGO8ZQhZOBAQFi4UKVj5qmVVKwWJvty+0=",
-      "url": "images\/elf-svgrepo-com.svg"
-    },
-    {
       "hash": "sha256-4FiLUAIWfoUpgBy1d5NAnfGuEh1kVZpCWjEh1lipZ8k=",
       "url": "index.html"
     },
     {
-      "hash": "sha256-G3Jj9PjojSbjLosNGgExSf1h+5+X\/Rge5TikoF61lYU=",
+      "hash": "sha256-W7xdChBnOf3aMuK\/LhucX\/MM0T7E7\/IbJpDa8dPQqkQ=",
       "url": "manifest.json"
     },
     {
@@ -429,5 +433,5 @@
       "url": "sample-data\/UnstableDiffusion.txt"
     }
   ],
-  "version": "JVpWJwxJ"
+  "version": "fQBU1cHR"
 };

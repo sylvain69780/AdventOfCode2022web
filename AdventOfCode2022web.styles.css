@@ -1,18 +1,19 @@
 /* /Pages/BlizzardBasinView.razor.rz.scp.css */
-:root[b-rcuh15abw5] {
+/* /Pages/BlizzardBasinVisualization.razor.rz.scp.css */
+:root[b-e9jb9r58lg] {
     --elf-animation-duration: 0;
     --dx: 0px;
     --dy: 0px;
 }
 
-.elf-move[b-rcuh15abw5] {
-    animation-name: elf-move-anim-b-rcuh15abw5;
+.elf-move[b-e9jb9r58lg] {
+    animation-name: elf-move-anim-b-e9jb9r58lg;
     animation-fill-mode: forwards;
     animation-iteration-count: 1;
     animation-duration: var(--elf-animation-duration);
 }
 
-@keyframes elf-move-anim-b-rcuh15abw5 {
+@keyframes elf-move-anim-b-e9jb9r58lg {
     from {
         transform: translate(0px,0px);
     }
@@ -22,14 +23,14 @@
     }
 }
 
-.elf-destroyed[b-rcuh15abw5] {
-    animation-name: elf-destroyed-anim-b-rcuh15abw5;
+.elf-destroyed[b-e9jb9r58lg] {
+    animation-name: elf-destroyed-anim-b-e9jb9r58lg;
     animation-fill-mode: forwards;
     animation-iteration-count: 1;
     animation-duration: var(--elf-animation-duration);
 }
 
-@keyframes elf-destroyed-anim-b-rcuh15abw5 {
+@keyframes elf-destroyed-anim-b-e9jb9r58lg {
     from {
         opacity: 1;
     }
