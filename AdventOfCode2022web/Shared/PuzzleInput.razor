@@ -4,7 +4,19 @@
 
 @if (Response != string.Empty)
 {
-    <div class="p-3 mb-2 bg-primary text-white">@(_isTaskRunning ? string.Empty : "The answer of the puzzle is : ")@Response</div>
+    if ( Response.Contains('\n'))
+    {
+        <div class="p-3 mb-2 bg-primary text-white">@(_isTaskRunning ? string.Empty : "The answer of the puzzle is : ")</div>
+        var lines = Response.Split('\n');
+        foreach (var line in lines)
+        {
+            <pre>@line</pre>
+        }
+    }
+    else
+    {
+        <div class="p-3 mb-2 bg-primary text-white">@(_isTaskRunning ? string.Empty : "The answer of the puzzle is : ")@Response</div>
+    }
 }
 <h1>@(PuzzleInfo.Title)</h1>
 <p>The code for this solution on <a href="https://github.com/sylvain69780/AdventOfCode2022web/blob/master/AdventOfCode2022/Puzzles/@(PuzzleInfo.Type.Name).cs">GitHub</a></p>

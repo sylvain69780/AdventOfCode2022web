@@ -1,9 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics;
-using System.Runtime.Intrinsics.X86;
-using System.Runtime.Versioning;
-
-namespace AdventOfCode2022web.Puzzles
+﻿namespace AdventOfCode2022web.Puzzles
 {
     [Puzzle(24, "Blizzard Basin")]
     public class BlizzardBasin : IPuzzleSolverV3
