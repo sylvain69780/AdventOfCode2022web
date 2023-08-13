@@ -6,16 +6,14 @@
 {
     if ( Response.Contains('\n'))
     {
-        <div class="p-3 mb-2 bg-primary text-white">@(_isTaskRunning ? string.Empty : "The answer of the puzzle is : ")</div>
-        var lines = Response.Split('\n');
-        foreach (var line in lines)
-        {
-            <pre>@line</pre>
-        }
+        <div class="p-3 mb-2 bg-primary text-white">
+            <pre>@(_isTaskRunning ? $"Loop turn {Iterations}" : $"The answer of the puzzle after {Iterations} loops is : ")</pre>
+            <pre>@Response</pre>
+            </div>
     }
     else
     {
-        <div class="p-3 mb-2 bg-primary text-white">@(_isTaskRunning ? string.Empty : "The answer of the puzzle is : ")@Response</div>
+        <div class="p-3 mb-2 bg-primary text-white">@(_isTaskRunning ? $"Loop turn {Iterations}" : "The answer of the puzzle after {Iterations} loops is : ")@Response</div>
     }
 }
 <h1>@(PuzzleInfo.Title)</h1>
@@ -63,6 +61,7 @@
     private string CurrentInput { get; set; } = string.Empty;
 
     private string Response { get; set; } = string.Empty;
+    private int Iterations { get; set; }
 
     (Type Type, int Number, string Title) PuzzleInfo => puzzleHelper.Puzzles[PuzzleNumber];
     bool _collapsePuzzleInput = false;
@@ -81,6 +80,7 @@
         if (CurrentInput == string.Empty)
             CurrentInput = Input!;
         Response = string.Empty;
+        Iterations = 0;
         PuzzleSolver!.Setup(CurrentInput);
         _isTaskRunning = true;
         _cancel = false;
@@ -88,6 +88,7 @@
         foreach (var s in part())
         {
             Response = s;
+            Iterations++;
             if (_delayVisualizationValue > 0 || _stopwatch.ElapsedMilliseconds > 1000)
             {
                 if (_delayVisualizationValue > 0)

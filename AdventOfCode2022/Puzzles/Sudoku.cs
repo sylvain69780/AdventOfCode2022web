@@ -51,6 +51,8 @@ namespace AdventOfCode2022web.Puzzles
                 }
                 yield return FormatPuzzleState();
             }
+            if (!puzzleCompleted)
+                throw new ArgumentException("No solution is found for this Sudoku !");
         }
         public IEnumerable<string> SolveSecondPart()
         {
