@@ -11,7 +11,7 @@ namespace AdventOfCode2022web.Puzzles
             PuzzleState = _puzzleInput;
         }
 
-        private string Entropy(int position)
+        public string Entropy(int position)
         {
             var res = new HashSet<char>();
             var (col, row) = (position % 9, position / 9);
@@ -41,7 +41,10 @@ namespace AdventOfCode2022web.Puzzles
                     var slotsWithMinimalEntropy = emptySlots.Select(x => (p: x, e: Entropy(x))).OrderBy(x => x.e.Length).ThenBy(x => x.p).ToArray();
                     var slot = slotsWithMinimalEntropy[0];
                     if (slot.e == string.Empty)
+                    {
+                        yield return FormatPuzzleState();
                         continue;
+                    }
                     var sb = new StringBuilder(PuzzleState);
                     for (var i = 0; i<slot.e.Length;i++)
                     {

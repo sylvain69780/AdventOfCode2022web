@@ -36,6 +36,8 @@
                     pageName = $"BlizzardBasinView/{item.Number}";
                 if (item.Type == typeof(UnstableDiffusion))
                     pageName = "UnstableDiffusionView";
+                if (item.Type == typeof(Sudoku))
+                    pageName = $"SudokuView/{item.Number}";
                 <div class="nav-item px-3" @onclick="ToggleNavMenu">
                     <NavLink class="nav-link" href="@(pageName)">
                         <span class="oi oi-puzzle-piece" aria-hidden="true"></span>

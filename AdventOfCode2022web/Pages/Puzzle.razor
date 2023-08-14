@@ -11,13 +11,13 @@
 </div>
 <div class="mb-3">
     <div class="mb-3">
-        <button class="btn btn-primary" disabled=@IsTask1Running @onclick="SolveFirstPart">Solve Part 1</button>
+        <button class="btn btn-primary" @onclick="SolveFirstPart">Solve Part 1</button>
     </div>
     <div><pre>@Output1</pre></div>
 </div>
 <div class="mb-3">
     <div class="mb-3">
-        <button class="btn btn-primary" disabled=@IsTask2Running @onclick="SolveSecondPart">Solve Part 2</button>
+        <button class="btn btn-primary" @onclick="SolveSecondPart">Solve Part 2</button>
     </div>
     <div><pre>@Output2</pre></div>
 </div>
@@ -30,8 +30,6 @@
     private string? Input;
     private string? Output1;
     private string? Output2;
-    private bool IsTask1Running;
-    private bool IsTask2Running;
     protected override async Task OnParametersSetAsync()
     {
         var puzzle = puzzleHelper.Puzzles[PuzzleNumber];
