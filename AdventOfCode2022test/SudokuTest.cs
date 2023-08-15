@@ -25,7 +25,7 @@ namespace AdventOfCode2022test
             var solution = @"132865749598374612764129358349581276871296435256743981427658193915432867683917524";
 
             _sudoku.Setup(input);
-            var res = _sudoku.SolveFirstPart().Last();
+            var res = _sudoku.SolveFirstPart().Last().Replace("\n", "");
             Assert.That(res, Is.EqualTo(solution));
         }
         [Test]
@@ -46,7 +46,28 @@ namespace AdventOfCode2022test
             _sudoku.Setup(input);
             var algo = _sudoku.SolveFirstPart().ToArray();
             var steps = algo.Length;
-            var res = algo[^1];
+            var res = algo[^1].Replace("\n", "");
+            Assert.That(res, Is.EqualTo(solution));
+        }
+        [Test]
+        public void TestSudoku3()
+        {
+            var input = @"
+.6..529..
+.79......
+..2.9..5.
+..48.....
+21.....94
+.....93..
+.4..7.8..
+......72.
+..368..4.";
+            var solution = @"461352987579168432832794156394816275218537694657429318945273861186945723723681549";
+
+            _sudoku.Setup(input);
+            var algo = _sudoku.SolveFirstPart().ToArray();
+            var steps = algo.Length;
+            var res = algo[^1].Replace("\n", "");
             Assert.That(res, Is.EqualTo(solution));
         }
     }

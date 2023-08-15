@@ -28,7 +28,7 @@ namespace AdventOfCode2022web.Puzzles
 
         public IEnumerable<string> SolveFirstPart()
         {
-            var DFS = new Stack<string>();
+            DFS = new Stack<string>();
             DFS.Push(_puzzleInput);
             bool puzzleCompleted = false;
             while (!puzzleCompleted && DFS.TryPop(out PuzzleState!))
@@ -75,6 +75,7 @@ namespace AdventOfCode2022web.Puzzles
         private string _puzzleInput = string.Empty;
         private const string Digits = "123456789";
         public string PuzzleState = string.Empty;
+        public Stack<string>? DFS;
     }
 }
 
