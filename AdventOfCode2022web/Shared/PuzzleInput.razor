@@ -13,7 +13,7 @@
     }
     else
     {
-        <div class="p-3 mb-2 bg-primary text-white">@(_isTaskRunning ? $"Loop turn {Iterations}" : "The answer of the puzzle after {Iterations} loops is : ")@Response</div>
+        <div class="p-3 mb-2 bg-primary text-white">@(_isTaskRunning ? $"Loop turn {Iterations}" : $"The answer of the puzzle after {Iterations} loop(s) is : ")@Response</div>
     }
 }
 <h1>@(PuzzleInfo.Title)</h1>
