@@ -12,7 +12,9 @@
     The number of question marks indicates the depth of the search.
 </p>
 
-
+<div class="container">
+<div class="row">
+        <div class="col-md-6">
 <svg viewBox="-0.2 -0.2 9.2 9.8" class="img-fluid">
     <defs>
         <g id="sudoku-cell">
@@ -72,15 +74,16 @@
                                     fcolor = b == '.' ? "gray" : "blue";
                                     if (b != '.')
                                         questions = questions + b;
-                                    questions = questions + '?';
+                                    else
+                                        questions = questions + '?';
                                 }
                             }
                         }
                         <g transform="translate(.5,.56)">
                             <text x="@x" y="@y" font-family="Comic Sans" font-size=".8" dominant-baseline="middle" text-anchor="middle" fill="@fcolor">@c</text>
                         </g>
-                        <g transform="translate(.8,.8)">
-                            <text x="@x" y="@y" font-family="Comic Sans" font-size=".3" dominant-baseline="middle" text-anchor="middle">@questions</text>
+                        <g transform="translate(.2,.8)">
+                            <text x="@x" y="@y" font-family="Comic Sans" font-size=".3" dominant-baseline="middle" >@questions</text>
                         </g>
 
                     }
@@ -88,8 +91,13 @@
         }
     }
 </svg>
+</div>
 
-<PuzzleInput PuzzleSolver="_solver" PuzzleNumber="@PuzzleNumber" Changed="@UpdateView" Input="@_input" />
+        <div class="col-md-6">
+    <PuzzleInput PuzzleSolver="_solver" PuzzleNumber="@PuzzleNumber" Changed="@UpdateView" Input="@_input" />
+</div>
+</div>
+</div>
 
 @code {
     [Parameter]

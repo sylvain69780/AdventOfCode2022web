@@ -13,12 +13,12 @@
 
 <div class="@NavMenuCssClass">
     <nav class="flex-column">
-        <div class="nav-item px-3" @onclick="ToggleNavMenu">
+        <div class="nav-item px-1" @onclick="ToggleNavMenu">
             <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
                 <span class="oi oi-home" aria-hidden="true"></span> Home
             </NavLink>
         </div>
-        <div class="nav-item px-3">
+        <div class="nav-item px-1">
             <button class="btn btn-primary" @onclick="DecrementPage">Prev</button>
             <button class="btn btn-primary" @onclick="IncrementPage">Next</button>
         </div>
@@ -38,10 +38,9 @@
                     pageName = "UnstableDiffusionView";
                 if (item.Type == typeof(Sudoku))
                     pageName = $"SudokuView/{item.Number}";
-                <div class="nav-item px-3" @onclick="ToggleNavMenu">
+                <div class="nav-item" @onclick="ToggleNavMenu">
                     <NavLink class="nav-link" href="@(pageName)">
-                        <span class="oi oi-puzzle-piece" aria-hidden="true"></span>
-                        <div data-toggle="tooltip" data-placement="top" title="@($"{item.Title}")">@($"Day {item.Number}")</div>
+                        <b style="padding-right:5px">@item.Number</b><span>@item.Title</span>
                     </NavLink>
                 </div>
             }

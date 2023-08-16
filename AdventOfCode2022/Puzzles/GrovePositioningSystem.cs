@@ -1,6 +1,6 @@
 ﻿namespace AdventOfCode2022web.Puzzles
 {
-    [Puzzle(20, "Grove Positioning System")]
+    [Puzzle(20, "Grove Pos. System")]
     public class GrovePositioningSystem : IPuzzleSolver
     {
         public string SolveFirstPart(string puzzleInput)

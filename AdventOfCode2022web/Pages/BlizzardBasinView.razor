@@ -3,9 +3,16 @@
 @inject HttpClient Http
 
 
-
-<BlizzardBasinVisualization Solver="@((BlizzardBasin)_solver)" AnimationDuration="@_animationDuration"/>
-<PuzzleInput PuzzleSolver="_solver" PuzzleNumber="24" Changed="@UpdateView" Input="@_input" />
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <BlizzardBasinVisualization Solver="@((BlizzardBasin)_solver)" AnimationDuration="@_animationDuration" />
+        </div>
+        <div class="col-md-6">
+            <PuzzleInput PuzzleSolver="_solver" PuzzleNumber="24" Changed="@UpdateView" Input="@_input" />
+        </div>
+    </div>
+</div>
 
 @code {
     [Parameter]
