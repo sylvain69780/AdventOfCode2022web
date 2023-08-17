@@ -2,20 +2,6 @@
 @using System.Diagnostics;
 @inject PuzzleHelper puzzleHelper;
 
-@if (Response != string.Empty)
-{
-    if ( Response.Contains('\n'))
-    {
-        <div class="p-3 mb-2 bg-primary text-white">
-            <pre>@(_isTaskRunning ? $"Loop turn {Iterations}" : $"The answer of the puzzle after {Iterations} loops is : ")</pre>
-            <pre>@Response</pre>
-            </div>
-    }
-    else
-    {
-        <div class="p-3 mb-2 bg-primary text-white">@(_isTaskRunning ? $"Loop turn {Iterations}" : $"The answer of the puzzle after {Iterations} loop(s) is : ")@Response</div>
-    }
-}
 <h1>@(PuzzleInfo.Title)</h1>
 <p>The code for this solution on <a href="https://github.com/sylvain69780/AdventOfCode2022web/blob/master/AdventOfCode2022/Puzzles/@(PuzzleInfo.Type.Name).cs">GitHub</a></p>
 <div class="mb-3 form-check form-switch">
@@ -47,6 +33,22 @@
     <input type="range" class="form-range me-3" style="width: 200px;" @bind="_delayVisualizationValue" min="0" max="1000" step="50">
     <label class="form-check-label">Delay @_delayVisualizationValue ms</label>
 </div>
+
+@if (Response != string.Empty)
+{
+    if (Response.Contains('\n'))
+    {
+                <div class="p-3 mb-2 bg-primary text-white">
+                    <pre>@(_isTaskRunning ? $"Loop turn {Iterations}" : $"The answer of the puzzle after {Iterations} loops is : ")</pre>
+                    <pre>@Response</pre>
+                    </div>
+    }
+    else
+    {
+                <div class="p-3 mb-2 bg-primary text-white">@(_isTaskRunning ? $"Loop turn {Iterations}" : $"The answer of the puzzle after {Iterations} loop(s) is : ")@Response</div>
+    }
+}
+
 
 @code {
     [Parameter]

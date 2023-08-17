@@ -3,11 +3,18 @@
 namespace AdventOfCode2022web.Puzzles
 {
     [Puzzle(14, "Regolith Reservoir")]
-    public class RegolithReservoir : IPuzzleSolverV2
+    public class RegolithReservoir : IIncrementalPuzzleSolver
     {
-        public async Task<string> SolveFirstPart(string puzzleInput, Func<Func<string>,bool, Task> update, CancellationToken cancellationToken)
+        private string _puzzleInput = string.Empty;
+
+        public void Initialize(string puzzleInput)
         {
-            var paths = puzzleInput.Split("\n").Select(x => x.Replace(" -> ", "#").Split('#')
+            _puzzleInput = puzzleInput;
+        }
+
+        public IEnumerable<string> SolveFirstPart()
+        {
+            var paths = _puzzleInput.Split("\n").Select(x => x.Replace(" -> ", "#").Split('#')
                 .Select(y => y.Split(','))
                 .Select(y => (x: int.Parse(y[0]), y: int.Parse(y[1]))).ToList())
                 .ToList();
@@ -35,9 +42,6 @@ namespace AdventOfCode2022web.Puzzles
                 var isFreeToMove = true;
                 while (isFreeToMove && map.SandPosition.y < floorPosition)
                 {
-                        await update(() => Visualize(map),false);
-                        if (cancellationToken.IsCancellationRequested)
-                            return "";
                     var newSandPosition = map.SandPosition;
                     foreach (var (dx, dy) in Directions)
                     {
@@ -58,12 +62,11 @@ namespace AdventOfCode2022web.Puzzles
                 map.SetOccupied(map.SandPosition);
                 iterations++;
             }
-            await update(() => Visualize(map),true);
-            return iterations.ToString();
+            yield return iterations.ToString();
         }
-        public async Task<string> SolveSecondPart(string puzzleInput, Func<Func<string>,bool, Task> update, CancellationToken cancellationToken)
+        public IEnumerable<string> SolveSecondPart()
         {
-            var paths = puzzleInput.Split("\n").Select(x => x.Replace(" -> ", "#").Split('#')
+            var paths = _puzzleInput.Split("\n").Select(x => x.Replace(" -> ", "#").Split('#')
                 .Select(y => y.Split(','))
                 .Select(y => (x: int.Parse(y[0]), y: int.Parse(y[1]))).ToList())
                 .ToList();
@@ -90,9 +93,6 @@ namespace AdventOfCode2022web.Puzzles
                 var isFreeToMove = true;
                 while (isFreeToMove)
                 {
-                        await update(() => Visualize(map),false);
-                        if (cancellationToken.IsCancellationRequested)
-                            return "";
                     var newSandPosition = map.SandPosition;
                     foreach (var (dx, dy) in Directions)
                     {
@@ -113,8 +113,7 @@ namespace AdventOfCode2022web.Puzzles
                     break;
                 map.SetOccupied(map.SandPosition);
             }
-            await update(() => Visualize(map),true);
-            return iterations.ToString();
+            yield return iterations.ToString();
         }
         private static readonly (int x, int y)[] Directions = new (int x, int y)[] { (0, 1), (-1, 1), (1, 1) };
 

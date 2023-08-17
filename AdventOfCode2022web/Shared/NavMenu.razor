@@ -26,12 +26,10 @@
             var puzzles = puzzleHelper.Puzzles.Values.OrderBy(x => x.Number).ToList();
             var first = puzzlePageNumber * 5 ;
             var last = Math.Min(puzzles.Count-1, first + 5 - 1);
-            var v1 = "puzzle";
-            var v2 = "puzzleV2";
             for (var puzzleIndex = first; puzzleIndex <= last; puzzleIndex++)
             {
                 var item = puzzles[puzzleIndex];
-                var pageName = $"{(typeof(IPuzzleSolverV2).IsAssignableFrom(item.Type) ? v2 : typeof(IIncrementalPuzzleSolver).IsAssignableFrom(item.Type) ? "DefaultPuzzleView" : v1)}/{item.Number}";
+                var pageName = $"{(typeof(IIncrementalPuzzleSolver).IsAssignableFrom(item.Type) ? "DefaultPuzzleView" : "puzzle")}/{item.Number}";
                 if (item.Type == typeof(BlizzardBasin))
                     pageName = $"BlizzardBasinView/{item.Number}";
                 if (item.Type == typeof(UnstableDiffusion))

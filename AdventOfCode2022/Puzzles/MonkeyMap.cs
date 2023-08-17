@@ -1,6 +1,7 @@
 ﻿using SixLabors.Fonts;
 using System;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -8,7 +9,7 @@ using System.Threading;
 namespace AdventOfCode2022web.Puzzles
 {
     [Puzzle(22, "Monkey Map")]
-    public class MonkeyMap : IPuzzleSolverV2
+    public class MonkeyMap : IIncrementalPuzzleSolver
     {
         private struct Simulation
         {
@@ -22,9 +23,16 @@ namespace AdventOfCode2022web.Puzzles
             public int Step;
         }
 
-        public async Task<string> SolveFirstPart(string inp, Func<Func<string>,bool, Task> update, CancellationToken cancellationToken)
+        private string _puzzleInput = string.Empty;
+
+        public void Initialize(string puzzleInput)
         {
-            var simulation = ProcessInput(inp);
+            _puzzleInput = puzzleInput;
+        }
+
+        public IEnumerable<string> SolveFirstPart()
+        {
+            var simulation = ProcessInput(_puzzleInput);
             foreach (var (move, rotation) in simulation.Instructions)
             {
                 for (var step = 0; step < move; step++)
@@ -33,22 +41,18 @@ namespace AdventOfCode2022web.Puzzles
                     if (Map(simulation, tmp) != '#')
                         simulation.Position = tmp;
                     simulation.Step++;
-                    if (cancellationToken.IsCancellationRequested)
-                        return "";
-                    await update(() => DisplayMap(simulation),false);
                 }
                 if (rotation == "R")
                     simulation.Direction = (Direction)(((int)simulation.Direction + 1) % 4);
                 if (rotation == "L")
                     simulation.Direction = (Direction)(((int)simulation.Direction - 1 + 4) % 4);
             }
-            await update(() => DisplayMap(simulation), true);
-            return (1000 * (simulation.Position.Y + 1) + 4 * (simulation.Position.X + 1) + (int)simulation.Direction).ToString();
+            yield return (1000 * (simulation.Position.Y + 1) + 4 * (simulation.Position.X + 1) + (int)simulation.Direction).ToString();
         }
 
-        public async Task<string> SolveSecondPart(string inp, Func<Func<string>,bool, Task> update, CancellationToken cancellationToken)
+        public IEnumerable<string> SolveSecondPart()
         {
-            var simulation = ProcessInput(inp);
+            var simulation = ProcessInput(_puzzleInput);
             foreach (var (move, rotation) in simulation.Instructions)
             {
                 for (var step = 0; step < move; step++)
@@ -57,17 +61,13 @@ namespace AdventOfCode2022web.Puzzles
                     if (Map(simulation, tmp.Position) != '#')
                         (simulation.Position, simulation.Direction) = tmp;
                     simulation.Step++;
-                    if (cancellationToken.IsCancellationRequested)
-                        return "";
-                    await update(() => DisplayMap(simulation),false);
                 }
                 if (rotation == "R")
                     simulation.Direction = (Direction)(((int)simulation.Direction + 1) % 4);
                 if (rotation == "L")
                     simulation.Direction = (Direction)(((int)simulation.Direction - 1 + 4) % 4);
             }
-            await update(() => DisplayMap(simulation), true);
-            return (1000 * (simulation.Position.Y + 1) + 4 * (simulation.Position.X + 1) + (int)simulation.Direction).ToString();
+            yield return (1000 * (simulation.Position.Y + 1) + 4 * (simulation.Position.X + 1) + (int)simulation.Direction).ToString();
         }
 
         private static (int X, int Y) ComputeNextPosition(Simulation simulation)

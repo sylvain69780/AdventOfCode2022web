@@ -10,12 +10,6 @@ namespace AdventOfCode2022web.Puzzles
         string SolveSecondPart();
     }
 
-    public interface IPuzzleSolverV2
-    {
-        Task<string> SolveFirstPart(string input, Func<Func<string>, bool, Task> update, CancellationToken cancellationToken);
-        Task<string> SolveSecondPart(string input, Func<Func<string>, bool, Task> update, CancellationToken cancellationToken);
-    }
-
     public interface IIncrementalPuzzleSolver
     {
         void Initialize(string puzzleInput);
@@ -51,7 +45,7 @@ namespace AdventOfCode2022web.Puzzles
     public class PuzzleHelper
     {
         public readonly IReadOnlyDictionary<int, (Type Type, int Number, string Title)> Puzzles = Assembly.GetExecutingAssembly().GetTypes()
-        .Where(x => x.IsClass && !x.IsGenericType && (typeof(IPuzzleSolver).IsAssignableFrom(x) || typeof(IPuzzleSolverV2).IsAssignableFrom(x) || typeof(IIncrementalPuzzleSolver).IsAssignableFrom(x)))
+        .Where(x => x.IsClass && !x.IsGenericType && (typeof(IPuzzleSolver).IsAssignableFrom(x) || typeof(IIncrementalPuzzleSolver).IsAssignableFrom(x)))
         .Select(x => (Type: x, Attr: x.GetCustomAttribute<PuzzleAttribute>()!))
         .Select(x => (x.Type, x.Attr.Number, x.Attr.Title))
         .ToDictionary(x => x.Number);

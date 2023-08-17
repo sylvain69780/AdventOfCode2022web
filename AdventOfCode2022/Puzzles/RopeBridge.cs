@@ -3,8 +3,15 @@
 namespace AdventOfCode2022web.Puzzles
 {
     [Puzzle(9, "Rope Bridge")]
-    public class RopeBridge : IPuzzleSolverV2
+    public class RopeBridge : IIncrementalPuzzleSolver
     {
+        private string _puzzleInput = string.Empty;
+
+        public void Initialize(string puzzleInput)
+        {
+            _puzzleInput = puzzleInput;
+        }
+
         private static string[] ToLines(string s) => s.Split("\n");
         private static string Format(int v) => v.ToString();
 
@@ -30,9 +37,9 @@ namespace AdventOfCode2022web.Puzzles
             return newTail;
         }
 
-        public async Task<string> SolveFirstPart(string puzzleInput, Func<Func<string>,bool, Task> func, CancellationToken cancellationToken)
+        public IEnumerable<string> SolveFirstPart()
         {
-            var seriesOfMotions = ToLines(puzzleInput)
+            var seriesOfMotions = ToLines(_puzzleInput)
                 .Select(x => x.Split(" "))
                 .SelectMany(x => Enumerable.Range(0, int.Parse(x[1])), (x, y) => x[0]);
             var visitedPositions = new HashSet<(int x, int y)>();
@@ -47,8 +54,7 @@ namespace AdventOfCode2022web.Puzzles
                 tail = MoveTailPosition(tail, head);
                 visitedPositions.Add(tail);
             }
-            await func(() => "No visualization available.",true);
-            return Format(visitedPositions.Count);
+            yield return Format(visitedPositions.Count);
         }
 
         private class Visualizer
@@ -85,9 +91,9 @@ namespace AdventOfCode2022web.Puzzles
             }
         }
 
-        public async Task<string> SolveSecondPart(string puzzleInput, Func<Func<string>,bool, Task> func, CancellationToken cancellationToken)
+        public IEnumerable<string> SolveSecondPart()
         {
-            var seriesOfMotions = ToLines(puzzleInput)
+            var seriesOfMotions = ToLines(_puzzleInput)
                 .Select(x => x.Split(" "))
                 .SelectMany(x => Enumerable.Range(0, int.Parse(x[1])), (x, y) => x[0]);
 
@@ -97,7 +103,6 @@ namespace AdventOfCode2022web.Puzzles
             visited.Add((0, 0));
 
             var visualizer = new Visualizer();
- //           var count = 0;
             foreach (var move in seriesOfMotions)
             {
                 var (x, y) = Directions[move];
@@ -109,14 +114,9 @@ namespace AdventOfCode2022web.Puzzles
                     tails[i] = MoveTailPosition(tails[i], previous);
                     previous = tails[i];
                 }
-//                if (count++ < 200)
-                    await func(() => visualizer.Visualize(head, tails, visited),false);
-                    if (cancellationToken.IsCancellationRequested)
-                        return "Cancelled";
                 visited.Add(tails[8]);
             }
-            await func(() => visualizer.Visualize(head, tails, visited), true);
-            return visited.Count.ToString();
+            yield return visited.Count.ToString();
         }
     }
 }
