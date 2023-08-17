@@ -30,10 +30,10 @@
             {
                 var item = puzzles[puzzleIndex];
                 var pageName = $"{(typeof(IIncrementalPuzzleSolver).IsAssignableFrom(item.Type) ? "DefaultPuzzleView" : "puzzle")}/{item.Number}";
-                if (item.Type == typeof(BlizzardBasin))
-                    pageName = $"BlizzardBasinView/{item.Number}";
-                if (item.Type == typeof(UnstableDiffusion))
-                    pageName = "UnstableDiffusionView";
+                //if (item.Type == typeof(BlizzardBasin))
+                //    pageName = $"BlizzardBasinView/{item.Number}";
+                //if (item.Type == typeof(UnstableDiffusion))
+                //    pageName = "UnstableDiffusionView";
                 if (item.Type == typeof(Sudoku))
                     pageName = $"SudokuView/{item.Number}";
                 <div class="nav-item" @onclick="ToggleNavMenu">

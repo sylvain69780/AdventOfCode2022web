@@ -2,22 +2,49 @@
 @inject PuzzleHelper puzzleHelper;
 @inject HttpClient Http
 
-<PuzzleInput PuzzleSolver="_solver" PuzzleNumber="@PuzzleNumber" Changed="@UpdateView" Input="@_input" />
-
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <PuzzleInput PuzzleSolver="_solver" PuzzleNumber="@PuzzleNumber" Changed="@UpdateView" Input="@_input" />
+        </div>
+        <div class="col-md-6">
+            @if (puzzleHelper.Puzzles[PuzzleNumber].Type == typeof(BlizzardBasin))
+            {
+                <BlizzardBasinVisualization Solver="@((BlizzardBasin)_solver!)" AnimationDuration="@_animationDuration" />
+            }
+            else if (puzzleHelper.Puzzles[PuzzleNumber].Type == typeof(UnstableDiffusion))
+            {
+                <UnstableDiffusionVisualization Solver="@((UnstableDiffusion)_solver!)" AnimationDuration="@_animationDuration" />
+            }
+            else
+            {
+                <p>No visualisation available for this Puzzle.</p>
+            }
+        </div>
+    </div>
+</div>
 @code {
     [Parameter]
     public int PuzzleNumber { get; set; }
     private string? _input { get; set; }
     private IIncrementalPuzzleSolver? _solver;
+    private int _animationDuration = 500;
+
     public void UpdateView(int animationDuration)
     {
+        _animationDuration = animationDuration;
         StateHasChanged();
     }
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnParametersSetAsync()
     {
         var puzzle = puzzleHelper.Puzzles[PuzzleNumber];
         _solver = (IIncrementalPuzzleSolver)(Activator.CreateInstance(puzzle.Type))!;
         _input = (await Http.GetStringAsync($"sample-data/{puzzle.Type.Name}.txt")).Replace("\r", "");
+        base.OnParametersSet();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
     }
 }

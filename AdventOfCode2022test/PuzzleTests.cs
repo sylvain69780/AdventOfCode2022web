@@ -9640,7 +9640,7 @@ zfqn: zdcs * hvrb";
         }
 
         [Test]
-        async public Task Test22()
+        public void Test22()
         {
             var solver = new MonkeyMap();
             var input1 = @"        ...#
