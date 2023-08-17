@@ -1,13 +1,13 @@
 ﻿namespace AdventOfCode2022web.Puzzles
 {
     [Puzzle(1, "Calorie Counting")]
-    public class CalorieCounting : IPuzzleSolverV3
+    public class CalorieCounting : IIncrementalPuzzleSolver
     {
         private static string[] ToLines(string s) => s.Split("\n");
 
         private string[]? _puzzleInput;
 
-        public void Setup(string input)
+        public void Initialize(string input)
         {
             _puzzleInput = ToLines(input);
         }

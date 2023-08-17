@@ -111,6 +111,6 @@
         var puzzle = puzzleHelper.Puzzles[PuzzleNumber];
         _solver = new Sudoku();
         _input = (await Http.GetStringAsync($"sample-data/{puzzle.Type.Name}.txt")).Replace("\r", "");
-        _solver.Setup(_input);
+        _solver.Initialize(_input);
     }
 }

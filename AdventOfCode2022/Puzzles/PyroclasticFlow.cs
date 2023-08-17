@@ -5,6 +5,11 @@ namespace AdventOfCode2022web.Puzzles
     [Puzzle(17, "Pyroclastic Flow")]
     public class PyroclasticFlow : IPuzzleSolver
     {
+        private string _puzzleInput = string.Empty;
+        public void Initialize(string puzzleInput)
+        {
+            _puzzleInput = puzzleInput;
+        }
         private class JetGenerator
         {
             public string JetPattern = "";
@@ -52,9 +57,9 @@ namespace AdventOfCode2022web.Puzzles
             return sb.ToString();
         }
 
-        public string SolveFirstPart(string puzzleInput)
+        public string SolveFirstPart()
         {
-            var jetGenerator = new JetGenerator { JetPattern = puzzleInput };
+            var jetGenerator = new JetGenerator { JetPattern = _puzzleInput };
             var rockGenerator = new RockGenerator();
             var occupiedSlots = new HashSet<(int x, int y)>();
             int highestPoint = 0;
@@ -82,9 +87,9 @@ namespace AdventOfCode2022web.Puzzles
             Console.WriteLine(Visualize(occupiedSlots, highestPoint));
             return $"After {maxIterations} rocks fallen, the Tower highest point is at y={highestPoint}";
         }
-        public string SolveSecondPart(string puzzleInput)
+        public string SolveSecondPart()
         {
-            var jetGenerator = new JetGenerator { JetPattern = puzzleInput };
+            var jetGenerator = new JetGenerator { JetPattern = _puzzleInput };
             var rockGenerator = new RockGenerator();
             var occupiedPositions = new HashSet<(int x, int y)>();
             var fallenRocksRecording = new List<(int Height, string RockPosition)>();

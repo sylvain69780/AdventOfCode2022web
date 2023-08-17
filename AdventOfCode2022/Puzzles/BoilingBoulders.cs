@@ -2,11 +2,11 @@
 namespace AdventOfCode2022web.Puzzles
 {
     [Puzzle(18, "Boiling Boulders")]
-    public class BoilingBoulders : IPuzzleSolverV3
+    public class BoilingBoulders : IIncrementalPuzzleSolver
     {
         private List<Voxel>? Voxels;
 
-        public void Setup (string puzzleInput)
+        public void Initialize(string puzzleInput)
         {
             Voxels = puzzleInput.Split("\n").Select(x => x.Split(','))
                 .Select(x => x.Select(y => int.Parse(y)).ToArray())

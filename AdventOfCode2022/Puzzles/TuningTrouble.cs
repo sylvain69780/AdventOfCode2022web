@@ -3,6 +3,12 @@
     [Puzzle(6, "Tuning Trouble")]
     public class TuningTrouble : IPuzzleSolver
     {
+        private string _puzzleInput = string.Empty;
+        public void Initialize(string puzzleInput)
+        {
+            _puzzleInput = puzzleInput;
+        }
+
         private static string Format(int v) => v.ToString();
 
         private static int FindMarkerPosition(string puzzleInput, int sequenceLenght)
@@ -20,13 +26,13 @@
             return processedCharacters;
         }
 
-        public string SolveFirstPart(string puzzleInput)
+        public string SolveFirstPart()
         {
-             return Format(FindMarkerPosition(puzzleInput, 4));
+             return Format(FindMarkerPosition(_puzzleInput, 4));
         }
-        public string SolveSecondPart(string puzzleInput)
+        public string SolveSecondPart()
         {
-             return Format(FindMarkerPosition(puzzleInput, 14));
+             return Format(FindMarkerPosition(_puzzleInput, 14));
         }
     }
 }

@@ -3,6 +3,12 @@
     [Puzzle(26, "Distress Signal2")]
     public class DistressSignal : IPuzzleSolver
     {
+        private string _puzzleInput = string.Empty;
+        public void Initialize(string puzzleInput)
+        {
+            _puzzleInput = puzzleInput;
+        }
+
         private static string[] ToLines(string s) => s.Split("\n");
 
         class IntegerPacket : Packet
@@ -63,9 +69,9 @@
             }
         }
 
-        public string SolveFirstPart(string puzzleInput)
+        public string SolveFirstPart()
         {
-            var packetStrings = ToLines(puzzleInput);
+            var packetStrings = ToLines(_puzzleInput);
             var wellOrderedPackets = 0;
             for (var pairId = 1; pairId * 3 <= packetStrings.Length + 1; pairId++)
             {
@@ -76,9 +82,9 @@
             }
             return wellOrderedPackets.ToString();
         }
-        public string SolveSecondPart(string puzzleInput)
+        public string SolveSecondPart()
         {
-            var packetStrings = ToLines(puzzleInput).Where(x => x != "")
+            var packetStrings = ToLines(_puzzleInput).Where(x => x != "")
                 .Append("[[2]]").Append("[[6]]")
                 .Select(x => (PacketString: x, Packet: PacketHelper.BuildPacket(x)))
                 .OrderBy(x => x.Packet)

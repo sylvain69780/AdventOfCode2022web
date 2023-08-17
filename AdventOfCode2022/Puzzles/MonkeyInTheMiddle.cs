@@ -6,6 +6,11 @@ namespace AdventOfCode2022web.Puzzles
     [Puzzle(11, "Monkey In The Middle")]
     public class MonkeyInTheMiddle : IPuzzleSolver
     {
+        private string _puzzleInput = string.Empty;
+        public void Initialize(string puzzleInput)
+        {
+            _puzzleInput = puzzleInput;
+        }
         class Monkey
         {
             public int Id;
@@ -59,9 +64,9 @@ namespace AdventOfCode2022web.Puzzles
                 .ToString();
         }
 
-        public string SolveFirstPart(string puzzleInput)
+        public string SolveFirstPart()
         {
-            var monkeys = BuildMonkeyList(puzzleInput);
+            var monkeys = BuildMonkeyList(_puzzleInput);
             const int maxRound = 20;
             foreach (var round in Enumerable.Range(1, maxRound))
             {
@@ -87,9 +92,9 @@ namespace AdventOfCode2022web.Puzzles
             }
             return Visualize(monkeys, maxRound);
         }
-        public string SolveSecondPart(string puzzleInput)
+        public string SolveSecondPart()
         {
-            var monkeys = BuildMonkeyList(puzzleInput);
+            var monkeys = BuildMonkeyList(_puzzleInput);
             var bigDiv = monkeys.Select(x => x.DivisibilityToTest).Aggregate(1L, (x, y) => y * x);
             var stopwatch = new Stopwatch();
             stopwatch.Start();

@@ -1,9 +1,9 @@
 ﻿namespace AdventOfCode2022web.Puzzles
 {
     [Puzzle(24, "Blizzard Basin")]
-    public class BlizzardBasin : IPuzzleSolverV3
+    public class BlizzardBasin : IIncrementalPuzzleSolver
     {
-        public void Setup(string puzzleInput)
+        public void Initialize(string puzzleInput)
         {
             var input = puzzleInput.Split("\n");
             Start = (x: input[0].IndexOf('.'), y: 0);

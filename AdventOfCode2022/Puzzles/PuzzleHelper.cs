@@ -5,8 +5,9 @@ namespace AdventOfCode2022web.Puzzles
 {
     public interface IPuzzleSolver
     {
-        string SolveFirstPart(string input);
-        string SolveSecondPart(string input);
+        void Initialize(string input);
+        string SolveFirstPart();
+        string SolveSecondPart();
     }
 
     public interface IPuzzleSolverV2
@@ -15,11 +16,28 @@ namespace AdventOfCode2022web.Puzzles
         Task<string> SolveSecondPart(string input, Func<Func<string>, bool, Task> update, CancellationToken cancellationToken);
     }
 
-    public interface IPuzzleSolverV3
+    public interface IIncrementalPuzzleSolver
     {
-        void Setup(string puzzleInput);
+        void Initialize(string puzzleInput);
         IEnumerable<string> SolveFirstPart();
         IEnumerable<string> SolveSecondPart();
+    }
+
+    public class PuzzleSolverWrapper<T> : IIncrementalPuzzleSolver where T:IPuzzleSolver
+    {
+        T? Puzzle { get; set; }
+        public void Initialize(string puzzleInput)
+        {
+            Puzzle!.Initialize(puzzleInput);
+        }
+        public IEnumerable<string> SolveFirstPart()
+        {
+            yield return Puzzle?.SolveFirstPart() ?? string.Empty;
+        }
+        public IEnumerable<string> SolveSecondPart()
+        {
+            yield return Puzzle?.SolveSecondPart() ?? string.Empty;
+        }
     }
 
     [AttributeUsage(AttributeTargets.Class)]
@@ -33,7 +51,7 @@ namespace AdventOfCode2022web.Puzzles
     public class PuzzleHelper
     {
         public readonly IReadOnlyDictionary<int, (Type Type, int Number, string Title)> Puzzles = Assembly.GetExecutingAssembly().GetTypes()
-        .Where(x => x.IsClass && (typeof(IPuzzleSolver).IsAssignableFrom(x) || typeof(IPuzzleSolverV2).IsAssignableFrom(x) || typeof(IPuzzleSolverV3).IsAssignableFrom(x)))
+        .Where(x => x.IsClass && !x.IsGenericType && (typeof(IPuzzleSolver).IsAssignableFrom(x) || typeof(IPuzzleSolverV2).IsAssignableFrom(x) || typeof(IIncrementalPuzzleSolver).IsAssignableFrom(x)))
         .Select(x => (Type: x, Attr: x.GetCustomAttribute<PuzzleAttribute>()!))
         .Select(x => (x.Type, x.Attr.Number, x.Attr.Title))
         .ToDictionary(x => x.Number);

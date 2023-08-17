@@ -6,6 +6,11 @@ namespace AdventOfCode2022web.Puzzles
     [Puzzle(5, "Supply Stacks")]
     public class SupplyStacks : IPuzzleSolver
     {
+        private string _puzzleInput = string.Empty;
+        public void Initialize(string puzzleInput)
+        {
+            _puzzleInput = puzzleInput;
+        }
         private static string[] ToLines(string s) => s.Split("\n");
 
         private static Stack<char>[] ReadStacks(string puzzleInput)
@@ -45,10 +50,10 @@ namespace AdventOfCode2022web.Puzzles
             return moves;
         }
 
-        public string SolveFirstPart(string puzzleInput)
+        public string SolveFirstPart()
         {
-            var stacks = ReadStacks(puzzleInput);
-            var moves = ReadMovesToDo(puzzleInput);
+            var stacks = ReadStacks(_puzzleInput);
+            var moves = ReadMovesToDo(_puzzleInput);
             foreach (var (count, from, to) in moves)
             {
                 for (var i = 0; i < count; i++)
@@ -59,10 +64,10 @@ namespace AdventOfCode2022web.Puzzles
             }
              return string.Join("", stacks.Select(x => x.Count == 0 ? ' ' : x.Peek()));
         }
-        public string SolveSecondPart(string puzzleInput)
+        public string SolveSecondPart()
         {
-            var stacks = ReadStacks(puzzleInput);
-            var moves = ReadMovesToDo(puzzleInput);
+            var stacks = ReadStacks(_puzzleInput);
+            var moves = ReadMovesToDo(_puzzleInput);
             var tmp = new Stack<char>();
             foreach (var (count, from, to) in moves)
             {

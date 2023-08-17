@@ -6,6 +6,11 @@ namespace AdventOfCode2022web.Puzzles
     [Puzzle(21, "Monkey Math")]
     public class MonkeyMath : IPuzzleSolver
     {
+        private string _puzzleInput = string.Empty;
+        public void Initialize(string puzzleInput)
+        {
+            _puzzleInput = puzzleInput;
+        }
         private class JobOfEachMonkey
         {
             public Dictionary<string, (string Left, string Operator, string Right)>? ComputingMonkeys;
@@ -46,14 +51,14 @@ namespace AdventOfCode2022web.Puzzles
             throw new NotImplementedException();
         }
 
-        public string SolveFirstPart(string puzzleInput)
+        public string SolveFirstPart()
         {
-            var jobOfEachMonkey = ReadPuzzleInput(puzzleInput);
+            var jobOfEachMonkey = ReadPuzzleInput(_puzzleInput);
             return GetYelledNumber(jobOfEachMonkey, "root").ToString();
         }
-        public string SolveSecondPart(string puzzleInput)
+        public string SolveSecondPart()
         {
-            var jobOfEachMonkey = ReadPuzzleInput(puzzleInput);
+            var jobOfEachMonkey = ReadPuzzleInput(_puzzleInput);
             var compute = (long guess) =>
             {
                 jobOfEachMonkey.NumberYellingMonkeys!["humn"] = guess;

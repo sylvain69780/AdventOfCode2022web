@@ -3,7 +3,7 @@
 namespace AdventOfCode2022web.Puzzles
 {
     [Puzzle(15, "Beacon Exclusion Zone")]
-    public class BeaconExclusionZone : IPuzzleSolverV3
+    public class BeaconExclusionZone : IIncrementalPuzzleSolver
     {
         private class SensorPositionAndClosestBeacon
         {
@@ -35,7 +35,7 @@ namespace AdventOfCode2022web.Puzzles
 
         private List<SensorPositionAndClosestBeacon>? SensorsPositionsAndClosestBeacon;
 
-        public void Setup(string puzzleInput)
+        public void Initialize(string puzzleInput)
         {
             SensorsPositionsAndClosestBeacon = GetSensorPositionAndClosestBeacons(puzzleInput);
         }

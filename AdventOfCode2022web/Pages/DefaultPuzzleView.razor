@@ -8,7 +8,7 @@
     [Parameter]
     public int PuzzleNumber { get; set; }
     private string? _input { get; set; }
-    private IPuzzleSolverV3? _solver;
+    private IIncrementalPuzzleSolver? _solver;
     public void UpdateView(int animationDuration)
     {
         StateHasChanged();
@@ -17,7 +17,7 @@
     protected override async Task OnInitializedAsync()
     {
         var puzzle = puzzleHelper.Puzzles[PuzzleNumber];
-        _solver = (IPuzzleSolverV3)(Activator.CreateInstance(puzzle.Type))!;
+        _solver = (IIncrementalPuzzleSolver)(Activator.CreateInstance(puzzle.Type))!;
         _input = (await Http.GetStringAsync($"sample-data/{puzzle.Type.Name}.txt")).Replace("\r", "");
     }
 }

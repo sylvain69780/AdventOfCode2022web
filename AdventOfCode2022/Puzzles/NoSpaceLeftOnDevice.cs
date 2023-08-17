@@ -3,6 +3,11 @@
     [Puzzle(7, "No Space Left On Device")]
     public class NoSpaceLeftOnDevice : IPuzzleSolver
     {
+        private string _puzzleInput = string.Empty;
+        public void Initialize(string puzzleInput)
+        {
+            _puzzleInput = puzzleInput;
+        }
         private static string Format(int v) => v.ToString();
         private static string[] ToLines(string s) => s.Split("\n");
 
@@ -47,16 +52,16 @@
             return directoriesContentSize;
         }
 
-        public string SolveFirstPart(string puzzleInput)
+        public string SolveFirstPart()
         {
-            var terminalOutputs = ToLines(puzzleInput);
+            var terminalOutputs = ToLines(_puzzleInput);
             var directoriesContentSize = BuildDirectoriesContentSize(terminalOutputs);
             var sumOfTotalSizesOfDirectories = directoriesContentSize.Values.Where(x => x <= 100000).Sum();
             return Format(sumOfTotalSizesOfDirectories);
         }
-        public string SolveSecondPart(string puzzleInput)
+        public string SolveSecondPart()
         {
-            var terminalOutputs = ToLines(puzzleInput);
+            var terminalOutputs = ToLines(_puzzleInput);
             var directoriesContentSize = BuildDirectoriesContentSize(terminalOutputs);
             var totalDiskSize = 70000000;
             var freeSpaceRequired = 30000000;

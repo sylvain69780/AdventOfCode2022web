@@ -4,7 +4,7 @@ namespace AdventOfCode2022test
 {
     public class Test23
     {
-        private IPuzzleSolverV3 _solver;
+        private IIncrementalPuzzleSolver _solver;
         string input1;
         string input0;
         string input2;
@@ -105,31 +105,31 @@ namespace AdventOfCode2022test
         [Test]
         public void TestFirstPart0()
         {
-            _solver.Setup(input0);
+            _solver.Initialize(input0);
             Assert.That(_solver.SolveFirstPart().Last(), Is.EqualTo("25"));
         }
         [Test]
         public void TestFirstPart()
         {
-            _solver.Setup(input1);
+            _solver.Initialize(input1);
             Assert.That(_solver.SolveFirstPart().Last(), Is.EqualTo("110"));
         }
         [Test]
         public void TestFirstPartFull()
         {
-            _solver.Setup(input2);
+            _solver.Initialize(input2);
             Assert.That(_solver.SolveFirstPart().Last(), Is.EqualTo("4116"));
         }
         [Test]
         public void TestSecondPart()
         {
-            _solver.Setup(input1);
+            _solver.Initialize(input1);
             Assert.That(_solver.SolveSecondPart().Last(), Is.EqualTo("20"));
         }
         [Test]
         public void TestSecondPartFull()
         {
-            _solver.Setup(input2);
+            _solver.Initialize(input2);
             Assert.That(_solver.SolveSecondPart().Last(), Is.EqualTo("984"));
         }
     }

@@ -3,6 +3,11 @@
     [Puzzle(3, "Rucksack Reorganization")]
     public class RucksackReorganization : IPuzzleSolver
     {
+        private string _puzzleInput = string.Empty;
+        public void Initialize(string puzzleInput)
+        {
+            _puzzleInput = puzzleInput;
+        }
         private static string[] ToLines(string s) => s.Split("\n");
         private static string Format(int v) => v.ToString();
 
@@ -13,10 +18,10 @@
         /// </summary>
         private static int Priority(char item) => item >= 'a' ? item - 'a' + 1 : item - 'A' + 27;
 
-        public string SolveFirstPart(string puzzleInput)
+        public string SolveFirstPart()
         {
             var score = 0;
-            foreach (var rucksack in ToLines(puzzleInput))
+            foreach (var rucksack in ToLines(_puzzleInput))
             {
                 var compartmentSize = rucksack.Length / 2;
                 var (compartmentA, compartmentB) = (rucksack[..compartmentSize], rucksack[compartmentSize..(compartmentSize + compartmentSize)]);
@@ -26,10 +31,10 @@
              return Format(score);
         }
 
-        public string SolveSecondPart(string puzzleInput)
+        public string SolveSecondPart()
         {
             var score = 0;
-            var rucksacks = ToLines(puzzleInput);
+            var rucksacks = ToLines(_puzzleInput);
             for (var i = 0; i < rucksacks.Length / 3; i++)
             {
                 var (firstGroup, secondGroup, thirdGroup) = (rucksacks[i * 3], rucksacks[i * 3 + 1], rucksacks[i * 3 + 2]);

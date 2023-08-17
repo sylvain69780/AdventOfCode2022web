@@ -3,17 +3,23 @@
     [Puzzle(20, "Grove Pos. System")]
     public class GrovePositioningSystem : IPuzzleSolver
     {
-        public string SolveFirstPart(string puzzleInput)
+        private string _puzzleInput = string.Empty;
+        public void Initialize(string puzzleInput)
         {
-            var arrangement = LoadArrangement(puzzleInput);
+            _puzzleInput = puzzleInput;
+        }
+
+        public string SolveFirstPart()
+        {
+            var arrangement = LoadArrangement(_puzzleInput);
             Mix(arrangement);
             var groveCoordinates = DecodeGroveCoordinates(arrangement);
             return groveCoordinates.ToString();
         }
 
-        public string SolveSecondPart(string puzzleInput)
+        public string SolveSecondPart()
         {
-            var arrangement = LoadArrangement(puzzleInput);
+            var arrangement = LoadArrangement(_puzzleInput);
             const long decryptionKey = 811589153;
             arrangement = arrangement.Select(x => (x.Id, x.Number * decryptionKey)).ToList();
             for (var turns = 0; turns < 10; turns++)

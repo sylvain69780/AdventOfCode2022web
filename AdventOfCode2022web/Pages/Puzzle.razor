@@ -41,10 +41,12 @@
 
     private void SolveFirstPart()
     {
-        Output1 = _solver!.SolveFirstPart(Input!);
+        _solver!.Initialize(Input!);
+        Output1 = _solver!.SolveFirstPart();
     }
     private void SolveSecondPart()
     {
-        Output2 = _solver!.SolveSecondPart(Input!);
+        _solver!.Initialize(Input!);
+        Output2 = _solver!.SolveSecondPart();
     }
 }

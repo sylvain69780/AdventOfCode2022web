@@ -3,9 +3,9 @@
 namespace AdventOfCode2022web.Puzzles
 {
     [Puzzle(27, "Sudoku")]
-    public class Sudoku : IPuzzleSolverV3
+    public class Sudoku : IIncrementalPuzzleSolver
     {
-        public void Setup(string input)
+        public void Initialize(string input)
         {
             _puzzleInput = input.Replace("\n", "").Replace("\r", "");
             PuzzleState = _puzzleInput;

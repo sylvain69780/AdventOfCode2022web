@@ -3,6 +3,11 @@
     [Puzzle(8, "Treetop Tree House")]
     public class TreetopTreeHouse : IPuzzleSolver
     {
+        private string _puzzleInput = string.Empty;
+        public void Initialize(string puzzleInput)
+        {
+            _puzzleInput = puzzleInput;
+        }
         private static string[] ToLines(string s) => s.Split("\n");
         private static string Format(int v) => v.ToString();
 
@@ -22,9 +27,9 @@
 
         private static readonly (int, int)[] Directions = new (int x, int y)[] { (1, 0), (-1, 0), (0, 1), (0, -1) };
 
-        public string SolveFirstPart(string puzzleInput)
+        public string SolveFirstPart()
         {
-            var map = new HeightMap(ToLines(puzzleInput));
+            var map = new HeightMap(ToLines(_puzzleInput));
             var visibleTrees = 0;
             foreach (var yTree in Enumerable.Range(0, map.Height))
                 foreach (var xTree in Enumerable.Range(0, map.Width))
@@ -51,9 +56,9 @@
              return Format(visibleTrees);
         }
 
-        public string SolveSecondPart(string puzzleInput)
+        public string SolveSecondPart()
         {
-            var map = new HeightMap(ToLines(puzzleInput));
+            var map = new HeightMap(ToLines(_puzzleInput));
             var scoreMax = 0;
             foreach (var yTree in Enumerable.Range(0, map.Height))
                 foreach (var xTree in Enumerable.Range(0, map.Width))

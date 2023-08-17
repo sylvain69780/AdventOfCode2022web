@@ -1,9 +1,9 @@
 ﻿namespace AdventOfCode2022web.Puzzles
 {
     [Puzzle(25, "Full of Hot Air")]
-    public class FullOfHotAir : IPuzzleSolverV3
+    public class FullOfHotAir : IIncrementalPuzzleSolver
     {
-        public void Setup(string inp)
+        public void Initialize(string inp)
         {
             input = inp.Split("\n");
         }

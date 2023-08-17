@@ -3,12 +3,12 @@
 namespace AdventOfCode2022web.Puzzles
 {
     [Puzzle(4, "Camp Cleanup")]
-    public class CampCleanup : IPuzzleSolverV3
+    public class CampCleanup : IIncrementalPuzzleSolver
     {
 
         private string[] _lines = Array.Empty<string>();
 
-        public void Setup(string s)
+        public void Initialize(string s)
         {
             _lines = s.Split("\n");
         }

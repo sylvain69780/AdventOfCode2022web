@@ -2950,13 +2950,13 @@ namespace AdventOfCode2022test
 15,10,16
 10,14,17
 11,12,4";
-            solver.Setup(input1);
+            solver.Initialize(input1);
             Assert.That(solver.SolveFirstPart().Last(), Is.EqualTo("64"));
-            solver.Setup(input1);
+            solver.Initialize(input1);
             Assert.That(solver.SolveSecondPart().Last(), Is.EqualTo("58"));
-            solver.Setup(input2);
+            solver.Initialize(input2);
             Assert.That(solver.SolveFirstPart().Last(), Is.EqualTo("4282"));
-            solver.Setup(input2);
+            solver.Initialize(input2);
             Assert.That(solver.SolveSecondPart().Last(), Is.EqualTo("2452"));
         }
 
@@ -2998,10 +2998,12 @@ Blueprint 29: Each ore robot costs 3 ore. Each clay robot costs 4 ore. Each obsi
 Blueprint 30: Each ore robot costs 4 ore. Each clay robot costs 3 ore. Each obsidian robot costs 3 ore and 20 clay. Each geode robot costs 2 ore and 19 obsidian.";
             Assert.Multiple(() =>
             {
-                Assert.That(solver.SolveFirstPart(input), Is.EqualTo("33"));
-                Assert.That(solver.SolveFirstPart(input2), Is.EqualTo("1413"));
-                Assert.That(solver.SolveSecondPart(input), Is.EqualTo("3472"));
-                Assert.That(solver.SolveSecondPart(input2), Is.EqualTo("21080"));
+                solver.Initialize(input);
+                Assert.That(solver.SolveFirstPart(), Is.EqualTo("33"));
+                Assert.That(solver.SolveSecondPart(), Is.EqualTo("3472"));
+                solver.Initialize(input2);
+                Assert.That(solver.SolveFirstPart(), Is.EqualTo("1413"));
+                Assert.That(solver.SolveSecondPart(), Is.EqualTo("21080"));
             });
         }
         [Test]
@@ -8016,11 +8018,12 @@ Blueprint 30: Each ore robot costs 4 ore. Each clay robot costs 3 ore. Each obsi
 9115
 7982";
 
-
-            Assert.That(solver.SolveFirstPart(input1), Is.EqualTo("3"));
-            Assert.That(solver.SolveFirstPart(input2), Is.EqualTo("4426"));
-            Assert.That(solver.SolveSecondPart(input1), Is.EqualTo("1623178306"));
-            Assert.That(solver.SolveSecondPart(input2), Is.EqualTo("8119137886612"));
+            solver.Initialize(input1);
+            Assert.That(solver.SolveFirstPart(), Is.EqualTo("3"));
+            Assert.That(solver.SolveSecondPart(), Is.EqualTo("1623178306"));
+            solver.Initialize(input2);
+            Assert.That(solver.SolveFirstPart(), Is.EqualTo("4426"));
+            Assert.That(solver.SolveSecondPart(), Is.EqualTo("8119137886612"));
         }
         [Test]
         public void Test21()
@@ -9622,12 +9625,20 @@ vvff: 4
 blbw: cftr * fftf
 zfqn: zdcs * hvrb";
 
-            Assert.That(solver.SolveFirstPart(input1), Is.EqualTo("152"));
-            Assert.That(solver.SolveFirstPart(input2), Is.EqualTo("78342931359552"));
-            Assert.That(solver.SolveSecondPart(input1), Is.EqualTo("301"));
-            Assert.That(solver.SolveSecondPart(input2), Is.EqualTo("3296135418820"));
-
+            solver.Initialize(input1);
+            Assert.Multiple(() =>
+            {
+                Assert.That(solver.SolveFirstPart(), Is.EqualTo("152"));
+                Assert.That(solver.SolveSecondPart(), Is.EqualTo("301"));
+            });
+            solver.Initialize(input2);
+            Assert.Multiple(() =>
+            {
+                Assert.That(solver.SolveFirstPart(), Is.EqualTo("78342931359552"));
+                Assert.That(solver.SolveSecondPart(), Is.EqualTo("3296135418820"));
+            });
         }
+
         [Test]
         async public Task Test22()
         {

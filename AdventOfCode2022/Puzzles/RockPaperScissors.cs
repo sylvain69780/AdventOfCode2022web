@@ -3,6 +3,11 @@
     [Puzzle(2, "Rock Paper Scissors")]
     public class RockPaperScissors : IPuzzleSolver
     {
+        private string _puzzleInput = string.Empty;
+        public void Initialize(string puzzleInput)
+        {
+            _puzzleInput = puzzleInput;
+        }
         private static string[] ToLines(string s) => s.Split("\n");
         private static string Format(int v) => v.ToString();
 
@@ -30,10 +35,10 @@
         private static (Moves OpponentPlayed, GameResults ExpectedResult) DecodeMovesPart2(string s)
             => ((Moves)(s[0] - 'A'), (GameResults)(s[2] - 'X'));
 
-        public string SolveFirstPart(string puzzleInput)
+        public string SolveFirstPart()
         {
             var score = 0;
-            foreach (var round in ToLines(puzzleInput).Select(x => DecodeMovesPart1(x)))
+            foreach (var round in ToLines(_puzzleInput).Select(x => DecodeMovesPart1(x)))
             {
                 score += (int)round.YouPlayed + 1;
                 if (round.YouPlayed == round.OpponentPlayed)
@@ -44,10 +49,10 @@
             return Format(score);
         }
 
-        public string SolveSecondPart(string puzzleInput)
+        public string SolveSecondPart()
         {
             var score = 0;
-            foreach (var (opponentPlayed, expectedResult) in ToLines(puzzleInput).Select(x => DecodeMovesPart2(x)))
+            foreach (var (opponentPlayed, expectedResult) in ToLines(_puzzleInput).Select(x => DecodeMovesPart2(x)))
             {
                 var youPlay = opponentPlayed; // Draw
                 if (expectedResult == GameResults.Win)

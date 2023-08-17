@@ -5,6 +5,12 @@ namespace AdventOfCode2022web.Puzzles
     [Puzzle(12, "Hill Climbing Algorithm")]
     public class HillClimbingAlgorithm : IPuzzleSolver
     {
+        private string _puzzleInput = string.Empty;
+        public void Initialize(string puzzleInput)
+        {
+            _puzzleInput = puzzleInput;
+        }
+
         private class HillMap
         {
             public string[] Map;
@@ -65,9 +71,9 @@ namespace AdventOfCode2022web.Puzzles
 
 
 
-        public string SolveFirstPart(string puzzleInput)
+        public string SolveFirstPart()
         {
-            var map = new HillMap(puzzleInput);
+            var map = new HillMap(_puzzleInput);
             map.SetAsExplored(map.Start);
             var breadthFirstSearchQueue = new Queue<(int x, int y)>();
             breadthFirstSearchQueue.Enqueue(map.Start);
@@ -100,9 +106,9 @@ namespace AdventOfCode2022web.Puzzles
             }
             return score.ToString();
         }
-        public string SolveSecondPart(string puzzleInput)
+        public string SolveSecondPart()
         {
-            var map = new HillMap(puzzleInput);
+            var map = new HillMap(_puzzleInput);
             map.SetAsExplored(map.Start);
             var breadthFirstSearchQueue = new Queue<(int x, int y)>();
             foreach (var position in map.GetZeroHeighPositions())

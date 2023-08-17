@@ -3,7 +3,7 @@
 namespace AdventOfCode2022web.Puzzles
 {
     [Puzzle(10, "Cathode Ray Tube")]
-    public class CathodeRayTube : IPuzzleSolverV3
+    public class CathodeRayTube : IIncrementalPuzzleSolver
     {
         private static string Format(int v) => v.ToString();
 
@@ -11,7 +11,7 @@ namespace AdventOfCode2022web.Puzzles
 
         private string[] program = Array.Empty<string>();
 
-        public void Setup(string s)
+        public void Initialize(string s)
         {
             program = ToLines(s);
         }

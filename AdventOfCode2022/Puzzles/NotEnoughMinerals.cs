@@ -5,6 +5,11 @@ namespace AdventOfCode2022web.Puzzles
     [Puzzle(19, "Not Enough Minerals")]
     public class NotEnoughMinerals : IPuzzleSolver
     {
+        private string _puzzleInput = string.Empty;
+        public void Initialize(string puzzleInput)
+        {
+            _puzzleInput = puzzleInput;
+        }
         struct BluePrint
         {
             public int BlueprintNumber;
@@ -13,9 +18,9 @@ namespace AdventOfCode2022web.Puzzles
 
         public enum RobotTypes { OreRobot, ClayRobot, ObsidianRobot, GeodeRobot }
 
-        public string SolveFirstPart(string puzzleInput)
+        public string SolveFirstPart()
         {
-            var bluePrints = LoadBluePrints(puzzleInput);
+            var bluePrints = LoadBluePrints(_puzzleInput);
             var quality = 0;
             var maxMinutes = 24;
             foreach (var bp in bluePrints)
@@ -26,9 +31,9 @@ namespace AdventOfCode2022web.Puzzles
             return $"{quality}";
         }
 
-        public string SolveSecondPart(string puzzleInput)
+        public string SolveSecondPart()
         {
-            var blueprints = LoadBluePrints(puzzleInput);
+            var blueprints = LoadBluePrints(_puzzleInput);
             var quality = 1;
             foreach (var bp in blueprints.Take(3))
             {

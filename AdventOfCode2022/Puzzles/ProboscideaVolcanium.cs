@@ -7,6 +7,11 @@ namespace AdventOfCode2022web.Puzzles
     [Puzzle(16, "Proboscidea Volcanium")]
     public class ProboscideaVolcanium : IPuzzleSolver
     {
+        private string _puzzleInput = string.Empty;
+        public void Initialize(string puzzleInput)
+        {
+            _puzzleInput = puzzleInput;
+        }
         struct Valve
         {
             public string Name;
@@ -105,9 +110,9 @@ namespace AdventOfCode2022web.Puzzles
         private const int MinutesAllowedFirstPart = 30;
         private const int MinutesAllowedSecondPart = 26;
 
-        public string SolveFirstPart(string puzzleInput)
+        public string SolveFirstPart()
         {
-            var valves = GetValves(puzzleInput);
+            var valves = GetValves(_puzzleInput);
             var valvesToVisit = valves.Values.Where(x => x.Rate > 0).Select(x => x.Name).ToArray();
             var distancesBetweenValves = ComputeDistanceBetweenAllValves(valves, valvesToVisit);
             var (optimalPressureReleased, optimalFlow) = (0, "");
@@ -118,9 +123,9 @@ namespace AdventOfCode2022web.Puzzles
             }
             return optimalFlow + '\n' + optimalPressureReleased.ToString();
         }
-        public string SolveSecondPart(string puzzleInput)
+        public string SolveSecondPart()
         {
-            var valves = GetValves(puzzleInput);
+            var valves = GetValves(_puzzleInput);
             var valvesToVisit = valves.Values.Where(x => x.Rate > 0).Select(x => x.Name).ToArray();
             var distancesBetweenValves = ComputeDistanceBetweenAllValves(valves, valvesToVisit);
 

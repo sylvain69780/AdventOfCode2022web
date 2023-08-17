@@ -50,7 +50,7 @@
 
 @code {
     [Parameter]
-    public IPuzzleSolverV3? PuzzleSolver { get; set; }
+    public IIncrementalPuzzleSolver? PuzzleSolver { get; set; }
     [Parameter]
     public int PuzzleNumber { get; set; }
     [Parameter]
@@ -81,7 +81,7 @@
             CurrentInput = Input!;
         Response = string.Empty;
         Iterations = 0;
-        PuzzleSolver!.Setup(CurrentInput);
+        PuzzleSolver!.Initialize(CurrentInput);
         _isTaskRunning = true;
         _cancel = false;
         _stopwatch.Start();

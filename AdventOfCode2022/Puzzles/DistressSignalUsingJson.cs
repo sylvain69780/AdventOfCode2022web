@@ -7,6 +7,12 @@ namespace AdventOfCode2022web.Puzzles
     [Puzzle(13, "Distress Signal")]
     public class DistressSignalUsingJson : IPuzzleSolver
     {
+        private string _puzzleInput = string.Empty;
+        public void Initialize(string puzzleInput)
+        {
+            _puzzleInput = puzzleInput;
+        }
+
         public class JsonElementComparer : Comparer<JsonElement>
         {
             public override int Compare(JsonElement x, JsonElement y)
@@ -49,9 +55,9 @@ namespace AdventOfCode2022web.Puzzles
             }
         }
 
-        public string SolveFirstPart(string puzzleInput)
+        public string SolveFirstPart()
         {
-            var packetStrings = @"[" + puzzleInput.Replace("\n\n", "\n").Replace("\n", ",") + "]";
+            var packetStrings = @"[" + _puzzleInput.Replace("\n\n", "\n").Replace("\n", ",") + "]";
             var packets = JsonSerializer.Deserialize<JsonElement[]>(packetStrings);
             var wellOrderedPackets = 0;
             for (var pairId = 0; pairId < packets!.Length / 2; pairId++)
@@ -61,9 +67,9 @@ namespace AdventOfCode2022web.Puzzles
             }
             return wellOrderedPackets.ToString();
         }
-        public string SolveSecondPart(string puzzleInput)
+        public string SolveSecondPart()
         {
-            var packetStrings = @"[[[2]],[[6]]," + puzzleInput.Replace("\n\n", "\n").Replace("\n", ",") + "]" ;
+            var packetStrings = @"[[[2]],[[6]]," + _puzzleInput.Replace("\n\n", "\n").Replace("\n", ",") + "]" ;
             var packets = JsonSerializer.Deserialize<JsonElement[]>(packetStrings);
             Array.Sort(packets!, new JsonElementComparer());
             int firstPacket = 0, secondPacket = 0;
