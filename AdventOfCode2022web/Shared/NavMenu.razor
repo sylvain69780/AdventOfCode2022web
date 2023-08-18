@@ -1,63 +1,44 @@
-﻿@using AdventOfCode2022web.Puzzles;
-@using System.Reflection;
-@inject PuzzleHelper puzzleHelper;
+﻿@inject PuzzleHelper puzzleHelper;
 
 <div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" href="">AdventOfCode2022web</a>
+        <a class="navbar-brand" href="">Puzzle Viewer</a>
         <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
             <span class="navbar-toggler-icon"></span>
         </button>
     </div>
 </div>
 
-<div class="@NavMenuCssClass">
+<div class="scrollable-menu @NavMenuCssClass" @onclick="ToggleNavMenu">
     <nav class="flex-column">
-        <div class="nav-item px-1" @onclick="ToggleNavMenu">
+        <div class="nav-item px-3">
             <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
                 <span class="oi oi-home" aria-hidden="true"></span> Home
             </NavLink>
         </div>
-        <div class="nav-item px-1">
-            <button class="btn btn-primary" @onclick="DecrementPage">Prev</button>
-            <button class="btn btn-primary" @onclick="IncrementPage">Next</button>
-        </div>
         @{
             var puzzles = puzzleHelper.Puzzles.Values.OrderBy(x => x.Number).ToList();
-            var first = puzzlePageNumber * 5 ;
-            var last = Math.Min(puzzles.Count-1, first + 5 - 1);
-            for (var puzzleIndex = first; puzzleIndex <= last; puzzleIndex++)
+            for (var puzzleIndex = 0; puzzleIndex < puzzles.Count; puzzleIndex++)
             {
                 var item = puzzles[puzzleIndex];
                 var pageName = $"{(typeof(IIncrementalPuzzleSolver).IsAssignableFrom(item.Type) ? "DefaultPuzzleView" : "puzzle")}/{item.Number}";
-                //if (item.Type == typeof(BlizzardBasin))
-                //    pageName = $"BlizzardBasinView/{item.Number}";
-                //if (item.Type == typeof(UnstableDiffusion))
-                //    pageName = "UnstableDiffusionView";
-                if (item.Type == typeof(Sudoku))
-                    pageName = $"SudokuView/{item.Number}";
-                <div class="nav-item" @onclick="ToggleNavMenu">
+                <div class="nav-item px-3">
                     <NavLink class="nav-link" href="@(pageName)">
-                        <b style="padding-right:5px">@item.Number</b><span>@item.Title</span>
+                        <span class="oi oi-puzzle-piece"></span><div>
+                            <div class="puzzle-number">Puzzle @item.Number</div>
+                            <div class="puzzle-title">
+                                @item.Title
+                            </div>
+                        </div>
                     </NavLink>
                 </div>
             }
         }
+
     </nav>
 </div>
 
 @code {
-    private int puzzlePageNumber = 0;
-    private void IncrementPage()
-    {
-        if (puzzlePageNumber < (puzzleHelper.Puzzles.Count - 1) / 5)
-            puzzlePageNumber += 1;
-    }
-    private void DecrementPage()
-    {
-        if (puzzlePageNumber > 0) 
-            puzzlePageNumber -= 1;
-    }
     private bool collapseNavMenu = true;
 
     private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;

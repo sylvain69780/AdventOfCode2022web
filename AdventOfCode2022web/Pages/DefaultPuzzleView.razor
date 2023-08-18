@@ -16,6 +16,10 @@
             {
                 <UnstableDiffusionVisualization Solver="@((UnstableDiffusion)_solver!)" AnimationDuration="@_animationDuration" />
             }
+            else if (puzzleHelper.Puzzles[PuzzleNumber].Type == typeof(Sudoku))
+            {
+                <SudokuVisualization Solver="@((Sudoku)_solver!)" AnimationDuration="@_animationDuration" />
+            }
             else
             {
                 <p>No visualisation available for this Puzzle.</p>

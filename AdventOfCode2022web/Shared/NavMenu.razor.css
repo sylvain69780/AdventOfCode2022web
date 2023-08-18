@@ -20,7 +20,7 @@
 
 .nav-item {
     font-size: 0.9rem;
-    padding-bottom: 0.5rem;
+    padding-bottom: 1.0rem;
 }
 
     .nav-item:first-of-type {
@@ -37,7 +37,6 @@
         height: 3rem;
         display: flex;
         align-items: center;
-        line-height: 3rem;
     }
 
         .nav-item ::deep a.active {
@@ -50,6 +49,10 @@
             color: white;
         }
 
+.scrollable-menu {
+    max-height: 90%;
+    overflow-y: auto;
+}
 @media (min-width: 641px) {
     .navbar-toggler {
         display: none;
@@ -59,4 +62,12 @@
         /* Never collapse the sidebar for wide screens */
         display: block;
     }
+}
+
+.puzzle-number {
+    font-weight: bold;
+}
+
+.puzzle-title {
+    margin-left: 5px; /* Adjust this value as needed */
 }
