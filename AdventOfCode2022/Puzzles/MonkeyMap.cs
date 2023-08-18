@@ -1,10 +1,5 @@
-﻿using SixLabors.Fonts;
-using System;
-using System.Diagnostics;
-using System.Runtime.CompilerServices;
-using System.Text;
+﻿using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading;
 
 namespace AdventOfCode2022web.Puzzles
 {

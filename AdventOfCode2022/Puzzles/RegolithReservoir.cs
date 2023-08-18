@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+﻿using static System.Net.Mime.MediaTypeNames;
 
 namespace AdventOfCode2022web.Puzzles
 {
@@ -14,12 +14,13 @@ namespace AdventOfCode2022web.Puzzles
 
         public IEnumerable<string> SolveFirstPart()
         {
+            OccupiedPositions.Clear();
+            InitialPositions.Clear();
             var paths = _puzzleInput.Split("\n").Select(x => x.Replace(" -> ", "#").Split('#')
                 .Select(y => y.Split(','))
                 .Select(y => (x: int.Parse(y[0]), y: int.Parse(y[1]))).ToList())
                 .ToList();
             var floorPosition = paths.SelectMany(x => x).Select(x => x.y).Max() + 2;
-            var map = new Map();
             foreach (var rocks in paths)
             {
                 for (var i = 0; i < rocks.Count - 1; i++)
@@ -28,50 +29,52 @@ namespace AdventOfCode2022web.Puzzles
                     var endRock = rocks[i + 1];
                     if (beginRock.y == endRock.y)
                         for (var x = Math.Min(beginRock.x, endRock.x); x <= Math.Max(beginRock.x, endRock.x); x++)
-                            map.SetOccupiedInitial((x, beginRock.y));
+                            SetOccupiedInitial((x, beginRock.y));
                     if (beginRock.x == endRock.x)
                         for (var y = Math.Min(beginRock.y, endRock.y); y <= Math.Max(beginRock.y, endRock.y); y++)
-                            map.SetOccupiedInitial((beginRock.x,y));
+                            SetOccupiedInitial((beginRock.x, y));
                 }
             }
 
             var iterations = 0;
             while (true)
             {
-                map.SandPosition = (500,0);
+                SandPosition = (500, 0);
                 var isFreeToMove = true;
-                while (isFreeToMove && map.SandPosition.y < floorPosition)
+                while (isFreeToMove && SandPosition.y < floorPosition)
                 {
-                    var newSandPosition = map.SandPosition;
+                    var newSandPosition = SandPosition;
                     foreach (var (dx, dy) in Directions)
                     {
-                        var (x, y) = (map.SandPosition.x + dx, map.SandPosition.y + dy);
-                        if (!map.OccupiedPositions!.Contains((x, y)))
+                        var (x, y) = (SandPosition.x + dx, SandPosition.y + dy);
+                        if (!OccupiedPositions!.Contains((x, y)))
                         {
                             newSandPosition = (x, y);
                             break;
                         }
                     }
-                    if (newSandPosition == map.SandPosition)
+                    if (newSandPosition == SandPosition)
                         isFreeToMove = false;
                     else
-                        map.SandPosition = newSandPosition;
+                        SandPosition = newSandPosition;
+                    yield return iterations.ToString();
                 }
-                if (map.SandPosition.y >= floorPosition) 
+                if (SandPosition.y >= floorPosition)
                     break;
-                map.SetOccupied(map.SandPosition);
+                SetOccupied(SandPosition);
                 iterations++;
             }
             yield return iterations.ToString();
         }
         public IEnumerable<string> SolveSecondPart()
         {
+            OccupiedPositions.Clear();
+            InitialPositions.Clear();
             var paths = _puzzleInput.Split("\n").Select(x => x.Replace(" -> ", "#").Split('#')
                 .Select(y => y.Split(','))
                 .Select(y => (x: int.Parse(y[0]), y: int.Parse(y[1]))).ToList())
                 .ToList();
             var floorPosition = paths.SelectMany(x => x).Select(x => x.y).Max() + 2;
-            var map = new Map();
             foreach (var rocks in paths)
             {
                 for (var i = 0; i < rocks.Count - 1; i++)
@@ -80,108 +83,67 @@ namespace AdventOfCode2022web.Puzzles
                     var endRock = rocks[i + 1];
                     if (beginRock.y == endRock.y)
                         for (var x = Math.Min(beginRock.x, endRock.x); x <= Math.Max(beginRock.x, endRock.x); x++)
-                            map.SetOccupiedInitial((x, beginRock.y));
+                            SetOccupiedInitial((x, beginRock.y));
                     if (beginRock.x == endRock.x)
                         for (var y = Math.Min(beginRock.y, endRock.y); y <= Math.Max(beginRock.y, endRock.y); y++)
-                            map.SetOccupiedInitial((beginRock.x, y));
+                            SetOccupiedInitial((beginRock.x, y));
                 }
             }
             var iterations = 0;
             while (true)
             {
-                map.SandPosition = (500,0);
+                SandPosition = (500, 0);
                 var isFreeToMove = true;
                 while (isFreeToMove)
                 {
-                    var newSandPosition = map.SandPosition;
+                    var newSandPosition = SandPosition;
                     foreach (var (dx, dy) in Directions)
                     {
-                        var (x, y) = (map.SandPosition.x + dx, map.SandPosition.y + dy);
-                        if (y < floorPosition && !map.OccupiedPositions!.Contains((x, y)))
+                        var (x, y) = (SandPosition.x + dx, SandPosition.y + dy);
+                        if (y < floorPosition && !OccupiedPositions!.Contains((x, y)))
                         {
                             newSandPosition = (x, y);
                             break;
                         }
                     }
-                    if (newSandPosition == map.SandPosition)
+                    if (newSandPosition == SandPosition)
                         isFreeToMove = false;
                     else
-                        map.SandPosition = newSandPosition;
+                        SandPosition = newSandPosition;
                 }
                 iterations++;
-                if (map.SandPosition == (500,0))
+                if (SandPosition == (500, 0))
                     break;
-                map.SetOccupied(map.SandPosition);
+                SetOccupied(SandPosition);
+                yield return iterations.ToString();
             }
             yield return iterations.ToString();
         }
         private static readonly (int x, int y)[] Directions = new (int x, int y)[] { (0, 1), (-1, 1), (1, 1) };
 
-        private class Map
+        public (int x, int y) SandPosition;
+        public readonly HashSet<(int x, int y)> OccupiedPositions = new HashSet<(int x, int y)>();
+        public readonly HashSet<(int x, int y)> InitialPositions = new HashSet<(int x, int y)>();
+        public int xMin = 500;
+        public int yMin;
+        public int xMax = 500;
+        public int yMax;
+        public void SetOccupiedInitial((int x, int y) position)
         {
-            public (int x, int y) SandPosition;
-            public readonly HashSet<(int x, int y)>? OccupiedPositions;
-            public readonly HashSet<(int x, int y)>? InitialPositions;
-            public int xMin = 500;
-            public int yMin;
-            public int xMax = 500;
-            public int yMax;
-            public Map()
-            {
-                OccupiedPositions = new HashSet<(int x, int y)>();
-                InitialPositions = new HashSet<(int x, int y)>();
-            }
-            public void SetOccupiedInitial((int x, int y) position)
-            {
-                OccupiedPositions!.Add(position);
-                InitialPositions!.Add(position);
-                xMin = Math.Min(xMin, position.x);
-                yMin = Math.Min(yMin, position.y);
-                xMax = Math.Max(xMax, position.x);
-                yMax = Math.Max(yMax, position.y);
-            }
-            public void SetOccupied((int x, int y) position)
-            {
-                OccupiedPositions!.Add(position);
-                xMin = Math.Min(xMin, position.x);
-                yMin = Math.Min(yMin, position.y);
-                xMax = Math.Max(xMax, position.x);
-                yMax = Math.Max(yMax, position.y);
-            }
+            OccupiedPositions!.Add(position);
+            InitialPositions!.Add(position);
+            xMin = Math.Min(xMin, position.x);
+            yMin = Math.Min(yMin, position.y);
+            xMax = Math.Max(xMax, position.x);
+            yMax = Math.Max(yMax, position.y);
         }
-
-        private static string Visualize(Map map)
+        public void SetOccupied((int x, int y) position)
         {
-            var Width = map.xMax - map.xMin;
-            var Height = map.yMax - map.yMin;
-            var response = string.Empty;
-            using (MemoryStream outStream = new())
-            {
-                using (Image<Rgba32> img = new(Width, Height))
-                {
-                    img.ProcessPixelRows(accessor =>
-                    {
-                        for (int y = 0; y < accessor.Height; y++)
-                        {
-                            Span<Rgba32> pixelRow = accessor.GetRowSpan(y);
-                            for (int x = 0; x < pixelRow.Length; x++)
-                            {
-                                ref Rgba32 pixel = ref pixelRow[x];
-                                if (map.InitialPositions!.Contains((map.xMin + x, map.yMin + y)))
-                                    pixel = Color.Blue;
-                                else if (map.OccupiedPositions!.Contains((map.xMin + x, map.yMin + y)))
-                                    pixel = Color.White;
-                                else if (map.SandPosition == (map.xMin + x, map.yMin + y))
-                                    pixel = Color.Red;
-                            }
-                        }
-                    });
-                    img.SaveAsPng(outStream);
-                }
-
-                response = "data:image/png;base64, " + Convert.ToBase64String(outStream.ToArray());
-            }
-            return response;
+            OccupiedPositions!.Add(position);
+            xMin = Math.Min(xMin, position.x);
+            yMin = Math.Min(yMin, position.y);
+            xMax = Math.Max(xMax, position.x);
+            yMax = Math.Max(yMax, position.y);
         }
     }
 }
