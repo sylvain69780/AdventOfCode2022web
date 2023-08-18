@@ -1,4 +1,8 @@
-﻿@if (Solver != null)
+﻿<p>
+    You have to find the shortest way from one point to another, avoiding the "blizzards".<br />
+    I'm using a breadth-search algorithm here, the difficulty being that the pattern of "blizzards" changes over time.
+</p>
+@if (Solver != null)
 {
     if (Solver.Prev != null)
     {
@@ -78,11 +82,6 @@
         </svg>
     }
 }
-<p>
-    You have to find the shortest way from one point to another, avoiding the "blizzards".<br />
-    I'm using a breadth-search algorithm here, the difficulty being that the pattern of "blizzards" changes over time.
-</p>
-
 
 @code {
     [Parameter]
