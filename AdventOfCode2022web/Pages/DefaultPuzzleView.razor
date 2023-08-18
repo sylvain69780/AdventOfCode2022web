@@ -1,11 +1,10 @@
 ﻿@page "/DefaultPuzzleView/{PuzzleNumber:int}"
 @inject PuzzleHelper puzzleHelper;
-@inject HttpClient Http
 
 <div class="container">
     <div class="row">
         <div class="col-md-6">
-            <PuzzleInput PuzzleSolver="_solver" PuzzleNumber="@PuzzleNumber" Changed="@UpdateView" Input="@_input" />
+            <PuzzleInput PuzzleSolver="_solver" PuzzleNumber="@PuzzleNumber" Changed="@UpdateView" />
         </div>
         <div class="col-md-6">
             @if (puzzleHelper.Puzzles[PuzzleNumber].Type == typeof(BlizzardBasin))
@@ -40,15 +39,11 @@
         StateHasChanged();
     }
 
-    protected override async Task OnParametersSetAsync()
+    protected override void OnParametersSet()
     {
         var puzzle = puzzleHelper.Puzzles[PuzzleNumber];
         _solver = (IIncrementalPuzzleSolver)(Activator.CreateInstance(puzzle.Type))!;
-        _input = (await Http.GetStringAsync($"sample-data/{puzzle.Type.Name}.txt")).Replace("\r", "");
         base.OnParametersSet();
     }
 
-    protected override async Task OnInitializedAsync()
-    {
-    }
 }

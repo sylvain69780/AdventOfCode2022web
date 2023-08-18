@@ -11,14 +11,3 @@
 <p>Yes it is possible to create a Web SPA application in C#, thanks to WebAssembly !</p>
 <p>Here you will find my solutions to Advent of Code 2022 puzzles.</p>
 <p>Day 27 is a Sudoku Solver, with no relation with Advent of Code !</p>
-@{
-    var puzzles = puzzleHelper.Puzzles.Values.OrderBy(x => x.Number).ToList();
-    for (var puzzleIndex = 0; puzzleIndex < puzzles.Count; puzzleIndex++)
-    {
-        var item = puzzles[puzzleIndex];
-        var pageName = $"{(typeof(IIncrementalPuzzleSolver).IsAssignableFrom(item.Type) ? "DefaultPuzzleView" : "puzzle")}/{item.Number}";
-        <NavLink class="nav-link" href="@(pageName)">
-            <b style="padding-right:5px">@item.Number</b><span>@item.Title</span>
-        </NavLink>
-    }
-}

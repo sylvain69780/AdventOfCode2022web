@@ -35,7 +35,7 @@
         private List<(int x, int y, char c)>? BlizzardsDown;
         public int Width;
         public int Height;
-        private HashSet<(int x, int y)> Walls;
+        private HashSet<(int x, int y)>? Walls;
         public Dictionary<(int x, int y, int t), (int x, int y, int t)>? Prev;
         public List<(int x, int y)>? DeadEnds;
         public bool ComputingCompleted;
@@ -113,7 +113,7 @@
                         found = true;
                         break;
                     }
-                    if ( !blizzardsPos.Contains(pos) && !Walls.Contains(pos) && !newSearch.Contains(pos))
+                    if ( !blizzardsPos.Contains(pos) && !Walls!.Contains(pos) && !newSearch.Contains(pos))
                     {
                         Prev!.Add((pos.x, pos.y, Minute), (head.x, head.y, Minute - 1));
                         newSearch.Enqueue(pos);
@@ -133,10 +133,10 @@
         public HashSet<(int x, int y)> ComputeBlizzardsPos()
         {
             // compute blizzards positions
-            var blizzardsPos = BlizzardsRight.Select(e => ((e.x - 1 + Minute) % Width + 1, e.y)).ToHashSet();
-            blizzardsPos.UnionWith(BlizzardsLeft.Select(e => (Mod(e.x - 1 - Minute, Width) + 1, e.y)));
-            blizzardsPos.UnionWith(BlizzardsUp.Select(e => (e.x, Mod(e.y - 1 - Minute, Height) + 1)));
-            blizzardsPos.UnionWith(BlizzardsDown.Select(e => (e.x, (e.y - 1 + Minute) % Height + 1)));
+            var blizzardsPos = BlizzardsRight!.Select(e => ((e.x - 1 + Minute) % Width + 1, e.y)).ToHashSet();
+            blizzardsPos.UnionWith(BlizzardsLeft!.Select(e => (Mod(e.x - 1 - Minute, Width) + 1, e.y)));
+            blizzardsPos.UnionWith(BlizzardsUp!.Select(e => (e.x, Mod(e.y - 1 - Minute, Height) + 1)));
+            blizzardsPos.UnionWith(BlizzardsDown!.Select(e => (e.x, (e.y - 1 + Minute) % Height + 1)));
             return blizzardsPos;
         }
 

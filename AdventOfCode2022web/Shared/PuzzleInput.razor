@@ -1,6 +1,8 @@
 ﻿@using AdventOfCode2022web.Puzzles;
 @using System.Diagnostics;
 @inject PuzzleHelper puzzleHelper;
+@inject HttpClient Http
+
 
 <h1>@(PuzzleInfo.Title)</h1>
 <p>The code for this solution on <a href="https://github.com/sylvain69780/AdventOfCode2022web/blob/master/AdventOfCode2022/Puzzles/@(PuzzleInfo.Type.Name).cs">GitHub</a></p>
@@ -10,11 +12,9 @@
 </div>
 @if (_collapsePuzzleInput)
 {
-    if (CurrentInput == string.Empty)
-        CurrentInput = Input!;      
     <div>
         <label class="form-label">The data below is that provided for example. Paste your own user input from <a href="https://adventofcode.com/2022/day/@PuzzleNumber">Advent Of Code</a>.</label>
-        <pre><textarea class="form-control" aria-label="Puzzle Input" rows="10" @bind="CurrentInput" maxlength="10000000"></textarea></pre>
+        <pre><textarea class="form-control" aria-label="Puzzle Input" rows="10" @bind="_input" maxlength="10000000"></textarea></pre>
     </div>
 }
 
@@ -57,10 +57,9 @@
     public int PuzzleNumber { get; set; }
     [Parameter]
     public Action<int>? Changed { get; set; }
-    [Parameter]
-    public string? Input { get; set; }
 
-    private string CurrentInput { get; set; } = string.Empty;
+    private string _input = string.Empty;
+    private int _puzzleNumber = -1;
 
     private string Response { get; set; } = string.Empty;
     private int Iterations { get; set; }
@@ -79,11 +78,9 @@
 
     private async Task Solve(Func<IEnumerable<string>> part)
     {
-        if (CurrentInput == string.Empty)
-            CurrentInput = Input!;
         Response = string.Empty;
         Iterations = 0;
-        PuzzleSolver!.Initialize(CurrentInput);
+        PuzzleSolver!.Initialize(_input);
         _isTaskRunning = true;
         _cancel = false;
         _stopwatch.Start();
@@ -108,5 +105,16 @@
         _isTaskRunning = false;
         _stopwatch.Stop();
         Changed!(_delayVisualizationValue);
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (PuzzleNumber != _puzzleNumber)
+        {
+            var puzzle = puzzleHelper.Puzzles[PuzzleNumber];
+            _input = (await Http.GetStringAsync($"sample-data/{puzzle.Type.Name}.txt")).Replace("\r", "");
+            _puzzleNumber = PuzzleNumber;
+        }
+        base.OnParametersSet();
     }
 }
