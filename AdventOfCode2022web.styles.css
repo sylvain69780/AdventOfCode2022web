@@ -1,109 +1,4 @@
-/* /Pages/BlizzardBasinView.razor.rz.scp.css */
-/* /Pages/BlizzardBasinVisualization.razor.rz.scp.css */
-:root[b-e9jb9r58lg] {
-    --elf-animation-duration: 0;
-    --dx: 0px;
-    --dy: 0px;
-}
-
-.elf-move[b-e9jb9r58lg] {
-    animation-name: elf-move-anim-b-e9jb9r58lg;
-    animation-fill-mode: forwards;
-    animation-iteration-count: 1;
-    animation-duration: var(--elf-animation-duration);
-}
-
-@keyframes elf-move-anim-b-e9jb9r58lg {
-    from {
-        transform: translate(0px,0px);
-    }
-
-    to {
-        transform: translate(var(--dx),var(--dy));
-    }
-}
-
-.elf-destroyed[b-e9jb9r58lg] {
-    animation-name: elf-destroyed-anim-b-e9jb9r58lg;
-    animation-fill-mode: forwards;
-    animation-iteration-count: 1;
-    animation-duration: var(--elf-animation-duration);
-}
-
-@keyframes elf-destroyed-anim-b-e9jb9r58lg {
-    from {
-        opacity: 1;
-    }
-
-    to {
-        opacity: 0;
-    }
-}
 /* /Pages/DefaultPuzzleView.razor.rz.scp.css */
-/* /Pages/UnstableDiffusionView.razor.rz.scp.css */
-
-.elf-move-right[b-jhg829pcn8] {
-    animation-name: elf-move-right-anim-b-jhg829pcn8;
-    animation-fill-mode: forwards;
-    animation-iteration-count: 1;
-}
-
-@keyframes elf-move-right-anim-b-jhg829pcn8 {
-    from {
-        transform: translate(0px,0px);
-    }
-    to {
-        transform: translate(1px,0px);
-    }
-}
-
-.elf-move-left[b-jhg829pcn8] {
-    animation-name: elf-move-left-anim-b-jhg829pcn8;
-    animation-fill-mode: forwards;
-    animation-iteration-count: 1;
-}
-
-@keyframes elf-move-left-anim-b-jhg829pcn8 {
-    from {
-        transform: translate(0px,0px);
-    }
-
-    to {
-        transform: translate(-1px,0px);
-    }
-}
-
-.elf-move-down[b-jhg829pcn8] {
-    animation-name: elf-move-down-anim-b-jhg829pcn8;
-    animation-fill-mode: forwards;
-    animation-iteration-count: 1;
-}
-
-@keyframes elf-move-down-anim-b-jhg829pcn8 {
-    from {
-        transform: translate(0px,0px);
-    }
-
-    to {
-        transform: translate(0px,1px);
-    }
-}
-
-.elf-move-up[b-jhg829pcn8] {
-    animation-name: elf-move-up-anim-b-jhg829pcn8;
-    animation-fill-mode: forwards;
-    animation-iteration-count: 1;
-}
-
-@keyframes elf-move-up-anim-b-jhg829pcn8 {
-    from {
-        transform: translate(0px,0px);
-    }
-
-    to {
-        transform: translate(0px,-1px);
-    }
-}
 /* /Shared/MainLayout.razor.rz.scp.css */
 
 .page[b-qs7qgbma46] {
@@ -164,7 +59,7 @@ main[b-qs7qgbma46] {
     }
 
     .sidebar[b-qs7qgbma46] {
-        width: 250px;
+        width: 300px;
         height: 100vh;
         position: sticky;
         top: 0;
@@ -210,7 +105,7 @@ main[b-qs7qgbma46] {
 
 .nav-item[b-3abgficp7i] {
     font-size: 0.9rem;
-    padding-bottom: 0.5rem;
+    padding-bottom: 1.0rem;
 }
 
     .nav-item:first-of-type[b-3abgficp7i] {
@@ -227,7 +122,6 @@ main[b-qs7qgbma46] {
         height: 3rem;
         display: flex;
         align-items: center;
-        line-height: 3rem;
     }
 
         .nav-item[b-3abgficp7i]  a.active {
@@ -240,6 +134,10 @@ main[b-qs7qgbma46] {
             color: white;
         }
 
+.scrollable-menu[b-3abgficp7i] {
+    max-height: 90%;
+    overflow-y: auto;
+}
 @media (min-width: 641px) {
     .navbar-toggler[b-3abgficp7i] {
         display: none;
@@ -248,5 +146,117 @@ main[b-qs7qgbma46] {
     .collapse[b-3abgficp7i] {
         /* Never collapse the sidebar for wide screens */
         display: block;
+    }
+}
+
+.puzzle-number[b-3abgficp7i] {
+    font-weight: bold;
+}
+
+.puzzle-title[b-3abgficp7i] {
+    margin-left: 5px; /* Adjust this value as needed */
+}
+/* /Visualizations/BlizzardBasinVisualization.razor.rz.scp.css */
+:root[b-zu4oidzbd2] {
+    --elf-animation-duration: 0;
+    --dx: 0px;
+    --dy: 0px;
+}
+
+.elf-move[b-zu4oidzbd2] {
+    animation-name: elf-move-anim-b-zu4oidzbd2;
+    animation-fill-mode: forwards;
+    animation-iteration-count: 1;
+    animation-duration: var(--elf-animation-duration);
+}
+
+@keyframes elf-move-anim-b-zu4oidzbd2 {
+    from {
+        transform: translate(0px,0px);
+    }
+
+    to {
+        transform: translate(var(--dx),var(--dy));
+    }
+}
+
+.elf-destroyed[b-zu4oidzbd2] {
+    animation-name: elf-destroyed-anim-b-zu4oidzbd2;
+    animation-fill-mode: forwards;
+    animation-iteration-count: 1;
+    animation-duration: var(--elf-animation-duration);
+}
+
+@keyframes elf-destroyed-anim-b-zu4oidzbd2 {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
+}
+/* /Visualizations/UnstableDiffusionVisualization.razor.rz.scp.css */
+
+.elf-move-right[b-g3mwhiwe6w] {
+    animation-name: elf-move-right-anim-b-g3mwhiwe6w;
+    animation-fill-mode: forwards;
+    animation-iteration-count: 1;
+}
+
+@keyframes elf-move-right-anim-b-g3mwhiwe6w {
+    from {
+        transform: translate(0px,0px);
+    }
+    to {
+        transform: translate(1px,0px);
+    }
+}
+
+.elf-move-left[b-g3mwhiwe6w] {
+    animation-name: elf-move-left-anim-b-g3mwhiwe6w;
+    animation-fill-mode: forwards;
+    animation-iteration-count: 1;
+}
+
+@keyframes elf-move-left-anim-b-g3mwhiwe6w {
+    from {
+        transform: translate(0px,0px);
+    }
+
+    to {
+        transform: translate(-1px,0px);
+    }
+}
+
+.elf-move-down[b-g3mwhiwe6w] {
+    animation-name: elf-move-down-anim-b-g3mwhiwe6w;
+    animation-fill-mode: forwards;
+    animation-iteration-count: 1;
+}
+
+@keyframes elf-move-down-anim-b-g3mwhiwe6w {
+    from {
+        transform: translate(0px,0px);
+    }
+
+    to {
+        transform: translate(0px,1px);
+    }
+}
+
+.elf-move-up[b-g3mwhiwe6w] {
+    animation-name: elf-move-up-anim-b-g3mwhiwe6w;
+    animation-fill-mode: forwards;
+    animation-iteration-count: 1;
+}
+
+@keyframes elf-move-up-anim-b-g3mwhiwe6w {
+    from {
+        transform: translate(0px,0px);
+    }
+
+    to {
+        transform: translate(0px,-1px);
     }
 }
