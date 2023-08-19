@@ -1,20 +1,29 @@
-﻿<h3>RegolithReservoirVisualization</h3>
-<img style="width:100%; image-rendering:pixelated" src=@Visualize() />
+﻿<img style="width:100%; image-rendering:pixelated" src=@Visualize() />
 
 @code {
     [Parameter]
-    public RegolithReservoir? Solver { get; set; }
+    public IIncrementalPuzzleSolver? Solver { get; set; }
     [Parameter]
     public int AnimationDuration { get; set; } = 500;
+
+    private RegolithReservoir? _solver;
+
+    protected override void OnInitialized()
+    {
+        if (Solver == null || Solver.GetType() != typeof(RegolithReservoir))
+            throw new ArgumentException("This is not expected Solver type for this visualisation.");
+        _solver = (RegolithReservoir)Solver;
+        base.OnInitialized();
+    }
 
     public string _image64 = string.Empty;
 
     private string Visualize()
     {
-        if (Solver == null || Solver.OccupiedPositions.Count == 0 )
+        if (_solver == null || _solver.OccupiedPositions.Count == 0)
             return string.Empty;
-        var Width = Solver!.xMax - Solver.xMin;
-        var Height = Solver!.yMax - Solver.yMin;
+        var Width = _solver!.xMax - _solver.xMin;
+        var Height = _solver!.yMax - _solver.yMin;
         if (Width == 0 || Height == 0)
             return string.Empty;
         var response = string.Empty;
@@ -30,11 +39,11 @@
                         for (int x = 0; x < pixelRow.Length; x++)
                         {
                             ref Rgba32 pixel = ref pixelRow[x];
-                            if (Solver.InitialPositions!.Contains((Solver.xMin + x, Solver.yMin + y)))
+                            if (_solver.InitialPositions!.Contains((_solver.xMin + x, _solver.yMin + y)))
                                 pixel = Color.Blue;
-                            else if (Solver.OccupiedPositions!.Contains((Solver.xMin + x, Solver.yMin + y)))
+                            else if (_solver.OccupiedPositions!.Contains((_solver.xMin + x, _solver.yMin + y)))
                                 pixel = Color.Green;
-                            else if (Solver.SandPosition == (Solver.xMin + x, Solver.yMin + y))
+                            else if (_solver.SandPosition == (_solver.xMin + x, _solver.yMin + y))
                                 pixel = Color.Red;
                         }
                     }

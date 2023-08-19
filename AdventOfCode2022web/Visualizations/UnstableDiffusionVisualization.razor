@@ -1,10 +1,10 @@
 ﻿<p>We need to simulate the diffusion of strangly behaving particules.</p>
-@if ((Solver != null))
+@if ((_solver != null))
 {
-    if (Solver.Elves.Length > 0)
+    if (_solver.Elves.Length > 0)
     {
-        var positions = Solver.Elves;
-        var prevPositions = Solver.ElvesPrevPosition;
+        var positions = _solver.Elves;
+        var prevPositions = _solver.ElvesPrevPosition;
         foreach (var p in positions)
         {
             if (p.X < ViewBox.xMin)
@@ -79,12 +79,21 @@
 
 @code {
     [Parameter]
-    public UnstableDiffusion? Solver { get; set; }
+    public IIncrementalPuzzleSolver? Solver { get; set; }
     [Parameter]
     public int AnimationDuration { get; set; } = 500;
+
+    private UnstableDiffusion? _solver;
+
     (int xMin, int yMin, int xMax, int yMax) ViewBox;
+
     protected override void OnInitialized()
     {
+        if (Solver == null || Solver.GetType() != typeof(UnstableDiffusion))
+            throw new ArgumentException("This is not expected Solver type for this visualisation.");
+        _solver = (UnstableDiffusion)Solver;
+
         ViewBox = (-4, -4, 4, 4);
+        base.OnInitialized();
     }
 }

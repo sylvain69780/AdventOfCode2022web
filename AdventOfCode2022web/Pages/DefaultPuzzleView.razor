@@ -4,68 +4,72 @@
 @inject PuzzleHelper puzzleHelper;
 @inject HttpClient Http
 
+<h1>@(puzzleHelper.Puzzles[PuzzleNumber].Title)</h1>
+<p>The code for this solution on <a href="https://github.com/sylvain69780/AdventOfCode2022web/blob/master/AdventOfCode2022/Puzzles/@(puzzleHelper.Puzzles[PuzzleNumber].Type.Name).cs">GitHub</a></p>
+<div class="mb-3 form-check form-switch">
+    <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" @bind="_collapsePuzzleInput">
+    <label class="form-check-label" for="flexSwitchCheckChecked">View puzzle input</label>
+</div>
+@if (_collapsePuzzleInput)
+{
+    <div>
+        <label class="form-label">The data below is that provided for example. Paste your own user input from <a href="https://adventofcode.com/2022/day/@PuzzleNumber">Advent Of Code</a>.</label>
+        <pre><textarea class="form-control" aria-label="Puzzle Input" rows="10" @bind="_input" maxlength="10000000"></textarea></pre>
+    </div>
+}
 <div class="container">
     <div class="row">
         <div class="col-md-6">
-            <h1>@(puzzleHelper.Puzzles[PuzzleNumber].Title)</h1>
-            <p>The code for this solution on <a href="https://github.com/sylvain69780/AdventOfCode2022web/blob/master/AdventOfCode2022/Puzzles/@(puzzleHelper.Puzzles[PuzzleNumber].Type.Name).cs">GitHub</a></p>
-            <div class="mb-3 form-check form-switch">
-                <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" @bind="_collapsePuzzleInput">
-                <label class="form-check-label" for="flexSwitchCheckChecked">View puzzle input</label>
+            <div class="row mb-3">
+                <button class="col-4 btn btn-primary" disabled="@_isTaskRunning" @onclick=@(() => Solve(_solver!.SolveFirstPart))>Solve First Part</button>
+                <button class="col-4 btn btn-primary" disabled="@_isTaskRunning" @onclick=@(() => Solve(_solver!.SolveSecondPart))>Solve Second Part</button>
+                <button class="col-4 btn btn-primary" disabled="@(!_isTaskRunning)" @onclick=@(() => _cancel = true)>Cancel</button>
             </div>
-            @if (_collapsePuzzleInput)
-            {
-                <div>
-                    <label class="form-label">The data below is that provided for example. Paste your own user input from <a href="https://adventofcode.com/2022/day/@PuzzleNumber">Advent Of Code</a>.</label>
-                    <pre><textarea class="form-control" aria-label="Puzzle Input" rows="10" @bind="_input" maxlength="10000000"></textarea></pre>
+            <div class="row mb-3">
+                <div class="col-md-3">
+                    <label for="delayRange">Delay @_delayVisualizationValue ms</label>
                 </div>
-            }
-
-            <div class="btn-group mb-3" role="group">
-                <button class="btn btn-primary" disabled="@_isTaskRunning" @onclick=@(() => Solve(_solver!.SolveFirstPart))>Solve First Part</button>
-                <button class="btn btn-primary" disabled="@_isTaskRunning" @onclick=@(() => Solve(_solver!.SolveSecondPart))>Solve Second Part</button>
-                <button class="btn btn-primary" disabled="@(!_isTaskRunning)" @onclick=@(() => _cancel = true)>Cancel</button>
-                @if (_isTaskRunning)
-                {
-                    <span class="spinner-grow text-primary ms-2"></span>
-                }
+                <div class="col-md-9">
+                    <input type="range" class="form-range" id="delayRange" @bind="_delayVisualizationValue" min="0" max="1000" step="50">
+                </div>
             </div>
-            <div class="mb-3 d-flex align-items-center">
-                <input type="range" class="form-range me-3" style="width: 200px;" @bind="_delayVisualizationValue" min="0" max="1000" step="50">
-                <label class="form-check-label">Delay @_delayVisualizationValue ms</label>
-            </div>
-
+ 
             @if (Response != string.Empty)
             {
                 if (Response.Contains('\n'))
                 {
-                    <div class="p-3 mb-2 bg-primary text-white">
+                    <div class="p-2 mb-2 bg-primary text-white">
                         <pre>@(_isTaskRunning ? $"Loop turn {Iterations}" : $"The answer of the puzzle after {Iterations} loops is : ")</pre>
                         <pre>@Response</pre>
                     </div>
                 }
                 else
                 {
-                    <div class="p-3 mb-2 bg-primary text-white">@(_isTaskRunning ? $"Loop turn {Iterations}" : $"The answer of the puzzle after {Iterations} loop(s) is : ")@Response</div>
+                    <div class="p-2 mb-2 bg-primary text-white">@(_isTaskRunning ? $"Loop turn {Iterations}" : $"The answer of the puzzle after {Iterations} loop(s) is : ")@Response</div>
                 }
             }
+            @if (_isTaskRunning)
+            {
+                <span class="spinner-grow text-primary ms-2"></span>
+            }
+
         </div>
         <div class="col-md-6">
             @if (puzzleHelper.Puzzles[PuzzleNumber].Type == typeof(BlizzardBasin))
             {
-                <BlizzardBasinVisualization Solver="@((BlizzardBasin)_solver!)" AnimationDuration="@_animationDuration" />
+                <BlizzardBasinVisualization Solver=@_solver AnimationDuration="@_animationDuration" />
             }
             else if (puzzleHelper.Puzzles[PuzzleNumber].Type == typeof(UnstableDiffusion))
             {
-                <UnstableDiffusionVisualization Solver="@((UnstableDiffusion)_solver!)" AnimationDuration="@_animationDuration" />
+                <UnstableDiffusionVisualization Solver=@_solver AnimationDuration="@_animationDuration" />
             }
             else if (puzzleHelper.Puzzles[PuzzleNumber].Type == typeof(Sudoku))
             {
-                <SudokuVisualization Solver="@((Sudoku)_solver!)" AnimationDuration="@_animationDuration" />
+                <SudokuVisualization Solver=@_solver AnimationDuration="@_animationDuration" />
             }
             else if (puzzleHelper.Puzzles[PuzzleNumber].Type == typeof(RegolithReservoir))
             {
-                <RegolithReservoirVisualization Solver="@((RegolithReservoir)_solver!)" AnimationDuration="@_animationDuration" />
+                <RegolithReservoirVisualization Solver=@_solver AnimationDuration="@_animationDuration" />
             }
             else
             {

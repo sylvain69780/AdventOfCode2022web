@@ -25,13 +25,13 @@
     </defs>
     <rect x="0" y="0" width="9.0" height="9.0" fill="url(#gridPattern2)"></rect>
     @{
-        if (Solver != null && Solver.PuzzleState.Length == 81)
+        if (_solver != null && _solver.PuzzleState.Length == 81)
         {
-            var s = Solver.PuzzleState;
+            var s = _solver.PuzzleState;
             var dfs = Array.Empty<string>();
-            if (Solver.DFS != null)
+            if (_solver.DFS != null)
             {
-                dfs = Solver.DFS.ToArray();
+                dfs = _solver.DFS.ToArray();
             }
             foreach (var y in Enumerable.Range(0, 9))
                 foreach (var x in Enumerable.Range(0, 9))
@@ -39,7 +39,7 @@
                     var c = s[x + y * 9];
                     if (c == '.')
                     {
-                        var r = Solver.Entropy(x + y * 9).Length;
+                        var r = _solver.Entropy(x + y * 9).Length;
                         if (r == 0)
                         {
                             <use href="#sudoku-bad-cell" x="@x" y="@y" />
@@ -90,7 +90,18 @@
 
 @code {
     [Parameter]
-    public Sudoku? Solver { get; set; }
+    public IIncrementalPuzzleSolver? Solver { get; set; }
     [Parameter]
     public int AnimationDuration { get; set; } = 500;
+
+    private Sudoku? _solver;
+
+    protected override void OnInitialized()
+    {
+        if (Solver == null || Solver.GetType() != typeof(Sudoku))
+            throw new ArgumentException("This is not expected Solver type for this visualisation.");
+        _solver = (Sudoku)Solver;
+        base.OnInitialized();
+    }
+
 }
