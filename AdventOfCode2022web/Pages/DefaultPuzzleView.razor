@@ -75,25 +75,18 @@
             </div>
 
             <h2>Response</h2>
+            @if (Response != string.Empty)
+            {
+                    <div class="p-2 mb-2 bg-primary text-white"><pre>@Response</pre></div>
+                    if (_iterations > 0)
+                    {
+                        <div>@($"Result found after {_iterations} iteration(s) of the aglorithm.")</div>
+                    }
+            }
             @if (_isTaskRunning)
             {
                 <span class="spinner-grow text-primary ms-2"></span>
             }
-            @if (Response != string.Empty)
-            {
-                if (Response.Contains('\n'))
-                {
-                    <div class="p-2 mb-2 bg-primary text-white">
-                        <pre>@(_isTaskRunning ? $"Loop turn {Iterations}" : $"The answer of the puzzle after {Iterations} loops is : ")</pre>
-                        <pre>@Response</pre>
-                    </div>
-                }
-                else
-                {
-                    <div class="p-2 mb-2 bg-primary text-white">@(_isTaskRunning ? $"Loop turn {Iterations}" : $"The answer of the puzzle after {Iterations} loop(s) is : ")@Response</div>
-                }
-            }
-
         </div>
     </div>
 </div>
@@ -113,7 +106,7 @@
     private Stopwatch _stopwatch = new Stopwatch();
     private int _puzzleNumber = -1;
     private string Response { get; set; } = string.Empty;
-    private int Iterations { get; set; }
+    private int _iterations;
 
     public void UpdateView(int animationDuration)
     {
@@ -125,6 +118,9 @@
     {
         if (PuzzleNumber != _puzzleNumber)
         {
+            _cancel = true;
+            Response = string.Empty;
+            _iterations = 0;
             _puzzleNumber = PuzzleNumber;
             var puzzle = puzzleHelper.Puzzles[_puzzleNumber];
             _solver = (IIncrementalPuzzleSolver)(Activator.CreateInstance(puzzle.Type))!;
@@ -137,7 +133,7 @@
     private async Task Solve(Func<IEnumerable<string>> part)
     {
         Response = string.Empty;
-        Iterations = 0;
+        _iterations = 0;
         _solver!.Initialize(_input);
         _isTaskRunning = true;
         _cancel = false;
@@ -145,7 +141,7 @@
         foreach (var s in part())
         {
             Response = s;
-            Iterations++;
+            _iterations++;
             if (_delayVisualizationValue > 0 || _stopwatch.ElapsedMilliseconds > 15000)
             {
                 if (_delayVisualizationValue > 0)
