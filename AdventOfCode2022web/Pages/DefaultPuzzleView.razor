@@ -12,19 +12,19 @@
             <div class="w-100 bg-primary text-white border mb-2">
                 @if (puzzleHelper.Puzzles[PuzzleNumber].Type == typeof(BlizzardBasin))
                 {
-                    <BlizzardBasinVisualization Solver=@_solver AnimationDuration="@_animationDuration" />
+                    <BlizzardBasinView Solver=@_solver AnimationDuration="@_animationDuration" />
                 }
                 else if (puzzleHelper.Puzzles[PuzzleNumber].Type == typeof(UnstableDiffusion))
                 {
-                    <UnstableDiffusionVisualization Solver=@_solver AnimationDuration="@_animationDuration" />
+                    <UnstableDiffusionView Solver=@_solver AnimationDuration="@_animationDuration" />
                 }
                 else if (puzzleHelper.Puzzles[PuzzleNumber].Type == typeof(Sudoku))
                 {
-                    <SudokuVisualization Solver=@_solver AnimationDuration="@_animationDuration" />
+                    <SudokuView Solver=@_solver AnimationDuration="@_animationDuration" />
                 }
                 else if (puzzleHelper.Puzzles[PuzzleNumber].Type == typeof(RegolithReservoir))
                 {
-                    <RegolithReservoirVisualization Solver=@_solver AnimationDuration="@_animationDuration" />
+                    <RegolithReservoirView Solver=@_solver AnimationDuration="@_animationDuration" />
                 }
                 else
                 {
