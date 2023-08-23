@@ -4,10 +4,7 @@
     public class DistressSignal : IPuzzleSolver
     {
         private string _puzzleInput = string.Empty;
-        public void Initialize(string puzzleInput)
-        {
-            _puzzleInput = puzzleInput;
-        }
+        public void Initialize(string puzzleInput) => _puzzleInput = puzzleInput;
 
         private static string[] ToLines(string s) => s.Split("\n");
 

@@ -17,22 +17,25 @@ namespace AdventOfCode2022web.Puzzles
         IEnumerable<string> SolveSecondPart();
     }
 
-    public class PuzzleSolverWrapper<T> : IIncrementalPuzzleSolver where T:IPuzzleSolver
-    {
-        T? Puzzle { get; set; }
-        public void Initialize(string puzzleInput)
-        {
-            Puzzle!.Initialize(puzzleInput);
-        }
-        public IEnumerable<string> SolveFirstPart()
-        {
-            yield return Puzzle?.SolveFirstPart() ?? string.Empty;
-        }
-        public IEnumerable<string> SolveSecondPart()
-        {
-            yield return Puzzle?.SolveSecondPart() ?? string.Empty;
-        }
-    }
+    //public class PuzzleSolverWrapper: IIncrementalPuzzleSolver
+    //{
+    //    private readonly IPuzzleSolver _puzzle;
+
+    //    public PuzzleSolverWrapper(IPuzzleSolver puzzle) => _puzzle = puzzle;
+
+    //    public void Initialize(string puzzleInput)
+    //    {
+    //        _puzzle!.Initialize(puzzleInput);
+    //    }
+    //    public IEnumerable<string> SolveFirstPart()
+    //    {
+    //        yield return _puzzle.SolveFirstPart();
+    //    }
+    //    public IEnumerable<string> SolveSecondPart()
+    //    {
+    //        yield return _puzzle.SolveSecondPart();
+    //    }
+    //}
 
     [AttributeUsage(AttributeTargets.Class)]
     public class PuzzleAttribute : Attribute
