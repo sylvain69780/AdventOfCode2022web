@@ -9,13 +9,14 @@
 {
     <p class="border border-2 m-1 p-1">Ready</p>
 }
-<pre>@_result</pre>
 @if (_isProcessing)
 {
     <p>Step @(Parent?.SolvingStep ?? 0)</p>
     <input type="range" id="delayRange" @bind="Parent!.AnimationDuration" min="0" max="5000" step="50">
     <label class="form-label" for="delayRange">@Parent!.AnimationDuration ms</label>
 }
+<h3>Output</h3>
+<pre class="display-6">@_result</pre>
 @code {
     [CascadingParameter(Name = "Parent")]
     private PuzzlePageBase? Parent { get; set; }
@@ -91,15 +92,15 @@
             Parent.SolvingStep++;
             if (Parent.AnimationDuration > 0)
             {
-                Parent.NotifyStateHasChanged();
+                NotifyParent();
                 await Task.Delay(Parent.AnimationDuration + 100);
-            } 
+            }
             if (Parent.AnimationDuration == 0 && stopwatch.ElapsedMilliseconds > 5000)
-                {
-                    Parent.NotifyStateHasChanged();
-                    await Task.Delay(1);
-                    stopwatch.Restart();
-                }
+            {
+                NotifyParent();
+                await Task.Delay(1);
+                stopwatch.Restart();
+            }
             if (!_isProcessing)
                 return;
         }
@@ -115,9 +116,7 @@
         Parent.NotifyStateHasChanged();
     }
 
-    private bool IsStartProcessingAllowed => _results == null || Parent == null || Parent.PuzzleInputReloaded;
-
-    private bool IsStartProcessingForbidden => !IsStartProcessingAllowed;
+    private bool IsStartProcessingForbidden => _isProcessing;
 
     private bool IsMoveNextForbidden => _results == null || _isCompleted || _isProcessing;
 
