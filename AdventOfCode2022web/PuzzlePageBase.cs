@@ -8,7 +8,8 @@ namespace AdventOfCode2022web
         public virtual IIncrementalPuzzleSolver? PuzzleBase { get; private set; }
 
         public bool PuzzleInputReloaded { get; set; }
-        public int AnimationDuration = 500;
+        public int AnimationDuration { get; set; } = 500;
+        public int SolvingStep { get; set; } = 0;
 
         public void NotifyStateHasChanged() => StateHasChanged();
     }

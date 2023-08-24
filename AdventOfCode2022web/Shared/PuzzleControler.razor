@@ -3,7 +3,7 @@
 <button disabled=@IsStartProcessingForbidden @onclick=@StartPart2>Start solving Part 2</button>
 <button disabled=@IsMoveNextForbidden @onclick=@MoveNext>Move to next Step</button>
 <button disabled=@IsMoveNextForbidden @onclick=@MoveUntilCompleted>Run all Steps</button>
-<button disabled=@IsCancelDisabled @onclick=@SetCompleted>Cancel</button>
+<button disabled=@IsCancelDisabled @onclick=@SetAsCompleted>Cancel</button>
 @if (_isCompleted)
 {
     <p class="border border-2 m-1 p-1">Ready</p>
@@ -11,8 +11,8 @@
 <pre>@_result</pre>
 @if (_isProcessing)
 {
-    <p>Step @_processingCounter</p>
-    <input type="range" id="delayRange" @bind="Parent!.AnimationDuration" min="0" max="1000" step="50">
+    <p>Step @(Parent?.SolvingStep ?? 0)</p>
+    <input type="range" id="delayRange" @bind="Parent!.AnimationDuration" min="0" max="5000" step="50">
     <label class="form-label" for="delayRange">@Parent!.AnimationDuration ms</label>
 }
 @code {
@@ -23,13 +23,13 @@
     private string _result = string.Empty;
     private bool _isProcessing = false;
     private bool _isCompleted = true;
-    private int _processingCounter;
 
     private void StartPart1()
     {
         if (Parent == null || Parent.PuzzleBase == null)
             throw new NullReferenceException();
         _results = Parent.PuzzleBase.SolveFirstPart().GetEnumerator();
+        SetAsRunning();
     }
 
     private void StartPart2()
@@ -37,13 +37,15 @@
         if (Parent == null || Parent.PuzzleBase == null)
             throw new NullReferenceException();
         _results = Parent.PuzzleBase.SolveSecondPart().GetEnumerator();
+        SetAsRunning();
     }
 
-    private void SetRunning()
+    private void SetAsRunning()
     {
         if (Parent == null)
             throw new NullReferenceException();
         Parent.PuzzleInputReloaded = false;
+        Parent.SolvingStep = 0;
         _result = string.Empty;
         _isCompleted = false;
         NotifyParent();
@@ -56,10 +58,10 @@
         if (_results.MoveNext())
             NotifyParent();
         else
-            SetCompleted();
+            SetAsCompleted();
     }
 
-    private void SetCompleted()
+    private void SetAsCompleted()
     {
         if (Parent == null)
             throw new NullReferenceException();
@@ -75,20 +77,19 @@
         if (Parent == null || _results == null)
             throw new NullReferenceException();
         _isProcessing = true;
-        _processingCounter = 0;
         while (_results.MoveNext())
         {
-            _processingCounter++;
+            Parent.SolvingStep++;
             if (Parent.AnimationDuration > 0)
             {
                 Parent.NotifyStateHasChanged();
-                await Task.Delay(Parent.AnimationDuration);
+                await Task.Delay(Parent.AnimationDuration + 1);
             }
             if (!_isProcessing)
                 break;
         }
         await Task.Delay(1);
-        SetCompleted();
+        SetAsCompleted();
     }
 
     private void NotifyParent()

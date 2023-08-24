@@ -6,9 +6,7 @@ namespace AdventOfCode2022web
     {
         [CascadingParameter(Name = "Parent")]
         protected PuzzlePageBase? Parent { get; set; }
-        [Parameter]
-        public int AnimationDuration { get; set; } = 500;
 
-
+        protected int AnimationDuration => Parent?.AnimationDuration ?? 500;
     }
 }
