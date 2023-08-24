@@ -1,9 +1,10 @@
-﻿<h3>PuzzleControler</h3>
+﻿@using System.Diagnostics;
+<h3>PuzzleControler</h3>
 <button disabled=@IsStartProcessingForbidden @onclick=@StartPart1>Start solving Part 1</button>
 <button disabled=@IsStartProcessingForbidden @onclick=@StartPart2>Start solving Part 2</button>
 <button disabled=@IsMoveNextForbidden @onclick=@MoveNext>Move to next Step</button>
 <button disabled=@IsMoveNextForbidden @onclick=@MoveUntilCompleted>Run all Steps</button>
-<button disabled=@IsCancelDisabled @onclick=@SetAsCompleted>Cancel</button>
+<button disabled=@IsStopDisabled @onclick=@Stop>Stop</button>
 @if (_isCompleted)
 {
     <p class="border border-2 m-1 p-1">Ready</p>
@@ -72,21 +73,35 @@
         _isCompleted = true;
     }
 
+    public void Stop()
+    {
+        _isProcessing = false;
+        Parent!.NotifyStateHasChanged();
+    }
+
     private async Task MoveUntilCompleted()
     {
         if (Parent == null || _results == null)
             throw new NullReferenceException();
         _isProcessing = true;
+        var stopwatch = new Stopwatch();
+        stopwatch.Start();
         while (_results.MoveNext())
         {
             Parent.SolvingStep++;
             if (Parent.AnimationDuration > 0)
             {
                 Parent.NotifyStateHasChanged();
-                await Task.Delay(Parent.AnimationDuration + 1);
-            }
+                await Task.Delay(Parent.AnimationDuration + 100);
+            } 
+            if (Parent.AnimationDuration == 0 && stopwatch.ElapsedMilliseconds > 5000)
+                {
+                    Parent.NotifyStateHasChanged();
+                    await Task.Delay(1);
+                    stopwatch.Restart();
+                }
             if (!_isProcessing)
-                break;
+                return;
         }
         await Task.Delay(1);
         SetAsCompleted();
@@ -106,5 +121,5 @@
 
     private bool IsMoveNextForbidden => _results == null || _isCompleted || _isProcessing;
 
-    private bool IsCancelDisabled => _isCompleted;
+    private bool IsStopDisabled => !_isProcessing;
 }

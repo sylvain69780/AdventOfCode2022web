@@ -48,7 +48,7 @@
                 <use href="#blizzard" x="@((blizzard.x-0.5).ToStringCSS())" y="@((blizzard.y-0.5).ToStringCSS())" />
             }
         }
-        <g style="--elf-animation-duration: @(AnimationDuration * 80 / 100)ms;">
+        <g style="--elf-animation-duration: @(AnimationDuration)ms;">
             @if (BlizzardBasin.ComputingCompleted)
             {
                 var np = BlizzardBasin.Prev.Single(x => x.Key.t == BlizzardBasin.Minute).Key;
@@ -109,7 +109,7 @@
             throw new NullReferenceException();
         if (Parent.SolvingStep == _previousSolingStep)
             return;
-        _timer = new Timer(Callback,null,Parent.AnimationDuration * 90 / 100, Timeout.Infinite);
+        _timer = new Timer(Callback,null,Parent.AnimationDuration, Timeout.Infinite);
         _previousSolingStep = Parent.SolvingStep;
         _animationCompleted = false;
     }
