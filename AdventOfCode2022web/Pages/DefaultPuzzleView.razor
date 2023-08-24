@@ -12,7 +12,7 @@
             <div class="w-100 bg-primary text-white border mb-2">
                 @if (puzzleHelper.Puzzles[PuzzleNumber].Type == typeof(BlizzardBasin))
                 {
-                    <BlizzardBasinView Solver=@_solver AnimationDuration="@_animationDuration" />
+                    <BlizzardBasinView Solver=@((BlizzardBasin)_solver!) AnimationDuration="@_animationDuration" />
                 }
                 else if (puzzleHelper.Puzzles[PuzzleNumber].Type == typeof(UnstableDiffusion))
                 {

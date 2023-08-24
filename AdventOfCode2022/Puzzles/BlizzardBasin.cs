@@ -3,6 +3,21 @@
     [Puzzle(24, "Blizzard Basin")]
     public class BlizzardBasin : IIncrementalPuzzleSolver
     {
+        public (int x, int y) Start;
+        public (int x, int y) Arrival;
+        public int Minute;
+        public int Width;
+        public int Height;
+        public Dictionary<(int x, int y, int t), (int x, int y, int t)>? Prev;
+        public List<(int x, int y)>? DeadEnds;
+        public bool ComputingCompleted;
+
+        private List<(int x, int y, char c)>? BlizzardsRight;
+        private List<(int x, int y, char c)>? BlizzardsLeft;
+        private List<(int x, int y, char c)>? BlizzardsUp;
+        private List<(int x, int y, char c)>? BlizzardsDown;
+        private HashSet<(int x, int y)>? Walls;
+
         public void Initialize(string puzzleInput)
         {
             var input = puzzleInput.Split("\n");
@@ -24,21 +39,12 @@
             BlizzardsDown = blizzards.Where(e => e.c == 'v').ToList();
             Width = input[0].Length - 2;
             Height = input.Length - 2;
-        }
 
-        public (int x, int y) Start;
-        public (int x, int y) Arrival;
-        public int Minute;
-        private List<(int x, int y, char c)>? BlizzardsRight;
-        private List<(int x, int y, char c)>? BlizzardsLeft;
-        private List<(int x, int y, char c)>? BlizzardsUp;
-        private List<(int x, int y, char c)>? BlizzardsDown;
-        public int Width;
-        public int Height;
-        private HashSet<(int x, int y)>? Walls;
-        public Dictionary<(int x, int y, int t), (int x, int y, int t)>? Prev;
-        public List<(int x, int y)>? DeadEnds;
-        public bool ComputingCompleted;
+            Minute = 0;
+            ComputingCompleted = false;
+            Prev = new Dictionary<(int x, int y, int t), (int x, int y, int t)>();
+            DeadEnds = new List<(int x, int y)>();
+        }
 
         private static readonly char[] BlizzardsTypes = new char[] { '>', '<', '^', 'v' };
 

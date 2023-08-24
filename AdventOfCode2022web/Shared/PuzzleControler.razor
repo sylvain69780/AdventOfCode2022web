@@ -1,0 +1,109 @@
+﻿<h3>PuzzleControler</h3>
+<button disabled=@IsStartProcessingForbidden @onclick=@StartPart1>Start solving Part 1</button>
+<button disabled=@IsStartProcessingForbidden @onclick=@StartPart2>Start solving Part 2</button>
+<button disabled=@IsMoveNextForbidden @onclick=@MoveNext>Move to next Step</button>
+<button disabled=@IsMoveNextForbidden @onclick=@MoveUntilCompleted>Run all Steps</button>
+<button disabled=@IsCancelDisabled @onclick=@SetCompleted>Cancel</button>
+@if (_isCompleted)
+{
+    <p class="border border-2 m-1 p-1">Ready</p>
+}
+<pre>@_result</pre>
+@if (_isProcessing)
+{
+    <p>Step @_processingCounter</p>
+    <input type="range" id="delayRange" @bind="Parent!.AnimationDuration" min="0" max="1000" step="50">
+    <label class="form-label" for="delayRange">@Parent!.AnimationDuration ms</label>
+}
+@code {
+    [CascadingParameter(Name = "Parent")]
+    private PuzzlePageBase? Parent { get; set; }
+
+    private IEnumerator<string>? _results;
+    private string _result = string.Empty;
+    private bool _isProcessing = false;
+    private bool _isCompleted = true;
+    private int _processingCounter;
+
+    private void StartPart1()
+    {
+        if (Parent == null || Parent.PuzzleBase == null)
+            throw new NullReferenceException();
+        _results = Parent.PuzzleBase.SolveFirstPart().GetEnumerator();
+    }
+
+    private void StartPart2()
+    {
+        if (Parent == null || Parent.PuzzleBase == null)
+            throw new NullReferenceException();
+        _results = Parent.PuzzleBase.SolveSecondPart().GetEnumerator();
+    }
+
+    private void SetRunning()
+    {
+        if (Parent == null)
+            throw new NullReferenceException();
+        Parent.PuzzleInputReloaded = false;
+        _result = string.Empty;
+        _isCompleted = false;
+        NotifyParent();
+    }
+
+    private void MoveNext()
+    {
+        if (Parent == null || _results == null)
+            throw new NullReferenceException();
+        if (_results.MoveNext())
+            NotifyParent();
+        else
+            SetCompleted();
+    }
+
+    private void SetCompleted()
+    {
+        if (Parent == null)
+            throw new NullReferenceException();
+        Parent.AnimationDuration = 500;
+        Parent.NotifyStateHasChanged();
+        _isProcessing = false;
+        _results = null;
+        _isCompleted = true;
+    }
+
+    private async Task MoveUntilCompleted()
+    {
+        if (Parent == null || _results == null)
+            throw new NullReferenceException();
+        _isProcessing = true;
+        _processingCounter = 0;
+        while (_results.MoveNext())
+        {
+            _processingCounter++;
+            if (Parent.AnimationDuration > 0)
+            {
+                Parent.NotifyStateHasChanged();
+                await Task.Delay(Parent.AnimationDuration);
+            }
+            if (!_isProcessing)
+                break;
+        }
+        await Task.Delay(1);
+        SetCompleted();
+    }
+
+    private void NotifyParent()
+    {
+        if (Parent == null || _results == null)
+            throw new NullReferenceException();
+        _result = _results.Current;
+        Parent.NotifyStateHasChanged();
+    }
+
+    private bool IsStartProcessingAllowed => _results == null || Parent == null || Parent.PuzzleInputReloaded;
+
+    private bool IsStartProcessingForbidden => !IsStartProcessingAllowed;
+
+    private bool IsMoveNextForbidden => _results == null || _isCompleted || _isProcessing;
+
+    private bool IsCancelDisabled => _isCompleted;
+}
