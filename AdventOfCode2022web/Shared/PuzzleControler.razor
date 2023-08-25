@@ -9,12 +9,9 @@
 {
     <p class="border border-2 m-1 p-1">Ready</p>
 }
-@if (_isProcessing)
-{
-    <p>Step @(Parent?.SolvingStep ?? 0)</p>
-    <input type="range" id="delayRange" @bind="Parent!.AnimationDuration" min="0" max="5000" step="50">
-    <label class="form-label" for="delayRange">@Parent!.AnimationDuration ms</label>
-}
+<p>Step @(Parent?.SolvingStep ?? 0)</p>
+<input type="range" id="delayRange" @bind="Parent!.AnimationDuration" min="0" max="5000" step="50">
+<label class="form-label" for="delayRange">Transition @Parent!.AnimationDuration ms</label>
 <h3>Output</h3>
 <pre class="display-6">@_result</pre>
 @code {
@@ -58,7 +55,10 @@
         if (Parent == null || _results == null)
             throw new NullReferenceException();
         if (_results.MoveNext())
+        {
+            Parent.SolvingStep++;
             NotifyParent();
+        }
         else
             SetAsCompleted();
     }
@@ -67,7 +67,6 @@
     {
         if (Parent == null)
             throw new NullReferenceException();
-        Parent.AnimationDuration = 500;
         Parent.NotifyStateHasChanged();
         _isProcessing = false;
         _results = null;
@@ -87,24 +86,26 @@
         _isProcessing = true;
         var stopwatch = new Stopwatch();
         stopwatch.Start();
+        var delay = Parent.AnimationDuration;
+        var solvingStep = Parent.SolvingStep;
+        var notifyStepCompleted = async (int waitTime) =>
+        {
+            Parent.SolvingStep = solvingStep;
+            NotifyParent();
+            await Task.Delay(delay + 100);
+            stopwatch.Restart();
+            delay = Parent.AnimationDuration;
+        };
         while (_results.MoveNext())
         {
-            Parent.SolvingStep++;
-            if (Parent.AnimationDuration > 0)
-            {
-                NotifyParent();
-                await Task.Delay(Parent.AnimationDuration + 100);
-            }
-            if (Parent.AnimationDuration == 0 && stopwatch.ElapsedMilliseconds > 5000)
-            {
-                NotifyParent();
-                await Task.Delay(1);
-                stopwatch.Restart();
-            }
+            solvingStep++;
+            if (delay > 0)
+                await notifyStepCompleted(delay + 100);
+            if (delay == 0 && stopwatch.ElapsedMilliseconds > 5000)
+                await notifyStepCompleted(100);
             if (!_isProcessing)
                 return;
         }
-        await Task.Delay(1);
         SetAsCompleted();
     }
 
