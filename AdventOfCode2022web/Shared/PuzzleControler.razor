@@ -1,7 +1,7 @@
 ﻿@using System.Diagnostics;
 <h3>PuzzleControler</h3>
-<button disabled=@IsStartProcessingForbidden @onclick=@StartPart1>Start solving Part 1</button>
-<button disabled=@IsStartProcessingForbidden @onclick=@StartPart2>Start solving Part 2</button>
+<button disabled=@IsStartProcessingForbidden @onclick=@StartPart1>Initialize Part 1</button>
+<button disabled=@IsStartProcessingForbidden @onclick=@StartPart2>Initialize Part 2</button>
 <button disabled=@IsMoveNextForbidden @onclick=@MoveNext>Move to next Step</button>
 <button disabled=@IsMoveNextForbidden @onclick=@MoveUntilCompleted>Run all Steps</button>
 <button disabled=@IsStopDisabled @onclick=@Stop>Stop</button>
@@ -106,6 +106,7 @@
             if (!_isProcessing)
                 return;
         }
+        await notifyStepCompleted(100);
         SetAsCompleted();
     }
 
