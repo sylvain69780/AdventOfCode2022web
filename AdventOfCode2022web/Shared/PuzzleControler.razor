@@ -25,25 +25,19 @@
 
     private void StartPart1()
     {
-        if (Parent == null || Parent.PuzzleBase == null)
-            throw new NullReferenceException();
-        _results = Parent.PuzzleBase.SolveFirstPart().GetEnumerator();
+        _results = Parent!.PuzzleBase!.SolveFirstPart().GetEnumerator();
         SetAsRunning();
     }
 
     private void StartPart2()
     {
-        if (Parent == null || Parent.PuzzleBase == null)
-            throw new NullReferenceException();
-        _results = Parent.PuzzleBase.SolveSecondPart().GetEnumerator();
+        _results = Parent!.PuzzleBase!.SolveSecondPart().GetEnumerator();
         SetAsRunning();
     }
 
     private void SetAsRunning()
     {
-        if (Parent == null)
-            throw new NullReferenceException();
-        Parent.PuzzleInputReloaded = false;
+        Parent!.PuzzleInputReloaded = false;
         Parent.SolvingStep = 0;
         _result = string.Empty;
         _isCompleted = false;
@@ -52,11 +46,9 @@
 
     private void MoveNext()
     {
-        if (Parent == null || _results == null)
-            throw new NullReferenceException();
-        if (_results.MoveNext())
+        if (_results!.MoveNext())
         {
-            Parent.SolvingStep++;
+            Parent!.SolvingStep++;
             NotifyParent();
         }
         else
@@ -65,9 +57,7 @@
 
     private void SetAsCompleted()
     {
-        if (Parent == null)
-            throw new NullReferenceException();
-        Parent.NotifyStateHasChanged();
+        Parent!.NotifyStateHasChanged();
         _isProcessing = false;
         _results = null;
         _isCompleted = true;
@@ -81,22 +71,20 @@
 
     private async Task MoveUntilCompleted()
     {
-        if (Parent == null || _results == null)
-            throw new NullReferenceException();
         _isProcessing = true;
         var stopwatch = new Stopwatch();
         stopwatch.Start();
-        var delay = Parent.AnimationDuration;
+        var delay = Parent!.AnimationDuration;
         var solvingStep = Parent.SolvingStep;
-        var notifyStepCompleted = async (int waitTime) =>
+        async Task notifyStepCompleted (int waitTime) 
         {
             Parent.SolvingStep = solvingStep;
             NotifyParent();
             await Task.Delay(delay + 100);
             stopwatch.Restart();
             delay = Parent.AnimationDuration;
-        };
-        while (_results.MoveNext())
+        }
+        while (_results!.MoveNext())
         {
             solvingStep++;
             if (delay > 0)
@@ -112,10 +100,8 @@
 
     private void NotifyParent()
     {
-        if (Parent == null || _results == null)
-            throw new NullReferenceException();
-        _result = _results.Current;
-        Parent.NotifyStateHasChanged();
+        _result = _results!.Current;
+        Parent!.NotifyStateHasChanged();
     }
 
     private bool IsStartProcessingForbidden => _isProcessing;

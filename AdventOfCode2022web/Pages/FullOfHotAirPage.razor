@@ -1,0 +1,10 @@
+﻿@page "/FullOfHotAirPage"
+@inherits PuzzlePageBase
+<h2>FullOfHotAirPage</h2>
+<CascadingValue Name="Parent" Value=@this>
+        <PuzzleInputForm/>
+        <PuzzleControler/>
+</CascadingValue>
+@code {
+    public FullOfHotAirPage() => PuzzleBase = new FullOfHotAir();
+}

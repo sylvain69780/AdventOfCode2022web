@@ -1,0 +1,10 @@
+﻿@page "/RegolithReservoirPage"
+@inherits PuzzlePageBase
+<h2>RegolithReservoirPage</h2>
+<CascadingValue Name="Parent" Value=@this>
+        <PuzzleInputForm/>
+        <PuzzleControler/>
+</CascadingValue>
+@code {
+    public RegolithReservoirPage() => PuzzleBase = new RegolithReservoir();
+}

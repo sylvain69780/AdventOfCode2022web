@@ -1,0 +1,10 @@
+﻿@page "/CathodeRayTubePage"
+@inherits PuzzlePageBase
+<h2>CathodeRayTubePage</h2>
+<CascadingValue Name="Parent" Value=@this>
+        <PuzzleInputForm/>
+        <PuzzleControler/>
+</CascadingValue>
+@code {
+    public CathodeRayTubePage() => PuzzleBase = new CathodeRayTube();
+}

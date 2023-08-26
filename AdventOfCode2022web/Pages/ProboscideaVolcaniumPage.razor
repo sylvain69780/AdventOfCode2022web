@@ -1,0 +1,10 @@
+﻿@page "/ProboscideaVolcaniumPage"
+@inherits PuzzlePageBase
+<h2>ProboscideaVolcaniumPage</h2>
+<CascadingValue Name="Parent" Value=@this>
+        <PuzzleInputForm/>
+        <PuzzleControler/>
+</CascadingValue>
+@code {
+    public ProboscideaVolcaniumPage() => PuzzleBase = new PuzzleSolverWrapper(new ProboscideaVolcanium());
+}

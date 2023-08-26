@@ -1,0 +1,10 @@
+﻿@page "/UnstableDiffusionPage"
+@inherits PuzzlePageBase
+<h2>UnstableDiffusionPage</h2>
+<CascadingValue Name="Parent" Value=@this>
+        <PuzzleInputForm/>
+        <PuzzleControler/>
+</CascadingValue>
+@code {
+    public UnstableDiffusionPage() => PuzzleBase = new UnstableDiffusion();
+}

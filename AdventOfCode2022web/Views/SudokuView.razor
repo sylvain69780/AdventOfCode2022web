@@ -1,4 +1,5 @@
-﻿<p class="p-1">
+﻿@inherits PuzzleViewBase
+<p class="p-1">
     This is a Sudoku solver, and it has really no relation with Advent Of Code !
 </p>
 <p class="p-1">
@@ -89,19 +90,5 @@
 </svg>
 
 @code {
-    [Parameter]
-    public IIncrementalPuzzleSolver? Solver { get; set; }
-    [Parameter]
-    public int AnimationDuration { get; set; } = 500;
-
-    private Sudoku? _solver;
-
-    protected override void OnInitialized()
-    {
-        if (Solver == null || Solver.GetType() != typeof(Sudoku))
-            throw new ArgumentException("This is not expected Solver type for this visualisation.");
-        _solver = (Sudoku)Solver;
-        base.OnInitialized();
-    }
-
+    private Sudoku _solver => (Sudoku)Parent!.PuzzleBase!;
 }

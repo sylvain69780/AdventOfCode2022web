@@ -13,6 +13,5 @@
 </div>
 </CascadingValue>
 @code {
-    public BlizzardBasin Puzzle = new BlizzardBasin();
-    public override IIncrementalPuzzleSolver? PuzzleBase => (IIncrementalPuzzleSolver)Puzzle;
+    public BlizzardBasinPage() => PuzzleBase = new BlizzardBasin();
 }

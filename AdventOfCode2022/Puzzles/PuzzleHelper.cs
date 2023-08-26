@@ -17,26 +17,6 @@ namespace AdventOfCode2022web.Puzzles
         IEnumerable<string> SolveSecondPart();
     }
 
-    //public class PuzzleSolverWrapper: IIncrementalPuzzleSolver
-    //{
-    //    private readonly IPuzzleSolver _puzzle;
-
-    //    public PuzzleSolverWrapper(IPuzzleSolver puzzle) => _puzzle = puzzle;
-
-    //    public void Initialize(string puzzleInput)
-    //    {
-    //        _puzzle!.Initialize(puzzleInput);
-    //    }
-    //    public IEnumerable<string> SolveFirstPart()
-    //    {
-    //        yield return _puzzle.SolveFirstPart();
-    //    }
-    //    public IEnumerable<string> SolveSecondPart()
-    //    {
-    //        yield return _puzzle.SolveSecondPart();
-    //    }
-    //}
-
     [AttributeUsage(AttributeTargets.Class)]
     public class PuzzleAttribute : Attribute
     {
@@ -48,7 +28,9 @@ namespace AdventOfCode2022web.Puzzles
     public class PuzzleHelper
     {
         public readonly IReadOnlyDictionary<int, (Type Type, int Number, string Title)> Puzzles = Assembly.GetExecutingAssembly().GetTypes()
-        .Where(x => x.IsClass && !x.IsGenericType && (typeof(IPuzzleSolver).IsAssignableFrom(x) || typeof(IIncrementalPuzzleSolver).IsAssignableFrom(x)))
+        .Where(x => x.IsClass && !x.IsGenericType 
+        && (typeof(IPuzzleSolver).IsAssignableFrom(x) || typeof(IIncrementalPuzzleSolver).IsAssignableFrom(x))
+        && x.IsDefined(typeof(PuzzleAttribute)))
         .Select(x => (Type: x, Attr: x.GetCustomAttribute<PuzzleAttribute>()!))
         .Select(x => (x.Type, x.Attr.Number, x.Attr.Title))
         .ToDictionary(x => x.Number);

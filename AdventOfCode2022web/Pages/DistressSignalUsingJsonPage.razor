@@ -1,0 +1,10 @@
+﻿@page "/DistressSignalUsingJsonPage"
+@inherits PuzzlePageBase
+<h2>DistressSignalUsingJsonPage</h2>
+<CascadingValue Name="Parent" Value=@this>
+        <PuzzleInputForm/>
+        <PuzzleControler/>
+</CascadingValue>
+@code {
+    public DistressSignalUsingJsonPage() => PuzzleBase = new PuzzleSolverWrapper(new DistressSignalUsingJson());
+}

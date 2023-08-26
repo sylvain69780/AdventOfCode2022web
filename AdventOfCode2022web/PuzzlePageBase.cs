@@ -5,7 +5,7 @@ namespace AdventOfCode2022web
 {
     public class PuzzlePageBase : ComponentBase
     {
-        public virtual IIncrementalPuzzleSolver? PuzzleBase { get; private set; }
+        public virtual IIncrementalPuzzleSolver? PuzzleBase { get; protected set; }
 
         public bool PuzzleInputReloaded { get; set; }
         public int AnimationDuration { get; set; } = 500;

@@ -1,0 +1,10 @@
+﻿@page "/BeaconExclusionZonePage"
+@inherits PuzzlePageBase
+<h2>BeaconExclusionZonePage</h2>
+<CascadingValue Name="Parent" Value=@this>
+        <PuzzleInputForm/>
+        <PuzzleControler/>
+</CascadingValue>
+@code {
+    public BeaconExclusionZonePage() => PuzzleBase = new BeaconExclusionZone();
+}

@@ -1,0 +1,10 @@
+﻿@page "/NotEnoughMineralsPage"
+@inherits PuzzlePageBase
+<h2>NotEnoughMineralsPage</h2>
+<CascadingValue Name="Parent" Value=@this>
+        <PuzzleInputForm/>
+        <PuzzleControler/>
+</CascadingValue>
+@code {
+    public NotEnoughMineralsPage() => PuzzleBase = new PuzzleSolverWrapper(new NotEnoughMinerals());
+}

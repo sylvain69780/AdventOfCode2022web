@@ -1,0 +1,10 @@
+﻿@page "/CampCleanupPage"
+@inherits PuzzlePageBase
+<h2>BlizzardBasinPage</h2>
+<CascadingValue Name="Parent" Value=@this>
+        <PuzzleInputForm/>
+        <PuzzleControler/>
+</CascadingValue>
+@code {
+    public CampCleanupPage() => PuzzleBase = new CampCleanup();
+}

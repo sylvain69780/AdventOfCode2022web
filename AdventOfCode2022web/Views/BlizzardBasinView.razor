@@ -86,7 +86,7 @@
         <p>Animation Completed</p>
     } else
     {
-        <p>Running</p>
+        <p>Animation Running</p>
     }
 }
 
@@ -97,17 +97,9 @@
     private Timer? _timer;
     private bool _animationCompleted = true;
 
-@*    protected override void OnInitialized()
-    {
-        _timer = new Timer(Callback);
-        base.OnInitialized();
-    }
-*@
     private void SetTimer()
     {
-        if (Parent == null)
-            throw new NullReferenceException();
-        if (Parent.SolvingStep == _previousSolingStep)
+        if (Parent!.SolvingStep == _previousSolingStep)
             return;
         _timer = new Timer(Callback,null,Parent.AnimationDuration, Timeout.Infinite);
         _previousSolingStep = Parent.SolvingStep;

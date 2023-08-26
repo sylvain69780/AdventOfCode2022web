@@ -20,17 +20,16 @@
 
     private async Task LoadDefaultPuzzleInput()
     {
-        if (Parent == null || Parent.PuzzleBase == null)
-            throw new NullReferenceException();
-        var puzzleType = Parent.PuzzleBase.GetType().Name;
-        _input = (await Http.GetStringAsync($"sample-data/{puzzleType}.txt")).Replace("\r", "");
+        var puzzleType = Parent!.PuzzleBase!.GetType();
+        var puzzleInputFile = puzzleType.Name;
+        if (puzzleType == typeof(PuzzleSolverWrapper))
+            puzzleInputFile = ((PuzzleSolverWrapper)(Parent.PuzzleBase)).PuzzleType.Name;
+        _input = (await Http.GetStringAsync($"sample-data/{puzzleInputFile}.txt")).Replace("\r", "");
     }
 
     private void InitializePuzzle()
     {
-        if (Parent == null || Parent.PuzzleBase == null)
-            throw new NullReferenceException();
-        Parent.PuzzleBase.Initialize(_input);
+        Parent!.PuzzleBase!.Initialize(_input);
         Parent.NotifyStateHasChanged();
         Parent.PuzzleInputReloaded = true;
     }
