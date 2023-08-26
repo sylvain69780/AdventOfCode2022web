@@ -7,7 +7,6 @@ namespace AdventOfCode2022web
     {
         public virtual IPuzzleSolutionIter? PuzzleSolution { get; protected set; }
 
-        public bool PuzzleInputReloaded { get; set; }
         public int AnimationDuration { get; set; } = 500;
         public int SolvingStep { get; set; } = 0;
 
