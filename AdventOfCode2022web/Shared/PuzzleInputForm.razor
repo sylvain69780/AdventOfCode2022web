@@ -24,16 +24,16 @@
 
     private async Task LoadDefaultPuzzleInput()
     {
-        var puzzleType = Parent!.PuzzleBase!.GetType();
+        var puzzleType = Parent!.PuzzleSolution!.GetType();
         var puzzleInputFile = puzzleType.Name;
         if (puzzleType == typeof(PuzzleSolverWrapper))
-            puzzleInputFile = ((PuzzleSolverWrapper)(Parent.PuzzleBase)).PuzzleType.Name;
+            puzzleInputFile = ((PuzzleSolverWrapper)(Parent.PuzzleSolution)).PuzzleType.Name;
         _input = (await Http.GetStringAsync($"sample-data/{puzzleInputFile}.txt")).Replace("\r", "");
     }
 
     private void InitializePuzzle()
     {
-        Parent!.PuzzleBase!.Initialize(_input);
+        Parent!.PuzzleSolution!.Initialize(_input);
         Parent.NotifyStateHasChanged();
         Parent.PuzzleInputReloaded = true;
     }

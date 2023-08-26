@@ -82,14 +82,14 @@
         }
         else
         {
-            <p>Animation Running</p>
+            <p>Animation Stopped</p>
         }
     }
 }
 
 @code {
 
-    private UnstableDiffusion? _solver => (UnstableDiffusion)(Parent!.PuzzleBase!);
+    private UnstableDiffusion? _solver => (UnstableDiffusion)(Parent!.PuzzleSolution!);
 
     (int xMin, int yMin, int xMax, int yMax) ViewBox = (-4, -4, 4, 4);
 
