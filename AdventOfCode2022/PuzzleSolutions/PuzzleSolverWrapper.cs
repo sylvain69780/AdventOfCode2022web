@@ -1,10 +1,10 @@
 ﻿namespace AdventOfCode2022web.Puzzles
 {
-    public class PuzzleSolverWrapper : IIncrementalPuzzleSolver
+    public class PuzzleSolverWrapper : IPuzzleSolutionIter
     {
-        private readonly IPuzzleSolver _puzzle;
+        private readonly IPuzzleSolution _puzzle;
 
-        public PuzzleSolverWrapper(IPuzzleSolver puzzle) => _puzzle = puzzle;
+        public PuzzleSolverWrapper(IPuzzleSolution puzzle) => _puzzle = puzzle;
 
         public Type PuzzleType => _puzzle.GetType();
 

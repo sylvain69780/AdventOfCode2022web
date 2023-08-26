@@ -3,7 +3,7 @@
 namespace AdventOfCode2022web.Puzzles
 {
     [Puzzle(19, "Not Enough Minerals")]
-    public class NotEnoughMinerals : IPuzzleSolver
+    public class NotEnoughMinerals : IPuzzleSolution
     {
         private string _puzzleInput = string.Empty;
         public void Initialize(string puzzleInput)

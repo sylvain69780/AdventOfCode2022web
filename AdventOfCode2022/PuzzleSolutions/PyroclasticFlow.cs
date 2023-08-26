@@ -3,7 +3,7 @@
 namespace AdventOfCode2022web.Puzzles
 {
     [Puzzle(17, "Pyroclastic Flow")]
-    public class PyroclasticFlow : IPuzzleSolver
+    public class PyroclasticFlow : IPuzzleSolution
     {
         private string _puzzleInput = string.Empty;
         public void Initialize(string puzzleInput)

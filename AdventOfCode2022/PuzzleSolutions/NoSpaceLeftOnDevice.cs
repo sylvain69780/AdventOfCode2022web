@@ -1,7 +1,7 @@
 ﻿namespace AdventOfCode2022web.Puzzles
 {
     [Puzzle(7, "No Space Left On Device")]
-    public class NoSpaceLeftOnDevice : IPuzzleSolver
+    public class NoSpaceLeftOnDevice : IPuzzleSolution
     {
         private string _puzzleInput = string.Empty;
         public void Initialize(string puzzleInput)

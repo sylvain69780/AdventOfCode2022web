@@ -3,14 +3,14 @@ using System.Reflection;
 
 namespace AdventOfCode2022web.Puzzles
 {
-    public interface IPuzzleSolver
+    public interface IPuzzleSolution
     {
         void Initialize(string input);
         string SolveFirstPart();
         string SolveSecondPart();
     }
 
-    public interface IIncrementalPuzzleSolver
+    public interface IPuzzleSolutionIter
     {
         void Initialize(string puzzleInput);
         IEnumerable<string> SolveFirstPart();
@@ -29,7 +29,7 @@ namespace AdventOfCode2022web.Puzzles
     {
         public readonly IReadOnlyDictionary<int, (Type Type, int Number, string Title)> Puzzles = Assembly.GetExecutingAssembly().GetTypes()
         .Where(x => x.IsClass && !x.IsGenericType 
-        && (typeof(IPuzzleSolver).IsAssignableFrom(x) || typeof(IIncrementalPuzzleSolver).IsAssignableFrom(x))
+        && (typeof(IPuzzleSolution).IsAssignableFrom(x) || typeof(IPuzzleSolutionIter).IsAssignableFrom(x))
         && x.IsDefined(typeof(PuzzleAttribute)))
         .Select(x => (Type: x, Attr: x.GetCustomAttribute<PuzzleAttribute>()!))
         .Select(x => (x.Type, x.Attr.Number, x.Attr.Title))

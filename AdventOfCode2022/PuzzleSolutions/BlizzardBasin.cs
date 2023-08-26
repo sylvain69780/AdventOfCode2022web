@@ -1,7 +1,7 @@
 ﻿namespace AdventOfCode2022web.Puzzles
 {
     [Puzzle(24, "Blizzard Basin")]
-    public class BlizzardBasin : IIncrementalPuzzleSolver
+    public class BlizzardBasin : IPuzzleSolutionIter
     {
         public (int x, int y) Start;
         public (int x, int y) Arrival;

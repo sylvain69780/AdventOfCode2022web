@@ -4,7 +4,7 @@ using System.Text;
 namespace AdventOfCode2022web.Puzzles
 {
     [Puzzle(11, "Monkey In The Middle")]
-    public class MonkeyInTheMiddle : IPuzzleSolver
+    public class MonkeyInTheMiddle : IPuzzleSolution
     {
         private string _puzzleInput = string.Empty;
         public void Initialize(string puzzleInput)

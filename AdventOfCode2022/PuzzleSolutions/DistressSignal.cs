@@ -1,7 +1,7 @@
 ﻿namespace AdventOfCode2022web.Puzzles
 {
     [Puzzle(26, "Distress Signal2")]
-    public class DistressSignal : IPuzzleSolver
+    public class DistressSignal : IPuzzleSolution
     {
         private string _puzzleInput = string.Empty;
         public void Initialize(string puzzleInput) => _puzzleInput = puzzleInput;

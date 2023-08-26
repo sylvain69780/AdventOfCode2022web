@@ -1,7 +1,7 @@
 ﻿namespace AdventOfCode2022web.Puzzles
 {
     [Puzzle(2, "Rock Paper Scissors")]
-    public class RockPaperScissors : IPuzzleSolver
+    public class RockPaperScissors : IPuzzleSolution
     {
         private string _puzzleInput = string.Empty;
         public void Initialize(string puzzleInput)

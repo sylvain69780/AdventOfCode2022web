@@ -1,7 +1,7 @@
 ﻿namespace AdventOfCode2022web.Puzzles
 {
     [Puzzle(6, "Tuning Trouble")]
-    public class TuningTrouble : IPuzzleSolver
+    public class TuningTrouble : IPuzzleSolution
     {
         private string _puzzleInput = string.Empty;
         public void Initialize(string puzzleInput)

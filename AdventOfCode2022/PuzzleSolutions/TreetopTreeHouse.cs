@@ -1,7 +1,7 @@
 ﻿namespace AdventOfCode2022web.Puzzles
 {
     [Puzzle(8, "Treetop Tree House")]
-    public class TreetopTreeHouse : IPuzzleSolver
+    public class TreetopTreeHouse : IPuzzleSolution
     {
         private string _puzzleInput = string.Empty;
         public void Initialize(string puzzleInput)

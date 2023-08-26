@@ -96,7 +96,7 @@
 
     private string _input = string.Empty;
     private string _code = string.Empty;
-    private IIncrementalPuzzleSolver? _solver;
+    private IPuzzleSolutionIter? _solver;
     private int _animationDuration = 500;
     private bool _collapsePuzzleInput = false;
     private bool _collapseViewCode = false;
@@ -123,7 +123,7 @@
             _iterations = 0;
             _puzzleNumber = PuzzleNumber;
             var puzzle = puzzleHelper.Puzzles[_puzzleNumber];
-            _solver = (IIncrementalPuzzleSolver)(Activator.CreateInstance(puzzle.Type))!;
+            _solver = (IPuzzleSolutionIter)(Activator.CreateInstance(puzzle.Type))!;
             _input = (await Http.GetStringAsync($"sample-data/{puzzle.Type.Name}.txt")).Replace("\r", "");
             _code = await Http.GetStringAsync($"https://raw.githubusercontent.com/sylvain69780/AdventOfCode2022web/master/AdventOfCode2022/Puzzles/{puzzle.Type.Name}.cs");
         }

@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 namespace AdventOfCode2022web.Puzzles
 {
     [Puzzle(5, "Supply Stacks")]
-    public class SupplyStacks : IPuzzleSolver
+    public class SupplyStacks : IPuzzleSolution
     {
         private string _puzzleInput = string.Empty;
         public void Initialize(string puzzleInput)

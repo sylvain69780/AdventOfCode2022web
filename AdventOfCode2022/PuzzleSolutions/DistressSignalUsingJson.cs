@@ -5,7 +5,7 @@ using System.Text.Json;
 namespace AdventOfCode2022web.Puzzles
 {
     [Puzzle(13, "Distress Signal")]
-    public class DistressSignalUsingJson : IPuzzleSolver
+    public class DistressSignalUsingJson : IPuzzleSolution
     {
         private string _puzzleInput = string.Empty;
         public void Initialize(string puzzleInput)

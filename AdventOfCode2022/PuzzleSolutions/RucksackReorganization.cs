@@ -1,7 +1,7 @@
 ﻿namespace AdventOfCode2022web.Puzzles
 {
     [Puzzle(3, "Rucksack Reorganization")]
-    public class RucksackReorganization : IPuzzleSolver
+    public class RucksackReorganization : IPuzzleSolution
     {
         private string _puzzleInput = string.Empty;
         public void Initialize(string puzzleInput)

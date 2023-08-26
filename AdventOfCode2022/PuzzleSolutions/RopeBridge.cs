@@ -3,7 +3,7 @@
 namespace AdventOfCode2022web.Puzzles
 {
     [Puzzle(9, "Rope Bridge")]
-    public class RopeBridge : IIncrementalPuzzleSolver
+    public class RopeBridge : IPuzzleSolutionIter
     {
         private string _puzzleInput = string.Empty;
 

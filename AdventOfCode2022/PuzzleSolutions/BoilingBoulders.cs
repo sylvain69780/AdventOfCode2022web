@@ -2,7 +2,7 @@
 namespace AdventOfCode2022web.Puzzles
 {
     [Puzzle(18, "Boiling Boulders")]
-    public class BoilingBoulders : IIncrementalPuzzleSolver
+    public class BoilingBoulders : IPuzzleSolutionIter
     {
         private List<Voxel>? Voxels;
 

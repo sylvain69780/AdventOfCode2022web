@@ -3,7 +3,7 @@
 namespace AdventOfCode2022web.Puzzles
 {
     [Puzzle(12, "Hill Climbing Algorithm")]
-    public class HillClimbingAlgorithm : IPuzzleSolver
+    public class HillClimbingAlgorithm : IPuzzleSolution
     {
         private string _puzzleInput = string.Empty;
         public void Initialize(string puzzleInput)

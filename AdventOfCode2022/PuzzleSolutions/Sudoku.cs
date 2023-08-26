@@ -3,7 +3,7 @@
 namespace AdventOfCode2022web.Puzzles
 {
     [Puzzle(27, "Sudoku")]
-    public class Sudoku : IIncrementalPuzzleSolver
+    public class Sudoku : IPuzzleSolutionIter
     {
         public void Initialize(string input)
         {

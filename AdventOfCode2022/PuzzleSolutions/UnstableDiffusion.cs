@@ -3,7 +3,7 @@
 namespace AdventOfCode2022web.Puzzles
 {
     [Puzzle(23, "Unstable Diffusion")]
-    public class UnstableDiffusion : IIncrementalPuzzleSolver
+    public class UnstableDiffusion : IPuzzleSolutionIter
     {
 
         public (int X, int Y)[] Elves = Array.Empty<(int X, int Y)>();

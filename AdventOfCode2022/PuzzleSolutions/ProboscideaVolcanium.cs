@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 namespace AdventOfCode2022web.Puzzles
 {
     [Puzzle(16, "Proboscidea Volcanium")]
-    public class ProboscideaVolcanium : IPuzzleSolver
+    public class ProboscideaVolcanium : IPuzzleSolution
     {
         private string _puzzleInput = string.Empty;
         public void Initialize(string puzzleInput)

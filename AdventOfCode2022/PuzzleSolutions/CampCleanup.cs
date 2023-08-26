@@ -3,7 +3,7 @@
 namespace AdventOfCode2022web.Puzzles
 {
     [Puzzle(4, "Camp Cleanup")]
-    public class CampCleanup : IIncrementalPuzzleSolver
+    public class CampCleanup : IPuzzleSolutionIter
     {
 
         private string[] _lines = Array.Empty<string>();

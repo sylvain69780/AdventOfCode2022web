@@ -1,7 +1,7 @@
 ﻿namespace AdventOfCode2022web.Puzzles
 {
     [Puzzle(25, "Full of Hot Air")]
-    public class FullOfHotAir : IIncrementalPuzzleSolver
+    public class FullOfHotAir : IPuzzleSolutionIter
     {
         public void Initialize(string inp)
         {

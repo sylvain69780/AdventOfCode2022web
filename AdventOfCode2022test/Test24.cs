@@ -4,7 +4,7 @@ namespace AdventOfCode2022test
 {
     public class Test24
     {
-        private IIncrementalPuzzleSolver _solver;
+        private IPuzzleSolutionIter _solver;
         string input1;
         string input0;
         string input2;
