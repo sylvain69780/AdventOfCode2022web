@@ -14,8 +14,8 @@
   "pthreadPoolSize": null,
   "resources": {
     "assembly": {
-      "AdventOfCode2022.dll": "sha256-5UuTinKkekslBc3C++eMQaK0S\/32BHZ8G59L7YwPgLE=",
-      "AdventOfCode2022web.dll": "sha256-JcrFyQOqc8SRTuv0sGD91gBpX8Hpw0N01NKvS85Su28=",
+      "AdventOfCode2022.dll": "sha256-C5lOVegwZoX7YV+XHIGWXdFO753zbKkLF0nnVAaWeik=",
+      "AdventOfCode2022web.dll": "sha256-YvUIYrZbxfxHK8DbqxK2xxeBVsRhpErXOHld0+pTznI=",
       "Microsoft.AspNetCore.Components.dll": "sha256-x5zwNpK4r4Rby5c8PVKA3hJNi20Lb\/mzG3uP3CeiAw4=",
       "Microsoft.AspNetCore.Components.Web.dll": "sha256-V85w+qPAX8WZzQnb26YGwsox0D9tdm8\/EoclVLSv7Ws=",
       "Microsoft.AspNetCore.Components.WebAssembly.dll": "sha256-k5luRRQL9VtNvTTnhxeiUgCRzfmIhKou4imsKZzkKoY=",
