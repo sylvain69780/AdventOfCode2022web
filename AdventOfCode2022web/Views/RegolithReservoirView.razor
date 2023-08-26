@@ -1,20 +1,8 @@
-﻿<img style="width:100%; image-rendering:pixelated" src=@Visualize() />
+﻿@inherits PuzzleViewBase
+<img style="width:100%; image-rendering:pixelated" src=@Visualize() />
 
 @code {
-    [Parameter]
-    public IIncrementalPuzzleSolver? Solver { get; set; }
-    [Parameter]
-    public int AnimationDuration { get; set; } = 500;
-
-    private RegolithReservoir? _solver;
-
-    protected override void OnInitialized()
-    {
-        if (Solver == null || Solver.GetType() != typeof(RegolithReservoir))
-            throw new ArgumentException("This is not expected Solver type for this visualisation.");
-        _solver = (RegolithReservoir)Solver;
-        base.OnInitialized();
-    }
+    private RegolithReservoir? _solver => (RegolithReservoir)(Parent!.PuzzleBase!);
 
     public string _image64 = string.Empty;
 

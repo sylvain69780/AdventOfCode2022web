@@ -1,8 +1,10 @@
-﻿<p>We need to simulate the diffusion of strangly behaving particules.</p>
+﻿@inherits PuzzleViewBase
+<p>We need to simulate the diffusion of strangly behaving particules.</p>
 @if ((_solver != null))
 {
     if (_solver.Elves.Length > 0)
     {
+        SetTimer();
         var positions = _solver.Elves;
         var prevPositions = _solver.ElvesPrevPosition;
         foreach (var p in positions)
@@ -42,7 +44,7 @@
                     </g>
                 </g>
             </g>
-            @if (AnimationDuration > 0)
+            @if (AnimationDuration > 0 && !_animationCompleted)
             {
                 var style = $"animation-duration : {AnimationDuration * 80 / 100}ms;";
                 for (var i = 0; i < positions.Length; i++)
@@ -74,26 +76,38 @@
                 }
             }
         </svg>
+        @if (_animationCompleted)
+        {
+            <p>Animation Completed</p>
+        }
+        else
+        {
+            <p>Animation Running</p>
+        }
     }
 }
 
 @code {
-    [Parameter]
-    public IIncrementalPuzzleSolver? Solver { get; set; }
-    [Parameter]
-    public int AnimationDuration { get; set; } = 500;
 
-    private UnstableDiffusion? _solver;
+    private UnstableDiffusion? _solver => (UnstableDiffusion)(Parent!.PuzzleBase!);
 
-    (int xMin, int yMin, int xMax, int yMax) ViewBox;
+    (int xMin, int yMin, int xMax, int yMax) ViewBox = (-4, -4, 4, 4);
 
-    protected override void OnInitialized()
+    private int _previousSolingStep = 0;
+    private Timer? _timer;
+    private bool _animationCompleted = true;
+
+    private void SetTimer()
     {
-        if (Solver == null || Solver.GetType() != typeof(UnstableDiffusion))
-            throw new ArgumentException("This is not expected Solver type for this visualisation.");
-        _solver = (UnstableDiffusion)Solver;
-
-        ViewBox = (-4, -4, 4, 4);
-        base.OnInitialized();
+        if (Parent!.SolvingStep == _previousSolingStep)
+            return;
+        _timer = new Timer(Callback, null, AnimationDuration, Timeout.Infinite);
+        _previousSolingStep = Parent.SolvingStep;
+        _animationCompleted = false;
+    }
+    private void Callback(object? state)
+    {
+        _animationCompleted = true;
+        StateHasChanged();
     }
 }
