@@ -20,8 +20,11 @@
                 if (value == string.Empty)
                     sumOfCalories = 0;
                 else
+                {
                     sumOfCalories += int.Parse(value);
-                maxCalories = Math.Max(maxCalories, sumOfCalories);
+                    maxCalories = Math.Max(maxCalories, sumOfCalories);
+                    yield return $"The current group of Elves carries {sumOfCalories} calories.\nCurrent max value is {maxCalories}";
+                }
             }
              yield return maxCalories.ToString();
         }
@@ -34,8 +37,10 @@
                     sumOfCalories.Add(0);
                 else
                     sumOfCalories[^1] += int.Parse(value);
+                yield return "Top 3 of Elves groups holding the more calories:\n"
+                    +string.Join('\n',sumOfCalories.OrderByDescending(x => x).Take(3).Select(x => x.ToString()));
             }
-             yield return sumOfCalories.OrderByDescending(x => x).Take(3).Sum().ToString();
+            yield return sumOfCalories.OrderByDescending(x => x).Take(3).Sum().ToString();
         }
     }
 }

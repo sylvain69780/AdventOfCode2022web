@@ -10,8 +10,10 @@
     <p class="border border-2 m-1 p-1">Ready</p>
 }
 <p>Step @(Parent?.SolvingStep ?? 0)</p>
-<input type="range" id="delayRange" @bind="Parent!.AnimationDuration" min="0" max="5000" step="50">
-<label class="form-label" for="delayRange">Transition @Parent!.AnimationDuration ms</label>
+<div class="row">
+    <input type="range" id="delayRange" @bind="Parent!.AnimationDuration" min="0" max="5000" step="50">
+    <label class="form-label" for="delayRange">Run a step every @Parent!.AnimationDuration ms</label>
+</div>
 <h3>Output</h3>
 <pre class="display-6">@_result</pre>
 @code {
