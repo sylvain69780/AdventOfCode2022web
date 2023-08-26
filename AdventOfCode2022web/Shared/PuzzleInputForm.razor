@@ -1,8 +1,9 @@
 ﻿@inherits PuzzleViewBase
 @inject HttpClient Http
+@inject PuzzleHelper PuzzleHelper
 <h3>PuzzleInputForm</h3>
 <div>
-    <label class="form-label">The data below is that provided for example. Paste your own user input from <a href="https://adventofcode.com/2022/day/PuzzleNumber">Advent Of Code</a>.</label>
+    <label class="form-label">The data below is that provided for example. Paste your own user input from <a href="https://adventofcode.com/2022/day/@(PuzzleNumber)">Advent Of Code</a>.</label>
     <pre><textarea class="form-control" aria-label="Puzzle Input" rows="10" @bind="_input" maxlength="10000000"></textarea></pre>
 </div>
 @if (_input != _inputBefore)
@@ -15,8 +16,14 @@
     string _input = string.Empty;
     string _inputBefore = string.Empty;
 
+    private int PuzzleNumber { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
+        var puzzle = Parent!.PuzzleSolution!.GetType();
+        if (puzzle == typeof(PuzzleSolverWrapper))
+            puzzle = ((PuzzleSolverWrapper)(Parent!.PuzzleSolution!)).PuzzleType;
+        PuzzleNumber = PuzzleHelper.Puzzles.Where(x => x.Value.Type == puzzle).Single().Key;
         await LoadDefaultPuzzleInput();
         InitializePuzzle();
         await base.OnInitializedAsync();
