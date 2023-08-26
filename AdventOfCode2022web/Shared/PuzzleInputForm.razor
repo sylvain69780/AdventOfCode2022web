@@ -21,8 +21,8 @@
     protected override async Task OnInitializedAsync()
     {
         var puzzle = Parent!.PuzzleSolution!.GetType();
-        if (puzzle == typeof(PuzzleSolverWrapper))
-            puzzle = ((PuzzleSolverWrapper)(Parent!.PuzzleSolution!)).PuzzleType;
+        if (puzzle == typeof(PuzzleSolutionWrapper))
+            puzzle = ((PuzzleSolutionWrapper)(Parent!.PuzzleSolution!)).PuzzleType;
         PuzzleNumber = PuzzleHelper.Puzzles.Where(x => x.Value.Type == puzzle).Single().Key;
         await LoadDefaultPuzzleInput();
         InitializePuzzle();
@@ -33,8 +33,8 @@
     {
         var puzzleType = Parent!.PuzzleSolution!.GetType();
         var puzzleInputFile = puzzleType.Name;
-        if (puzzleType == typeof(PuzzleSolverWrapper))
-            puzzleInputFile = ((PuzzleSolverWrapper)(Parent.PuzzleSolution)).PuzzleType.Name;
+        if (puzzleType == typeof(PuzzleSolutionWrapper))
+            puzzleInputFile = ((PuzzleSolutionWrapper)(Parent.PuzzleSolution)).PuzzleType.Name;
         _input = (await Http.GetStringAsync($"sample-data/{puzzleInputFile}.txt")).Replace("\r", "");
     }
 
