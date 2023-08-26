@@ -156,21 +156,21 @@ main[b-qs7qgbma46] {
 .puzzle-title[b-3abgficp7i] {
     margin-left: 5px; /* Adjust this value as needed */
 }
-/* /Visualizations/BlizzardBasinVisualization.razor.rz.scp.css */
-:root[b-zu4oidzbd2] {
+/* /Views/BlizzardBasinView.razor.rz.scp.css */
+:root[b-xkn240tyyb] {
     --elf-animation-duration: 0;
     --dx: 0px;
     --dy: 0px;
 }
 
-.elf-move[b-zu4oidzbd2] {
-    animation-name: elf-move-anim-b-zu4oidzbd2;
+.elf-move[b-xkn240tyyb] {
+    animation-name: elf-move-anim-b-xkn240tyyb;
     animation-fill-mode: forwards;
     animation-iteration-count: 1;
     animation-duration: var(--elf-animation-duration);
 }
 
-@keyframes elf-move-anim-b-zu4oidzbd2 {
+@keyframes elf-move-anim-b-xkn240tyyb {
     from {
         transform: translate(0px,0px);
     }
@@ -180,14 +180,14 @@ main[b-qs7qgbma46] {
     }
 }
 
-.elf-destroyed[b-zu4oidzbd2] {
-    animation-name: elf-destroyed-anim-b-zu4oidzbd2;
+.elf-destroyed[b-xkn240tyyb] {
+    animation-name: elf-destroyed-anim-b-xkn240tyyb;
     animation-fill-mode: forwards;
     animation-iteration-count: 1;
     animation-duration: var(--elf-animation-duration);
 }
 
-@keyframes elf-destroyed-anim-b-zu4oidzbd2 {
+@keyframes elf-destroyed-anim-b-xkn240tyyb {
     from {
         opacity: 1;
     }
@@ -196,15 +196,15 @@ main[b-qs7qgbma46] {
         opacity: 0;
     }
 }
-/* /Visualizations/UnstableDiffusionVisualization.razor.rz.scp.css */
+/* /Views/UnstableDiffusionView.razor.rz.scp.css */
 
-.elf-move-right[b-g3mwhiwe6w] {
-    animation-name: elf-move-right-anim-b-g3mwhiwe6w;
+.elf-move-right[b-hkn9qycfq2] {
+    animation-name: elf-move-right-anim-b-hkn9qycfq2;
     animation-fill-mode: forwards;
     animation-iteration-count: 1;
 }
 
-@keyframes elf-move-right-anim-b-g3mwhiwe6w {
+@keyframes elf-move-right-anim-b-hkn9qycfq2 {
     from {
         transform: translate(0px,0px);
     }
@@ -213,13 +213,13 @@ main[b-qs7qgbma46] {
     }
 }
 
-.elf-move-left[b-g3mwhiwe6w] {
-    animation-name: elf-move-left-anim-b-g3mwhiwe6w;
+.elf-move-left[b-hkn9qycfq2] {
+    animation-name: elf-move-left-anim-b-hkn9qycfq2;
     animation-fill-mode: forwards;
     animation-iteration-count: 1;
 }
 
-@keyframes elf-move-left-anim-b-g3mwhiwe6w {
+@keyframes elf-move-left-anim-b-hkn9qycfq2 {
     from {
         transform: translate(0px,0px);
     }
@@ -229,13 +229,13 @@ main[b-qs7qgbma46] {
     }
 }
 
-.elf-move-down[b-g3mwhiwe6w] {
-    animation-name: elf-move-down-anim-b-g3mwhiwe6w;
+.elf-move-down[b-hkn9qycfq2] {
+    animation-name: elf-move-down-anim-b-hkn9qycfq2;
     animation-fill-mode: forwards;
     animation-iteration-count: 1;
 }
 
-@keyframes elf-move-down-anim-b-g3mwhiwe6w {
+@keyframes elf-move-down-anim-b-hkn9qycfq2 {
     from {
         transform: translate(0px,0px);
     }
@@ -245,13 +245,13 @@ main[b-qs7qgbma46] {
     }
 }
 
-.elf-move-up[b-g3mwhiwe6w] {
-    animation-name: elf-move-up-anim-b-g3mwhiwe6w;
+.elf-move-up[b-hkn9qycfq2] {
+    animation-name: elf-move-up-anim-b-hkn9qycfq2;
     animation-fill-mode: forwards;
     animation-iteration-count: 1;
 }
 
-@keyframes elf-move-up-anim-b-g3mwhiwe6w {
+@keyframes elf-move-up-anim-b-hkn9qycfq2 {
     from {
         transform: translate(0px,0px);
     }
