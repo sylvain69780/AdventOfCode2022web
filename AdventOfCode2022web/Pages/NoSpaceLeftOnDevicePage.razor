@@ -2,8 +2,9 @@
 @inherits PuzzlePageBase
 <h2>NoSpaceLeftOnDevicePage</h2>
 <CascadingValue Name="Parent" Value=@this>
-        <PuzzleInputForm/>
-        <PuzzleControler/>
+    <PuzzleCodeViewer />
+    <PuzzleInputForm />
+    <PuzzleControler />
 </CascadingValue>
 @code {
     public NoSpaceLeftOnDevicePage() => PuzzleSolution = new PuzzleSolverWrapper(new NoSpaceLeftOnDevice());

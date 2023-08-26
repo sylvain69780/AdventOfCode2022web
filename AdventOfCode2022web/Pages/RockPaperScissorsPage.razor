@@ -2,8 +2,9 @@
 @inherits PuzzlePageBase
 <h2>RockPaperScissorsPage</h2>
 <CascadingValue Name="Parent" Value=@this>
-        <PuzzleInputForm/>
-        <PuzzleControler/>
+    <PuzzleCodeViewer />
+    <PuzzleInputForm />
+    <PuzzleControler />
 </CascadingValue>
 @code {
     public RockPaperScissorsPage() => PuzzleSolution = new PuzzleSolverWrapper(new RockPaperScissors());

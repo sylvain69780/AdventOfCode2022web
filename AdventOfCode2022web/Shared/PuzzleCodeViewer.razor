@@ -1,0 +1,8 @@
+﻿<h3>PuzzleCodeViewer</h3>
+<p class="form-label">View the solution on <a href="https://github.com/sylvain69780/AdventOfCode2022web/blob/master/AdventOfCode2022/PuzzleSolutions/@(Parent!.PuzzleSolution!.GetType().Name).cs">GitHub</a>.</p>
+@code {
+    [CascadingParameter(Name = "Parent")]
+    protected PuzzlePageBase? Parent { get; set; }
+
+
+}

@@ -2,8 +2,9 @@
 @inherits PuzzlePageBase
 <h2>GrovePositioningSystemPage</h2>
 <CascadingValue Name="Parent" Value=@this>
-        <PuzzleInputForm/>
-        <PuzzleControler/>
+    <PuzzleCodeViewer />
+    <PuzzleInputForm />
+    <PuzzleControler />
 </CascadingValue>
 @code {
     public GrovePositioningSystemPage() => PuzzleSolution = new PuzzleSolverWrapper(new GrovePositioningSystem());

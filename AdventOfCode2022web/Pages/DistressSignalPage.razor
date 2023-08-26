@@ -2,8 +2,9 @@
 @inherits PuzzlePageBase
 <h2>DistressSignalPage</h2>
 <CascadingValue Name="Parent" Value=@this>
-        <PuzzleInputForm/>
-        <PuzzleControler/>
+    <PuzzleCodeViewer />
+    <PuzzleInputForm />
+    <PuzzleControler />
 </CascadingValue>
 @code {
     public DistressSignalPage() => PuzzleSolution = new PuzzleSolverWrapper(new DistressSignal());

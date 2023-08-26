@@ -1,9 +1,10 @@
 ﻿@page "/CalorieCountingPage"
 @inherits PuzzlePageBase
-<h2>BlizzardBasinPage</h2>
+<h2>CalorieCountingPage</h2>
 <CascadingValue Name="Parent" Value=@this>
-        <PuzzleInputForm/>
-        <PuzzleControler/>
+    <PuzzleCodeViewer />
+    <PuzzleInputForm />
+    <PuzzleControler />
 </CascadingValue>
 @code {
     public CalorieCountingPage() => PuzzleSolution = new CalorieCounting();
