@@ -156,6 +156,12 @@ main[b-qs7qgbma46] {
 .puzzle-title[b-3abgficp7i] {
     margin-left: 5px; /* Adjust this value as needed */
 }
+
+.puzzle-title-visu[b-3abgficp7i] {
+    margin-left: 5px; /* Adjust this value as needed */
+    font-weight: bold;
+    color:green;
+}
 /* /Views/BlizzardBasinView.razor.rz.scp.css */
 :root[b-xkn240tyyb] {
     --elf-animation-duration: 0;
