@@ -2,7 +2,7 @@
 
 namespace AdventOfCode2022web.Puzzles
 {
-    [Puzzle(27, "Sudoku")]
+    [Puzzle(27, "Sudoku",true)]
     public class Sudoku : IPuzzleSolutionIter
     {
         public void Initialize(string input)
@@ -59,7 +59,7 @@ namespace AdventOfCode2022web.Puzzles
         }
         public IEnumerable<string> SolveSecondPart()
         {
-            yield return string.Empty;
+            yield return "NO PART 2! USE PART 1 BUTTON";
         }
 
         private string FormatPuzzleState()

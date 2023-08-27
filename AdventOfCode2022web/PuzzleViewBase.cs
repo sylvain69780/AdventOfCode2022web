@@ -4,9 +4,9 @@ namespace AdventOfCode2022web
 {
     public class PuzzleViewBase : ComponentBase
     {
-        [CascadingParameter(Name = "Parent")]
-        protected PuzzlePageBase? Parent { get; set; }
+        [CascadingParameter(Name = "PuzzleSolutionViewModel")]
+        protected PuzzleSolutionViewModel? PuzzleSolutionViewModel { get; set; }
 
-        protected int AnimationDuration => Parent?.AnimationDuration ?? 500;
+        protected int AnimationDuration => PuzzleSolutionViewModel?.AnimationDuration ?? 500;
     }
 }

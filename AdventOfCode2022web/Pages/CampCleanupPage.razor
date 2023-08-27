@@ -1,11 +1,11 @@
 ﻿@page "/CampCleanupPage"
 @inherits PuzzlePageBase
 <h2>CampCleanupPage</h2>
-<CascadingValue Name="Parent" Value=@this>
+<CascadingValue Name="PuzzleSolutionViewModel" Value=@PuzzleSolutionViewModel>
     <PuzzleCodeViewer />
     <PuzzleInputForm />
     <PuzzleControler />
 </CascadingValue>
 @code {
-    public CampCleanupPage() => PuzzleSolution = new CampCleanup();
+    public CampCleanupPage() => PuzzleSolutionViewModel = new(new CampCleanup());
 }

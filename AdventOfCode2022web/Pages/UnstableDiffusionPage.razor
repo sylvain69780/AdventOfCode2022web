@@ -1,18 +1,18 @@
 ﻿@page "/UnstableDiffusionPage"
 @inherits PuzzlePageBase
 <h2>UnstableDiffusionPage</h2>
-<CascadingValue Name="Parent" Value=@this>
-<div class="row">
-    <div class="col-lg-6">
-        <UnstableDiffusionView />
+<CascadingValue Name="PuzzleSolutionViewModel" Value=@PuzzleSolutionViewModel>
+    <div class="row">
+        <div class="col-lg-6">
+            <UnstableDiffusionView />
+        </div>
+        <div class="col-lg-6">
+            <PuzzleCodeViewer />
+            <PuzzleInputForm />
+            <PuzzleControler />
+        </div>
     </div>
-    <div class="col-lg-6">
-        <PuzzleCodeViewer/>
-        <PuzzleInputForm />
-        <PuzzleControler />
-    </div>
-</div>
 </CascadingValue>
 @code {
-    public UnstableDiffusionPage() => PuzzleSolution = new UnstableDiffusion();
+    public UnstableDiffusionPage() => PuzzleSolutionViewModel = new(new UnstableDiffusion());
 }

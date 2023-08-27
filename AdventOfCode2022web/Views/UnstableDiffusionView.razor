@@ -1,12 +1,12 @@
 ﻿@inherits PuzzleViewBase
+@implements IDisposable
 <p>We need to simulate the diffusion of strangely behaving particules.</p>
-@if ((_solver != null))
+@if ((PuzzleSolution != null))
 {
-    if (_solver.Elves.Length > 0)
+    if (PuzzleSolution.Elves.Length > 0)
     {
-        SetTimer();
-        var positions = _solver.Elves;
-        var prevPositions = _solver.ElvesPrevPosition;
+        var positions = PuzzleSolution.Elves;
+        var prevPositions = PuzzleSolution.ElvesPrevPosition;
         foreach (var p in positions)
         {
             if (p.X < ViewBox.xMin)
@@ -82,28 +82,37 @@
         }
         else
         {
-            <p>Animation Stopped</p>
+            <p>Animation Running</p>
         }
     }
 }
 
 @code {
 
-    private UnstableDiffusion? _solver => (UnstableDiffusion)(Parent!.PuzzleSolution!);
+    private UnstableDiffusion? PuzzleSolution { get; set; }
+
+    protected override void OnInitialized()
+    {
+        PuzzleSolution = (UnstableDiffusion)(PuzzleSolutionViewModel!.PuzzleSolution!);
+        PuzzleSolutionViewModel.PuzzleOutputReturned += SetTimer;
+        base.OnInitialized();
+    }
+
+    public void Dispose()
+    {
+        PuzzleSolutionViewModel!.PuzzleOutputReturned -= SetTimer;
+    }
 
     (int xMin, int yMin, int xMax, int yMax) ViewBox = (-4, -4, 4, 4);
 
-    private int _previousSolingStep = 0;
     private Timer? _timer;
     private bool _animationCompleted = true;
 
     private void SetTimer()
     {
-        if (Parent!.SolvingStep == _previousSolingStep)
-            return;
         _timer = new Timer(Callback, null, AnimationDuration, Timeout.Infinite);
-        _previousSolingStep = Parent.SolvingStep;
         _animationCompleted = false;
+        StateHasChanged();
     }
     private void Callback(object? state)
     {

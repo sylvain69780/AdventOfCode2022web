@@ -71,3 +71,9 @@
 .puzzle-title {
     margin-left: 5px; /* Adjust this value as needed */
 }
+
+.puzzle-title-visu {
+    margin-left: 5px; /* Adjust this value as needed */
+    font-weight: bold;
+    color:green;
+}

@@ -1,16 +1,14 @@
-﻿<h3>PuzzleCodeViewer</h3>
+﻿@inherits PuzzleViewBase
+<h3>PuzzleCodeViewer</h3>
 <p class="form-label">View the solution on <a href="https://github.com/sylvain69780/AdventOfCode2022web/blob/master/AdventOfCode2022/PuzzleSolutions/@(PuzzleType).cs">GitHub</a>.</p>
 @code {
-    [CascadingParameter(Name = "Parent")]
-    protected PuzzlePageBase? Parent { get; set; }
-
     private string PuzzleType { get; set; } = string.Empty;
 
     protected override void OnInitialized()
     {
-        var puzzle = Parent!.PuzzleSolution!.GetType();
+        var puzzle = PuzzleSolutionViewModel!.PuzzleSolution!.GetType();
         if (puzzle == typeof(PuzzleSolutionWrapper))
-            puzzle = ((PuzzleSolutionWrapper)(Parent!.PuzzleSolution!)).PuzzleType;
+            puzzle = ((PuzzleSolutionWrapper)(PuzzleSolutionViewModel!.PuzzleSolution!)).PuzzleType;
         PuzzleType = puzzle.Name;
         base.OnInitialized();
     }

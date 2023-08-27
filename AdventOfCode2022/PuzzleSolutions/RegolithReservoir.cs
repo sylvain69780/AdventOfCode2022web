@@ -2,7 +2,7 @@
 
 namespace AdventOfCode2022web.Puzzles
 {
-    [Puzzle(14, "Regolith Reservoir")]
+    [Puzzle(14, "Regolith Reservoir",true)]
     public class RegolithReservoir : IPuzzleSolutionIter
     {
         private string _puzzleInput = string.Empty;

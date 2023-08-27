@@ -1,11 +1,11 @@
 ﻿@page "/DistressSignalUsingJsonPage"
 @inherits PuzzlePageBase
 <h2>DistressSignalUsingJsonPage</h2>
-<CascadingValue Name="Parent" Value=@this>
+<CascadingValue Name="PuzzleSolutionViewModel" Value=@PuzzleSolutionViewModel>
     <PuzzleCodeViewer />
     <PuzzleInputForm />
     <PuzzleControler />
 </CascadingValue>
 @code {
-    public DistressSignalUsingJsonPage() => PuzzleSolution = new PuzzleSolutionWrapper(new DistressSignalUsingJson());
+    public DistressSignalUsingJsonPage() => PuzzleSolutionViewModel = new(new PuzzleSolutionWrapper(new DistressSignalUsingJson()));
 }

@@ -1,7 +1,7 @@
 ﻿@page "/RegolithReservoirPage"
 @inherits PuzzlePageBase
 <h2>RegolithReservoirPage</h2>
-<CascadingValue Name="Parent" Value=@this>
+<CascadingValue Name="PuzzleSolutionViewModel" Value=@PuzzleSolutionViewModel>
 <div class="row">
     <div class="col-lg-6">
         <RegolithReservoirView />
@@ -14,5 +14,5 @@
 </div>
 </CascadingValue>
 @code {
-    public RegolithReservoirPage() => PuzzleSolution = new RegolithReservoir();
+    public RegolithReservoirPage() => PuzzleSolutionViewModel = new(new RegolithReservoir());
 }

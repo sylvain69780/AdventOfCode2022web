@@ -1,7 +1,7 @@
 ﻿@page "/BlizzardBasinPage"
 @inherits PuzzlePageBase
 <h2>BlizzardBasinPage</h2>
-<CascadingValue Name="Parent" Value=@this>
+<CascadingValue Name="PuzzleSolutionViewModel" Value=@PuzzleSolutionViewModel>
 <div class="row">
     <div class="col-lg-6">
         <BlizzardBasinView/>
@@ -14,5 +14,5 @@
 </div>
 </CascadingValue>
 @code {
-    public BlizzardBasinPage() => PuzzleSolution = new BlizzardBasin();
+    public BlizzardBasinPage() => PuzzleSolutionViewModel = new(new BlizzardBasin());
 }

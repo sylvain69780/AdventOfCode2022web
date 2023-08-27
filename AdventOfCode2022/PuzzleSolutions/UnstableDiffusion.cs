@@ -2,10 +2,10 @@
 
 namespace AdventOfCode2022web.Puzzles
 {
-    [Puzzle(23, "Unstable Diffusion")]
+    [Puzzle(23, "Unstable Diffusion",true)]
     public class UnstableDiffusion : IPuzzleSolutionIter
     {
-
+        private string[]? Input { get; set; }
         public (int X, int Y)[] Elves = Array.Empty<(int X, int Y)>();
         public (int X, int Y)[] ElvesPrevPosition = Array.Empty<(int X, int Y)>();
 
@@ -31,9 +31,14 @@ namespace AdventOfCode2022web.Puzzles
 
         public void Initialize(string puzzleInput)
         {
-            var input = puzzleInput.Split("\n");
+            Input = puzzleInput.Split("\n");
+            Reset();
+        }
+
+        public void Reset()
+        {
             var row = 0;
-            Elves = input
+            Elves = Input!
                 .Select(x => (line: x, row: row++))
                 .SelectMany(x => Enumerable.Range(0, x.line.Length).Where(col => x.line[col] == '#')
                 .Select(col => (col, x.row)))
@@ -43,9 +48,9 @@ namespace AdventOfCode2022web.Puzzles
 
         public IEnumerable<string> SolveFirstPart()
         {
+            Reset();
             var rounds = 10;
             var directionIndex = 0;
-
             for (var round = 1; round <= rounds; round++)
             {
                 SimulateDiffusion(directionIndex);
@@ -65,6 +70,7 @@ namespace AdventOfCode2022web.Puzzles
 
         public IEnumerable<string> SolveSecondPart()
         {
+            Reset();
             var round = 0;
             var directionIndex = 0;
             var someElevesMoved = true;

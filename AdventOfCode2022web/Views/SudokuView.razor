@@ -1,4 +1,5 @@
-﻿@inherits PuzzleViewBase
+﻿@implements IDisposable
+@inherits PuzzleViewBase
 <p class="p-1">
     This is a Sudoku solver, and it has really no relation with Advent Of Code !
 </p>
@@ -26,13 +27,13 @@
     </defs>
     <rect x="-0.05" y="-0.05" width="9.1" height="9.1" fill="url(#gridPattern2)"></rect>
     @{
-        if (_solver != null && _solver.PuzzleState.Length == 81)
+        if (PuzzleSolution != null && PuzzleSolution.PuzzleState.Length == 81)
         {
-            var s = _solver.PuzzleState;
+            var s = PuzzleSolution.PuzzleState;
             var dfs = Array.Empty<string>();
-            if (_solver.DFS != null)
+            if (PuzzleSolution.DFS != null)
             {
-                dfs = _solver.DFS.ToArray();
+                dfs = PuzzleSolution.DFS.ToArray();
             }
             foreach (var y in Enumerable.Range(0, 9))
                 foreach (var x in Enumerable.Range(0, 9))
@@ -40,7 +41,7 @@
                     var c = s[x + y * 9];
                     if (c == '.')
                     {
-                        var r = _solver.Entropy(x + y * 9).Length;
+                        var r = PuzzleSolution.Entropy(x + y * 9).Length;
                         if (r == 0)
                         {
                             <use href="#sudoku-bad-cell" x="@x" y="@y" />
@@ -90,5 +91,17 @@
 </svg>
 
 @code {
-    private Sudoku _solver => (Sudoku)Parent!.PuzzleSolution!;
+    private Sudoku? PuzzleSolution;
+
+    protected override void OnInitialized()
+    {
+        PuzzleSolution = (Sudoku)(PuzzleSolutionViewModel!.PuzzleSolution!);
+        PuzzleSolutionViewModel.PuzzleOutputReturned += StateHasChanged;
+        base.OnInitialized();
+    }
+
+    public void Dispose()
+    {
+        PuzzleSolutionViewModel!.PuzzleOutputReturned -= StateHasChanged;
+    }
 }

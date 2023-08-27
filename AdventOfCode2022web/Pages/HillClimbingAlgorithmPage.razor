@@ -1,11 +1,11 @@
 ﻿@page "/HillClimbingAlgorithmPage"
 @inherits PuzzlePageBase
 <h2>HillClimbingAlgorithmPage</h2>
-<CascadingValue Name="Parent" Value=@this>
+<CascadingValue Name="PuzzleSolutionViewModel" Value=@PuzzleSolutionViewModel>
     <PuzzleCodeViewer />
     <PuzzleInputForm />
     <PuzzleControler />
 </CascadingValue>
 @code {
-    public HillClimbingAlgorithmPage() => PuzzleSolution = new PuzzleSolutionWrapper(new HillClimbingAlgorithm());
+    public HillClimbingAlgorithmPage() => PuzzleSolutionViewModel = new(new PuzzleSolutionWrapper(new HillClimbingAlgorithm()));
 }

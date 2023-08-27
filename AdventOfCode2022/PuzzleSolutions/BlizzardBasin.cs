@@ -1,6 +1,6 @@
 ﻿namespace AdventOfCode2022web.Puzzles
 {
-    [Puzzle(24, "Blizzard Basin")]
+    [Puzzle(24, "Blizzard Basin",true)]
     public class BlizzardBasin : IPuzzleSolutionIter
     {
         public (int x, int y) Start;
@@ -17,18 +17,24 @@
         private List<(int x, int y, char c)>? BlizzardsUp;
         private List<(int x, int y, char c)>? BlizzardsDown;
         private HashSet<(int x, int y)>? Walls;
+        private string[]? Input { get; set; }
 
         public void Initialize(string puzzleInput)
         {
-            var input = puzzleInput.Split("\n");
-            Start = (x: input[0].IndexOf('.'), y: 0);
-            Arrival = (x: input[^1].IndexOf('.'), y: input.Length - 1);
-            Walls = input
+            Input = puzzleInput.Split("\n");
+            Reset();
+        }
+
+        private void Reset()
+        {
+            Start = (x: Input![0].IndexOf('.'), y: 0);
+            Arrival = (x: Input[^1].IndexOf('.'), y: Input.Length - 1);
+            Walls = Input
                 .SelectMany((line, row) => line.Select((c, col) => (c, col, row))
                 .Where(y => y.c == '#'))
                 .Select(e => (x: e.col, y: e.row))
                 .ToHashSet();
-            var blizzards = input
+            var blizzards = Input
                 .SelectMany((line, row) => line.Select((c, col) => (c, col, row))
                 .Where(y => BlizzardsTypes.Contains(y.c)))
                 .Select(e => (x: e.col, y: e.row, e.c))
@@ -37,8 +43,8 @@
             BlizzardsLeft = blizzards.Where(e => e.c == '<').ToList();
             BlizzardsUp = blizzards.Where(e => e.c == '^').ToList();
             BlizzardsDown = blizzards.Where(e => e.c == 'v').ToList();
-            Width = input[0].Length - 2;
-            Height = input.Length - 2;
+            Width = Input[0].Length - 2;
+            Height = Input.Length - 2;
 
             Minute = 0;
             ComputingCompleted = false;
@@ -61,6 +67,7 @@
 
         public IEnumerable<string> SolveFirstPart()
         {
+            Reset();
             Minute = 0;
             var newPrev = new Dictionary<(int x, int y, int t), (int x, int y, int t)>();
             ComputingCompleted = false;
@@ -148,6 +155,7 @@
 
         public IEnumerable<string> SolveSecondPart()
         {
+            Reset();
             Minute = 0;
             ComputingCompleted = false;
             var newPrev = new Dictionary<(int x, int y, int t), (int x, int y, int t)>();

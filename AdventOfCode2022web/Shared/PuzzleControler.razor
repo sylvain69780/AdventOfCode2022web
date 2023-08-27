@@ -1,4 +1,5 @@
-﻿@using System.Diagnostics;
+﻿@inherits PuzzleViewBase
+@using System.Diagnostics;
 <h3>PuzzleControler</h3>
 <button disabled=@IsStartProcessingForbidden @onclick=@StartPart1>Initialize Part 1</button>
 <button disabled=@IsStartProcessingForbidden @onclick=@StartPart2>Initialize Part 2</button>
@@ -9,16 +10,14 @@
 {
     <p class="border border-2 m-1 p-1">Ready</p>
 }
-<p>Step @(Parent?.SolvingStep ?? 0)</p>
+<p>Step @(PuzzleSolutionViewModel?.SolvingStep ?? 0)</p>
 <div class="row">
-    <input type="range" id="delayRange" @bind="Parent!.AnimationDuration" min="0" max="5000" step="50">
-    <label class="form-label" for="delayRange">Run a step every @Parent!.AnimationDuration ms</label>
+    <input type="range" id="delayRange" @bind="PuzzleSolutionViewModel!.AnimationDuration" min="0" max="5000" step="50">
+    <label class="form-label" for="delayRange">Run a step every @PuzzleSolutionViewModel!.AnimationDuration ms</label>
 </div>
 <h3>Output</h3>
-<pre class="display-6">@_result</pre>
+<p><pre>@_result</pre></p>
 @code {
-    [CascadingParameter(Name = "Parent")]
-    private PuzzlePageBase? Parent { get; set; }
 
     private IEnumerator<string>? _results;
     private string _result = string.Empty;
@@ -27,19 +26,19 @@
 
     private void StartPart1()
     {
-        _results = Parent!.PuzzleSolution!.SolveFirstPart().GetEnumerator();
+        _results = PuzzleSolutionViewModel!.PuzzleSolution!.SolveFirstPart().GetEnumerator();
         SetAsRunning();
     }
 
     private void StartPart2()
     {
-        _results = Parent!.PuzzleSolution!.SolveSecondPart().GetEnumerator();
+        _results = PuzzleSolutionViewModel!.PuzzleSolution!.SolveSecondPart().GetEnumerator();
         SetAsRunning();
     }
 
     private void SetAsRunning()
     {
-        Parent!.SolvingStep = 0;
+        PuzzleSolutionViewModel!.SolvingStep = 0;
         _result = string.Empty;
         _isCompleted = false;
         NotifyParent();
@@ -49,7 +48,7 @@
     {
         if (_results!.MoveNext())
         {
-            Parent!.SolvingStep++;
+            PuzzleSolutionViewModel!.SolvingStep++;
             NotifyParent();
         }
         else
@@ -58,7 +57,7 @@
 
     private void SetAsCompleted()
     {
-        Parent!.NotifyStateHasChanged();
+        PuzzleSolutionViewModel!.NotifyStateHasChanged();
         _isProcessing = false;
         _results = null;
         _isCompleted = true;
@@ -67,7 +66,7 @@
     public void Stop()
     {
         _isProcessing = false;
-        Parent!.NotifyStateHasChanged();
+        PuzzleSolutionViewModel!.NotifyStateHasChanged();
     }
 
     private async Task MoveUntilCompleted()
@@ -75,15 +74,15 @@
         _isProcessing = true;
         var stopwatch = new Stopwatch();
         stopwatch.Start();
-        var delay = Parent!.AnimationDuration;
-        var solvingStep = Parent.SolvingStep;
+        var delay = PuzzleSolutionViewModel!.AnimationDuration;
+        var solvingStep = PuzzleSolutionViewModel.SolvingStep;
         async Task notifyStepCompleted (int waitTime) 
         {
-            Parent.SolvingStep = solvingStep;
+            PuzzleSolutionViewModel.SolvingStep = solvingStep;
             NotifyParent();
             await Task.Delay(delay + 100);
             stopwatch.Restart();
-            delay = Parent.AnimationDuration;
+            delay = PuzzleSolutionViewModel.AnimationDuration;
         }
         while (_results!.MoveNext())
         {
@@ -102,7 +101,8 @@
     private void NotifyParent()
     {
         _result = _results!.Current;
-        Parent!.NotifyStateHasChanged();
+        StateHasChanged();
+        PuzzleSolutionViewModel!.NotifyStateHasChanged();
     }
 
     private bool IsStartProcessingForbidden => _isProcessing;

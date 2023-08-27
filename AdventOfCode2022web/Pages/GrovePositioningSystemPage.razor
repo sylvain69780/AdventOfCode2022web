@@ -1,11 +1,11 @@
 ﻿@page "/GrovePositioningSystemPage"
 @inherits PuzzlePageBase
 <h2>GrovePositioningSystemPage</h2>
-<CascadingValue Name="Parent" Value=@this>
+<CascadingValue Name="PuzzleSolutionViewModel" Value=@PuzzleSolutionViewModel>
     <PuzzleCodeViewer />
     <PuzzleInputForm />
     <PuzzleControler />
 </CascadingValue>
 @code {
-    public GrovePositioningSystemPage() => PuzzleSolution = new PuzzleSolutionWrapper(new GrovePositioningSystem());
+    public GrovePositioningSystemPage() => PuzzleSolutionViewModel = new(new PuzzleSolutionWrapper(new GrovePositioningSystem()));
 }

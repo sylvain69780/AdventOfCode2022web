@@ -1,11 +1,11 @@
 ﻿@page "/MonkeyMathPage"
 @inherits PuzzlePageBase
 <h2>MonkeyMathPage</h2>
-<CascadingValue Name="Parent" Value=@this>
+<CascadingValue Name="PuzzleSolutionViewModel" Value=@PuzzleSolutionViewModel>
     <PuzzleCodeViewer />
     <PuzzleInputForm />
     <PuzzleControler />
 </CascadingValue>
 @code {
-    public MonkeyMathPage() => PuzzleSolution = new PuzzleSolutionWrapper(new MonkeyMath());
+    public MonkeyMathPage() => PuzzleSolutionViewModel = new(new PuzzleSolutionWrapper(new MonkeyMath()));
 }

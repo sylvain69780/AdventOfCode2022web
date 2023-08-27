@@ -17,12 +17,12 @@
             </NavLink>
         </div>
         <div class="nav-item px-3">
-            @foreach (var puzzle in puzzleHelper.Puzzles.OrderBy(x => x.Key).Select(x => (x.Value.Number,x.Value.Type.Name,x.Value.Title)))
+            @foreach (var puzzle in puzzleHelper.Puzzles.OrderBy(x => x.Key).Select(x => (x.Value.Number,x.Value.Type.Name,x.Value.Title,x.Value.HasVisualization)))
             {
                 <NavLink class="nav-link" href=@(puzzle.Name+"Page")>
                     <span class="oi oi-puzzle-piece"></span><div>
                         <div class="puzzle-number">Puzzle @(puzzle.Number)</div>
-                        <div class="puzzle-title">@(puzzle.Title)</div>
+                        <div class=@(puzzle.HasVisualization ? "puzzle-title-visu":"puzzle-title")>@(puzzle.Title)</div>
                     </div>
                 </NavLink>
             }

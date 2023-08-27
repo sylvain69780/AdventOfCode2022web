@@ -1,7 +1,7 @@
 ﻿@page "/SudokuPage"
 @inherits PuzzlePageBase
 <h2>SudokuPage</h2>
-<CascadingValue Name="Parent" Value=@this>
+<CascadingValue Name="PuzzleSolutionViewModel" Value=@PuzzleSolutionViewModel>
 <div class="row">
     <div class="col-lg-6">
         <SudokuView />
@@ -14,5 +14,5 @@
 </div>
 </CascadingValue>
 @code {
-    public SudokuPage() => PuzzleSolution = new Sudoku();
+    public SudokuPage() => PuzzleSolutionViewModel = new(new Sudoku());
 }
