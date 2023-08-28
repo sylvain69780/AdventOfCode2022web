@@ -197,6 +197,39 @@ main[b-qs7qgbma46] {
         opacity: 1;
     }
 
+    75% {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
+}
+
+.blizzard-hidden[b-xkn240tyyb] {
+    opacity:0;
+}
+
+.blizzard[b-xkn240tyyb] {
+    animation-name: blizzard-anim-b-xkn240tyyb;
+    animation-fill-mode: forwards;
+    animation-iteration-count: 1;
+    animation-duration: var(--elf-animation-duration);
+}
+
+@keyframes blizzard-anim-b-xkn240tyyb {
+    from {
+        opacity: 0;
+    }
+
+    50% {
+        opacity: 0;
+    }
+
+    75% {
+        opacity: 1;
+    }
+
     to {
         opacity: 0;
     }
