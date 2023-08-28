@@ -40,13 +40,6 @@
         <rect x="@(PuzzleSolution.Start.x-1)" y="@(PuzzleSolution.Start.y-1)" width="1" height="1" fill="blue" />
         <rect x="@(PuzzleSolution.Arrival.x-1)" y="@(PuzzleSolution.Arrival.y-1)" width="1" height="1" fill="red" />
 
-        @{
-            var blizzards = PuzzleSolution.ComputeBlizzardsPos();
-            foreach (var blizzard in blizzards)
-            {
-                <use href="#blizzard" x="@((blizzard.x-0.5).ToStringCSS())" y="@((blizzard.y-0.5).ToStringCSS())" />
-            }
-        }
         <g style="--elf-animation-duration: @(AnimationDuration)ms;">
             @if (PuzzleSolution.ComputingCompleted)
             {
@@ -77,6 +70,16 @@
                     <use href="#myImage" x="@(p.x-1)" y="@(p.y-1)" class="elf-destroyed" />
                 }
             }
+            @{
+                var blizzards = PuzzleSolution.ComputeBlizzardsPos();
+                foreach (var blizzard in blizzards)
+                {
+                    <g class=@(_animationCompleted?"blizzard-hidden":"blizzard")>
+                        <use href="#blizzard" x="@((blizzard.x-0.5).ToStringCSS())" y="@((blizzard.y-0.5).ToStringCSS())" />
+                    </g>
+                }
+            }
+
         </g>
 
     </svg>

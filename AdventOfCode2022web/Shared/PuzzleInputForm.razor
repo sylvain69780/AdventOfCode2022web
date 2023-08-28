@@ -4,7 +4,7 @@
 <h3>PuzzleInputForm</h3>
 <div>
     <label class="form-label">The data below is that provided for example. Paste your own user input from <a href="https://adventofcode.com/2022/day/@(PuzzleNumber)">Advent Of Code</a>.</label>
-    <pre><textarea class="form-control" aria-label="Puzzle Input" rows="10" @bind="_input" maxlength="10000000"></textarea></pre>
+    <pre><textarea spellcheck="false" class="form-control" aria-label="Puzzle Input" rows="10" @bind="_input" maxlength="10000000"></textarea></pre>
 </div>
 @if (_input != _inputBefore)
 {
