@@ -1,11 +1,8 @@
 ﻿@page "/RopeBridgePage"
-@inherits PuzzlePageBase
+@inject PuzzleSolutionViewModel<RopeBridge> PuzzleSolutionViewModel
 <h2>RopeBridgePage</h2>
 <CascadingValue Name="PuzzleSolutionViewModel" Value=@PuzzleSolutionViewModel>
     <PuzzleCodeViewer />
     <PuzzleInputForm />
     <PuzzleControler />
 </CascadingValue>
-@code {
-    public RopeBridgePage() => PuzzleSolutionViewModel = new(new RopeBridge());
-}

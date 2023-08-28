@@ -1,5 +1,5 @@
 ﻿@page "/UnstableDiffusionPage"
-@inherits PuzzlePageBase
+@inject PuzzleSolutionViewModel<UnstableDiffusion> PuzzleSolutionViewModel
 <h2>UnstableDiffusionPage</h2>
 <CascadingValue Name="PuzzleSolutionViewModel" Value=@PuzzleSolutionViewModel>
     <div class="row">
@@ -13,6 +13,3 @@
         </div>
     </div>
 </CascadingValue>
-@code {
-    public UnstableDiffusionPage() => PuzzleSolutionViewModel = new(new UnstableDiffusion());
-}

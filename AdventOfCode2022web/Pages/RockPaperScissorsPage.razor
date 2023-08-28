@@ -1,11 +1,8 @@
 ﻿@page "/RockPaperScissorsPage"
-@inherits PuzzlePageBase
+@inject PuzzleBasicSolutionViewModel<RockPaperScissors> PuzzleSolutionViewModel
 <h2>RockPaperScissorsPage</h2>
 <CascadingValue Name="PuzzleSolutionViewModel" Value=@PuzzleSolutionViewModel>
     <PuzzleCodeViewer />
     <PuzzleInputForm />
     <PuzzleControler />
 </CascadingValue>
-@code {
-    public RockPaperScissorsPage() => PuzzleSolutionViewModel = new(new PuzzleSolutionWrapper(new RockPaperScissors()));
-}

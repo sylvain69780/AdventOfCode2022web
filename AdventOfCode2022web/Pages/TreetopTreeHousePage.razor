@@ -1,11 +1,8 @@
 ﻿@page "/TreetopTreeHousePage"
-@inherits PuzzlePageBase
+@inject PuzzleBasicSolutionViewModel<TreetopTreeHouse> PuzzleSolutionViewModel
 <h2>TreetopTreeHousePage</h2>
 <CascadingValue Name="PuzzleSolutionViewModel" Value=@PuzzleSolutionViewModel>
     <PuzzleCodeViewer />
     <PuzzleInputForm />
     <PuzzleControler />
 </CascadingValue>
-@code {
-    public TreetopTreeHousePage() => PuzzleSolutionViewModel = new(new PuzzleSolutionWrapper(new TreetopTreeHouse()));
-}

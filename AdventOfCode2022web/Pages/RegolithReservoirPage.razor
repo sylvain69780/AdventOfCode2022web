@@ -1,5 +1,5 @@
 ﻿@page "/RegolithReservoirPage"
-@inherits PuzzlePageBase
+@inject PuzzleSolutionViewModel<RegolithReservoir> PuzzleSolutionViewModel
 <h2>RegolithReservoirPage</h2>
 <CascadingValue Name="PuzzleSolutionViewModel" Value=@PuzzleSolutionViewModel>
 <div class="row">
@@ -13,6 +13,3 @@
     </div>
 </div>
 </CascadingValue>
-@code {
-    public RegolithReservoirPage() => PuzzleSolutionViewModel = new(new RegolithReservoir());
-}

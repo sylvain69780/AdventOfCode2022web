@@ -1,11 +1,8 @@
 ﻿@page "/CalorieCountingPage"
-@inherits PuzzlePageBase
+@inject PuzzleSolutionViewModel<CalorieCounting> PuzzleSolutionViewModel
 <h2>CalorieCountingPage</h2>
 <CascadingValue Name="PuzzleSolutionViewModel" Value=@PuzzleSolutionViewModel>
     <PuzzleCodeViewer />
     <PuzzleInputForm />
     <PuzzleControler />
 </CascadingValue>
-@code {
-    public CalorieCountingPage() => PuzzleSolutionViewModel = new(new CalorieCounting());
-}

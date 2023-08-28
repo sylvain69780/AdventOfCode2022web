@@ -1,5 +1,5 @@
 ﻿@page "/BlizzardBasinPage"
-@inherits PuzzlePageBase
+@inject PuzzleSolutionViewModel<BlizzardBasin> PuzzleSolutionViewModel
 <h2>BlizzardBasinPage</h2>
 <CascadingValue Name="PuzzleSolutionViewModel" Value=@PuzzleSolutionViewModel>
 <div class="row">
@@ -13,6 +13,3 @@
     </div>
 </div>
 </CascadingValue>
-@code {
-    public BlizzardBasinPage() => PuzzleSolutionViewModel = new(new BlizzardBasin());
-}

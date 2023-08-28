@@ -1,11 +1,8 @@
 ﻿@page "/PyroclasticFlowPage"
-@inherits PuzzlePageBase
+@inject PuzzleBasicSolutionViewModel<PyroclasticFlow> PuzzleSolutionViewModel
 <h2>PyroclasticFlowPage</h2>
 <CascadingValue Name="PuzzleSolutionViewModel" Value=@PuzzleSolutionViewModel>
     <PuzzleCodeViewer />
     <PuzzleInputForm />
     <PuzzleControler />
 </CascadingValue>
-@code {
-    public PyroclasticFlowPage() => PuzzleSolutionViewModel = new(new PuzzleSolutionWrapper(new PyroclasticFlow()));
-}

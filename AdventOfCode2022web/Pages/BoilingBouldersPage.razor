@@ -1,11 +1,8 @@
 ﻿@page "/BoilingBouldersPage"
-@inherits PuzzlePageBase
+@inject PuzzleSolutionViewModel<BoilingBoulders> PuzzleSolutionViewModel
 <h2>BoilingBouldersPage</h2>
 <CascadingValue Name="PuzzleSolutionViewModel" Value=@PuzzleSolutionViewModel>
     <PuzzleCodeViewer />
     <PuzzleInputForm />
     <PuzzleControler />
 </CascadingValue>
-@code {
-    public BoilingBouldersPage() => PuzzleSolutionViewModel = new(new BoilingBoulders());
-}

@@ -1,11 +1,8 @@
 ﻿@page "/NoSpaceLeftOnDevicePage"
-@inherits PuzzlePageBase
+@inject PuzzleBasicSolutionViewModel<NoSpaceLeftOnDevice> PuzzleSolutionViewModel
 <h2>NoSpaceLeftOnDevicePage</h2>
 <CascadingValue Name="PuzzleSolutionViewModel" Value=@PuzzleSolutionViewModel>
     <PuzzleCodeViewer />
     <PuzzleInputForm />
     <PuzzleControler />
 </CascadingValue>
-@code {
-    public NoSpaceLeftOnDevicePage() => PuzzleSolutionViewModel = new(new PuzzleSolutionWrapper(new NoSpaceLeftOnDevice()));
-}

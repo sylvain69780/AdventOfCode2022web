@@ -57,7 +57,7 @@
 
     private void SetAsCompleted()
     {
-        PuzzleSolutionViewModel!.NotifyStateHasChanged();
+        PuzzleSolutionViewModel!.NotifyPuzzleOutputReturned();
         _isProcessing = false;
         _results = null;
         _isCompleted = true;
@@ -66,7 +66,7 @@
     public void Stop()
     {
         _isProcessing = false;
-        PuzzleSolutionViewModel!.NotifyStateHasChanged();
+        PuzzleSolutionViewModel!.NotifyPuzzleOutputReturned();
     }
 
     private async Task MoveUntilCompleted()
@@ -102,7 +102,7 @@
     {
         _result = _results!.Current;
         StateHasChanged();
-        PuzzleSolutionViewModel!.NotifyStateHasChanged();
+        PuzzleSolutionViewModel!.NotifyPuzzleOutputReturned();
     }
 
     private bool IsStartProcessingForbidden => _isProcessing;
