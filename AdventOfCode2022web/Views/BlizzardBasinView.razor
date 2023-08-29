@@ -41,45 +41,37 @@
         <rect x="@(PuzzleSolution.Arrival.x-1)" y="@(PuzzleSolution.Arrival.y-1)" width="1" height="1" fill="red" />
 
         <g style="--elf-animation-duration: @(AnimationDuration)ms;">
-            @if (PuzzleSolution.ComputingCompleted)
-            {
-                var np = PuzzleSolution.Prev.Single(x => x.Key.t == PuzzleSolution.Minute).Key;
-                {
-                    <use href="#myImage" x="@(np.x-1)" y="@(np.y-1)" />
+            <g class=@(_animationCompleted ? "elf-still" : "elf-move" )>
+                @{
+                    foreach (var p in PuzzleSolution!.Prev!.Keys.Where(p => p.t == PuzzleSolution.Minute))
+                    {
+                        var pr = _animationCompleted ? p : PuzzleSolution.Prev[p];
+                        var style = $"--dax:{pr.x - 1}px;--day:{pr.y - 1}px;--dbx:{p.x - 1}px;--dby:{p.y - 1}px;";
+                        <use href="#myImage" style=@style />
+                    }
                 }
-            }
-            else if (_animationCompleted)
-            {
-                foreach (var p in PuzzleSolution!.Prev.Keys.Where(p => p.t == PuzzleSolution.Minute))
-                {
-                    <use href="#myImage" x="@(p.x-1)" y="@(p.y-1)" />
+            </g>
+            <g class=@(_animationCompleted ? "elf-hidden" : "elf-destroyed" )>
+                @{
+                    if (PuzzleSolution.DeadEnds != null && PuzzleSolution.DeadEnds.Count > 0)
+                        foreach (var p in PuzzleSolution.DeadEnds)
+                        {
+                            var style = $"--dax:{p.x - 1}px;--day:{p.y - 1}px;--dbx:{p.x - 1}px;--dby:{p.y - 1}px;";
+                            <use href="#myImage" style=@style />
+                        }
                 }
-            }
-            else
-            {
-                foreach (var p in PuzzleSolution!.Prev!.Keys.Where(p => p.t == PuzzleSolution.Minute))
-                {
-                    var pr = PuzzleSolution.Prev[p];
-                    var anim = string.Empty;
-                    var d = (x: p.x - pr.x, y: p.y - pr.y);
-                    var style = $"--dx:{d.x}px;--dy:{d.y}px;";
-                    <use href="#myImage" x="@(pr.x-1)" y="@(pr.y-1)" class="elf-move" style="@style" />
+            </g>
+            <g>
+                @{
+                    var blizzards = PuzzleSolution.ComputeBlizzardsPos();
+                    foreach (var blizzard in blizzards)
+                    {
+                        <g class=@(_animationCompleted?"blizzard-hidden":"blizzard")>
+                            <use href="#blizzard" x="@((blizzard.x-0.5).ToStringCSS())" y="@((blizzard.y-0.5).ToStringCSS())" />
+                        </g>
+                    }
                 }
-                foreach (var p in PuzzleSolution.DeadEnds!)
-                {
-                    <use href="#myImage" x="@(p.x-1)" y="@(p.y-1)" class="elf-destroyed" />
-                }
-            }
-            @{
-                var blizzards = PuzzleSolution.ComputeBlizzardsPos();
-                foreach (var blizzard in blizzards)
-                {
-                    <g class=@(_animationCompleted?"blizzard-hidden":"blizzard")>
-                        <use href="#blizzard" x="@((blizzard.x-0.5).ToStringCSS())" y="@((blizzard.y-0.5).ToStringCSS())" />
-                    </g>
-                }
-            }
-
+            </g>
         </g>
 
     </svg>

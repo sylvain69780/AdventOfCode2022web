@@ -2,9 +2,17 @@
     --elf-animation-duration: 0;
     --dx: 0px;
     --dy: 0px;
+    --dax: 0px;
+    --day: 0px;
+    --dbx: 0px;
+    --dby: 0px;
 }
 
-.elf-move {
+.elf-still > use {
+    transform: translate(var(--dbx),var(--dby));
+}
+
+.elf-move > use {
     animation-name: elf-move-anim;
     animation-fill-mode: forwards;
     animation-iteration-count: 1;
@@ -13,20 +21,26 @@
 
 @keyframes elf-move-anim {
     from {
-        transform: translate(0px,0px);
+        transform: translate(var(--dax),var(--day));
     }
 
     to {
-        transform: translate(var(--dx),var(--dy));
+        transform: translate(var(--dbx),var(--dby));
     }
 }
 
-.elf-destroyed {
+.elf-destroyed > use {
     animation-name: elf-destroyed-anim;
     animation-fill-mode: forwards;
     animation-iteration-count: 1;
     animation-duration: var(--elf-animation-duration);
+    transform: translate(var(--dbx),var(--dby));
 }
+
+.elf-hidden > use {
+    opacity: 0;
+}
+
 
 @keyframes elf-destroyed-anim {
     from {
