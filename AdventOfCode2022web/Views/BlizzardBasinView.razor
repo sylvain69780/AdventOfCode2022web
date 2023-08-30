@@ -6,62 +6,32 @@
 </p>
 @if (PuzzleSolution != null && PuzzleSolution.Prev != null)
 {
-    var ViewBox = (xMin: -1, yMin: -1, xMax: PuzzleSolution.Width + 2, yMax: PuzzleSolution.Height + 2);
-    <svg viewBox="@ViewBox.xMin @ViewBox.yMin @ViewBox.xMax @ViewBox.yMax" class="img-fluid">
-        <defs>
-            <radialGradient id="myGradient">
-                <stop offset="10%" stop-color="chartreuse" />
-                <stop offset="80%" stop-color="green" />
-            </radialGradient>
-            <g id="myImage">
-                <g transform="translate(0.5,0.5)">
-                    <g transform="scale(.5)">
-                        <circle r="0.5" fill="url('#myGradient')" />
-                        <g transform="translate(0, -0.05)">
-                            <g id="eye">
-                                <circle cx="0.15" r="0.13" fill="green" />
-                                <circle cx="0.15" r="0.1" fill="white" />
-                                <circle cx="0.12" r="0.05" fill="black" />
-                            </g>
-                            <use transform="scale(-1, 1)" href="#eye" />
-                        </g>
-                    </g>
-                </g>
-            </g>
-            <g id="blizzard">
-                <rect x="-0.2" y="-0.2" width="0.4" height="0.4" fill="gray" />
-            </g>
-        </defs>
-        <pattern id="gridPattern" width="1" height="1" patternUnits="userSpaceOnUse">
-            <rect width="1" height="1" fill="white" stroke="gray" stroke-width="0.1" />
-        </pattern>
-        <rect x="@ViewBox.xMin" y="@ViewBox.yMin" width="@(ViewBox.xMax-ViewBox.xMin)" height="@(ViewBox.yMax-ViewBox.yMin)" fill="grey" />
-        <rect x="@(ViewBox.xMin+1)" y="@(ViewBox.yMin+1)" width="@(ViewBox.xMax-ViewBox.xMin-3)" height="@(ViewBox.yMax-ViewBox.yMin-3)" fill="url(#gridPattern)" />
-        <rect x="@(PuzzleSolution.Start.x-1)" y="@(PuzzleSolution.Start.y-1)" width="1" height="1" fill="blue" />
-        <rect x="@(PuzzleSolution.Arrival.x-1)" y="@(PuzzleSolution.Arrival.y-1)" width="1" height="1" fill="red" />
+    <svg viewBox="@ViewBox.Min.X @ViewBox.Min.Y @ViewBox.Max.X @ViewBox.Max.Y" class="img-fluid">
+        <BlizzardBasinViewDefs/>
+        <rect x="@ViewBox.Min.X" y="@ViewBox.Min.Y" width="@(ViewBox.Max.X-ViewBox.Min.X)" height="@(ViewBox.Max.Y-ViewBox.Min.Y)" fill="grey" />
+        <rect x="@(ViewBox.Min.X+1)" y="@(ViewBox.Min.Y+1)" width="@(ViewBox.Max.X-ViewBox.Min.X-3)" height="@(ViewBox.Max.Y-ViewBox.Min.Y-3)" fill="url(#gridPattern)" />
+        <rect x="@(Entrance.X)" y="@(Entrance.Y)" width="1" height="1" fill="blue" />
+        <rect x="@(Exit.X)" y="@(Exit.Y)" width="1" height="1" fill="red" />
 
         <g style="--elf-animation-duration: @(AnimationDuration)ms;">
-            <g class=@(_animationCompleted ? "elf-still" : "elf-move" )>
-                @{
-                    foreach (var p in PuzzleSolution!.Prev!.Keys.Where(p => p.t == PuzzleSolution.Minute))
-                    {
-                        var pr = _animationCompleted ? p : PuzzleSolution.Prev[p];
-                        var style = $"--dax:{pr.x - 1}px;--day:{pr.y - 1}px;--dbx:{p.x - 1}px;--dby:{p.y - 1}px;";
-                        <use href="#myImage" style=@style />
-                    }
+            <g class=@(_animationCompleted ? "elf-still" : "elf-move")>
+                @foreach (var elf in PuzzleSolution!.Elves!.Where(x => x.State == BlizzardBasinElfState.Possible))
+                {
+                    <use href="#elf-possible" style=@($"--dax:{elf.StartingPosition.X - 1}px;--day:{elf.StartingPosition.Y - 1}px;--dbx:{elf.TargetPosition.X - 1}px;--dby:{elf.TargetPosition.Y - 1}px;") />
                 }
             </g>
-            <g class=@(_animationCompleted ? "elf-hidden" : "elf-destroyed" )>
-                @{
-                    if (PuzzleSolution.DeadEnds != null && PuzzleSolution.DeadEnds.Count > 0)
-                        foreach (var p in PuzzleSolution.DeadEnds)
-                        {
-                            var style = $"--dax:{p.x - 1}px;--day:{p.y - 1}px;--dbx:{p.x - 1}px;--dby:{p.y - 1}px;";
-                            <use href="#myImage" style=@style />
-                        }
-                }
-            </g>
-            <g>
+            @*            <g class=@(_animationCompleted ? "elf-hidden" : "elf-destroyed" )>
+        @{
+        if (PuzzleSolution.DeadEnds != null && PuzzleSolution.DeadEnds.Count > 0)
+        foreach (var p in PuzzleSolution.DeadEnds)
+        {
+        var style = $"--dax:{p.x - 1}px;--day:{p.y - 1}px;--dbx:{p.x - 1}px;--dby:{p.y - 1}px;";
+        <use href="#myImage" style=@style />
+        }
+        }
+        </g>
+        *@
+        @*<g>
                 @{
                     var blizzards = PuzzleSolution.ComputeBlizzardsPos();
                     foreach (var blizzard in blizzards)
@@ -71,7 +41,7 @@
                         </g>
                     }
                 }
-            </g>
+            </g>*@
         </g>
 
     </svg>
@@ -115,4 +85,8 @@ else
         _animationCompleted = true;
         StateHasChanged();
     }
+
+    private (int X, int Y) Exit => PuzzleSolution!.ExitPosition;
+    private (int X, int Y) Entrance => PuzzleSolution!.EntrancePosition;
+    private ((int X, int Y) Min, (int X, int Y) Max) ViewBox => ((-1,-1),(PuzzleSolution!.GridWidth + 2, yMax: PuzzleSolution.GridHeight + 2));
 }

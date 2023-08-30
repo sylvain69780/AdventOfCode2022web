@@ -41,7 +41,6 @@
     opacity: 0;
 }
 
-
 @keyframes elf-destroyed-anim {
     from {
         opacity: 1;
