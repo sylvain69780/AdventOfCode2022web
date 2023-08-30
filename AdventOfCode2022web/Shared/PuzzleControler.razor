@@ -41,32 +41,30 @@
         PuzzleSolutionViewModel!.SolvingStep = 0;
         _result = string.Empty;
         _isCompleted = false;
-        NotifyParent();
+        _result = _results!.Current;
+        StateHasChanged();
     }
 
     private void MoveNext()
     {
         if (_results!.MoveNext())
         {
+            PuzzleSolutionViewModel!.NotifyPuzzleOutputReturned();
             PuzzleSolutionViewModel!.SolvingStep++;
-            NotifyParent();
+            _result = _results!.Current;
+            StateHasChanged();
         }
         else
-            SetAsCompleted();
-    }
-
-    private void SetAsCompleted()
-    {
-        PuzzleSolutionViewModel!.NotifyPuzzleOutputReturned();
-        _isProcessing = false;
-        _results = null;
-        _isCompleted = true;
+        {
+            _isProcessing = false;
+            _results = null;
+            _isCompleted = true;
+        }
     }
 
     public void Stop()
     {
         _isProcessing = false;
-        PuzzleSolutionViewModel!.NotifyPuzzleOutputReturned();
     }
 
     private async Task MoveUntilCompleted()
@@ -76,16 +74,18 @@
         stopwatch.Start();
         var delay = PuzzleSolutionViewModel!.AnimationDuration;
         var solvingStep = PuzzleSolutionViewModel.SolvingStep;
-        async Task notifyStepCompleted (int waitTime) 
+        async Task notifyStepCompleted(int waitTime)
         {
             PuzzleSolutionViewModel.SolvingStep = solvingStep;
-            NotifyParent();
+            _result = _results!.Current;
             await Task.Delay(delay + 100);
             stopwatch.Restart();
             delay = PuzzleSolutionViewModel.AnimationDuration;
+            StateHasChanged();
         }
         while (_results!.MoveNext())
         {
+            PuzzleSolutionViewModel!.NotifyPuzzleOutputReturned();
             solvingStep++;
             if (delay > 0)
                 await notifyStepCompleted(delay + 100);
@@ -95,14 +95,9 @@
                 return;
         }
         await notifyStepCompleted(100);
-        SetAsCompleted();
-    }
-
-    private void NotifyParent()
-    {
-        _result = _results!.Current;
-        StateHasChanged();
-        PuzzleSolutionViewModel!.NotifyPuzzleOutputReturned();
+        _isProcessing = false;
+        _results = null;
+        _isCompleted = true;
     }
 
     private bool IsStartProcessingForbidden => _isProcessing;

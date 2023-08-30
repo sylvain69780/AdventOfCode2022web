@@ -4,23 +4,30 @@
     You have to find the shortest way from one point to another, avoiding the "blizzards".<br />
     I'm using a breadth-search algorithm here, the difficulty being that the pattern of "blizzards" changes over time.
 </p>
-@if (PuzzleSolution != null && PuzzleSolution.Prev != null)
+@if (PuzzleSolution != null && PuzzleSolution.Elves != null)
 {
-    <svg viewBox="@ViewBox.Min.X @ViewBox.Min.Y @ViewBox.Max.X @ViewBox.Max.Y" class="img-fluid">
+    var ElvesSearching = PuzzleSolution!.Elves!.Where(x => x.State == BlizzardBasinElfState.Possible || x.State == BlizzardBasinElfState.Safe);
+    var ElvesKilled = PuzzleSolution!.Elves!.Where(x => x.State == BlizzardBasinElfState.Killed);
+    <svg viewBox="0 0 @GridWidth @GridHeight" class="img-fluid">
         <BlizzardBasinViewDefs/>
-        <rect x="@ViewBox.Min.X" y="@ViewBox.Min.Y" width="@(ViewBox.Max.X-ViewBox.Min.X)" height="@(ViewBox.Max.Y-ViewBox.Min.Y)" fill="grey" />
-        <rect x="@(ViewBox.Min.X+1)" y="@(ViewBox.Min.Y+1)" width="@(ViewBox.Max.X-ViewBox.Min.X-3)" height="@(ViewBox.Max.Y-ViewBox.Min.Y-3)" fill="url(#gridPattern)" />
-        <rect x="@(Entrance.X)" y="@(Entrance.Y)" width="1" height="1" fill="blue" />
-        <rect x="@(Exit.X)" y="@(Exit.Y)" width="1" height="1" fill="red" />
-
-        <g style="--elf-animation-duration: @(AnimationDuration)ms;">
-            <g class=@(_animationCompleted ? "elf-still" : "elf-move")>
-                @foreach (var elf in PuzzleSolution!.Elves!.Where(x => x.State == BlizzardBasinElfState.Possible))
+        <rect x="0" y="0" width=@GridWidth height=@GridHeight fill="grey" />
+        <rect x="1" y="1" width=@(GridWidth-2) height=@(GridHeight-2) fill="url(#gridPattern)" />
+        <rect x=@Entrance.X y=@Entrance.Y width="1" height="1" fill="blue" />
+        <rect x=@Exit.X y=@Exit.Y width="1" height="1" fill="red" />
+        <g style=@AnimationTimingStyle>
+            <g class=@ElfSearchClass>
+                @foreach (var elf in ElvesSearching)
                 {
-                    <use href="#elf-possible" style=@($"--dax:{elf.StartingPosition.X - 1}px;--day:{elf.StartingPosition.Y - 1}px;--dbx:{elf.TargetPosition.X - 1}px;--dby:{elf.TargetPosition.Y - 1}px;") />
+                    <use href="#elf-possible" style=@($"--dax:{elf.StartingPosition.X}px;--day:{elf.StartingPosition.Y}px;--dbx:{elf.TargetPosition.X }px;--dby:{elf.TargetPosition.Y}px;") />
                 }
             </g>
-            @*            <g class=@(_animationCompleted ? "elf-hidden" : "elf-destroyed" )>
+            <g class=@ElfKilledClass>
+                @foreach (var elf in ElvesKilled)
+                {
+                    <use href="#elf-possible" style=@($"--dax:{elf.StartingPosition.X}px;--day:{elf.StartingPosition.Y}px;--dbx:{elf.TargetPosition.X }px;--dby:{elf.TargetPosition.Y}px;") />
+                }
+            </g>
+            @*            <g class=@(_animationCompleted ? "elf-hidden" : "elf-killed" )>
         @{
         if (PuzzleSolution.DeadEnds != null && PuzzleSolution.DeadEnds.Count > 0)
         foreach (var p in PuzzleSolution.DeadEnds)
@@ -56,11 +63,11 @@ else
 }
 
 @code {
-    private BlizzardBasin? PuzzleSolution;
+    private IBlizzardBasinState? PuzzleSolution { get; set; }
 
     protected override void OnInitialized()
     {
-        PuzzleSolution = (BlizzardBasin)(PuzzleSolutionViewModel!.PuzzleSolution!);
+        PuzzleSolution = (IBlizzardBasinState)(PuzzleSolutionViewModel!.PuzzleSolution!);
         PuzzleSolutionViewModel.PuzzleOutputReturned += SetTimer;
         base.OnInitialized();
     }
@@ -88,5 +95,9 @@ else
 
     private (int X, int Y) Exit => PuzzleSolution!.ExitPosition;
     private (int X, int Y) Entrance => PuzzleSolution!.EntrancePosition;
-    private ((int X, int Y) Min, (int X, int Y) Max) ViewBox => ((-1,-1),(PuzzleSolution!.GridWidth + 2, yMax: PuzzleSolution.GridHeight + 2));
+    private int GridWidth => PuzzleSolution!.GridWidth;
+    private int GridHeight => PuzzleSolution!.GridHeight;
+    private string AnimationTimingStyle => $"--elf-animation-duration: {AnimationDuration}ms;";
+    private string ElfSearchClass => (_animationCompleted ? "elf-still" : "elf-move");
+    private string ElfKilledClass => (_animationCompleted ? "elf-hidden" : "elf-killed");
 }

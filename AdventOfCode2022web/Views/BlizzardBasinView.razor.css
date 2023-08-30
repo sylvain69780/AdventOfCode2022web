@@ -29,8 +29,8 @@
     }
 }
 
-.elf-destroyed > use {
-    animation-name: elf-destroyed-anim;
+.elf-killed > use {
+    animation-name: elf-killed-anim;
     animation-fill-mode: forwards;
     animation-iteration-count: 1;
     animation-duration: var(--elf-animation-duration);
@@ -41,7 +41,7 @@
     opacity: 0;
 }
 
-@keyframes elf-destroyed-anim {
+@keyframes elf-killed-anim {
     from {
         opacity: 1;
     }

@@ -2,7 +2,7 @@
 
 namespace AdventOfCode2022test
 {
-    public class Test24
+    public class BlizzardBasinTest
     {
         private IPuzzleSolutionIter _solver;
         string input1;

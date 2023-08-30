@@ -1,4 +1,7 @@
-﻿namespace AdventOfCode2022web.Puzzles
+﻿using System.Collections.Generic;
+using System.Linq;
+
+namespace AdventOfCode2022web.Puzzles
 {
     public enum BlizzardBasinElfState
     {
@@ -11,30 +14,44 @@
         Halt = 0,
         Right = 1,
         Left = 2,
-        Up = 3 ,
+        Up = 3,
         Down = 4
     }
 
     //BlizzardsTypes = new char[] { '>', '<', '^', 'v' }
 
-public interface IBlizzardBasinState
+    public interface IBlizzardBasinState
     {
         int GridWidth { get; }
         int GridHeight { get; }
-        List<((int X, int Y) StartingPosition,(int X, int Y) TargetPosition,BlizzardBasinElfState State)>? Elves { get; }
-        List<((int X, int Y) TargetPosition, Directions)>? Blizzards { get; }
+        List<((int X, int Y) StartingPosition, (int X, int Y) TargetPosition, BlizzardBasinElfState State)>? Elves { get; }
+        IEnumerable<((int X, int Y) Position, Directions Direction)>? BlizzardsPos { get; }
         (int X, int Y) EntrancePosition { get; }
-        (int X, int Y) ExitPosition { get;  }
+        (int X, int Y) ExitPosition { get; }
     }
 
-    [Puzzle(24, "Blizzard Basin",true)]
+    [Puzzle(24, "Blizzard Basin", true)]
     public class BlizzardBasin : IPuzzleSolutionIter, IBlizzardBasinState
     {
-        private int RoundNumber;
-        public (int X, int Y) EntrancePosition { get; set; }
-        public (int X, int Y) ExitPosition { get; set; }
         public int GridWidth { get; set; }
         public int GridHeight { get; set; }
+        public List<((int X, int Y) StartingPosition, (int X, int Y) TargetPosition, BlizzardBasinElfState State)>? Elves { get; set; }
+        public (int X, int Y) EntrancePosition { get; set; }
+        public (int X, int Y) ExitPosition { get; set; }
+
+        public Dictionary<(int x, int y, int t), (int x, int y, int t)>? Prev;
+        public List<(int x, int y)>? DeadEnds { get; set; }
+
+        private int RoundNumber { get; set; }
+        private bool IsSafeTraversalFound { get; set; }
+        private Queue<(int X, int Y)>? BFS;
+        private List<((int X, int Y) Position, Directions Direction)>? Blizzards { get; set; }
+        public IEnumerable<((int X, int Y) Position, Directions Direction)> BlizzardsPos
+            => Blizzards!
+            .Select(b => (X: b.Position.X - 1, Y: b.Position.Y - 1, b.Direction))
+            .Select(b => (X: b.X + RoundNumber * Moves[(int)b.Direction].dx, Y: b.Y + RoundNumber * Moves[(int)b.Direction].dy, b.Direction))
+            .Select(b => (X: Mod(b.X, GridWidth-2), Y: Mod(b.Y, GridHeight-2), b.Direction))
+            .Select(b => ((b.X + 1,b.Y + 1), b.Direction));
 
         private static readonly List<(int dx, int dy)> Moves = new()
         {
@@ -45,17 +62,6 @@ public interface IBlizzardBasinState
             (0,1),
         };
 
-        public List<((int X, int Y) StartingPosition, (int X, int Y) TargetPosition, BlizzardBasinElfState State)>? Elves { get; }
-        public List<((int X, int Y) TargetPosition, Directions)>? Blizzards { get; }
-
-        public Dictionary<(int x, int y, int t), (int x, int y, int t)>? Prev;
-        public List<(int x, int y)>? DeadEnds { get; set; }
-        public bool ComputingCompleted;
-
-        private List<(int x, int y, char c)>? BlizzardsRight;
-        private List<(int x, int y, char c)>? BlizzardsLeft;
-        private List<(int x, int y, char c)>? BlizzardsUp;
-        private List<(int x, int y, char c)>? BlizzardsDown;
         private HashSet<(int x, int y)>? Walls;
         private string[]? Input { get; set; }
 
@@ -67,29 +73,28 @@ public interface IBlizzardBasinState
 
         private void Reset()
         {
-            EntrancePosition = ( Input![0].IndexOf('.'),  0);
-            ExitPosition = ( Input[^1].IndexOf('.'), Input.Length - 1);
-            Walls = Input
+            Walls = Input!
                 .SelectMany((line, row) => line.Select((c, col) => (c, col, row))
                 .Where(y => y.c == '#'))
                 .Select(e => (x: e.col, y: e.row))
                 .ToHashSet();
-            var blizzards = Input
+            Blizzards = Input!
                 .SelectMany((line, row) => line.Select((c, col) => (c, col, row))
-                .Where(y => BlizzardsTypes.Contains(y.c)))
-                .Select(e => (x: e.col, y: e.row, e.c))
+                .Where(y => "><^v".Contains(y.c)))
+                .Select(e => ((x: e.col, y: e.row), e.c == '>' ? Directions.Right : e.c == '<' ? Directions.Left : e.c == '^' ? Directions.Up : Directions.Down))
                 .ToList();
-            BlizzardsRight = blizzards.Where(e => e.c == '>').ToList();
-            BlizzardsLeft = blizzards.Where(e => e.c == '<').ToList();
-            BlizzardsUp = blizzards.Where(e => e.c == '^').ToList();
-            BlizzardsDown = blizzards.Where(e => e.c == 'v').ToList();
-            GridWidth = Input[0].Length - 2;
-            GridHeight = Input.Length - 2;
-
             RoundNumber = 0;
-            ComputingCompleted = false;
             Prev = new Dictionary<(int x, int y, int t), (int x, int y, int t)>();
             DeadEnds = new List<(int x, int y)>();
+            BFS = new Queue<(int x, int y)>();
+            EntrancePosition = (Input![0].IndexOf('.'), 0);
+            ExitPosition = (Input[^1].IndexOf('.'), Input.Length - 1);
+            GridWidth = Input[0].Length;
+            GridHeight = Input.Length;
+            Elves = new List<((int X, int Y) StartingPosition, (int X, int Y) TargetPosition, BlizzardBasinElfState State)>() 
+            {
+                (StartingPosition:EntrancePosition,TargetPosition:EntrancePosition , BlizzardBasinElfState.Safe) 
+            };
         }
 
         private static readonly char[] BlizzardsTypes = new char[] { '>', '<', '^', 'v' };
@@ -99,44 +104,94 @@ public interface IBlizzardBasinState
         public IEnumerable<string> SolveFirstPart()
         {
             Reset();
-            RoundNumber = 0;
-            var newPrev = new Dictionary<(int x, int y, int t), (int x, int y, int t)>();
-            ComputingCompleted = false;
-            var search = new Queue<(int x, int y)>();
-            Prev = new Dictionary<(int x, int y, int t), (int x, int y, int t)>();
-            search.Enqueue(EntrancePosition);
-
-        
-            bool found;
+            BFS!.Enqueue(EntrancePosition);
             do
             {
                 RoundNumber++;
-                var newSearch = new Queue<(int x, int y)>();
-                HashSet<(int, int y)> blizzardsPos = ComputeBlizzardsPos();
-                found = SearchForNextMove(search,newSearch, blizzardsPos,ExitPosition);
-                yield return $"{RoundNumber}";
-                search = newSearch;
-            } while (search.Count > 0 && !found);
-            var p = (x:ExitPosition.X, y:ExitPosition.Y,t: RoundNumber);
-            if (!Prev.ContainsKey(p))
+                var blizzardsPos = BlizzardsPos.Select(b => (b.Position.X,b.Position.Y)).ToHashSet();
+                var bfs = new Queue<(int X, int Y)>();
+                Elves!.Clear();
+                {
+                    while (BFS.TryDequeue(out var position))
+                    {
+                        var branches = new List<(int X,int Y)>();
+                        for (var i = 0; i<Moves.Count; i++)
+                        {
+                            var (dx, dy) = Moves[i];
+                            var pos = (X: position.X + dx, Y: position.Y + dy);
+                            if (blizzardsPos.Contains(pos) || Walls!.Contains(pos) || bfs.Contains(pos) || pos.Y < 0 || pos.Y >= GridHeight )
+                                continue;
+                            else
+                                branches.Add(pos);
+                        }
+                        // update state
+                        if (branches.Count == 0)
+                            Elves.Add((StartingPosition: position, TargetPosition: position, BlizzardBasinElfState.Killed));
+                        else
+                            foreach(var branch in branches)
+                            {
+                                Elves.Add((StartingPosition: position, TargetPosition: branch, BlizzardBasinElfState.Possible));
+                                bfs.Enqueue(branch);
+                            }
+                    }
+                }
+                BFS = bfs;
+                yield return $"Search phase {RoundNumber}";
+            } while (BFS.Count > 0 && !BFS.Contains(ExitPosition));
+            if (!BFS.Contains(ExitPosition))
                 throw new InvalidDataException("No solution found");
-            while (Prev.TryGetValue(p, out var np))
+            Elves!.Clear();
+            foreach (var pos in BFS)
+                Elves.Add((StartingPosition: pos, TargetPosition: pos, pos == ExitPosition ? BlizzardBasinElfState.Safe : BlizzardBasinElfState.Killed));
+            yield return $"{RoundNumber}";
+        }
+
+        public IEnumerable<string> SolveSecondPart()
+        {
+            Reset();
+            var newPrev = new Dictionary<(int x, int y, int t), (int x, int y, int t)>();
+            var stages = new ((int x, int y), (int x, int y))[]
             {
-                newPrev.Add(p, np);
-                p = np;
+                (EntrancePosition,ExitPosition),
+                (ExitPosition,EntrancePosition),
+                (EntrancePosition,ExitPosition),
+            };
+            foreach (var (start, arrival) in stages)
+            {
+                Prev = new Dictionary<(int x, int y, int t), (int x, int y, int t)>();
+                var search = new Queue<(int x, int y)>();
+                search.Enqueue(start);
+                bool found;
+                do
+                {
+                    RoundNumber++;
+                    var newSearch = new Queue<(int x, int y)>();
+                    /// to do
+                    HashSet<(int, int y)> blizzardsPos = new HashSet<(int, int y)>();
+                    found = SearchForNextMove(search, newSearch, blizzardsPos, arrival);
+                    yield return $"{RoundNumber}";
+                    search = newSearch;
+                } while (search.Count > 0 && !found);
+                var p = (arrival.x, arrival.y, RoundNumber);
+                if (!Prev.ContainsKey(p))
+                    throw new InvalidDataException("No solution found");
+                while (Prev.TryGetValue(p, out var np))
+                {
+                    newPrev.Add(p, np);
+                    p = np;
+                }
             }
             Prev = newPrev;
             var minute = RoundNumber;
-            for (var i = 1; i <= minute; i++) 
+            for (var i = 1; i <= minute; i++)
             {
                 RoundNumber = i;
                 yield return $"Replay step {i}";
             }
-            ComputingCompleted = true;
             yield return $"{RoundNumber}";
         }
 
-        private bool SearchForNextMove(Queue<(int x, int y)> search, Queue<(int x, int y)> newSearch, HashSet<(int, int y)> blizzardsPos,(int x,int y) arrival)
+        private bool SearchForNextMove(Queue<(int x, int y)> search, Queue<(int x, int y)> newSearch, HashSet<(int, int y)> blizzardsPos, (int x, int y) arrival)
         {
             bool found = false;
             DeadEnds = new List<(int x, int y)>();
@@ -157,7 +212,7 @@ public interface IBlizzardBasinState
                         found = true;
                         break;
                     }
-                    if ( !blizzardsPos.Contains(pos) && !Walls!.Contains(pos) && !newSearch.Contains(pos))
+                    if (!blizzardsPos.Contains(pos) && !Walls!.Contains(pos) && !newSearch.Contains(pos))
                     {
                         Prev!.Add((pos.x, pos.y, RoundNumber), (head.x, head.y, RoundNumber - 1));
                         newSearch.Enqueue(pos);
@@ -174,61 +229,6 @@ public interface IBlizzardBasinState
             return found;
         }
 
-        public HashSet<(int x, int y)> ComputeBlizzardsPos()
-        {
-            // compute blizzards positions
-            var blizzardsPos = BlizzardsRight!.Select(e => ((e.x - 1 + RoundNumber) % GridWidth + 1, e.y)).ToHashSet();
-            blizzardsPos.UnionWith(BlizzardsLeft!.Select(e => (Mod(e.x - 1 - RoundNumber, GridWidth) + 1, e.y)));
-            blizzardsPos.UnionWith(BlizzardsUp!.Select(e => (e.x, Mod(e.y - 1 - RoundNumber, GridHeight) + 1)));
-            blizzardsPos.UnionWith(BlizzardsDown!.Select(e => (e.x, (e.y - 1 + RoundNumber) % GridHeight + 1)));
-            return blizzardsPos;
-        }
-
-        public IEnumerable<string> SolveSecondPart()
-        {
-            Reset();
-            RoundNumber = 0;
-            ComputingCompleted = false;
-            var newPrev = new Dictionary<(int x, int y, int t), (int x, int y, int t)>();
-            var stages = new ((int x, int y), (int x, int y))[]
-            {
-                (EntrancePosition,ExitPosition),
-                (ExitPosition,EntrancePosition),
-                (EntrancePosition,ExitPosition),
-            };
-            foreach (var (start,arrival) in stages)
-            {
-                Prev = new Dictionary<(int x, int y, int t), (int x, int y, int t)>();
-                var search = new Queue<(int x, int y)>();
-                search.Enqueue(start);
-                bool found;
-                do
-                {
-                    RoundNumber++;
-                    var newSearch = new Queue<(int x, int y)>();
-                    HashSet<(int, int y)> blizzardsPos = ComputeBlizzardsPos();
-                    found = SearchForNextMove(search, newSearch, blizzardsPos, arrival);
-                    yield return $"{RoundNumber}";
-                    search = newSearch;
-                } while (search.Count > 0 && !found);
-                var p = (arrival.x,arrival.y,RoundNumber);
-                if (!Prev.ContainsKey(p))
-                    throw new InvalidDataException("No solution found");
-                while (Prev.TryGetValue(p, out var np))
-                {
-                    newPrev.Add(p, np);
-                    p = np;
-                }
-            }
-            Prev = newPrev;
-            var minute = RoundNumber;
-            for (var i = 1; i <= minute; i++)
-            {
-                RoundNumber = i;
-                yield return $"Replay step {i}";
-            }
-            ComputingCompleted = true;
-            yield return $"{RoundNumber}";
-        }
     }
 }
+
