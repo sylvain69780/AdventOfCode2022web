@@ -119,7 +119,7 @@ namespace AdventOfCode2022web.Puzzles
                         {
                             var (dx, dy) = Moves[i];
                             var pos = (X: position.X + dx, Y: position.Y + dy);
-                            if (blizzardsPos.Contains(pos) || Walls!.Contains(pos) || bfs.Contains(pos) || pos.Y < 0 || pos.Y >= GridHeight )
+                            if (blizzardsPos.Contains(pos) || Walls!.Contains(pos) || bfs.Contains(pos) || (i > 0 && BFS.Contains(pos)) || pos.Y < 0 || pos.Y >= GridHeight )
                                 continue;
                             else
                                 branches.Add(pos);

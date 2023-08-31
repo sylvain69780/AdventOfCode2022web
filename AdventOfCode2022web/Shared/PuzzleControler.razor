@@ -27,12 +27,14 @@
     private void StartPart1()
     {
         _results = PuzzleSolutionViewModel!.PuzzleSolution!.SolveFirstPart().GetEnumerator();
+        PuzzleSolutionViewModel!.NotifyPuzzleInputNeeded();
         SetAsRunning();
     }
 
     private void StartPart2()
     {
         _results = PuzzleSolutionViewModel!.PuzzleSolution!.SolveSecondPart().GetEnumerator();
+        PuzzleSolutionViewModel!.NotifyPuzzleInputNeeded();
         SetAsRunning();
     }
 

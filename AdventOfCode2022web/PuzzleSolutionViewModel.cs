@@ -10,6 +10,8 @@ namespace AdventOfCode2022web
         int SolvingStep { get; set; }
         Action? PuzzleOutputReturned { get; set; }
         void NotifyPuzzleOutputReturned();
+        Action? PuzzleInputNeeded { get; set; }
+        void NotifyPuzzleInputNeeded();
     }
 
     public class PuzzleSolutionViewModel : IPuzzleSolutionViewModel
@@ -26,14 +28,13 @@ namespace AdventOfCode2022web
         public int SolvingStep { get; set; } = 0;
 
         public Action? PuzzleOutputReturned { get; set; }
+        public void NotifyPuzzleOutputReturned() => PuzzleOutputReturned?.Invoke();
 
-        public void NotifyPuzzleOutputReturned() 
-        {
-            PuzzleOutputReturned?.Invoke();
-        }
+        public Action? PuzzleInputNeeded { get; set; }
+        public void NotifyPuzzleInputNeeded() => PuzzleInputNeeded?.Invoke();
     }
 
-    public class PuzzleSolutionViewModel<T> : IPuzzleSolutionViewModel where T: IPuzzleSolutionIter
+    public class PuzzleSolutionViewModel<T> : IPuzzleSolutionViewModel where T : IPuzzleSolutionIter
     {
         private T _puzzleSolution;
         public IPuzzleSolutionIter PuzzleSolution { get => _puzzleSolution; }
@@ -47,11 +48,10 @@ namespace AdventOfCode2022web
         public int SolvingStep { get; set; } = 0;
 
         public Action? PuzzleOutputReturned { get; set; }
+        public void NotifyPuzzleOutputReturned() => PuzzleOutputReturned?.Invoke();
 
-        public void NotifyPuzzleOutputReturned()
-        {
-            PuzzleOutputReturned?.Invoke();
-        }
+        public Action? PuzzleInputNeeded { get; set; }
+        public void NotifyPuzzleInputNeeded() => PuzzleInputNeeded?.Invoke();
     }
 
     public class PuzzleBasicSolutionViewModel<T> : IPuzzleSolutionViewModel where T : IPuzzleSolution
@@ -68,12 +68,9 @@ namespace AdventOfCode2022web
         public int SolvingStep { get; set; } = 0;
 
         public Action? PuzzleOutputReturned { get; set; }
+        public void NotifyPuzzleOutputReturned() => PuzzleOutputReturned?.Invoke();
 
-        public void NotifyPuzzleOutputReturned()
-        {
-            PuzzleOutputReturned?.Invoke();
-        }
+        public Action? PuzzleInputNeeded { get; set; }
+        public void NotifyPuzzleInputNeeded() => PuzzleInputNeeded?.Invoke();
     }
-
-
 }

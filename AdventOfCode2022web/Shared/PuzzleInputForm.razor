@@ -25,6 +25,7 @@
             puzzle = ((PuzzleSolutionWrapper)(PuzzleSolutionViewModel!.PuzzleSolution!)).PuzzleType;
         PuzzleNumber = PuzzleHelper.Puzzles.Where(x => x.Value.Type == puzzle).Single().Key;
         await LoadDefaultPuzzleInput();
+        PuzzleSolutionViewModel.PuzzleInputNeeded += InitializePuzzle;
         InitializePuzzle();
         await base.OnInitializedAsync();
     }
@@ -43,4 +44,7 @@
         PuzzleSolutionViewModel!.PuzzleSolution!.Initialize(_input);
         PuzzleSolutionViewModel.NotifyPuzzleOutputReturned();
     }
+
+    public void Dispose() => PuzzleSolutionViewModel!.PuzzleInputNeeded -= InitializePuzzle;
+
 }
