@@ -102,8 +102,7 @@ namespace AdventOfCode2022web.Puzzles
         {
             Reset();
             RoundNumber = 0;
-            var (start, end) = (EntrancePosition, ExitPosition);
-            List<(int Id, int ParentId, (int X, int Y) Pos)> tree = ComputeSearchTree(start, end);
+            var tree = ComputeSearchTree(EntrancePosition, ExitPosition);
 
             var parentIds = new List<int>() { 0 };
             var treeGroupedByParent = tree.GroupBy(x => x.ParentId).ToDictionary(x => x.Key);
@@ -129,6 +128,8 @@ namespace AdventOfCode2022web.Puzzles
                     }
                 }
                 parentIds = newParentIds;
+                if ( i == RoundNumber-1)
+                    Elves = Elves.Select(x => (x.StartingPosition, x.TargetPosition, x.TargetPosition == ExitPosition ? BlizzardBasinElfState.Safe : BlizzardBasinElfState.Killed)).ToList();
                 yield return $"{i + 1}";
             }
         }
@@ -172,27 +173,6 @@ namespace AdventOfCode2022web.Puzzles
             if (!found)
                 throw new InvalidDataException("No solution found");
             return tree;
-        }
-
-        private void AddAsKilledOrSafe((int X, int Y) pos)
-        {
-            Elves!.Add((StartingPosition: pos, TargetPosition: pos, pos == ExitPosition ? BlizzardBasinElfState.Safe : BlizzardBasinElfState.Killed));
-        }
-
-        private void AddAsPossiblePath((int X, int Y) position, (int X, int Y) branch)
-        {
-            Elves!.Add((StartingPosition: position, TargetPosition: branch, BlizzardBasinElfState.Possible));
-        }
-
-        private void AddAsKilled((int X, int Y) position)
-        {
-            Elves!.Add((StartingPosition: position, TargetPosition: position, BlizzardBasinElfState.Killed));
-        }
-
-        private void ResetViewModel()
-        {
-            Elves!.Clear();
-            BlizzardsPositions = BlizzardsPositionAtTime(RoundNumber).ToList();
         }
 
         public IEnumerable<string> SolveSecondPart()

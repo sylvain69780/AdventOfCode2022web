@@ -42,7 +42,7 @@
     private void InitializePuzzle()
     {
         PuzzleSolutionViewModel!.PuzzleSolution!.Initialize(_input);
-        PuzzleSolutionViewModel.NotifyPuzzleOutputReturned();
+        PuzzleSolutionViewModel.NotifyPuzzleInputLoaded();
     }
 
     public void Dispose() => PuzzleSolutionViewModel!.PuzzleInputNeeded -= InitializePuzzle;

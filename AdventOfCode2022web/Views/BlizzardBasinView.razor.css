@@ -12,11 +12,24 @@
     transform: translate(var(--dbx),var(--dby));
 }
 
+.elf-still-possible > use {
+    transform: translate(var(--dbx),var(--dby));
+    opacity: 0.5;
+}
+
 .elf-move > use {
     animation-name: elf-move-anim;
     animation-fill-mode: forwards;
     animation-iteration-count: 1;
     animation-duration: var(--elf-animation-duration);
+}
+
+.elf-possible > use {
+    animation-name: elf-move-anim;
+    animation-fill-mode: forwards;
+    animation-iteration-count: 1;
+    animation-duration: var(--elf-animation-duration);
+    opacity: 0.5;
 }
 
 @keyframes elf-move-anim {
@@ -34,8 +47,9 @@
     animation-fill-mode: forwards;
     animation-iteration-count: 1;
     animation-duration: var(--elf-animation-duration);
-    transform: translate(var(--dbx),var(--dby));
+    transform-origin: 0.5px 0.5px;
 }
+
 
 .elf-hidden > use {
     opacity: 0;
@@ -43,15 +57,23 @@
 
 @keyframes elf-killed-anim {
     from {
-        opacity: 1;
+        opacity: 0.5;
+        transform: translate(var(--dbx),var(--dby)) rotate(0deg);
+    }
+
+    50% {
+        opacity: 0.5;
+        transform: translate(var(--dbx),var(--dby)) rotate(0deg);
     }
 
     75% {
-        opacity: 1;
+        opacity: 0.5;
+        transform: translate(var(--dbx),var(--dby)) rotate(180deg);
     }
 
     to {
         opacity: 0;
+        transform: translate(var(--dbx),var(--dby)) rotate(180deg);
     }
 }
 

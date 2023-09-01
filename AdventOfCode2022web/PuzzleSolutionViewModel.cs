@@ -12,6 +12,8 @@ namespace AdventOfCode2022web
         void NotifyPuzzleOutputReturned();
         Action? PuzzleInputNeeded { get; set; }
         void NotifyPuzzleInputNeeded();
+        Action? PuzzleInputLoaded { get; set; }
+        void NotifyPuzzleInputLoaded();
     }
 
     public class PuzzleSolutionViewModel : IPuzzleSolutionViewModel
@@ -32,6 +34,9 @@ namespace AdventOfCode2022web
 
         public Action? PuzzleInputNeeded { get; set; }
         public void NotifyPuzzleInputNeeded() => PuzzleInputNeeded?.Invoke();
+
+        public Action? PuzzleInputLoaded { get; set; }
+        public void NotifyPuzzleInputLoaded() => PuzzleInputLoaded?.Invoke();
     }
 
     public class PuzzleSolutionViewModel<T> : IPuzzleSolutionViewModel where T : IPuzzleSolutionIter
@@ -52,6 +57,9 @@ namespace AdventOfCode2022web
 
         public Action? PuzzleInputNeeded { get; set; }
         public void NotifyPuzzleInputNeeded() => PuzzleInputNeeded?.Invoke();
+
+        public Action? PuzzleInputLoaded { get; set; }
+        public void NotifyPuzzleInputLoaded() => PuzzleInputLoaded?.Invoke();
     }
 
     public class PuzzleBasicSolutionViewModel<T> : IPuzzleSolutionViewModel where T : IPuzzleSolution
@@ -72,5 +80,8 @@ namespace AdventOfCode2022web
 
         public Action? PuzzleInputNeeded { get; set; }
         public void NotifyPuzzleInputNeeded() => PuzzleInputNeeded?.Invoke();
+
+        public Action? PuzzleInputLoaded { get; set; }
+        public void NotifyPuzzleInputLoaded() => PuzzleInputLoaded?.Invoke();
     }
 }

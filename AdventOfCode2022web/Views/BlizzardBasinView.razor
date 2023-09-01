@@ -6,8 +6,9 @@
 </p>
 @if (PuzzleSolution != null && PuzzleSolution.Elves != null)
 {
-    var elvesSearching = PuzzleSolution!.Elves!.Where(x => x.State == BlizzardBasinElfState.Possible || x.State == BlizzardBasinElfState.Safe);
+    var elvesSearching = PuzzleSolution!.Elves!.Where(x => x.State == BlizzardBasinElfState.Possible);
     var elvesKilled = PuzzleSolution!.Elves!.Where(x => x.State == BlizzardBasinElfState.Killed);
+    var elvesSafe = PuzzleSolution!.Elves!.Where(x => x.State == BlizzardBasinElfState.Safe);
     var blizzard = PuzzleSolution!.BlizzardsPositions!;
     var (gridWidth, gridHeight) = (GridWidth - 2, GridHeight - 2);
     <svg viewBox="0 0 @GridWidth @GridHeight" class="img-fluid">
@@ -19,6 +20,12 @@
         <g style=@AnimationTimingStyle>
             <g class=@ElfSearchClass>
                 @foreach (var elf in elvesSearching)
+                {
+                    <use href="#elf-possible" style=@($"--dax:{elf.StartingPosition.X}px;--day:{elf.StartingPosition.Y}px;--dbx:{elf.TargetPosition.X }px;--dby:{elf.TargetPosition.Y}px;") />
+                }
+            </g>
+            <g class=@ElfSafeClass>
+                @foreach (var elf in elvesSafe)
                 {
                     <use href="#elf-possible" style=@($"--dax:{elf.StartingPosition.X}px;--day:{elf.StartingPosition.Y}px;--dbx:{elf.TargetPosition.X }px;--dby:{elf.TargetPosition.Y}px;") />
                 }
@@ -108,12 +115,14 @@ else
     {
         PuzzleSolution = (IBlizzardBasinViewModel)(PuzzleSolutionViewModel!.PuzzleSolution!);
         PuzzleSolutionViewModel.PuzzleOutputReturned += SetTimer;
+        PuzzleSolutionViewModel.PuzzleInputLoaded += StateHasChanged;
         base.OnInitialized();
     }
 
     public void Dispose()
     {
         PuzzleSolutionViewModel!.PuzzleOutputReturned -= SetTimer;
+        PuzzleSolutionViewModel.PuzzleInputLoaded -= StateHasChanged;
     }
 
     private Timer? _timer;
@@ -137,7 +146,8 @@ else
     private int GridWidth => PuzzleSolution!.GridWidth;
     private int GridHeight => PuzzleSolution!.GridHeight;
     private string AnimationTimingStyle => $"--elf-animation-duration: {AnimationDuration}ms;";
-    private string ElfSearchClass => (_animationCompleted ? "elf-still" : "elf-move");
+    private string ElfSearchClass => (_animationCompleted ? "elf-still-possible" : "elf-possible");
+    private string ElfSafeClass => (_animationCompleted ? "elf-still" : "elf-move");
     private string ElfKilledClass => (_animationCompleted ? "elf-hidden" : "elf-killed");
     private string BlizzardClass => (_animationCompleted ? "blizzard-still" : "blizzard-move");
 }
