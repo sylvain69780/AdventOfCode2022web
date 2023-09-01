@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 
 namespace AdventOfCode2022web.Puzzles
@@ -82,7 +83,6 @@ namespace AdventOfCode2022web.Puzzles
                 .Where(y => "><^v".Contains(y.c)))
                 .Select(e => ((x: e.col, y: e.row), e.c == '>' ? Directions.Right : e.c == '<' ? Directions.Left : e.c == '^' ? Directions.Up : Directions.Down))
                 .ToList();
-            RoundNumber = 0;
             Prev = new Dictionary<(int x, int y, int t), (int x, int y, int t)>();
             DeadEnds = new List<(int x, int y)>();
             EntrancePosition = (Input![0].IndexOf('.'), 0);
@@ -101,16 +101,52 @@ namespace AdventOfCode2022web.Puzzles
         public IEnumerable<string> SolveFirstPart()
         {
             Reset();
-            var queue = new Queue<(int X, int Y)>();
+            RoundNumber = 0;
             var (start, end) = (EntrancePosition, ExitPosition);
-            queue.Enqueue(start);
+            List<(int Id, int ParentId, (int X, int Y) Pos)> tree = ComputeSearchTree(start, end);
+
+            var parentIds = new List<int>() { 0 };
+            var treeGroupedByParent = tree.GroupBy(x => x.ParentId).ToDictionary(x => x.Key);
+            for (var i = 0; i < RoundNumber; i++)
+            {
+                BlizzardsPositions = BlizzardsPositionAtTime(i + 1).ToList();
+                Elves!.Clear();
+                var newParentIds = new List<int>();
+                foreach(var parentId in parentIds)
+                {
+                    var parent = tree[parentId];
+                    if (treeGroupedByParent.TryGetValue(parentId, out var children))
+                    {
+                        foreach (var child in children)
+                        {
+                            Elves.Add((StartingPosition: parent.Pos, TargetPosition: child.Pos, BlizzardBasinElfState.Possible));
+                            newParentIds.Add(child.Id);
+                        }
+                    } 
+                    else
+                    {
+                        Elves.Add((StartingPosition: parent.Pos, TargetPosition: parent.Pos, BlizzardBasinElfState.Killed));
+                    }
+                }
+                parentIds = newParentIds;
+                yield return $"{i + 1}";
+            }
+        }
+
+        private List<(int Id, int ParentId, (int X, int Y) Pos)> ComputeSearchTree((int X, int Y) start, (int X, int Y) end)
+        {
+            var found = false;
+            var queue = new Queue<(int Id, (int X, int Y) Pos)>();
+            queue.Enqueue((0, start));
+            var tree = new List<(int Id, int ParentId, (int X, int Y) Pos)>
+            {
+                (0, -1, start)
+            };
             do
             {
                 RoundNumber++;
-                // VIEW init
-                ResetViewModel();
                 var blizzardsPosition = BlizzardsPositionAtTime(RoundNumber).Select(b => (b.Position.X, b.Position.Y)).ToHashSet();
-                var newQueue = new Queue<(int X, int Y)>();
+                var newQueue = new Queue<(int Id, (int X, int Y) Pos)>();
                 {
                     while (queue.TryDequeue(out var position))
                     {
@@ -118,43 +154,24 @@ namespace AdventOfCode2022web.Puzzles
                         for (var i = 0; i < Moves.Count; i++)
                         {
                             var (dx, dy) = Moves[i];
-                            var pos = (X: position.X + dx, Y: position.Y + dy);
-                            var positionIsBlocked = blizzardsPosition.Contains(pos) || Walls!.Contains(pos) || newQueue.Contains(pos) || (i > 0 && queue.Contains(pos)) || pos.Y < 0 || pos.Y >= GridHeight;
-                            if (positionIsBlocked)
-                                continue;
-                            else
+                            var pos = (X: position.Pos.X + dx, Y: position.Pos.Y + dy);
+                            var isPositionBlocked = blizzardsPosition.Contains(pos) || Walls!.Contains(pos) || newQueue.Any(x => x.Pos == pos) || (i > 0 && queue.Any(x => x.Pos == pos)) || pos.Y < 0 || pos.Y >= GridHeight;
+                            if (!isPositionBlocked)
                                 possiblePaths.Add(pos);
                         }
                         foreach (var possiblePath in possiblePaths)
-                            newQueue.Enqueue(possiblePath);
-                        // VIEW update
-                        if (possiblePaths.Count == 0)
-                            AddAsKilled(position);
-                        else
-                            foreach (var possiblePath in possiblePaths)
-                                AddAsPossiblePath(position, possiblePath);
-                    }
-                }
-                queue = newQueue;
-                // VIEW if it is last animation
-                if (queue.Contains(end))
-                {
-                    for (var i = 0; i < Elves!.Count; i++)
-                    {
-                        var p = Elves[i];
-                        if ((p.TargetPosition.X, p.TargetPosition.Y) != end)
                         {
-                            p.TargetPosition = p.StartingPosition;
-                            p.State = BlizzardBasinElfState.Killed;
-                            Elves[i] = p;
+                            newQueue.Enqueue((tree.Count, possiblePath));
+                            tree.Add((tree.Count, position.Id, possiblePath));
                         }
                     }
                 }
-                yield return $"Search phase {RoundNumber}";
-            } while (queue.Count > 0 && !queue.Contains(end));
-            if (!queue.Contains(end))
+                queue = newQueue;
+                found = queue.Any(x => x.Pos == end);
+            } while (queue.Count > 0 && !found);
+            if (!found)
                 throw new InvalidDataException("No solution found");
-            //yield return $"{RoundNumber}";
+            return tree;
         }
 
         private void AddAsKilledOrSafe((int X, int Y) pos)
