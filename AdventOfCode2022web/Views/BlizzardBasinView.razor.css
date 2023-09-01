@@ -83,3 +83,24 @@
         opacity: 0;
     }
 }
+
+.blizzard-still > use {
+    transform: translate(var(--dbx),var(--dby));
+}
+
+.blizzard-move > use {
+    animation-name: blizzard-move-anim;
+    animation-fill-mode: forwards;
+    animation-iteration-count: 1;
+    animation-duration: var(--elf-animation-duration);
+}
+
+@keyframes blizzard-move-anim {
+    from {
+        transform: translate(var(--dax),var(--day));
+    }
+
+    to {
+        transform: translate(var(--dbx),var(--dby));
+    }
+}

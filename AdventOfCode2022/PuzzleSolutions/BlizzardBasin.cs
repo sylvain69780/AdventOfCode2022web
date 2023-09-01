@@ -49,8 +49,8 @@ namespace AdventOfCode2022web.Puzzles
             => BlizzardsInitialPosition!
             .Select(b => (X: b.Position.X - 1, Y: b.Position.Y - 1, b.Direction))
             .Select(b => (X: b.X + roundNumber * Moves[(int)b.Direction].dx, Y: b.Y + roundNumber * Moves[(int)b.Direction].dy, b.Direction))
-            .Select(b => (X: Mod(b.X, GridWidth-2), Y: Mod(b.Y, GridHeight-2), b.Direction))
-            .Select(b => ((b.X + 1,b.Y + 1), b.Direction));
+            .Select(b => (X: Mod(b.X, GridWidth - 2), Y: Mod(b.Y, GridHeight - 2), b.Direction))
+            .Select(b => ((b.X + 1, b.Y + 1), b.Direction));
 
         private static readonly List<(int dx, int dy)> Moves = new()
         {
@@ -90,9 +90,9 @@ namespace AdventOfCode2022web.Puzzles
             GridWidth = Input[0].Length;
             GridHeight = Input.Length;
             BlizzardsPositions = BlizzardsPositionAtTime(RoundNumber).ToList();
-            Elves = new List<((int X, int Y) StartingPosition, (int X, int Y) TargetPosition, BlizzardBasinElfState State)>() 
+            Elves = new List<((int X, int Y) StartingPosition, (int X, int Y) TargetPosition, BlizzardBasinElfState State)>()
             {
-                (StartingPosition:EntrancePosition,TargetPosition:EntrancePosition , BlizzardBasinElfState.Safe) 
+                (StartingPosition:EntrancePosition,TargetPosition:EntrancePosition , BlizzardBasinElfState.Safe)
             };
         }
 
@@ -107,6 +107,7 @@ namespace AdventOfCode2022web.Puzzles
             do
             {
                 RoundNumber++;
+                // VIEW init
                 ResetViewModel();
                 var blizzardsPosition = BlizzardsPositionAtTime(RoundNumber).Select(b => (b.Position.X, b.Position.Y)).ToHashSet();
                 var newQueue = new Queue<(int X, int Y)>();
@@ -126,6 +127,7 @@ namespace AdventOfCode2022web.Puzzles
                         }
                         foreach (var possiblePath in possiblePaths)
                             newQueue.Enqueue(possiblePath);
+                        // VIEW update
                         if (possiblePaths.Count == 0)
                             AddAsKilled(position);
                         else
@@ -134,14 +136,25 @@ namespace AdventOfCode2022web.Puzzles
                     }
                 }
                 queue = newQueue;
+                // VIEW if it is last animation
+                if (queue.Contains(end))
+                {
+                    for (var i = 0; i < Elves!.Count; i++)
+                    {
+                        var p = Elves[i];
+                        if ((p.TargetPosition.X, p.TargetPosition.Y) != end)
+                        {
+                            p.TargetPosition = p.StartingPosition;
+                            p.State = BlizzardBasinElfState.Killed;
+                            Elves[i] = p;
+                        }
+                    }
+                }
                 yield return $"Search phase {RoundNumber}";
             } while (queue.Count > 0 && !queue.Contains(end));
             if (!queue.Contains(end))
                 throw new InvalidDataException("No solution found");
-            ResetViewModel();
-            foreach (var pos in queue)
-                AddAsKilledOrSafe(pos);
-            yield return $"{RoundNumber}";
+            //yield return $"{RoundNumber}";
         }
 
         private void AddAsKilledOrSafe((int X, int Y) pos)

@@ -6,8 +6,10 @@
 </p>
 @if (PuzzleSolution != null && PuzzleSolution.Elves != null)
 {
-    var ElvesSearching = PuzzleSolution!.Elves!.Where(x => x.State == BlizzardBasinElfState.Possible || x.State == BlizzardBasinElfState.Safe);
-    var ElvesKilled = PuzzleSolution!.Elves!.Where(x => x.State == BlizzardBasinElfState.Killed);
+    var elvesSearching = PuzzleSolution!.Elves!.Where(x => x.State == BlizzardBasinElfState.Possible || x.State == BlizzardBasinElfState.Safe);
+    var elvesKilled = PuzzleSolution!.Elves!.Where(x => x.State == BlizzardBasinElfState.Killed);
+    var blizzard = PuzzleSolution!.BlizzardsPositions!;
+    var (gridWidth, gridHeight) = (GridWidth - 2, GridHeight - 2);
     <svg viewBox="0 0 @GridWidth @GridHeight" class="img-fluid">
         <BlizzardBasinViewDefs/>
         <rect x="0" y="0" width=@GridWidth height=@GridHeight fill="grey" />
@@ -16,15 +18,52 @@
         <rect x=@Exit.X y=@Exit.Y width="1" height="1" fill="red" />
         <g style=@AnimationTimingStyle>
             <g class=@ElfSearchClass>
-                @foreach (var elf in ElvesSearching)
+                @foreach (var elf in elvesSearching)
                 {
                     <use href="#elf-possible" style=@($"--dax:{elf.StartingPosition.X}px;--day:{elf.StartingPosition.Y}px;--dbx:{elf.TargetPosition.X }px;--dby:{elf.TargetPosition.Y}px;") />
                 }
             </g>
             <g class=@ElfKilledClass>
-                @foreach (var elf in ElvesKilled)
+                @foreach (var elf in elvesKilled)
                 {
                     <use href="#elf-possible" style=@($"--dax:{elf.StartingPosition.X}px;--day:{elf.StartingPosition.Y}px;--dbx:{elf.TargetPosition.X }px;--dby:{elf.TargetPosition.Y}px;") />
+                }
+            </g>
+            <g class=@BlizzardClass>
+                @foreach (var b in blizzard)
+                {
+                    if ( b.Direction == Directions.Right)
+                    {
+                        <use href="#blizzard-right" style=@($"--dax:{b.Position.X-1}px;--day:{b.Position.Y}px;--dbx:{b.Position.X }px;--dby:{b.Position.Y}px;") />
+                        if (b.Position.X == 1)
+                        {
+                            <use href="#blizzard-right" style=@($"--dax:{gridWidth}px;--day:{b.Position.Y}px;--dbx:{gridWidth+1}px;--dby:{b.Position.Y}px;") />
+                        }
+                    }
+                    if ( b.Direction == Directions.Left)
+                    {
+                        <use href="#blizzard-left" style=@($"--dax:{b.Position.X+1}px;--day:{b.Position.Y}px;--dbx:{b.Position.X }px;--dby:{b.Position.Y}px;") />
+                        if (b.Position.X == gridWidth)
+                        {
+                            <use href="#blizzard-left" style=@($"--dax:1px;--day:{b.Position.Y}px;--dbx:0px;--dby:{b.Position.Y}px;") />
+                        }
+                    }
+                    if (b.Direction == Directions.Down)
+                    {
+                        <use href="#blizzard-down" style=@($"--dax:{b.Position.X}px;--day:{b.Position.Y-1}px;--dbx:{b.Position.X}px;--dby:{b.Position.Y}px;") />
+                        if (b.Position.Y == 1)
+                        {
+                            <use href="#blizzard-down" style=@($"--dax:{b.Position.X}px;--day:{gridHeight}px;--dbx:{b.Position.X}px;--dby:{gridHeight+1}px;") />
+                        }
+                    }
+                    if (b.Direction == Directions.Up)
+                    {
+                        <use href="#blizzard-up" style=@($"--dax:{b.Position.X}px;--day:{b.Position.Y+1}px;--dbx:{b.Position.X}px;--dby:{b.Position.Y}px;") />
+                        if (b.Position.Y == gridHeight)
+                        {
+                            <use href="#blizzard-up" style=@($"--dax:{b.Position.X}px;--day:1px;--dbx:{b.Position.X }px;--dby:0px;") />
+                        }
+                    }
                 }
             </g>
             @*            <g class=@(_animationCompleted ? "elf-hidden" : "elf-killed" )>
@@ -63,11 +102,11 @@ else
 }
 
 @code {
-    private IBlizzardBasinState? PuzzleSolution { get; set; }
+    private IBlizzardBasinViewModel? PuzzleSolution { get; set; }
 
     protected override void OnInitialized()
     {
-        PuzzleSolution = (IBlizzardBasinState)(PuzzleSolutionViewModel!.PuzzleSolution!);
+        PuzzleSolution = (IBlizzardBasinViewModel)(PuzzleSolutionViewModel!.PuzzleSolution!);
         PuzzleSolutionViewModel.PuzzleOutputReturned += SetTimer;
         base.OnInitialized();
     }
@@ -100,4 +139,5 @@ else
     private string AnimationTimingStyle => $"--elf-animation-duration: {AnimationDuration}ms;";
     private string ElfSearchClass => (_animationCompleted ? "elf-still" : "elf-move");
     private string ElfKilledClass => (_animationCompleted ? "elf-hidden" : "elf-killed");
+    private string BlizzardClass => (_animationCompleted ? "blizzard-still" : "blizzard-move");
 }
