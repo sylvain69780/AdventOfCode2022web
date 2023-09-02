@@ -58,22 +58,22 @@
 @keyframes elf-killed-anim {
     from {
         opacity: 0.5;
-        transform: translate(var(--dbx),var(--dby)) rotate(0deg);
+        transform: translate(var(--dbx),var(--dby)) rotate(0deg) scale(1);
     }
 
     50% {
         opacity: 0.5;
-        transform: translate(var(--dbx),var(--dby)) rotate(0deg);
+        transform: translate(var(--dbx),var(--dby)) rotate(0deg) scale(1);
     }
 
     75% {
         opacity: 0.5;
-        transform: translate(var(--dbx),var(--dby)) rotate(180deg);
+        transform: translate(var(--dbx),var(--dby)) rotate(180deg) scale(1.5);
     }
 
     to {
         opacity: 0;
-        transform: translate(var(--dbx),var(--dby)) rotate(180deg);
+        transform: translate(var(--dbx),var(--dby)) rotate(180deg) scale(1);
     }
 }
 

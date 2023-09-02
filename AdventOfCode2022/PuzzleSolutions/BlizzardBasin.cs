@@ -49,11 +49,11 @@ namespace AdventOfCode2022web.Puzzles
         private IEnumerable<((int X, int Y) Position, Directions Direction)> BlizzardsPositionAtTime(int roundNumber)
             => BlizzardsInitialPosition!
             .Select(b => (X: b.Position.X - 1, Y: b.Position.Y - 1, b.Direction))
-            .Select(b => (X: b.X + roundNumber * Moves[(int)b.Direction].dx, Y: b.Y + roundNumber * Moves[(int)b.Direction].dy, b.Direction))
+            .Select(b => (X: b.X + roundNumber * AllowedMoves[(int)b.Direction].dx, Y: b.Y + roundNumber * AllowedMoves[(int)b.Direction].dy, b.Direction))
             .Select(b => (X: Mod(b.X, GridWidth - 2), Y: Mod(b.Y, GridHeight - 2), b.Direction))
             .Select(b => ((b.X + 1, b.Y + 1), b.Direction));
 
-        private static readonly List<(int dx, int dy)> Moves = new()
+        private static readonly List<(int dx, int dy)> AllowedMoves = new()
         {
             (0,0),
             (1,0),
@@ -102,162 +102,98 @@ namespace AdventOfCode2022web.Puzzles
         {
             Reset();
             RoundNumber = 0;
-            var tree = ComputeSearchTree(EntrancePosition, ExitPosition);
-
-            var parentIds = new List<int>() { 0 };
-            var treeGroupedByParent = tree.GroupBy(x => x.ParentId).ToDictionary(x => x.Key);
-            for (var i = 0; i < RoundNumber; i++)
+            List<List<(int ParentId, (int X, int Y) Pos)>> tree = new() { new List<(int ParentId, (int X, int Y) Pos)>() { (0, EntrancePosition) } };
+            foreach (var treeLevel in GetTreeLevels(EntrancePosition, ExitPosition))
             {
-                BlizzardsPositions = BlizzardsPositionAtTime(i + 1).ToList();
+                tree.Add(treeLevel);
+                BlizzardsPositions = BlizzardsPositionAtTime(RoundNumber).ToList();
                 Elves!.Clear();
-                var newParentIds = new List<int>();
-                foreach(var parentId in parentIds)
+                foreach (var child in tree[RoundNumber])
                 {
-                    var parent = tree[parentId];
-                    if (treeGroupedByParent.TryGetValue(parentId, out var children))
-                    {
-                        foreach (var child in children)
-                        {
-                            Elves.Add((StartingPosition: parent.Pos, TargetPosition: child.Pos, BlizzardBasinElfState.Possible));
-                            newParentIds.Add(child.Id);
-                        }
-                    } 
-                    else
-                    {
-                        Elves.Add((StartingPosition: parent.Pos, TargetPosition: parent.Pos, BlizzardBasinElfState.Killed));
-                    }
+                    var parent = tree[RoundNumber - 1][child.ParentId];
+                    Elves.Add((StartingPosition: parent.Pos, TargetPosition: child.Pos, BlizzardBasinElfState.Possible));
                 }
-                parentIds = newParentIds;
-                if ( i == RoundNumber-1)
-                    Elves = Elves.Select(x => (x.StartingPosition, x.TargetPosition, x.TargetPosition == ExitPosition ? BlizzardBasinElfState.Safe : BlizzardBasinElfState.Killed)).ToList();
-                yield return $"{i + 1}";
+                var parentIds = tree[RoundNumber].Select(x => x.ParentId).ToHashSet();
+                for (var parentId = 0; parentId < tree[RoundNumber-1].Count;parentId++)
+                {
+                    if (parentIds.Contains(parentId))
+                        continue;
+                    var parent = tree[RoundNumber - 1][parentId];
+                    Elves.Add((StartingPosition: parent.Pos, TargetPosition: parent.Pos, BlizzardBasinElfState.Killed));
+                }
+                yield return $"{RoundNumber}";
             }
-        }
-
-        private List<(int Id, int ParentId, (int X, int Y) Pos)> ComputeSearchTree((int X, int Y) start, (int X, int Y) end)
-        {
-            var found = false;
-            var queue = new Queue<(int Id, (int X, int Y) Pos)>();
-            queue.Enqueue((0, start));
-            var tree = new List<(int Id, int ParentId, (int X, int Y) Pos)>
-            {
-                (0, -1, start)
-            };
-            do
-            {
-                RoundNumber++;
-                var blizzardsPosition = BlizzardsPositionAtTime(RoundNumber).Select(b => (b.Position.X, b.Position.Y)).ToHashSet();
-                var newQueue = new Queue<(int Id, (int X, int Y) Pos)>();
-                {
-                    while (queue.TryDequeue(out var position))
-                    {
-                        var possiblePaths = new List<(int X, int Y)>();
-                        for (var i = 0; i < Moves.Count; i++)
-                        {
-                            var (dx, dy) = Moves[i];
-                            var pos = (X: position.Pos.X + dx, Y: position.Pos.Y + dy);
-                            var isPositionBlocked = blizzardsPosition.Contains(pos) || Walls!.Contains(pos) || newQueue.Any(x => x.Pos == pos) || (i > 0 && queue.Any(x => x.Pos == pos)) || pos.Y < 0 || pos.Y >= GridHeight;
-                            if (!isPositionBlocked)
-                                possiblePaths.Add(pos);
-                        }
-                        foreach (var possiblePath in possiblePaths)
-                        {
-                            newQueue.Enqueue((tree.Count, possiblePath));
-                            tree.Add((tree.Count, position.Id, possiblePath));
-                        }
-                    }
-                }
-                queue = newQueue;
-                found = queue.Any(x => x.Pos == end);
-            } while (queue.Count > 0 && !found);
-            if (!found)
-                throw new InvalidDataException("No solution found");
-            return tree;
         }
 
         public IEnumerable<string> SolveSecondPart()
         {
             Reset();
-            var newPrev = new Dictionary<(int x, int y, int t), (int x, int y, int t)>();
-            var stages = new ((int x, int y), (int x, int y))[]
+            RoundNumber = 0;
+            List<List<(int ParentId, (int X, int Y) Pos)>> tree = new() { new List<(int ParentId, (int X, int Y) Pos)>() { (0, EntrancePosition) } };
+            foreach (var treeLevel in GetTreeLevels(EntrancePosition, ExitPosition).Concat(GetTreeLevels(ExitPosition, EntrancePosition).Concat(GetTreeLevels(EntrancePosition, ExitPosition))))
             {
-                (EntrancePosition,ExitPosition),
-                (ExitPosition,EntrancePosition),
-                (EntrancePosition,ExitPosition),
-            };
-            foreach (var (start, arrival) in stages)
-            {
-                Prev = new Dictionary<(int x, int y, int t), (int x, int y, int t)>();
-                var search = new Queue<(int x, int y)>();
-                search.Enqueue(start);
-                bool found;
-                do
+                tree.Add(treeLevel);
+                BlizzardsPositions = BlizzardsPositionAtTime(RoundNumber).ToList();
+                Elves!.Clear();
+                foreach (var child in tree[RoundNumber])
                 {
-                    RoundNumber++;
-                    var newSearch = new Queue<(int x, int y)>();
-                    /// to do
-                    HashSet<(int, int y)> blizzardsPos = new HashSet<(int, int y)>();
-                    found = SearchForNextMove(search, newSearch, blizzardsPos, arrival);
-                    yield return $"{RoundNumber}";
-                    search = newSearch;
-                } while (search.Count > 0 && !found);
-                var p = (arrival.x, arrival.y, RoundNumber);
-                if (!Prev.ContainsKey(p))
-                    throw new InvalidDataException("No solution found");
-                while (Prev.TryGetValue(p, out var np))
-                {
-                    newPrev.Add(p, np);
-                    p = np;
+                    var parent = tree[RoundNumber - 1][child.ParentId];
+                    Elves.Add((StartingPosition: parent.Pos, TargetPosition: child.Pos, BlizzardBasinElfState.Possible));
                 }
+                var parentIds = tree[RoundNumber].Select(x => x.ParentId).ToHashSet();
+                for (var parentId = 0; parentId < tree[RoundNumber - 1].Count; parentId++)
+                {
+                    if (parentIds.Contains(parentId))
+                        continue;
+                    var parent = tree[RoundNumber - 1][parentId];
+                    Elves.Add((StartingPosition: parent.Pos, TargetPosition: parent.Pos, BlizzardBasinElfState.Killed));
+                }
+                yield return $"{RoundNumber}";
             }
-            Prev = newPrev;
-            var minute = RoundNumber;
-            for (var i = 1; i <= minute; i++)
-            {
-                RoundNumber = i;
-                yield return $"Replay step {i}";
-            }
-            yield return $"{RoundNumber}";
         }
 
-        private bool SearchForNextMove(Queue<(int x, int y)> search, Queue<(int x, int y)> newSearch, HashSet<(int, int y)> blizzardsPos, (int x, int y) arrival)
+        private IEnumerable<List<(int ParentId, (int X, int Y) Pos)>> GetTreeLevels((int X, int Y) start, (int X, int Y) end)
         {
-            bool found = false;
-            DeadEnds = new List<(int x, int y)>();
-            while (search.TryDequeue(out var head))
+            var queue = new List<(int ParentId, (int X, int Y) Pos)>
             {
-                var branches = 0;
-                foreach (var (dx, dy) in Moves)
+                (0, start)
+            };
+            var found = false;
+            do
+            {
+                RoundNumber++;
+                var blizzardsPosition = BlizzardsPositionAtTime(RoundNumber).Select(b => (b.Position.X, b.Position.Y)).ToHashSet();
+                var newQueue = new List<(int ParentId, (int X, int Y) Pos)>();
+                for (var parentId = 0; parentId < queue.Count && !found; parentId++)
                 {
-                    if (head == EntrancePosition && dy == -1)
-                        continue;
-                    if (head == ExitPosition && dy == 1)
-                        continue;
-
-                    var pos = (x: head.x + dx, y: head.y + dy);
-                    if (pos == arrival)
+                    var (x, y) = queue[parentId].Pos;
+                    foreach (var (dx, dy) in AllowedMoves)
                     {
-                        Prev!.Add((pos.x, pos.y, RoundNumber), (head.x, head.y, RoundNumber - 1));
-                        found = true;
-                        break;
+                        var child = (X: x + dx, Y: y + dy);
+                        if (child.Y < 0 || child.Y >= GridHeight)
+                            continue;
+                        var isBlockedByBlizzardsOrWalls = blizzardsPosition.Contains(child) || Walls!.Contains(child);
+                        if (isBlockedByBlizzardsOrWalls)
+                            continue;
+                        bool isNodeAlreadyHere = newQueue.Any(x => x.Pos == child) || ((dx, dy) != (0, 0) && queue.Any(x => x.Pos == child));
+                        if (isNodeAlreadyHere)
+                            continue;
+                        newQueue.Add((parentId, child));
+                        if (child == end)
+                        {
+                            found = true;
+                            break;
+                        }
                     }
-                    if (!blizzardsPos.Contains(pos) && !Walls!.Contains(pos) && !newSearch.Contains(pos))
-                    {
-                        Prev!.Add((pos.x, pos.y, RoundNumber), (head.x, head.y, RoundNumber - 1));
-                        newSearch.Enqueue(pos);
-                        branches++;
-                    }
-                }
-                if (branches == 0)
-                {
-                    DeadEnds.Add(head);
                 }
                 if (found)
-                    break;
-            }
-            return found;
+                    newQueue = newQueue.Where(x => x.Pos == end).ToList();
+                queue = newQueue;
+                yield return queue;
+            } while (!found && queue.Count > 0);
+            if (queue.Count == 0)
+                throw new InvalidDataException("No solution found");
         }
-
     }
 }
 
