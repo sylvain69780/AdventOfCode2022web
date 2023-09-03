@@ -6,7 +6,7 @@
 <button disabled=@IsMoveNextForbidden @onclick=@MoveNext>Move to next Step</button>
 <button disabled=@IsMoveNextForbidden @onclick=@MoveUntilCompleted>Run all Steps</button>
 <button disabled=@IsStopDisabled @onclick=@Stop>Stop</button>
-<p class="border border-2 m-1 p-1">@(_isCompleted ? "Click to start solving one of the the 2 parts." : "Click to run the next step")</p>
+<p class="border border-2 m-1 p-1">@(_isCompleted ? "Click to start solving one of the the 2 parts." : "Click to run the next step, adjust the animation speed using the slider.")</p>
 <p>Step @(PuzzleSolutionViewModel?.SolvingStep ?? 0)</p>
 <div class="row">
     <input type="range" id="delayRange" @bind="PuzzleSolutionViewModel!.AnimationDuration" min="0" max="5000" step="50">
