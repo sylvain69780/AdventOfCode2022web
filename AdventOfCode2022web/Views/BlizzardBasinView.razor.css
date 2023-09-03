@@ -1,5 +1,5 @@
 ﻿:root {
-    --elf-animation-duration: 0;
+    --animation-duration: 0;
     --dx: 0px;
     --dy: 0px;
     --dax: 0px;
@@ -8,31 +8,18 @@
     --dby: 0px;
 }
 
-.elf-still > use {
+.elf-motionless > use {
     transform: translate(var(--dbx),var(--dby));
 }
 
-.elf-still-possible > use {
-    transform: translate(var(--dbx),var(--dby));
-    opacity: 0.5;
-}
-
-.elf-move > use {
-    animation-name: elf-move-anim;
+.elf-moving > use {
+    animation-name: elf-moving-anim;
     animation-fill-mode: forwards;
     animation-iteration-count: 1;
-    animation-duration: var(--elf-animation-duration);
+    animation-duration: var(--animation-duration);
 }
 
-.elf-possible > use {
-    animation-name: elf-move-anim;
-    animation-fill-mode: forwards;
-    animation-iteration-count: 1;
-    animation-duration: var(--elf-animation-duration);
-    opacity: 0.5;
-}
-
-@keyframes elf-move-anim {
+@keyframes elf-moving-anim {
     from {
         transform: translate(var(--dax),var(--day));
     }
@@ -46,10 +33,9 @@
     animation-name: elf-killed-anim;
     animation-fill-mode: forwards;
     animation-iteration-count: 1;
-    animation-duration: var(--elf-animation-duration);
+    animation-duration: var(--animation-duration);
     transform-origin: 0.5px 0.5px;
 }
-
 
 .elf-hidden > use {
     opacity: 0;
@@ -57,12 +43,12 @@
 
 @keyframes elf-killed-anim {
     from {
-        opacity: 0.5;
+        opacity: 1.0;
         transform: translate(var(--dbx),var(--dby)) rotate(0deg) scale(1);
     }
 
     50% {
-        opacity: 0.5;
+        opacity: 1.0;
         transform: translate(var(--dbx),var(--dby)) rotate(0deg) scale(1);
     }
 
@@ -77,47 +63,18 @@
     }
 }
 
-.blizzard-hidden {
-    opacity:0;
-}
-
-.blizzard {
-    animation-name: blizzard-anim;
-    animation-fill-mode: forwards;
-    animation-iteration-count: 1;
-    animation-duration: var(--elf-animation-duration);
-}
-
-@keyframes blizzard-anim {
-    from {
-        opacity: 0;
-    }
-
-    50% {
-        opacity: 0;
-    }
-
-    75% {
-        opacity: 1;
-    }
-
-    to {
-        opacity: 0;
-    }
-}
-
-.blizzard-still > use {
+.blizzard-motionless > use {
     transform: translate(var(--dbx),var(--dby));
 }
 
-.blizzard-move > use {
-    animation-name: blizzard-move-anim;
+.blizzard-moving > use {
+    animation-name: blizzard-moving-anim;
     animation-fill-mode: forwards;
     animation-iteration-count: 1;
-    animation-duration: var(--elf-animation-duration);
+    animation-duration: var(--animation-duration);
 }
 
-@keyframes blizzard-move-anim {
+@keyframes blizzard-moving-anim {
     from {
         transform: translate(var(--dax),var(--day));
     }

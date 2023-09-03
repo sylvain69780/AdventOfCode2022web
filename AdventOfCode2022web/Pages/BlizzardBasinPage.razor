@@ -2,14 +2,14 @@
 @inject PuzzleSolutionViewModel<BlizzardBasin> PuzzleSolutionViewModel
 <h2>BlizzardBasinPage</h2>
 <CascadingValue Name="PuzzleSolutionViewModel" Value=@PuzzleSolutionViewModel>
-<div class="row">
-    <div class="col-lg-6">
-        <BlizzardBasinView/>
+    <div class="row">
+        <div class="col-lg-6">
+            <BlizzardBasinView />
+        </div>
+        <div class="col-lg-6">
+            <PuzzleControler />
+            <PuzzleCodeViewer />
+            <PuzzleInputForm />
+        </div>
     </div>
-    <div class="col-lg-6">
-        <PuzzleCodeViewer/>
-        <PuzzleInputForm/>
-        <PuzzleControler/>
-    </div>
-</div>
 </CascadingValue>

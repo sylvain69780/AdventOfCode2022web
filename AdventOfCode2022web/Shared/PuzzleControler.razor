@@ -1,15 +1,12 @@
 ﻿@inherits PuzzleViewBase
 @using System.Diagnostics;
-<h3>PuzzleControler</h3>
+<h3>Puzzle Controler</h3>
 <button disabled=@IsStartProcessingForbidden @onclick=@StartPart1>Initialize Part 1</button>
 <button disabled=@IsStartProcessingForbidden @onclick=@StartPart2>Initialize Part 2</button>
 <button disabled=@IsMoveNextForbidden @onclick=@MoveNext>Move to next Step</button>
 <button disabled=@IsMoveNextForbidden @onclick=@MoveUntilCompleted>Run all Steps</button>
 <button disabled=@IsStopDisabled @onclick=@Stop>Stop</button>
-@if (_isCompleted)
-{
-    <p class="border border-2 m-1 p-1">Ready</p>
-}
+<p class="border border-2 m-1 p-1">@(_isCompleted ? "Click to start solving one of the the 2 parts." : "Click to run the next step")</p>
 <p>Step @(PuzzleSolutionViewModel?.SolvingStep ?? 0)</p>
 <div class="row">
     <input type="range" id="delayRange" @bind="PuzzleSolutionViewModel!.AnimationDuration" min="0" max="5000" step="50">

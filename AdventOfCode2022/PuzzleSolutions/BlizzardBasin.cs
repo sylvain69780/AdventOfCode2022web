@@ -1,24 +1,14 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-
-namespace AdventOfCode2022web.Puzzles
+﻿namespace AdventOfCode2022web.Puzzles
 {
     public interface IBlizzardBasinViewModel
     {
         int GridWidth { get; }
         int GridHeight { get; }
-        List<((int X, int Y) StartingPosition, (int X, int Y) TargetPosition, BlizzardBasinElfState State)>? Elves { get; }
-        List<((int X, int Y) Position, Directions Direction)>? BlizzardsPositions { get; }
+        int CurrentMinute { get; }
         (int X, int Y) EntrancePosition { get; }
         (int X, int Y) ExitPosition { get; }
-    }
-
-    public enum BlizzardBasinElfState
-    {
-        Possible,
-        Safe,
-        Killed
+        IEnumerable<((int X, int Y) Position, Directions Direction)>? BlizzardsPositions { get; }
+        List<List<(int ParentId, (int X, int Y) Pos)>> Tree { get; }
     }
 
     public enum Directions
@@ -35,15 +25,11 @@ namespace AdventOfCode2022web.Puzzles
     {
         public int GridWidth { get; set; }
         public int GridHeight { get; set; }
-        public List<((int X, int Y) StartingPosition, (int X, int Y) TargetPosition, BlizzardBasinElfState State)>? Elves { get; set; }
-        public List<((int X, int Y) Position, Directions Direction)>? BlizzardsPositions { get; set; }
+        public int CurrentMinute { get; set; }
         public (int X, int Y) EntrancePosition { get; set; }
         public (int X, int Y) ExitPosition { get; set; }
-
-        public Dictionary<(int x, int y, int t), (int x, int y, int t)>? Prev;
-        public List<(int x, int y)>? DeadEnds { get; set; }
-
-        private int RoundNumber { get; set; }
+        public IEnumerable<((int X, int Y) Position, Directions Direction)> BlizzardsPositions => BlizzardsPositionAtTime(CurrentMinute);
+        public List<List<(int ParentId, (int X, int Y) Pos)>> Tree { get; set; } = new();
 
         private List<((int X, int Y) Position, Directions Direction)>? BlizzardsInitialPosition { get; set; }
         private IEnumerable<((int X, int Y) Position, Directions Direction)> BlizzardsPositionAtTime(int roundNumber)
@@ -62,6 +48,8 @@ namespace AdventOfCode2022web.Puzzles
             (0,1),
         };
 
+        private static int Mod(int x, int m) => (x % m + m) % m;
+
         private HashSet<(int x, int y)>? Walls;
         private string[]? Input { get; set; }
 
@@ -73,86 +61,50 @@ namespace AdventOfCode2022web.Puzzles
 
         private void Reset()
         {
-            Walls = Input!
+            GridWidth = Input![0].Length;
+            GridHeight = Input.Length;
+            CurrentMinute = 0;
+            EntrancePosition = (Input[0].IndexOf('.'), 0);
+            ExitPosition = (Input[^1].IndexOf('.'), Input.Length - 1);
+            Walls = Input
                 .SelectMany((line, row) => line.Select((c, col) => (c, col, row))
                 .Where(y => y.c == '#'))
                 .Select(e => (x: e.col, y: e.row))
                 .ToHashSet();
-            BlizzardsInitialPosition = Input!
+            BlizzardsInitialPosition = Input
                 .SelectMany((line, row) => line.Select((c, col) => (c, col, row))
                 .Where(y => "><^v".Contains(y.c)))
                 .Select(e => ((x: e.col, y: e.row), e.c == '>' ? Directions.Right : e.c == '<' ? Directions.Left : e.c == '^' ? Directions.Up : Directions.Down))
                 .ToList();
-            Prev = new Dictionary<(int x, int y, int t), (int x, int y, int t)>();
-            DeadEnds = new List<(int x, int y)>();
-            EntrancePosition = (Input![0].IndexOf('.'), 0);
-            ExitPosition = (Input[^1].IndexOf('.'), Input.Length - 1);
-            GridWidth = Input[0].Length;
-            GridHeight = Input.Length;
-            BlizzardsPositions = BlizzardsPositionAtTime(RoundNumber).ToList();
-            Elves = new List<((int X, int Y) StartingPosition, (int X, int Y) TargetPosition, BlizzardBasinElfState State)>()
-            {
-                (StartingPosition:EntrancePosition,TargetPosition:EntrancePosition , BlizzardBasinElfState.Safe)
-            };
+            Tree.Clear();
+            Tree.Add(new List<(int ParentId, (int X, int Y) Pos)>() { (0, EntrancePosition) });
         }
-
-        private static int Mod(int x, int m) => (x % m + m) % m;
 
         public IEnumerable<string> SolveFirstPart()
         {
             Reset();
-            RoundNumber = 0;
-            List<List<(int ParentId, (int X, int Y) Pos)>> tree = new() { new List<(int ParentId, (int X, int Y) Pos)>() { (0, EntrancePosition) } };
-            foreach (var treeLevel in GetTreeLevels(EntrancePosition, ExitPosition))
+            var Levels = GetTreeLevelsAndIncrementCurrentMinute(EntrancePosition, ExitPosition);
+            foreach (var treeLevel in Levels)
             {
-                tree.Add(treeLevel);
-                BlizzardsPositions = BlizzardsPositionAtTime(RoundNumber).ToList();
-                Elves!.Clear();
-                foreach (var child in tree[RoundNumber])
-                {
-                    var parent = tree[RoundNumber - 1][child.ParentId];
-                    Elves.Add((StartingPosition: parent.Pos, TargetPosition: child.Pos, BlizzardBasinElfState.Possible));
-                }
-                var parentIds = tree[RoundNumber].Select(x => x.ParentId).ToHashSet();
-                for (var parentId = 0; parentId < tree[RoundNumber-1].Count;parentId++)
-                {
-                    if (parentIds.Contains(parentId))
-                        continue;
-                    var parent = tree[RoundNumber - 1][parentId];
-                    Elves.Add((StartingPosition: parent.Pos, TargetPosition: parent.Pos, BlizzardBasinElfState.Killed));
-                }
-                yield return $"{RoundNumber}";
+                Tree.Add(treeLevel);
+                yield return $"{CurrentMinute}"; 
             }
         }
 
         public IEnumerable<string> SolveSecondPart()
         {
             Reset();
-            RoundNumber = 0;
-            List<List<(int ParentId, (int X, int Y) Pos)>> tree = new() { new List<(int ParentId, (int X, int Y) Pos)>() { (0, EntrancePosition) } };
-            foreach (var treeLevel in GetTreeLevels(EntrancePosition, ExitPosition).Concat(GetTreeLevels(ExitPosition, EntrancePosition).Concat(GetTreeLevels(EntrancePosition, ExitPosition))))
+            var levels = GetTreeLevelsAndIncrementCurrentMinute(EntrancePosition, ExitPosition)
+                .Concat(GetTreeLevelsAndIncrementCurrentMinute(ExitPosition, EntrancePosition)
+                .Concat(GetTreeLevelsAndIncrementCurrentMinute(EntrancePosition, ExitPosition)));
+            foreach (var treeLevel in levels)
             {
-                tree.Add(treeLevel);
-                BlizzardsPositions = BlizzardsPositionAtTime(RoundNumber).ToList();
-                Elves!.Clear();
-                foreach (var child in tree[RoundNumber])
-                {
-                    var parent = tree[RoundNumber - 1][child.ParentId];
-                    Elves.Add((StartingPosition: parent.Pos, TargetPosition: child.Pos, BlizzardBasinElfState.Possible));
-                }
-                var parentIds = tree[RoundNumber].Select(x => x.ParentId).ToHashSet();
-                for (var parentId = 0; parentId < tree[RoundNumber - 1].Count; parentId++)
-                {
-                    if (parentIds.Contains(parentId))
-                        continue;
-                    var parent = tree[RoundNumber - 1][parentId];
-                    Elves.Add((StartingPosition: parent.Pos, TargetPosition: parent.Pos, BlizzardBasinElfState.Killed));
-                }
-                yield return $"{RoundNumber}";
+                Tree.Add(treeLevel);
+                yield return $"{CurrentMinute}";
             }
         }
 
-        private IEnumerable<List<(int ParentId, (int X, int Y) Pos)>> GetTreeLevels((int X, int Y) start, (int X, int Y) end)
+        private IEnumerable<List<(int ParentId, (int X, int Y) Pos)>> GetTreeLevelsAndIncrementCurrentMinute((int X, int Y) start, (int X, int Y) end)
         {
             var queue = new List<(int ParentId, (int X, int Y) Pos)>
             {
@@ -161,8 +113,8 @@ namespace AdventOfCode2022web.Puzzles
             var found = false;
             do
             {
-                RoundNumber++;
-                var blizzardsPosition = BlizzardsPositionAtTime(RoundNumber).Select(b => (b.Position.X, b.Position.Y)).ToHashSet();
+                CurrentMinute++;
+                var blizzardsPosition = BlizzardsPositionAtTime(CurrentMinute).Select(b => (b.Position.X, b.Position.Y)).ToHashSet();
                 var newQueue = new List<(int ParentId, (int X, int Y) Pos)>();
                 for (var parentId = 0; parentId < queue.Count && !found; parentId++)
                 {
