@@ -1,5 +1,5 @@
 ﻿@inherits PuzzleViewBase
-<h3>BlizzardBasinView</h3>
+<h3>Visualization of the solution</h3>
 <p>
     You have to find the shortest way from one point to another, avoiding the "blizzards".<br />
     I'm using a breadth-search algorithm here, the difficulty being that the pattern of "blizzards" changes over time.
@@ -74,14 +74,14 @@
         </g>
     </svg>
 }
-@if (_animationCompleted)
+@*@if (_animationCompleted)
 {
     <p>Animation Stopped</p>
 }
 else
 {
     <p>Animation Running</p>
-}
+}*@
 
 @code {
     private IBlizzardBasinViewModel? PuzzleSolution { get; set; }
