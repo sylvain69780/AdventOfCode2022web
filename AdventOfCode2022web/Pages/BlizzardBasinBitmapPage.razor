@@ -1,0 +1,15 @@
+﻿@page "/BlizzardBasinBitmapPage"
+@inject PuzzleSolutionViewModel<BlizzardBasin> PuzzleSolutionViewModel
+<h2>Blizzard Basin Page (Bitmap visualization)</h2>
+<CascadingValue Name="PuzzleSolutionViewModel" Value=@PuzzleSolutionViewModel>
+    <div class="row">
+        <div class="col-lg-6">
+            <BlizzardBasinBitmapView />
+        </div>
+        <div class="col-lg-6">
+            <PuzzleControler />
+            <PuzzleCodeViewer />
+            <PuzzleInputForm />
+        </div>
+    </div>
+</CascadingValue>

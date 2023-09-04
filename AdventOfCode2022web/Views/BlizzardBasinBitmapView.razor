@@ -1,0 +1,77 @@
+﻿@inherits PuzzleViewBase
+<img style="width:100%; image-rendering:pixelated" src=@Visualize() />
+
+@code {
+    private IBlizzardBasinViewState? PuzzleSolution;
+
+    protected override void OnInitialized()
+    {
+        PuzzleSolution = (IBlizzardBasinViewState)(PuzzleSolutionViewModel!.PuzzleSolution!);
+        PuzzleSolutionViewModel.PuzzleOutputReturned += StateHasChanged;
+        base.OnInitialized();
+    }
+
+    public void Dispose()
+    {
+        PuzzleSolutionViewModel!.PuzzleOutputReturned -= StateHasChanged;
+    }
+
+    public string _image64 = string.Empty;
+
+    private string Visualize()
+    {
+        if (PuzzleSolution == null || PuzzleSolution.Tree.Count == 0)
+            return string.Empty;
+        var Width = PuzzleSolution!.GridWidth;
+        var Height = PuzzleSolution!.GridHeight;
+        if (Width == 0 || Height == 0)
+            return string.Empty;
+        var response = string.Empty;
+        var tree = PuzzleSolution.Tree;
+        var level0 = tree[^1].Select(x => x.Pos).ToHashSet();
+        var level1 = tree.Count > 1 ? tree[^2].Select(x => x.Pos).ToHashSet() : new HashSet<(int X,int Y)>();
+        var level2 = tree.Count > 2 ? tree[^3].Select(x => x.Pos).ToHashSet() : new HashSet<(int X, int Y)>();
+        var blizzards = PuzzleSolution.BlizzardsPositions!.Select(x => x.Position).ToHashSet();
+        using (MemoryStream outStream = new())
+        {
+            using (Image<Rgba32> img = new(Width, Height))
+            {
+                img.ProcessPixelRows(accessor =>
+                {
+                    for (int y = 0; y < accessor.Height; y++)
+                    {
+                        Span<Rgba32> pixelRow = accessor.GetRowSpan(y);
+                        for (int x = 0; x < pixelRow.Length; x++)
+                        {
+                            ref Rgba32 pixel = ref pixelRow[x];
+                            if (level0.Contains((x, y)))
+                                pixel = new Rgba32(0, 255, 0, 255);
+                            else if (level1.Contains((x, y)))
+                                pixel = new Rgba32(128, 255, 128, 255);
+                            else if (level2.Contains((x, y)))
+                                pixel = new Rgba32(200, 255, 200, 255);
+
+                            //if (blizzards.Contains((x, y)))
+                            //    pixel = Color.Gray;
+                            //else
+                        }
+                    }
+                    if (level0.Count == 1)
+                    {
+                        var childId = 0;
+                        for (var i = 1; i <= tree.Count; i++)
+                        {
+                            var child = tree[^i][childId];
+                            childId = child.ParentId;
+                            img[child.Pos.X, child.Pos.Y] = Color.Red;
+                        }
+                    }
+
+                });
+                img.SaveAsPng(outStream);
+            }
+            response = "data:image/png;base64, " + Convert.ToBase64String(outStream.ToArray());
+        }
+        return response;
+    }
+}
