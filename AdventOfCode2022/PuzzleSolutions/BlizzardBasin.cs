@@ -169,9 +169,9 @@
                         }
                     }
                 }
-                if (found)
-                    newQueue = newQueue.Where(x => x.Pos == end).ToList();
                 queue = newQueue;
+                if (found)
+                    KeepOnlyFinalNode(end, ref queue);
                 yield return queue;
             } while (!found && queue.Count > 0);
             if (queue.Count == 0)
@@ -187,11 +187,6 @@
                 return child.Y < 0 || child.Y >= GridHeight;
             }
 
-            //static bool IsBoxAlreadyExplored(List<(int ParentId, (int X, int Y) Pos)> queue, List<(int ParentId, (int X, int Y) Pos)> newQueue, int dx, int dy, (int X, int Y) child)
-            //{
-            //    return newQueue.Any(x => x.Pos == child) || ((dx, dy) != (0, 0) && queue.Any(x => x.Pos == child));
-            //}
-
             static bool IsBoxAlreadyInQueue((int X, int Y) box,List<(int ParentId, (int X, int Y) Pos)> queue)
             {
                 return queue.Any(x => x.Pos == box);
@@ -200,6 +195,11 @@
             static bool IsStayInPlace((int dx, int dy) move)
             {
                 return move == (0,0);
+            }
+
+            static void KeepOnlyFinalNode((int X, int Y) box, ref List<(int ParentId, (int X, int Y) Pos)> queue)
+            {
+                queue = queue.Where(x => x.Pos == box).ToList();
             }
         }
 
