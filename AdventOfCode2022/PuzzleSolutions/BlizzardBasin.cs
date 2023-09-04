@@ -1,4 +1,6 @@
-﻿namespace AdventOfCode2022web.Puzzles
+﻿using System.Collections.Generic;
+
+namespace AdventOfCode2022web.Puzzles
 {
     public interface IBlizzardBasinViewState
     {
@@ -118,7 +120,7 @@
             foreach (var treeLevel in treeLevels)
             {
                 Tree.Add(treeLevel);
-                yield return $"{CurrentMinute}"; 
+                yield return $"{CurrentMinute}";
             }
         }
 
@@ -137,69 +139,86 @@
 
         private IEnumerable<List<(int ParentId, (int X, int Y) Pos)>> GetTreeLevelsAndIncrementCurrentMinute((int X, int Y) start, (int X, int Y) end)
         {
-            var queue = new List<(int ParentId, (int X, int Y) Pos)>
-            {
-                (0, start)
-            };
-            var found = false;
+            var currentTreeLevel = CreateTreeLevelWithSingleNode(start,0);
             do
             {
                 IncrementCurrentMinute();
-                var blizzardsPosition = GetBlizzardsPositionAtTime(CurrentMinute).Select(b => (b.Position.X, b.Position.Y)).ToHashSet();
-                var newQueue = new List<(int ParentId, (int X, int Y) Pos)>();
-                for (var parentId = 0; parentId < queue.Count && !found; parentId++)
+                var searchResult = GetNextTreeLevel(end, currentTreeLevel);
+                currentTreeLevel = searchResult.NextTreeLevel;
+                yield return currentTreeLevel;
+                if (searchResult.IsDestinationFound)
+                    break;
+            } while (currentTreeLevel.Count > 0);
+            if (currentTreeLevel.Count == 0)
+                throw new InvalidDataException("No solution found");
+
+            (bool IsDestinationFound, List<(int ParentId, (int X, int Y) Pos)> NextTreeLevel) GetNextTreeLevel((int X, int Y) end, List<(int ParentId, (int X, int Y) Pos)> currentTreeLevel)
+            {
+                var boxesOccupiedByBlizzards = GetBoxesOccupiedByBlizzards();
+                bool isSolutionFound = false;
+                var nextTreeLevel = NewEmptyTreeLevel();
+                for (var parentId = 0; parentId < currentTreeLevel.Count && !isSolutionFound; parentId++)
                 {
-                    var (x, y) = queue[parentId].Pos;
+                    var (x, y) = currentTreeLevel[parentId].Pos;
                     foreach (var move in AllowedMoves)
                     {
                         var box = (X: x + move.dx, Y: y + move.dy);
-                        if (IsOutOfGrid(box))
+                        if (IsBoxOutOfGrid(box))
                             continue;
-                        if (IsBlockedByBlizzardsOrWalls(box, blizzardsPosition))
+                        if (IsBoxBlockedByBlizzardsOrWalls(box, boxesOccupiedByBlizzards))
                             continue;
-                        if (!IsStayInPlace(move) && IsBoxAlreadyInQueue(box, queue))
+                        if (IsDisplacement(move) && IsBoxAlreadyInTreeLevel(box, currentTreeLevel))
                             continue;
-                        if (IsBoxAlreadyInQueue(box, newQueue))
+                        if (IsBoxAlreadyInTreeLevel(box, nextTreeLevel))
                             continue;
-                        newQueue.Add((parentId, box));
                         if (box == end)
                         {
-                            found = true;
+                            nextTreeLevel = CreateTreeLevelWithSingleNode(box, parentId);
+                            isSolutionFound = true;
                             break;
                         }
+                        nextTreeLevel.Add((parentId, box));
                     }
                 }
-                queue = newQueue;
-                if (found)
-                    KeepOnlyFinalNode(end, ref queue);
-                yield return queue;
-            } while (!found && queue.Count > 0);
-            if (queue.Count == 0)
-                throw new InvalidDataException("No solution found");
+                return (isSolutionFound, nextTreeLevel);
+            }
 
-            bool IsBlockedByBlizzardsOrWalls((int X, int Y) child,HashSet< (int X, int Y)> blizzardsPosition)
+            bool IsBoxBlockedByBlizzardsOrWalls((int X, int Y) child, HashSet<(int X, int Y)> blizzardsPosition)
             {
                 return blizzardsPosition.Contains(child) || Walls!.Contains(child);
             }
 
-            bool IsOutOfGrid((int X, int Y) child)
+            bool IsBoxOutOfGrid((int X, int Y) child)
             {
                 return child.Y < 0 || child.Y >= GridHeight;
             }
 
-            static bool IsBoxAlreadyInQueue((int X, int Y) box,List<(int ParentId, (int X, int Y) Pos)> queue)
+            static bool IsBoxAlreadyInTreeLevel((int X, int Y) box, List<(int ParentId, (int X, int Y) Pos)> queue)
             {
                 return queue.Any(x => x.Pos == box);
             }
 
-            static bool IsStayInPlace((int dx, int dy) move)
+            static bool IsDisplacement((int dx, int dy) move)
             {
-                return move == (0,0);
+                return move != (0, 0);
             }
 
-            static void KeepOnlyFinalNode((int X, int Y) box, ref List<(int ParentId, (int X, int Y) Pos)> queue)
+            static List<(int ParentId, (int X, int Y) Pos)> CreateTreeLevelWithSingleNode((int X, int Y) box, int parentId)
             {
-                queue = queue.Where(x => x.Pos == box).ToList();
+                return new List<(int ParentId, (int X, int Y) Pos)>
+            {
+                (parentId, box)
+            };
+            }
+
+            static List<(int ParentId, (int X, int Y) Pos)> NewEmptyTreeLevel()
+            {
+                return new List<(int ParentId, (int X, int Y) Pos)>();
+            }
+
+            HashSet<(int X, int Y)> GetBoxesOccupiedByBlizzards()
+            {
+                return GetBlizzardsPositionAtTime(CurrentMinute).Select(b => (b.Position.X, b.Position.Y)).ToHashSet();
             }
         }
 
