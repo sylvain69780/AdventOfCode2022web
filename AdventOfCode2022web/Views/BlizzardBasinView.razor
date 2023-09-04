@@ -84,11 +84,11 @@ else
 }*@
 
 @code {
-    private IBlizzardBasinViewModel? PuzzleSolution { get; set; }
+    private IBlizzardBasinViewState? PuzzleSolution { get; set; }
 
     protected override void OnInitialized()
     {
-        PuzzleSolution = (IBlizzardBasinViewModel)(PuzzleSolutionViewModel!.PuzzleSolution!);
+        PuzzleSolution = (IBlizzardBasinViewState)(PuzzleSolutionViewModel!.PuzzleSolution!);
         PuzzleSolutionViewModel.PuzzleOutputReturned += SetTimer;
         PuzzleSolutionViewModel.PuzzleInputLoaded += StateHasChanged;
         base.OnInitialized();
