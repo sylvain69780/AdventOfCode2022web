@@ -104,10 +104,10 @@
 
         private static int Mod(int x, int m) => (x % m + m) % m;
 
-        private IEnumerable<((int X, int Y) Position, Directions Direction)> GetBlizzardsPositionAtTime(int roundNumber)
+        private IEnumerable<((int X, int Y) Position, Directions Direction)> GetBlizzardsPositionAtTime(int minute)
             => BlizzardsInitialPosition!
             .Select(b => (X: b.Position.X - 1, Y: b.Position.Y - 1, b.Direction))
-            .Select(b => (X: b.X + roundNumber * AllowedMoves[(int)b.Direction].dx, Y: b.Y + roundNumber * AllowedMoves[(int)b.Direction].dy, b.Direction))
+            .Select(b => (X: b.X + minute * AllowedMoves[(int)b.Direction].dx, Y: b.Y + minute * AllowedMoves[(int)b.Direction].dy, b.Direction))
             .Select(b => (X: Mod(b.X, GridWidth - 2), Y: Mod(b.Y, GridHeight - 2), b.Direction))
             .Select(b => ((b.X + 1, b.Y + 1), b.Direction));
 
@@ -144,25 +144,25 @@
             var found = false;
             do
             {
-                CurrentMinute++;
+                IncrementCurrentMinute();
                 var blizzardsPosition = GetBlizzardsPositionAtTime(CurrentMinute).Select(b => (b.Position.X, b.Position.Y)).ToHashSet();
                 var newQueue = new List<(int ParentId, (int X, int Y) Pos)>();
                 for (var parentId = 0; parentId < queue.Count && !found; parentId++)
                 {
                     var (x, y) = queue[parentId].Pos;
-                    foreach (var (dx, dy) in AllowedMoves)
+                    foreach (var move in AllowedMoves)
                     {
-                        var child = (X: x + dx, Y: y + dy);
-                        if (child.Y < 0 || child.Y >= GridHeight)
+                        var box = (X: x + move.dx, Y: y + move.dy);
+                        if (IsOutOfGrid(box))
                             continue;
-                        var isBlockedByBlizzardsOrWalls = blizzardsPosition.Contains(child) || Walls!.Contains(child);
-                        if (isBlockedByBlizzardsOrWalls)
+                        if (IsBlockedByBlizzardsOrWalls(box, blizzardsPosition))
                             continue;
-                        bool isNodeAlreadyHere = newQueue.Any(x => x.Pos == child) || ((dx, dy) != (0, 0) && queue.Any(x => x.Pos == child));
-                        if (isNodeAlreadyHere)
+                        if (!IsStayInPlace(move) && IsBoxAlreadyInQueue(box, queue))
                             continue;
-                        newQueue.Add((parentId, child));
-                        if (child == end)
+                        if (IsBoxAlreadyInQueue(box, newQueue))
+                            continue;
+                        newQueue.Add((parentId, box));
+                        if (box == end)
                         {
                             found = true;
                             break;
@@ -176,6 +176,36 @@
             } while (!found && queue.Count > 0);
             if (queue.Count == 0)
                 throw new InvalidDataException("No solution found");
+
+            bool IsBlockedByBlizzardsOrWalls((int X, int Y) child,HashSet< (int X, int Y)> blizzardsPosition)
+            {
+                return blizzardsPosition.Contains(child) || Walls!.Contains(child);
+            }
+
+            bool IsOutOfGrid((int X, int Y) child)
+            {
+                return child.Y < 0 || child.Y >= GridHeight;
+            }
+
+            //static bool IsBoxAlreadyExplored(List<(int ParentId, (int X, int Y) Pos)> queue, List<(int ParentId, (int X, int Y) Pos)> newQueue, int dx, int dy, (int X, int Y) child)
+            //{
+            //    return newQueue.Any(x => x.Pos == child) || ((dx, dy) != (0, 0) && queue.Any(x => x.Pos == child));
+            //}
+
+            static bool IsBoxAlreadyInQueue((int X, int Y) box,List<(int ParentId, (int X, int Y) Pos)> queue)
+            {
+                return queue.Any(x => x.Pos == box);
+            }
+
+            static bool IsStayInPlace((int dx, int dy) move)
+            {
+                return move == (0,0);
+            }
+        }
+
+        private void IncrementCurrentMinute()
+        {
+            CurrentMinute++;
         }
     }
 }
