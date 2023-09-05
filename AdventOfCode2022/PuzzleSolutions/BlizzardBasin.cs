@@ -106,6 +106,8 @@ namespace AdventOfCode2022web.Puzzles
 
         private static int Mod(int x, int m) => (x % m + m) % m;
 
+        private static int ManhattanDistance((int x, int y) a, (int x, int y) b) => Math.Abs(a.x - b.x) + Math.Abs(a.y - b.y);
+
         private IEnumerable<((int X, int Y) Position, Directions Direction)> GetBlizzardsPositionAtTime(int minute)
             => BlizzardsInitialPosition!
             .Select(b => (X: b.Position.X - 1, Y: b.Position.Y - 1, b.Direction))
@@ -180,7 +182,7 @@ namespace AdventOfCode2022web.Puzzles
                         nextTreeLevel.Add((parentId, box));
                     }
                 }
-                return (isSolutionFound, nextTreeLevel);
+                return (isSolutionFound, nextTreeLevel.OrderBy(x => ManhattanDistance(x.Pos,end)).Take(100).ToList());
             }
 
             bool IsBoxBlockedByBlizzardsOrWalls((int X, int Y) child, HashSet<(int X, int Y)> blizzardsPosition)

@@ -4,6 +4,7 @@
 <h3>Puzzle Input</h3>
 <div>
     <label class="form-label">The data below is what is provided as example in the problem statement. Paste your own user input from <a href="https://adventofcode.com/2022/day/@(PuzzleNumber)">Advent Of Code</a>.</label>
+    <button class="btn-primary" @onclick=LoadFullPuzzleInput>Load a full puzzle input</button>
     <pre><textarea spellcheck="false" class="form-control" aria-label="Puzzle Input" rows="10" @bind="_input" maxlength="10000000"></textarea></pre>
 </div>
 @if (_input != _inputBefore)
@@ -37,6 +38,15 @@
         if (puzzleType == typeof(PuzzleSolutionWrapper))
             puzzleInputFile = ((PuzzleSolutionWrapper)(PuzzleSolutionViewModel.PuzzleSolution)).PuzzleType.Name;
         _input = (await Http.GetStringAsync($"sample-data/{puzzleInputFile}.txt")).Replace("\r", "");
+    }
+
+    private async Task LoadFullPuzzleInput()
+    {
+        var puzzleType = PuzzleSolutionViewModel!.PuzzleSolution!.GetType();
+        var puzzleInputFile = puzzleType.Name;
+        if (puzzleType == typeof(PuzzleSolutionWrapper))
+            puzzleInputFile = ((PuzzleSolutionWrapper)(PuzzleSolutionViewModel.PuzzleSolution)).PuzzleType.Name;
+        _input = (await Http.GetStringAsync($"sample-data/{puzzleInputFile}_full.txt")).Replace("\r", "");
     }
 
     private void InitializePuzzle()
