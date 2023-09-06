@@ -1,5 +1,7 @@
-﻿@inherits PuzzleViewBase
-<img style="width:100%; image-rendering:pixelated" src=@Visualize() />
+﻿@using SixLabors.ImageSharp.Formats.Gif;
+@inherits PuzzleViewBase
+<img style="width:100%; image-rendering:pixelated" src=@Image64 />
+<button class="btn-primary" @onclick=CreateAnimation >Generate GIF</button>
 
 @code {
     private IBlizzardBasinViewState? PuzzleSolution;
@@ -7,16 +9,66 @@
     protected override void OnInitialized()
     {
         PuzzleSolution = (IBlizzardBasinViewState)(PuzzleSolutionViewModel!.PuzzleSolution!);
-        PuzzleSolutionViewModel.PuzzleOutputReturned += StateHasChanged;
+        PuzzleSolutionViewModel.PuzzleOutputReturned += UpdateBitmap;
         base.OnInitialized();
     }
 
     public void Dispose()
     {
-        PuzzleSolutionViewModel!.PuzzleOutputReturned -= StateHasChanged;
+        PuzzleSolutionViewModel!.PuzzleOutputReturned -= UpdateBitmap;
     }
 
-    public string _image64 = string.Empty;
+    public string Image64 { get; set; } = string.Empty;
+
+    private void UpdateBitmap()
+    {
+        Image64 = Visualize();
+        StateHasChanged();
+    }
+
+    private void CreateAnimation()
+    {
+        // to do
+        // Button to Generate animated Gif
+        // Code to read attributes of pages instead of puzzles. @attribute [Route(Constants.CounterRoute)]
+
+        if (PuzzleSolution == null || PuzzleSolution.Tree.Count == 0)
+            return;
+        var width = PuzzleSolution!.GridWidth;
+        var height = PuzzleSolution!.GridHeight;
+        if (width == 0 || height == 0)
+            return;
+        var tree = PuzzleSolution!.Tree;
+
+        const int frameDelay = 10;
+        // Create empty image.
+        using Image<Rgba32> gif = new(width, height, Color.White);
+
+        // Set animation loop repeat count to 5.
+        var gifMetaData = gif.Metadata.GetGifMetadata();
+        gifMetaData.RepeatCount = 5;
+
+        GifFrameMetadata metadata = gif.Frames.RootFrame.Metadata.GetGifMetadata();
+        metadata.FrameDelay = frameDelay;
+
+        for (int i = 1; i < tree.Count; i++)
+        {
+            // Create a color image, which will be added to the gif.
+            using Image<Rgba32> image = new(width, height);
+            CreateVisualization(image,i);
+            // Set the delay until the next image is displayed.
+            metadata = image.Frames.RootFrame.Metadata.GetGifMetadata();
+            metadata.FrameDelay = frameDelay;
+
+            // Add the color image to the gif.
+            gif.Frames.AddFrame(image.Frames.RootFrame);
+        }
+
+        // Save the final result.
+        using MemoryStream outStream = new();
+        gif.SaveAsGif(outStream);
+        Image64 = "data:image/gif;base64, " + Convert.ToBase64String(outStream.ToArray());
+    }
 
     private string Visualize()
     {
@@ -27,51 +79,50 @@
         if (Width == 0 || Height == 0)
             return string.Empty;
         var response = string.Empty;
-        var tree = PuzzleSolution.Tree;
-        var level0 = tree[^1].Select(x => x.Pos).ToHashSet();
-        var level1 = tree.Count > 1 ? tree[^2].Select(x => x.Pos).ToHashSet() : new HashSet<(int X,int Y)>();
-        var level2 = tree.Count > 2 ? tree[^3].Select(x => x.Pos).ToHashSet() : new HashSet<(int X, int Y)>();
-        var blizzards = PuzzleSolution.BlizzardsPositions!.Select(x => x.Position).ToHashSet();
         using (MemoryStream outStream = new())
         {
             using (Image<Rgba32> img = new(Width, Height))
             {
-                img.ProcessPixelRows(accessor =>
-                {
-                    for (int y = 0; y < accessor.Height; y++)
-                    {
-                        Span<Rgba32> pixelRow = accessor.GetRowSpan(y);
-                        for (int x = 0; x < pixelRow.Length; x++)
-                        {
-                            ref Rgba32 pixel = ref pixelRow[x];
-                            if (level0.Contains((x, y)))
-                                pixel = new Rgba32(0, 255, 0, 255);
-                            else if (level1.Contains((x, y)))
-                                pixel = new Rgba32(128, 255, 128, 255);
-                            else if (level2.Contains((x, y)))
-                                pixel = new Rgba32(200, 255, 200, 255);
-// to do
-// Button to Generate animated Gif
-// Code to read attributes of pages instead of puzzles. @attribute [Route(Constants.CounterRoute)]
-// Always Draw 3 nearest path (order by manathan distance) / keep only the 100/200/1000 betters
-                        }
-                    }
-                    if (level0.Count == 1)
-                    {
-                        var childId = 0;
-                        for (var i = 1; i <= tree.Count; i++)
-                        {
-                            var child = tree[^i][childId];
-                            childId = child.ParentId;
-                            img[child.Pos.X, child.Pos.Y] = Color.Red;
-                        }
-                    }
-
-                });
+                CreateVisualization(img, PuzzleSolution!.Tree.Count);
                 img.SaveAsPng(outStream);
             }
             response = "data:image/png;base64, " + Convert.ToBase64String(outStream.ToArray());
         }
         return response;
+    }
+
+    private void CreateVisualization(Image<Rgba32> img,int minute)
+    {
+        var tree = PuzzleSolution!.Tree;
+        var level0 = tree[minute-1].Select(x => x.Pos).ToHashSet();
+        var level1 = minute > 1 ? tree[minute-2].Select(x => x.Pos).ToHashSet() : new HashSet<(int X, int Y)>();
+        var level2 = minute > 2 ? tree[minute-3].Select(x => x.Pos).ToHashSet() : new HashSet<(int X, int Y)>();
+        img.ProcessPixelRows(accessor =>
+        {
+            for (int y = 0; y < accessor.Height; y++)
+            {
+                Span<Rgba32> pixelRow = accessor.GetRowSpan(y);
+                for (int x = 0; x < pixelRow.Length; x++)
+                {
+                    ref Rgba32 pixel = ref pixelRow[x];
+                    if (level0.Contains((x, y)))
+                        pixel = new Rgba32(0, 255, 0, 255);
+                    else if (level1.Contains((x, y)))
+                        pixel = new Rgba32(128, 255, 128, 255);
+                    else if (level2.Contains((x, y)))
+                        pixel = new Rgba32(200, 255, 200, 255);
+                }
+            }
+            if (level0.Count == 1)
+            {
+                var childId = 0;
+                for (var i = 1; i <= tree.Count; i++)
+                {
+                    var child = tree[^i][childId];
+                    childId = child.ParentId;
+                    img[child.Pos.X, child.Pos.Y] = Color.Red;
+                }
+            }
+        });
     }
 }
