@@ -33,15 +33,15 @@
       "url": "_framework\/icudt.dat"
     },
     {
-      "hash": "sha256-cOVlWMwpDJLyIsguUNsOyO09m\/T\/T6QT6\/tXDDwIz\/Y=",
+      "hash": "sha256-0S3V9bFG3mgrsEAAt\/6HdPdJwFi2UItjkIm0zfuUVs8=",
       "url": "_framework\/blazor.boot.json"
     },
     {
-      "hash": "sha256-uM7Z195\/InkqkAc8S1fTOZBi9kV7rGZ3tFku7WIVU48=",
+      "hash": "sha256-s54iQOvcJei9cMQIABxbaRLNh6ddg1pjzQEolOq1PeE=",
       "url": "_framework\/AdventOfCode2022.dll"
     },
     {
-      "hash": "sha256-O\/oJqKHkmYl4ULWjsaG30ygC7HSSFkRwATkdCF+MokI=",
+      "hash": "sha256-r0xQdbCLMvUbGxySACEhlfj24ci5owCWFvuv6OoOyug=",
       "url": "_framework\/AdventOfCode2022web.dll"
     },
     {
@@ -105,7 +105,7 @@
       "url": "_framework\/SixLabors.Fonts.dll"
     },
     {
-      "hash": "sha256-2JknOSr+Ubo47Z4Yt77K+rYgee0iBEfAcykKStlOY30=",
+      "hash": "sha256-MQvx7eM8fDHVgSmvcZoolXeXIAQVAP+cWUAqYKqv6+k=",
       "url": "_framework\/SixLabors.ImageSharp.dll"
     },
     {
@@ -333,6 +333,10 @@
       "url": "sample-data\/BeaconExclusionZone.txt"
     },
     {
+      "hash": "sha256-Q1vAhDvBsS6G2cAF4Ve7GhWIrizIImwzoSDR0pSXDR0=",
+      "url": "sample-data\/BlizzardBasin_full.txt"
+    },
+    {
       "hash": "sha256-AbVutt4\/rArzhuUmZlz2z9cYBQNYV5cuxDH7gPi7R+c=",
       "url": "sample-data\/BlizzardBasin.txt"
     },
@@ -437,5 +441,5 @@
       "url": "sample-data\/UnstableDiffusion.txt"
     }
   ],
-  "version": "8R1JlFQh"
+  "version": "HCaPrgd1"
 };
