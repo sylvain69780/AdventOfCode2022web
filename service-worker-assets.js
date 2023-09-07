@@ -33,15 +33,15 @@
       "url": "_framework\/icudt.dat"
     },
     {
-      "hash": "sha256-nWC2+ASnIVvPINuzpWsU5ifIW+WUucxKfvbGRrhsUOs=",
+      "hash": "sha256-ylcTAdXi+qRZtClWgUpt1xZ\/5DhsomDDEdOZG12t3FY=",
       "url": "_framework\/blazor.boot.json"
     },
     {
-      "hash": "sha256-RKyifBlZctQyHj7trGLhetyIRyg4XSXAZi\/hjPfMFZY=",
+      "hash": "sha256-kltn3XBO\/cARJuRBR43n+\/rXnDrQ5yw\/eagbBUtiXhM=",
       "url": "_framework\/AdventOfCode2022.dll"
     },
     {
-      "hash": "sha256-6uKfBkglNjTdCq4JS+EoF6rjgsGdL9Rk9\/+jEZ0ETsw=",
+      "hash": "sha256-AwynSN+y72+g01LaN4cOJZ3XSuLfp5jauf0MTn7XvWQ=",
       "url": "_framework\/AdventOfCode2022web.dll"
     },
     {
@@ -329,6 +329,10 @@
       "url": "manifest.json"
     },
     {
+      "hash": "sha256-a3aV9DLPdFlYnk+nXcZ493EIBrD1cxsDV4MoL6+TsiM=",
+      "url": "sample-data\/BeaconExclusionZone_full.txt"
+    },
+    {
       "hash": "sha256-x5EOEY+Od2vTyg8QnRCi8DYsOJUYXDK1yxPx5gIqp4I=",
       "url": "sample-data\/BeaconExclusionZone.txt"
     },
@@ -341,20 +345,40 @@
       "url": "sample-data\/BlizzardBasin.txt"
     },
     {
+      "hash": "sha256-uzsPrlZ7oW5EN+I+N+tYKbGJBZZsqkf1HJnts1NO4vE=",
+      "url": "sample-data\/BoilingBoulders_full.txt"
+    },
+    {
       "hash": "sha256-OQYpv7rQMmgqGyb92ODr5Ozgx3VnJe\/UjIhmSEAkpUY=",
       "url": "sample-data\/BoilingBoulders.txt"
+    },
+    {
+      "hash": "sha256-QimLdwRbkPtlwl2n9\/hmh4BxHIFENfwhrB5FZIE6cAE=",
+      "url": "sample-data\/CalorieCounting_full.txt"
     },
     {
       "hash": "sha256-lD5Bhsd5ubJ1Q0V6tueCBF4rODVz13H0nSh\/BoDgY8g=",
       "url": "sample-data\/CalorieCounting.txt"
     },
     {
+      "hash": "sha256-N5c8xj2g4Wx7Xr2pJwYaOErzKIZGlUsV81iiUad6Uy4=",
+      "url": "sample-data\/CampCleanup_full.txt"
+    },
+    {
       "hash": "sha256-7g\/V+nQQAE0Mx13wNsznTBeKEafWt5dNgm5RJkvdhMw=",
       "url": "sample-data\/CampCleanup.txt"
     },
     {
+      "hash": "sha256-UvUI+akSdoxIgwYDqTDlJdn\/jHJJOj7CnXJ3LNwRX9o=",
+      "url": "sample-data\/CathodeRayTube_full.txt"
+    },
+    {
       "hash": "sha256-G4jzVrF8fmIbpoXRNUgUgo7H9ziUwQPgSsprW5KFqp8=",
       "url": "sample-data\/CathodeRayTube.txt"
+    },
+    {
+      "hash": "sha256-rbyr8Q3VZQLuv7yaK+9sDrkTtX+BlrucQYgcQtf8AVg=",
+      "url": "sample-data\/DistressSignal_full.txt"
     },
     {
       "hash": "sha256-SNOwkXwLBQmCxxvxf8+GQYZmWjVq7B2unNvphmUyJVY=",
@@ -365,81 +389,157 @@
       "url": "sample-data\/DistressSignalUsingJson.txt"
     },
     {
+      "hash": "sha256-qqhUok7npg6QyLxbSphUO46MPsS6HVGNU0xT9Bp1Mx4=",
+      "url": "sample-data\/FullOfHotAir_full.txt"
+    },
+    {
       "hash": "sha256-YQsTNhmpDQM5hC3eJDkUJ5ZckDK5mJVjOfFoMqmswmw=",
       "url": "sample-data\/FullOfHotAir.txt"
+    },
+    {
+      "hash": "sha256-Fe9fwisD5eY8ioGRaAMYaod9MbyUBGT18FPMYnOiKps=",
+      "url": "sample-data\/GrovePositioningSystem_full.txt"
     },
     {
       "hash": "sha256-fxFi64ZgVSun16TNEcz+o27RbKolWPTbZlkRhABdLqM=",
       "url": "sample-data\/GrovePositioningSystem.txt"
     },
     {
+      "hash": "sha256-9kduf0HczSKHzey0mXPTyyEkEgDeMbizQNqlw+07Reg=",
+      "url": "sample-data\/HillClimbingAlgorithm_full.txt"
+    },
+    {
       "hash": "sha256-cEWNWCMGzJF9V3dxzZG3XIJDanubgzbGzsbLE59uuEU=",
       "url": "sample-data\/HillClimbingAlgorithm.txt"
+    },
+    {
+      "hash": "sha256-x\/wz4OFhLUFYVrk2fukOws2QLzSnqGk4yb05IP6fnfY=",
+      "url": "sample-data\/MonkeyInTheMiddle_full.txt"
     },
     {
       "hash": "sha256-8MWUjrNcBf5mNhtHO4xHsyYL1pM8oNZArJjKjjI118w=",
       "url": "sample-data\/MonkeyInTheMiddle.txt"
     },
     {
+      "hash": "sha256-yrf\/xHSXrQDsnu6Kex4Ijh0kuLsksdJtSEct1D0zkW4=",
+      "url": "sample-data\/MonkeyMap_full.txt"
+    },
+    {
       "hash": "sha256-wARoN2ZT4csW7zkm\/6exugesjTH+Mbs+gHHMdJeE06I=",
       "url": "sample-data\/MonkeyMap.txt"
+    },
+    {
+      "hash": "sha256-ym0Xz3vNDHjOo1R\/vq9mM36mVL7B\/0fMkS2d77BO5ag=",
+      "url": "sample-data\/MonkeyMath_full.txt"
     },
     {
       "hash": "sha256-vPIrkc8gi4bud0dQHJ5CEjSCqVoBpUv3+iQ548xOA7U=",
       "url": "sample-data\/MonkeyMath.txt"
     },
     {
+      "hash": "sha256-ZBeV99BjEDGTRpcEoJBI2SclIiFAJmkFKinmRDFZO78=",
+      "url": "sample-data\/NoSpaceLeftOnDevice_full.txt"
+    },
+    {
       "hash": "sha256-xjIyMN9NUmxIxhvg\/QPN3MpcGFMe8iPpoKI1Ld0Ju5g=",
       "url": "sample-data\/NoSpaceLeftOnDevice.txt"
+    },
+    {
+      "hash": "sha256-2v6XTBojFyNxz8eFXLynkDCB73gJl4eORAv1ZkejXng=",
+      "url": "sample-data\/NotEnoughMinerals_full.txt"
     },
     {
       "hash": "sha256-osoNaiYwx7001iaBCfe50y5tTR97KZTaV+cWRlC2m4c=",
       "url": "sample-data\/NotEnoughMinerals.txt"
     },
     {
+      "hash": "sha256-R3zkFaE6lbekHKMwESdT2ciYPeDUyZxZ+\/Gdh5KqNtg=",
+      "url": "sample-data\/ProboscideaVolcanium_full.txt"
+    },
+    {
       "hash": "sha256-BEPlVH1H24D7p0PMmvw+HrrSIcn515OtnxgOLQzix0I=",
       "url": "sample-data\/ProboscideaVolcanium.txt"
+    },
+    {
+      "hash": "sha256-XuirnlgGf7U9Ix2hQc4Xfia1g4dCXrQRsVCmfr3sYrI=",
+      "url": "sample-data\/PyroclasticFlow_full.txt"
     },
     {
       "hash": "sha256-bunJ\/ui7JBiHj5UV6cVx7BYj46pKqWdZAhX2DS6F2bM=",
       "url": "sample-data\/PyroclasticFlow.txt"
     },
     {
+      "hash": "sha256-KGwtlTF\/Dx3RjwilAC9ty7Tr19CzanqtwX3cKHyhou4=",
+      "url": "sample-data\/RegolithReservoir_full.txt"
+    },
+    {
       "hash": "sha256-GvcyXQAmfYInqKGOYsjc+uANZm1zRRX2FhZ2x8Xe12w=",
       "url": "sample-data\/RegolithReservoir.txt"
+    },
+    {
+      "hash": "sha256-fy75TcmbIMmo+1luooNd0gPXvw6hE5dVkUD97O5q\/wI=",
+      "url": "sample-data\/RockPaperScissors_full.txt"
     },
     {
       "hash": "sha256-OBLqeAITo8R3kF30p3CKSslRUhyAN9v\/Sf3zer8IyJU=",
       "url": "sample-data\/RockPaperScissors.txt"
     },
     {
+      "hash": "sha256-sFL+oeniU6At6lAv8gC1\/hmRBqx7tpPgjk0D5tUbLFs=",
+      "url": "sample-data\/RopeBridge_full.txt"
+    },
+    {
       "hash": "sha256-JUXNWHSJUoo3mKZUn7X0lGR9kYbW\/Yjqhj1suCwSsuM=",
       "url": "sample-data\/RopeBridge.txt"
+    },
+    {
+      "hash": "sha256-eXUWoq0TyVeZDdlldu+Ktub9tyPSa\/fU0BTEkHK6GSQ=",
+      "url": "sample-data\/RucksackReorganization_full.txt"
     },
     {
       "hash": "sha256-0oXPQAc8XeOtIuD9QkS4QXdctl7ynRGwGcRD893HzAQ=",
       "url": "sample-data\/RucksackReorganization.txt"
     },
     {
+      "hash": "sha256-McOFGk1JMm656szQynmqq\/T3Vy7L43Xd2\/ezmXCpIdU=",
+      "url": "sample-data\/Sudoku_full.txt"
+    },
+    {
       "hash": "sha256-0RgcDxkxH6N8pr6Z862ybgg\/LXeYtXbo6YnljdnlljI=",
       "url": "sample-data\/Sudoku.txt"
+    },
+    {
+      "hash": "sha256-KqJ7akfoTXAsv3jue3IkXe2rIyTEoEVrF46f+xLA1+s=",
+      "url": "sample-data\/SupplyStacks_full.txt"
     },
     {
       "hash": "sha256-HWrQbUixpSVojj53LGgbC5cjc9R6rBZE5RxjHrRXYpE=",
       "url": "sample-data\/SupplyStacks.txt"
     },
     {
+      "hash": "sha256-w0F8yo4ONLrtsqlMQm5UDQW7SLaIU6AYL421uB27bt8=",
+      "url": "sample-data\/TreetopTreeHouse_full.txt"
+    },
+    {
       "hash": "sha256-kr\/aZv50x4cwSn1\/Ui15YaQ1F8MXnsPHXyrqH1PUfOE=",
       "url": "sample-data\/TreetopTreeHouse.txt"
+    },
+    {
+      "hash": "sha256-e+lPatDdFgPeyABhm083xyLwy4x1jOBcJ3nTAs1TuFo=",
+      "url": "sample-data\/TuningTrouble_full.txt"
     },
     {
       "hash": "sha256-CgXHbz+CKjUeVNw6B5tOgCoJKC2AwKt6CrgTRQlaGkg=",
       "url": "sample-data\/TuningTrouble.txt"
     },
     {
+      "hash": "sha256-HdGvF2rDDgzdsl4AJt1ILJB9ehH9LI\/WDJKheVvIpAI=",
+      "url": "sample-data\/UnstableDiffusion_full.txt"
+    },
+    {
       "hash": "sha256-vgVMH5PaJIe5MqMNluZz8LuCSPseT28\/jrdZQbW1TXY=",
       "url": "sample-data\/UnstableDiffusion.txt"
     }
   ],
-  "version": "3\/QR61fO"
+  "version": "YMgAflvY"
 };
