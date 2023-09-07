@@ -9,6 +9,19 @@
     </div>
 </div>
 
+@*	var puzzleHelper = new PuzzleHelper();
+    foreach (var puzzle in puzzleHelper.Puzzles.OrderBy(x => x.Key).Select(x => (x.Value.Number,x.Value.Type.Name,x.Value.Title,x.Value.HasVisualization)))
+            {
+			var c = puzzle.HasVisualization ? "puzzle-title-visu":"puzzle-title";
+			Console.WriteLine(@$"
+                <NavLink class=""nav-link"" href={puzzle.Name+"Page"}>
+                    <span class=""oi oi-puzzle-piece""></span><div>
+                        <div class=""puzzle-number"">Puzzle {puzzle.Number}</div>
+                        <div class={c}>{puzzle.Title}</div>
+                    </div>
+                </NavLink>\n");
+            }*@
+
 <div class="scrollable-menu @NavMenuCssClass" @onclick="ToggleNavMenu">
     <nav class="flex-column">
         <div class="nav-item px-3">
@@ -17,23 +30,204 @@
             </NavLink>
         </div>
         <div class="nav-item px-3">
-            @foreach (var puzzle in puzzleHelper.Puzzles.OrderBy(x => x.Key).Select(x => (x.Value.Number,x.Value.Type.Name,x.Value.Title,x.Value.HasVisualization)))
-            {
-                <NavLink class="nav-link" href=@(puzzle.Name+"Page")>
-                    <span class="oi oi-puzzle-piece"></span><div>
-                        <div class="puzzle-number">Puzzle @(puzzle.Number)</div>
-                        <div class=@(puzzle.HasVisualization ? "puzzle-title-visu":"puzzle-title")>@(puzzle.Title)</div>
-                    </div>
-                </NavLink>
-            }
+
+            <NavLink class="nav-link" href=CalorieCountingPage>
+                <span class="oi oi-puzzle-piece"></span><div>
+                    <div class="puzzle-number">Puzzle 1</div>
+                    <div class=puzzle-title>Calorie Counting</div>
+                </div>
+            </NavLink>
+
+            <NavLink class="nav-link" href=RockPaperScissorsPage>
+                <span class="oi oi-puzzle-piece"></span><div>
+                    <div class="puzzle-number">Puzzle 2</div>
+                    <div class=puzzle-title>Rock Paper Scissors</div>
+                </div>
+            </NavLink>
+
+            <NavLink class="nav-link" href=RucksackReorganizationPage>
+                <span class="oi oi-puzzle-piece"></span><div>
+                    <div class="puzzle-number">Puzzle 3</div>
+                    <div class=puzzle-title>Rucksack Reorganization</div>
+                </div>
+            </NavLink>
+
+            <NavLink class="nav-link" href=CampCleanupPage>
+                <span class="oi oi-puzzle-piece"></span><div>
+                    <div class="puzzle-number">Puzzle 4</div>
+                    <div class=puzzle-title>Camp Cleanup</div>
+                </div>
+            </NavLink>
+
+            <NavLink class="nav-link" href=SupplyStacksPage>
+                <span class="oi oi-puzzle-piece"></span><div>
+                    <div class="puzzle-number">Puzzle 5</div>
+                    <div class=puzzle-title>Supply Stacks</div>
+                </div>
+            </NavLink>
+
+            <NavLink class="nav-link" href=TuningTroublePage>
+                <span class="oi oi-puzzle-piece"></span><div>
+                    <div class="puzzle-number">Puzzle 6</div>
+                    <div class=puzzle-title>Tuning Trouble</div>
+                </div>
+            </NavLink>
+
+            <NavLink class="nav-link" href=NoSpaceLeftOnDevicePage>
+                <span class="oi oi-puzzle-piece"></span><div>
+                    <div class="puzzle-number">Puzzle 7</div>
+                    <div class=puzzle-title>No Space Left On Device</div>
+                </div>
+            </NavLink>
+
+            <NavLink class="nav-link" href=TreetopTreeHousePage>
+                <span class="oi oi-puzzle-piece"></span><div>
+                    <div class="puzzle-number">Puzzle 8</div>
+                    <div class=puzzle-title>Treetop Tree House</div>
+                </div>
+            </NavLink>
+
+            <NavLink class="nav-link" href=RopeBridgePage>
+                <span class="oi oi-puzzle-piece"></span><div>
+                    <div class="puzzle-number">Puzzle 9</div>
+                    <div class=puzzle-title>Rope Bridge</div>
+                </div>
+            </NavLink>
+
+            <NavLink class="nav-link" href=CathodeRayTubePage>
+                <span class="oi oi-puzzle-piece"></span><div>
+                    <div class="puzzle-number">Puzzle 10</div>
+                    <div class=puzzle-title>Cathode Ray Tube</div>
+                </div>
+            </NavLink>
+
+            <NavLink class="nav-link" href=MonkeyInTheMiddlePage>
+                <span class="oi oi-puzzle-piece"></span><div>
+                    <div class="puzzle-number">Puzzle 11</div>
+                    <div class=puzzle-title>Monkey In The Middle</div>
+                </div>
+            </NavLink>
+
+            <NavLink class="nav-link" href=HillClimbingAlgorithmPage>
+                <span class="oi oi-puzzle-piece"></span><div>
+                    <div class="puzzle-number">Puzzle 12</div>
+                    <div class=puzzle-title>Hill Climbing Algorithm</div>
+                </div>
+            </NavLink>
+
+            <NavLink class="nav-link" href=DistressSignalUsingJsonPage>
+                <span class="oi oi-puzzle-piece"></span><div>
+                    <div class="puzzle-number">Puzzle 13</div>
+                    <div class=puzzle-title>Distress Signal</div>
+                </div>
+            </NavLink>
+
+            <NavLink class="nav-link" href=DistressSignalPage>
+                <span class="oi oi-puzzle-piece"></span><div>
+                    <div class="puzzle-number">Puzzle 26</div>
+                    <div class=puzzle-title>Distress Signal v2</div>
+                </div>
+            </NavLink>
+
+            <NavLink class="nav-link" href=RegolithReservoirPage>
+                <span class="oi oi-puzzle-piece"></span><div>
+                    <div class="puzzle-number">Puzzle 14</div>
+                    <div class=puzzle-title-visu>Regolith Reservoir</div>
+                </div>
+            </NavLink>
+
+            <NavLink class="nav-link" href=BeaconExclusionZonePage>
+                <span class="oi oi-puzzle-piece"></span><div>
+                    <div class="puzzle-number">Puzzle 15</div>
+                    <div class=puzzle-title>Beacon Exclusion Zone</div>
+                </div>
+            </NavLink>
+
+            <NavLink class="nav-link" href=ProboscideaVolcaniumPage>
+                <span class="oi oi-puzzle-piece"></span><div>
+                    <div class="puzzle-number">Puzzle 16</div>
+                    <div class=puzzle-title>Proboscidea Volcanium</div>
+                </div>
+            </NavLink>
+
+            <NavLink class="nav-link" href=PyroclasticFlowPage>
+                <span class="oi oi-puzzle-piece"></span><div>
+                    <div class="puzzle-number">Puzzle 17</div>
+                    <div class=puzzle-title>Pyroclastic Flow</div>
+                </div>
+            </NavLink>
+
+            <NavLink class="nav-link" href=BoilingBouldersPage>
+                <span class="oi oi-puzzle-piece"></span><div>
+                    <div class="puzzle-number">Puzzle 18</div>
+                    <div class=puzzle-title>Boiling Boulders</div>
+                </div>
+            </NavLink>
+
+            <NavLink class="nav-link" href=NotEnoughMineralsPage>
+                <span class="oi oi-puzzle-piece"></span><div>
+                    <div class="puzzle-number">Puzzle 19</div>
+                    <div class=puzzle-title>Not Enough Minerals</div>
+                </div>
+            </NavLink>
+
+            <NavLink class="nav-link" href=GrovePositioningSystemPage>
+                <span class="oi oi-puzzle-piece"></span><div>
+                    <div class="puzzle-number">Puzzle 20</div>
+                    <div class=puzzle-title>Grove Positioning System</div>
+                </div>
+            </NavLink>
+
+            <NavLink class="nav-link" href=MonkeyMathPage>
+                <span class="oi oi-puzzle-piece"></span><div>
+                    <div class="puzzle-number">Puzzle 21</div>
+                    <div class=puzzle-title>Monkey Math</div>
+                </div>
+            </NavLink>
+
+            <NavLink class="nav-link" href=MonkeyMapPage>
+                <span class="oi oi-puzzle-piece"></span><div>
+                    <div class="puzzle-number">Puzzle 22</div>
+                    <div class=puzzle-title>Monkey Map</div>
+                </div>
+            </NavLink>
+
+            <NavLink class="nav-link" href=UnstableDiffusionPage>
+                <span class="oi oi-puzzle-piece"></span><div>
+                    <div class="puzzle-number">Puzzle 23</div>
+                    <div class=puzzle-title-visu>Unstable Diffusion</div>
+                </div>
+            </NavLink>
+
+            <NavLink class="nav-link" href=BlizzardBasinPage>
+                <span class="oi oi-puzzle-piece"></span><div>
+                    <div class="puzzle-number">Puzzle 24</div>
+                    <div class=puzzle-title-visu>Blizzard Basin</div>
+                </div>
+            </NavLink>
+
             <NavLink class="nav-link" href=@("BlizzardBasinBitmapPage")>
                 <span class="oi oi-puzzle-piece"></span>
                 <div>
-                    <div class="puzzle-number">Puzzle Bonus</div>
+                    <div class="puzzle-number">Puzzle 24</div>
                     <div class="puzzle-title-visu">Blizzard Basin (Bitmap)</div>
                 </div>
             </NavLink>
 
+            <NavLink class="nav-link" href=FullOfHotAirPage>
+                <span class="oi oi-puzzle-piece"></span><div>
+                    <div class="puzzle-number">Puzzle 25</div>
+                    <div class=puzzle-title>Full of Hot Air</div>
+                </div>
+            </NavLink>
+
+            <NavLink class="nav-link" href=SudokuPage>
+                <span class="oi oi-puzzle-piece"></span><div>
+                    <div class="puzzle-number">Bonus</div>
+                    <div class=puzzle-title-visu>Sudoku</div>
+                </div>
+            </NavLink>
+            
         </div>
     </nav>
 </div>
