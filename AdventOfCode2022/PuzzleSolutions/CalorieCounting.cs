@@ -38,9 +38,11 @@
                 else
                     sumOfCalories[^1] += int.Parse(value);
                 yield return "Top 3 of Elves groups holding the more calories:\n"
-                    +string.Join('\n',sumOfCalories.OrderByDescending(x => x).Take(3).Select(x => x.ToString()));
+                    + string.Join('\n', Top3(sumOfCalories).Select(x => x.ToString()));
             }
-            yield return sumOfCalories.OrderByDescending(x => x).Take(3).Sum().ToString();
+            yield return Top3(sumOfCalories).Sum().ToString();
+
+            static IEnumerable<int> Top3(List<int> sumOfCalories) => sumOfCalories.OrderByDescending(x => x).Take(3);
         }
     }
 }
