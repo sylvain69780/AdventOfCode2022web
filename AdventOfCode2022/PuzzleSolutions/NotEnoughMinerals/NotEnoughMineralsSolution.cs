@@ -43,7 +43,7 @@ namespace AdventOfCode2022.PuzzleSolutions.NotEnoughMinerals
             var maxMinutes = 24;
             foreach (var bp in bluePrints)
             {
-                var (maxGeodes,iterationsDone) = ComputeMaxGeodes(bp, maxMinutes);
+                var (maxGeodes, iterationsDone) = ComputeMaxGeodes(bp, maxMinutes);
                 yield return $"Blueprint {bp.BlueprintNumber} gives at most {maxGeodes} geodes. {iterationsDone} iterations done.";
                 quality += maxGeodes * bp.BlueprintNumber;
             }
@@ -82,13 +82,13 @@ namespace AdventOfCode2022.PuzzleSolutions.NotEnoughMinerals
                 .ToList();
         }
 
-        private static (int MaxGeodes,int IterationsDone) ComputeMaxGeodes(BluePrint bluePrint, int maxMinutes)
+        private static (int MaxGeodes, int IterationsDone) ComputeMaxGeodes(BluePrint bluePrint, int maxMinutes)
         {
             var stack = new Stack<FactoryData>();
             stack.Push(FirstRobot(RobotType.OreRobot));
             stack.Push(FirstRobot(RobotType.ClayRobot));
             var bestScore = 0;
-                var iterationsDone = 0;
+            var iterationsDone = 0;
             while (stack.TryPop(out var currentFactoryData))
             {
                 iterationsDone++;
@@ -97,7 +97,7 @@ namespace AdventOfCode2022.PuzzleSolutions.NotEnoughMinerals
                 var maxGeodesPossible = currentFactoryData.Geodes + currentFactoryData.GeodeRobots * timeRemaining + sumOfSecondsRemaining;
                 if (maxGeodesPossible < bestScore)
                     continue;
-                while (currentFactoryData.Minutes < maxMinutes && HasNotEnoughMineralsToBuildTheRobot(bluePrint,currentFactoryData))
+                while (currentFactoryData.Minutes < maxMinutes && HasNotEnoughMineralsToBuildTheRobot(bluePrint, currentFactoryData))
                     CollectMinerals(ref currentFactoryData);
                 CollectMinerals(ref currentFactoryData);
                 if (currentFactoryData.Minutes == maxMinutes + 1)
@@ -110,7 +110,7 @@ namespace AdventOfCode2022.PuzzleSolutions.NotEnoughMinerals
                 foreach (var FactoryData in TargetNewRobots(currentFactoryData))
                     stack.Push(FactoryData);
             }
-            return (bestScore,iterationsDone);
+            return (bestScore, iterationsDone);
         }
 
         private static FactoryData FirstRobot(RobotType robotType)
