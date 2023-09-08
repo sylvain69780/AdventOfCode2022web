@@ -43,8 +43,8 @@ namespace AdventOfCode2022.PuzzleSolutions.NotEnoughMinerals
             var maxMinutes = 24;
             foreach (var bp in bluePrints)
             {
-                var maxGeodes = ComputeMaxGeodes(bp, maxMinutes);
-                yield return $"Blueprint {bp.BlueprintNumber} gives at most {maxGeodes} geodes.";
+                var (maxGeodes,iterationsDone) = ComputeMaxGeodes(bp, maxMinutes);
+                yield return $"Blueprint {bp.BlueprintNumber} gives at most {maxGeodes} geodes. {iterationsDone} iterations done.";
                 quality += maxGeodes * bp.BlueprintNumber;
             }
             yield return $"{quality}";
@@ -56,8 +56,8 @@ namespace AdventOfCode2022.PuzzleSolutions.NotEnoughMinerals
             var quality = 1;
             foreach (var bp in blueprints.Take(3))
             {
-                var maxGeodes = ComputeMaxGeodes(bp, 32);
-                yield return $"Blueprint {bp.BlueprintNumber} gives at most {maxGeodes} geodes.";
+                var (maxGeodes, iterationsDone) = ComputeMaxGeodes(bp, 32);
+                yield return $"Blueprint {bp.BlueprintNumber} gives at most {maxGeodes} geodes. {iterationsDone} iterations done.";
                 quality *= maxGeodes;
             }
             yield return $"{quality}";
@@ -82,14 +82,16 @@ namespace AdventOfCode2022.PuzzleSolutions.NotEnoughMinerals
                 .ToList();
         }
 
-        private static int ComputeMaxGeodes(BluePrint bluePrint, int maxMinutes)
+        private static (int MaxGeodes,int IterationsDone) ComputeMaxGeodes(BluePrint bluePrint, int maxMinutes)
         {
             var stack = new Stack<FactoryData>();
             stack.Push(FirstRobot(RobotType.OreRobot));
             stack.Push(FirstRobot(RobotType.ClayRobot));
             var bestScore = 0;
+                var iterationsDone = 0;
             while (stack.TryPop(out var currentFactoryData))
             {
+                iterationsDone++;
                 var timeRemaining = maxMinutes - currentFactoryData.Minutes + 1;
                 var sumOfSecondsFromOneToTimeRemaining = timeRemaining * (timeRemaining - 1) / 2;
                 var maxGeodesPossible = currentFactoryData.Geodes + currentFactoryData.GeodeRobots * timeRemaining + sumOfSecondsFromOneToTimeRemaining;
@@ -108,7 +110,7 @@ namespace AdventOfCode2022.PuzzleSolutions.NotEnoughMinerals
                 foreach (var FactoryData in TargetNewRobots(currentFactoryData))
                     stack.Push(FactoryData);
             }
-            return bestScore;
+            return (bestScore,iterationsDone);
         }
 
         private static FactoryData FirstRobot(RobotType robotType)
