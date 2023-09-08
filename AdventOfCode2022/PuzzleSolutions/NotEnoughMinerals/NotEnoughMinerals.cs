@@ -17,7 +17,6 @@ namespace AdventOfCode2022.PuzzleSolutions.NotEnoughMinerals
         public int ClayRobots;
         public int ObsidianRobots;
         public int GeodeRobots;
-        public IReadOnlyDictionary<RobotType, (int Ores, int Clays, int Obsidians)> CostOfRobots;
     }
 
     [Puzzle(19, "Not Enough Minerals")]
@@ -86,8 +85,8 @@ namespace AdventOfCode2022.PuzzleSolutions.NotEnoughMinerals
         private static int ComputeMaxGeodes(BluePrint bluePrint, int maxMinutes)
         {
             var stack = new Stack<FactoryData>();
-            stack.Push(FirstRobot(bluePrint, RobotType.OreRobot));
-            stack.Push(FirstRobot(bluePrint, RobotType.ClayRobot));
+            stack.Push(FirstRobot(RobotType.OreRobot));
+            stack.Push(FirstRobot(RobotType.ClayRobot));
             var bestScore = 0;
             while (stack.TryPop(out var currentFactoryData))
             {
@@ -112,14 +111,13 @@ namespace AdventOfCode2022.PuzzleSolutions.NotEnoughMinerals
             return bestScore;
         }
 
-        private static FactoryData FirstRobot(BluePrint bluePrint, RobotType robotType)
+        private static FactoryData FirstRobot(RobotType robotType)
         {
             return new FactoryData
             {
                 Minutes = 1,
                 RobotToBuild = robotType,
                 OreRobots = 1,
-                CostOfRobots = bluePrint.CostOfRobots
             };
         }
 

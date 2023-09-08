@@ -1,3 +1,4 @@
+using AdventOfCode2022.PuzzleSolutions.NotEnoughMinerals;
 using AdventOfCode2022web;
 using AdventOfCode2022web.Puzzles;
 using Microsoft.AspNetCore.Components.Web;
@@ -28,7 +29,7 @@ builder.Services.AddScoped(sp => new PuzzleSolutionViewModel<BeaconExclusionZone
 builder.Services.AddScoped(sp => new PuzzleBasicSolutionViewModel<ProboscideaVolcanium>(new ProboscideaVolcanium()));
 builder.Services.AddScoped(sp => new PuzzleBasicSolutionViewModel<PyroclasticFlow>(new PyroclasticFlow()));
 builder.Services.AddScoped(sp => new PuzzleSolutionViewModel<BoilingBoulders>(new BoilingBoulders()));
-builder.Services.AddScoped(sp => new PuzzleSolutionViewModel<AdventOfCode2022.PuzzleSolutions.NotEnoughMinerals.NotEnoughMineralsSolution>(new AdventOfCode2022.PuzzleSolutions.NotEnoughMinerals.NotEnoughMineralsSolution()));
+builder.Services.AddScoped(sp => new PuzzleSolutionViewModel<NotEnoughMineralsSolution>(new NotEnoughMineralsSolution()));
 builder.Services.AddScoped(sp => new PuzzleBasicSolutionViewModel<GrovePositioningSystem>(new GrovePositioningSystem()));
 builder.Services.AddScoped(sp => new PuzzleBasicSolutionViewModel<MonkeyMath>(new MonkeyMath()));
 builder.Services.AddScoped(sp => new PuzzleSolutionViewModel<MonkeyMap>(new MonkeyMap()));
