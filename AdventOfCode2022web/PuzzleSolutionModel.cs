@@ -3,7 +3,7 @@
 namespace AdventOfCode2022web
 {
 
-    public interface IPuzzleSolutionViewModel
+    public interface IPuzzleSolutionModel
     {
         IPuzzleSolutionIter PuzzleSolution { get; }
         int AnimationDuration { get; set; }
@@ -16,12 +16,12 @@ namespace AdventOfCode2022web
         void NotifyPuzzleInputLoaded();
     }
 
-    public class PuzzleSolutionViewModel : IPuzzleSolutionViewModel
+    public class PuzzleSolutionModel : IPuzzleSolutionModel
     {
         private IPuzzleSolutionIter _puzzleSolution;
         public IPuzzleSolutionIter PuzzleSolution => _puzzleSolution;
 
-        public PuzzleSolutionViewModel(IPuzzleSolutionIter solution)
+        public PuzzleSolutionModel(IPuzzleSolutionIter solution)
         {
             _puzzleSolution = solution;
         }
@@ -39,7 +39,7 @@ namespace AdventOfCode2022web
         public void NotifyPuzzleInputLoaded() => PuzzleInputLoaded?.Invoke();
     }
 
-    public class PuzzleSolutionViewModel<T> : IPuzzleSolutionViewModel where T : IPuzzleSolutionIter
+    public class PuzzleSolutionViewModel<T> : IPuzzleSolutionModel where T : IPuzzleSolutionIter
     {
         private T _puzzleSolution;
         public IPuzzleSolutionIter PuzzleSolution { get => _puzzleSolution; }
@@ -62,7 +62,7 @@ namespace AdventOfCode2022web
         public void NotifyPuzzleInputLoaded() => PuzzleInputLoaded?.Invoke();
     }
 
-    public class PuzzleBasicSolutionViewModel<T> : IPuzzleSolutionViewModel where T : IPuzzleSolution
+    public class PuzzleBasicSolutionViewModel<T> : IPuzzleSolutionModel where T : IPuzzleSolution
     {
         private PuzzleSolutionWrapper _puzzleSolution;
         public IPuzzleSolutionIter PuzzleSolution { get => _puzzleSolution; }
