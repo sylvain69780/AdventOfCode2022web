@@ -93,8 +93,8 @@ namespace AdventOfCode2022.PuzzleSolutions.NotEnoughMinerals
             {
                 iterationsDone++;
                 var timeRemaining = maxMinutes - currentFactoryData.Minutes + 1;
-                var sumOfSecondsFromOneToTimeRemaining = timeRemaining * (timeRemaining - 1) / 2;
-                var maxGeodesPossible = currentFactoryData.Geodes + currentFactoryData.GeodeRobots * timeRemaining + sumOfSecondsFromOneToTimeRemaining;
+                var sumOfSecondsRemaining = timeRemaining * (timeRemaining - 1) / 2;
+                var maxGeodesPossible = currentFactoryData.Geodes + currentFactoryData.GeodeRobots * timeRemaining + sumOfSecondsRemaining;
                 if (maxGeodesPossible < bestScore)
                     continue;
                 while (currentFactoryData.Minutes < maxMinutes && HasNotEnoughMineralsToBuildTheRobot(bluePrint,currentFactoryData))
