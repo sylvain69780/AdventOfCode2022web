@@ -1,4 +1,5 @@
-﻿using AdventOfCode2022web.Puzzles;
+﻿using AdventOfCode2022.PuzzleSolutions.NotEnoughMinerals;
+using AdventOfCode2022web.Puzzles;
 
 namespace AdventOfCode2022test
 {
@@ -47,33 +48,33 @@ Blueprint 30: Each ore robot costs 4 ore. Each clay robot costs 3 ore. Each obsi
         [Test]
         public void Test1()
         {
-            var puzzle = new NotEnoughMinerals();
+            var puzzle = new NotEnoughMineralsSolution();
             puzzle.Initialize(Input1);
-            var res = puzzle.SolveFirstPart();
+            var res = puzzle.SolveFirstPart().Last();
             Assert.That(res, Is.EqualTo("33"));
         }
         [Test]
         public void Test1_full()
         {
-            var puzzle = new NotEnoughMinerals();
+            var puzzle = new NotEnoughMineralsSolution();
             puzzle.Initialize(Input2);
-            var res = puzzle.SolveFirstPart();
+            var res = puzzle.SolveFirstPart().Last();
             Assert.That(res, Is.EqualTo("1413"));
         }
         [Test]
         public void Test2()
         {
-            var puzzle = new NotEnoughMinerals();
+            var puzzle = new NotEnoughMineralsSolution();
             puzzle.Initialize(Input1);
-            var res = puzzle.SolveSecondPart();
+            var res = puzzle.SolveSecondPart().Last();
             Assert.That(res, Is.EqualTo("3472"));
         }
         [Test]
         public void Test2_full()
         {
-            var puzzle = new NotEnoughMinerals();
+            var puzzle = new NotEnoughMineralsSolution();
             puzzle.Initialize(Input2);
-            var res = puzzle.SolveSecondPart();
+            var res = puzzle.SolveSecondPart().Last();
             Assert.That(res, Is.EqualTo("21080"));
         }
     }
