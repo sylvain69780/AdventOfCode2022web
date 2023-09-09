@@ -92,15 +92,13 @@ namespace AdventOfCode2022.PuzzleSolutions.NotEnoughMinerals
             while (stack.TryPop(out var currentFactoryData))
             {
                 iterationsDone++;
-                var timeRemaining = maxMinutes - currentFactoryData.Minutes + 1;
-                var sumOfSecondsRemaining = timeRemaining * (timeRemaining - 1) / 2;
-                var maxGeodesPossible = currentFactoryData.Geodes + currentFactoryData.GeodeRobots * timeRemaining + sumOfSecondsRemaining;
-                if (maxGeodesPossible <= bestScore)
+                var timeRemaining = maxMinutes - currentFactoryData.Minutes;
+                if (bestScore >= MaxGeodesPossible(currentFactoryData, timeRemaining))
                     continue;
                 while (currentFactoryData.Minutes < maxMinutes && NeedMoreMineralsToBuildTheRobot(bluePrint, currentFactoryData))
                     CollectMinerals(ref currentFactoryData);
                 CollectMinerals(ref currentFactoryData);
-                if (currentFactoryData.Minutes == maxMinutes + 1)
+                if (currentFactoryData.Minutes > maxMinutes)
                 {
                     if (currentFactoryData.Geodes > bestScore)
                         bestScore = currentFactoryData.Geodes;
@@ -111,6 +109,20 @@ namespace AdventOfCode2022.PuzzleSolutions.NotEnoughMinerals
                     stack.Push(FactoryData);
             }
             return (bestScore, iterationsDone);
+        }
+
+        private static int MaxGeodesPossible(FactoryData f, int timeRemaining)
+        {
+            var maxNewGeodeRobots = timeRemaining;
+            if (f.RobotToBuild != RobotType.GeodeRobot)
+                maxNewGeodeRobots--;
+            if (f.ObsidianRobots == 0 && f.RobotToBuild != RobotType.ObsidianRobot)
+                maxNewGeodeRobots--;
+            if (maxNewGeodeRobots < 0)
+                maxNewGeodeRobots = 0;
+            var sumOfSecondsRemaining = maxNewGeodeRobots * (maxNewGeodeRobots + 1) / 2;
+            var maxGeodesPossible = f.Geodes + f.GeodeRobots * (timeRemaining+1) + sumOfSecondsRemaining;
+            return maxGeodesPossible;
         }
 
         private static FactoryData FirstRobot(RobotType robotType)
