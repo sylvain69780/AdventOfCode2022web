@@ -19,6 +19,12 @@ namespace AdventOfCode2022.PuzzleSolutions.NotEnoughMinerals
         public int GeodeRobots;
     }
 
+    class BluePrintData
+    {
+        public int BlueprintNumber;
+        public IReadOnlyDictionary<RobotType, (int Ores, int Clays, int Obsidians)> CostOfRobots;
+    }
+
     [Puzzle(19, "Not Enough Minerals")]
     public class NotEnoughMineralsSolution : IPuzzleSolutionIter
     {
@@ -30,11 +36,6 @@ namespace AdventOfCode2022.PuzzleSolutions.NotEnoughMinerals
         {
             _puzzleInput = puzzleInput;
         }
-        struct BluePrint
-        {
-            public int BlueprintNumber;
-            public IReadOnlyDictionary<RobotType, (int Ores, int Clays, int Obsidians)> CostOfRobots;
-        }
 
         public IEnumerable<string> SolveFirstPart()
         {
@@ -43,7 +44,7 @@ namespace AdventOfCode2022.PuzzleSolutions.NotEnoughMinerals
             var maxMinutes = 24;
             foreach (var bp in bluePrints)
             {
-                var (maxGeodes, iterationsDone) = ComputeMaxGeodes(bp, maxMinutes);
+                var (maxGeodes, iterationsDone) = MaxGeodesPossible(bp, maxMinutes);
                 yield return $"Blueprint {bp.BlueprintNumber} gives at most {maxGeodes} geodes. {iterationsDone} iterations done.";
                 quality += maxGeodes * bp.BlueprintNumber;
             }
@@ -54,21 +55,22 @@ namespace AdventOfCode2022.PuzzleSolutions.NotEnoughMinerals
         {
             var blueprints = LoadBluePrints(_puzzleInput);
             var quality = 1;
+            var maxMinutes = 32;
             foreach (var bp in blueprints.Take(3))
             {
-                var (maxGeodes, iterationsDone) = ComputeMaxGeodes(bp, 32);
+                var (maxGeodes, iterationsDone) = MaxGeodesPossible(bp, maxMinutes);
                 yield return $"Blueprint {bp.BlueprintNumber} gives at most {maxGeodes} geodes. {iterationsDone} iterations done.";
                 quality *= maxGeodes;
             }
             yield return $"{quality}";
         }
 
-        private static List<BluePrint> LoadBluePrints(string puzzleInput)
+        private static List<BluePrintData> LoadBluePrints(string puzzleInput)
         {
             var regex = new Regex(@"Blueprint (\d+): Each ore robot costs (\d+) ore. Each clay robot costs (\d+) ore. Each obsidian robot costs (\d+) ore and (\d+) clay. Each geode robot costs (\d+) ore and (\d+) obsidian.");
             return puzzleInput.Split("\n")
                 .Select(x => regex.Match(x).Groups.Values.Skip(1).Select(x => int.Parse(x.Value)).ToArray())
-                .Select(x => new BluePrint
+                .Select(x => new BluePrintData
                 {
                     BlueprintNumber = x[0],
                     CostOfRobots = new Dictionary<RobotType, (int Ore, int Clay, int Obsidian)>()
@@ -82,7 +84,7 @@ namespace AdventOfCode2022.PuzzleSolutions.NotEnoughMinerals
                 .ToList();
         }
 
-        private static (int MaxGeodes, int IterationsDone) ComputeMaxGeodes(BluePrint bluePrint, int maxMinutes)
+        private static (int MaxGeodes, int IterationsDone) MaxGeodesPossible(BluePrintData bluePrint, int maxMinutes)
         {
             var stack = new Stack<FactoryData>();
             stack.Push(FirstRobot(RobotType.OreRobot));
@@ -93,9 +95,9 @@ namespace AdventOfCode2022.PuzzleSolutions.NotEnoughMinerals
             {
                 iterationsDone++;
                 var timeRemaining = maxMinutes - currentFactoryData.Minutes;
-                if (bestScore >= MaxGeodesPossible(currentFactoryData, timeRemaining))
+                if (bestScore >= MaxGeodesEstimated(currentFactoryData, timeRemaining))
                     continue;
-                while (currentFactoryData.Minutes < maxMinutes && NeedMoreMineralsToBuildTheRobot(bluePrint, currentFactoryData))
+                while (currentFactoryData.Minutes < maxMinutes && IsNotEnoughMinerals(bluePrint, currentFactoryData))
                     CollectMinerals(ref currentFactoryData);
                 CollectMinerals(ref currentFactoryData);
                 if (currentFactoryData.Minutes > maxMinutes)
@@ -111,7 +113,7 @@ namespace AdventOfCode2022.PuzzleSolutions.NotEnoughMinerals
             return (bestScore, iterationsDone);
         }
 
-        private static int MaxGeodesPossible(FactoryData f, int timeRemaining)
+        private static int MaxGeodesEstimated(FactoryData f, int timeRemaining)
         {
             var maxNewGeodeRobots = timeRemaining;
             if (f.RobotToBuild != RobotType.GeodeRobot)
@@ -160,13 +162,13 @@ namespace AdventOfCode2022.PuzzleSolutions.NotEnoughMinerals
             factory.Geodes += factory.GeodeRobots;
         }
 
-        private static bool NeedMoreMineralsToBuildTheRobot(BluePrint bp, FactoryData factory)
+        private static bool IsNotEnoughMinerals(BluePrintData bp, FactoryData factory)
         {
             var cost = bp.CostOfRobots[factory.RobotToBuild];
             return factory.Ores < cost.Ores || factory.Clays < cost.Clays || factory.Obsidians < cost.Obsidians;
         }
 
-        private static void TargetRobotIsNowBuilt(BluePrint bp, ref FactoryData factory)
+        private static void TargetRobotIsNowBuilt(BluePrintData bp, ref FactoryData factory)
         {
             var (ores, clays, obsidians) = bp.CostOfRobots[factory.RobotToBuild];
             if (factory.RobotToBuild == RobotType.OreRobot)
