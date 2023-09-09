@@ -116,12 +116,14 @@ namespace AdventOfCode2022.PuzzleSolutions.NotEnoughMinerals
             var maxNewGeodeRobots = timeRemaining;
             if (f.RobotToBuild != RobotType.GeodeRobot)
                 maxNewGeodeRobots--;
-            if (f.ObsidianRobots == 0 && f.RobotToBuild != RobotType.ObsidianRobot)
+            if (f.ObsidianRobots == 0)
+                maxNewGeodeRobots--;
+            if (f.ClayRobots == 0)
                 maxNewGeodeRobots--;
             if (maxNewGeodeRobots < 0)
                 maxNewGeodeRobots = 0;
-            var sumOfSecondsRemaining = maxNewGeodeRobots * (maxNewGeodeRobots + 1) / 2;
-            var maxGeodesPossible = f.Geodes + f.GeodeRobots * (timeRemaining+1) + sumOfSecondsRemaining;
+            var geodesCollectedByNewRobots = maxNewGeodeRobots * (maxNewGeodeRobots + 1) / 2;
+            var maxGeodesPossible = f.Geodes + f.GeodeRobots * (timeRemaining+1) + geodesCollectedByNewRobots;
             return maxGeodesPossible;
         }
 
