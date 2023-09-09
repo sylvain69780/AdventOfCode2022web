@@ -33,15 +33,15 @@
       "url": "_framework\/icudt.dat"
     },
     {
-      "hash": "sha256-RwkV2Bcc0lts1j0Y5qRhF31kAPYv\/ONqzz7J6xUDoWg=",
+      "hash": "sha256-iV69yu8qmlLznABG8jU6LtAqwWDYIrfsmUYubd0bg0E=",
       "url": "_framework\/blazor.boot.json"
     },
     {
-      "hash": "sha256-jkeKnpsrExt6bnHMQlHycMeNrQnkKGSxPMLHhuh130g=",
+      "hash": "sha256-+hzpQWnJd5xJQBqGhZka53cvH7BOUT9Lyhwas4AK7lE=",
       "url": "_framework\/AdventOfCode2022.dll"
     },
     {
-      "hash": "sha256-YpjsN\/1xMpy\/xw\/q2luWvVt0WEC8p2oG+COjbfrhW8I=",
+      "hash": "sha256-Tf4Z92YFX10YB1AAFaWiJMc6lOrR0uK\/OgdDhehRar4=",
       "url": "_framework\/AdventOfCode2022web.dll"
     },
     {
@@ -446,11 +446,11 @@
     },
     {
       "hash": "sha256-2v6XTBojFyNxz8eFXLynkDCB73gJl4eORAv1ZkejXng=",
-      "url": "sample-data\/NotEnoughMinerals_full.txt"
+      "url": "sample-data\/NotEnoughMineralsSolution_full.txt"
     },
     {
       "hash": "sha256-osoNaiYwx7001iaBCfe50y5tTR97KZTaV+cWRlC2m4c=",
-      "url": "sample-data\/NotEnoughMinerals.txt"
+      "url": "sample-data\/NotEnoughMineralsSolution.txt"
     },
     {
       "hash": "sha256-R3zkFaE6lbekHKMwESdT2ciYPeDUyZxZ+\/Gdh5KqNtg=",
@@ -541,5 +541,5 @@
       "url": "sample-data\/UnstableDiffusion.txt"
     }
   ],
-  "version": "jSPiZL56"
+  "version": "HsKAoN7S"
 };
