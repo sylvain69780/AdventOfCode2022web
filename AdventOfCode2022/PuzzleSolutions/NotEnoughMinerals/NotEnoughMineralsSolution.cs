@@ -87,8 +87,8 @@ namespace AdventOfCode2022.PuzzleSolutions.NotEnoughMinerals
         private static (int MaxGeodes, int IterationsDone) MaxGeodesPossible(BluePrintData bluePrint, int maxMinutes)
         {
             var stack = new Stack<FactoryData>();
-            stack.Push(FirstRobot(RobotType.OreRobot));
             stack.Push(FirstRobot(RobotType.ClayRobot));
+            stack.Push(FirstRobot(RobotType.OreRobot));
             var bestScore = 0;
             var iterationsDone = 0;
             while (stack.TryPop(out var currentFactoryData))
