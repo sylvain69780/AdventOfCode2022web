@@ -1,4 +1,4 @@
-﻿namespace AdventOfCode2022web.Puzzles
+﻿namespace AdventOfCode2022Solutions.PuzzleSolutions
 {
     public class PuzzleSolutionWrapper : IPuzzleSolutionIter
     {

@@ -1,10 +1,11 @@
-﻿using AdventOfCode2022web.Puzzles;
+﻿using AdventOfCode2022Solutions.PuzzleSolutions.Sudoku;
+using AdventOfCode2022Solutions.PuzzleSolutions;
 
 namespace AdventOfCode2022test
 {
     public class SudokuTest
     {
-        Sudoku _sudoku = new Sudoku();
+        SudokuSolution _sudoku = new SudokuSolution();
         [SetUp]
         public void Setup()
         {

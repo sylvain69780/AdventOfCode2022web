@@ -2,11 +2,11 @@
 <img style="width:100%; image-rendering:pixelated" src=@Visualize() />
 
 @code {
-    private RegolithReservoir? PuzzleSolution;
+    private RegolithReservoirSolution? PuzzleSolution;
 
     protected override void OnInitialized()
     {
-        PuzzleSolution = (RegolithReservoir)(PuzzleSolutionViewModel!.PuzzleSolution!);
+        PuzzleSolution = (RegolithReservoirSolution)(PuzzleSolutionViewModel!.PuzzleSolution!);
         PuzzleSolutionViewModel.PuzzleOutputReturned += StateHasChanged;
         base.OnInitialized();
     }

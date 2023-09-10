@@ -33,20 +33,25 @@
 
     private async Task LoadDefaultPuzzleInput()
     {
-        var puzzleType = PuzzleSolutionViewModel!.PuzzleSolution!.GetType();
-        var puzzleInputFile = puzzleType.Name;
-        if (puzzleType == typeof(PuzzleSolutionWrapper))
-            puzzleInputFile = ((PuzzleSolutionWrapper)(PuzzleSolutionViewModel.PuzzleSolution)).PuzzleType.Name;
+        var puzzleInputFile = GetInputFile();
         _input = (await Http.GetStringAsync($"sample-data/{puzzleInputFile}.txt")).Replace("\r", "");
     }
 
     private async Task LoadFullPuzzleInput()
     {
+        var puzzleInputFile = GetInputFile();
+        _input = (await Http.GetStringAsync($"sample-data/{puzzleInputFile}_full.txt")).Replace("\r", "");
+    }
+
+    private string GetInputFile()
+    {
         var puzzleType = PuzzleSolutionViewModel!.PuzzleSolution!.GetType();
         var puzzleInputFile = puzzleType.Name;
         if (puzzleType == typeof(PuzzleSolutionWrapper))
             puzzleInputFile = ((PuzzleSolutionWrapper)(PuzzleSolutionViewModel.PuzzleSolution)).PuzzleType.Name;
-        _input = (await Http.GetStringAsync($"sample-data/{puzzleInputFile}_full.txt")).Replace("\r", "");
+        if (puzzleInputFile.Contains("Solution"))
+            puzzleInputFile = puzzleInputFile.Replace("Solution", "");
+        return puzzleInputFile;
     }
 
     private void InitializePuzzle()

@@ -1,7 +1,7 @@
 ﻿using System.Text.RegularExpressions;
-using AdventOfCode2022web.Puzzles;
+using AdventOfCode2022Solutions.PuzzleSolutions;
 
-namespace AdventOfCode2022.PuzzleSolutions.NotEnoughMinerals
+namespace AdventOfCode2022Solutions.PuzzleSolutions.NotEnoughMinerals
 {
     public enum RobotType { OreRobot, ClayRobot, ObsidianRobot, GeodeRobot }
 
@@ -22,7 +22,7 @@ namespace AdventOfCode2022.PuzzleSolutions.NotEnoughMinerals
     class BluePrintData
     {
         public int BlueprintNumber;
-        public IReadOnlyDictionary<RobotType, (int Ores, int Clays, int Obsidians)> CostOfRobots;
+        public IReadOnlyDictionary<RobotType, (int Ores, int Clays, int Obsidians)>? CostOfRobots;
     }
 
     [Puzzle(19, "Not Enough Minerals")]
@@ -164,13 +164,13 @@ namespace AdventOfCode2022.PuzzleSolutions.NotEnoughMinerals
 
         private static bool HasEnoughMineralsToBuildRobot(BluePrintData bp, FactoryData factory)
         {
-            var cost = bp.CostOfRobots[factory.RobotToBuild];
+            var cost = bp.CostOfRobots![factory.RobotToBuild];
             return factory.Ores < cost.Ores || factory.Clays < cost.Clays || factory.Obsidians < cost.Obsidians;
         }
 
         private static void TargetRobotIsNowBuilt(BluePrintData bp, ref FactoryData factory)
         {
-            var (ores, clays, obsidians) = bp.CostOfRobots[factory.RobotToBuild];
+            var (ores, clays, obsidians) = bp.CostOfRobots![factory.RobotToBuild];
             if (factory.RobotToBuild == RobotType.OreRobot)
                 factory.OreRobots++;
             if (factory.RobotToBuild == RobotType.ClayRobot)

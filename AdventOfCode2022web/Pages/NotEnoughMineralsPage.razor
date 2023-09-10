@@ -1,7 +1,7 @@
 ﻿@page "/NotEnoughMineralsPage"
-@using AdventOfCode2022.PuzzleSolutions.NotEnoughMinerals;
+@using AdventOfCode2022Solutions.PuzzleSolutions.NotEnoughMinerals;
 @inject PuzzleSolutionViewModel<NotEnoughMineralsSolution> PuzzleSolutionViewModel
-<h2>NotEnoughMineralsPage</h2>
+<h2>Not Enough Minerals</h2>
 <p>It's a depth-first search algorithm, with a trick to stop the search when you cannot achieve a better score than the one already obtained. I had a meltdown because I didn't interpret the statement correctly, and I assumed that you could build multiple robots each turn, whereas you're limited to only one.</p>
 <CascadingValue Name="PuzzleSolutionViewModel" Value=@PuzzleSolutionViewModel>
     <PuzzleCodeViewer />

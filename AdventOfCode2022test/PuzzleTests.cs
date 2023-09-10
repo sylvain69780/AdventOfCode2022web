@@ -1,5 +1,5 @@
-using AdventOfCode2022.PuzzleSolutions.NotEnoughMinerals;
-using AdventOfCode2022web.Puzzles;
+using AdventOfCode2022Solutions.PuzzleSolutions.BoilingBoulders;
+using AdventOfCode2022Solutions.PuzzleSolutions;
 
 namespace AdventOfCode2022test
 {
@@ -13,7 +13,7 @@ namespace AdventOfCode2022test
         [Test]
         public void Test18()
         {
-            var solver = new BoilingBoulders();
+            BoilingBouldersSolution solver = new BoilingBouldersSolution();
             var input1 = @"2,2,2
 1,2,2
 3,2,2
@@ -2964,7 +2964,7 @@ namespace AdventOfCode2022test
         [Test]
         public void Test20()
         {
-            var solver = new GrovePositioningSystem();
+            var solver = new GrovePositioningSystemSolution();
             var input1 = @"1
 2
 -3
@@ -7983,7 +7983,7 @@ namespace AdventOfCode2022test
         [Test]
         public void Test21()
         {
-            var solver = new MonkeyMath();
+            var solver = new MonkeyMathSolution();
             var input1 = @"root: pppw + sjmn
 dbpl: 5
 cczh: sllz + lgvd
@@ -9597,7 +9597,7 @@ zfqn: zdcs * hvrb";
         [Test]
         public void Test22()
         {
-            var solver = new MonkeyMap();
+            var solver = new MonkeyMapSolution();
             var input1 = @"        ...#
         .#..
         #...

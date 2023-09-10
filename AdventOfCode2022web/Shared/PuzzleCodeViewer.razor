@@ -9,7 +9,7 @@
         var puzzle = PuzzleSolutionViewModel!.PuzzleSolution!.GetType();
         if (puzzle == typeof(PuzzleSolutionWrapper))
             puzzle = ((PuzzleSolutionWrapper)(PuzzleSolutionViewModel!.PuzzleSolution!)).PuzzleType;
-        PuzzleType = puzzle.Name.Contains("Solution") ? puzzle.Name.Replace("Solution","")+"/"+puzzle.Name : puzzle.Name;
+        PuzzleType = puzzle.Name.Replace("Solution","");
         base.OnInitialized();
     }
 }

@@ -1,4 +1,4 @@
-﻿using AdventOfCode2022web.Puzzles;
+﻿using AdventOfCode2022Solutions.PuzzleSolutions;
 
 namespace AdventOfCode2022test
 {
@@ -99,7 +99,7 @@ namespace AdventOfCode2022test
 ...####.#..###....#.###.#.#.........#....####..#........#.###..####.##...#
 .##.##.#####...##.....##.#..#####..##.....#....##......#.#..###..###..##..";
 
-            _solver = new UnstableDiffusion();
+            _solver = new UnstableDiffusionSolution();
         }
 
         [Test]

@@ -1,4 +1,4 @@
-﻿using AdventOfCode2022web.Puzzles;
+﻿using AdventOfCode2022Solutions.PuzzleSolutions;
 
 namespace AdventOfCode2022test
 {
@@ -52,7 +52,7 @@ namespace AdventOfCode2022test
 #<<v<v>^><^v^<^<v>><.v<.>^vv^>^<v^v>v<.vvv<v<^^>^^^^v^<<v^>v<v^vv>.^vv>v^.>>.^<.>>v<..^v.>^<<v<vvv^<..^<<>^^>v<<><^^><>>>#
 ########################################################################################################################.#".Replace("\r", "");
 
-            _solver = new BlizzardBasin();
+            _solver = new BlizzardBasinSolution();
         }
 
         [Test]

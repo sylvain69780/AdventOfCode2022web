@@ -91,11 +91,11 @@
 </svg>
 
 @code {
-    private Sudoku? PuzzleSolution;
+    private SudokuSolution? PuzzleSolution;
 
     protected override void OnInitialized()
     {
-        PuzzleSolution = (Sudoku)(PuzzleSolutionViewModel!.PuzzleSolution!);
+        PuzzleSolution = (SudokuSolution)(PuzzleSolutionViewModel!.PuzzleSolution!);
         PuzzleSolutionViewModel.PuzzleOutputReturned += StateHasChanged;
         base.OnInitialized();
     }

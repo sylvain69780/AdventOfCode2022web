@@ -89,11 +89,11 @@
 
 @code {
 
-    private UnstableDiffusion? PuzzleSolution { get; set; }
+    private UnstableDiffusionSolution? PuzzleSolution { get; set; }
 
     protected override void OnInitialized()
     {
-        PuzzleSolution = (UnstableDiffusion)(PuzzleSolutionViewModel!.PuzzleSolution!);
+        PuzzleSolution = (UnstableDiffusionSolution)(PuzzleSolutionViewModel!.PuzzleSolution!);
         PuzzleSolutionViewModel.PuzzleOutputReturned += SetTimer;
         base.OnInitialized();
     }
