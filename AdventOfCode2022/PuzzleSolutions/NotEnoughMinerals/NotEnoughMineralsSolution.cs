@@ -97,7 +97,7 @@ namespace AdventOfCode2022.PuzzleSolutions.NotEnoughMinerals
                 var timeRemaining = maxMinutes - currentFactoryData.Minutes;
                 if (bestScore >= MaxGeodesEstimated(currentFactoryData, timeRemaining))
                     continue;
-                while (currentFactoryData.Minutes < maxMinutes && IsNotEnoughMinerals(bluePrint, currentFactoryData))
+                while (currentFactoryData.Minutes < maxMinutes && HasEnoughMineralsToBuildRobot(bluePrint, currentFactoryData))
                     CollectMinerals(ref currentFactoryData);
                 CollectMinerals(ref currentFactoryData);
                 if (currentFactoryData.Minutes > maxMinutes)
@@ -162,7 +162,7 @@ namespace AdventOfCode2022.PuzzleSolutions.NotEnoughMinerals
             factory.Geodes += factory.GeodeRobots;
         }
 
-        private static bool IsNotEnoughMinerals(BluePrintData bp, FactoryData factory)
+        private static bool HasEnoughMineralsToBuildRobot(BluePrintData bp, FactoryData factory)
         {
             var cost = bp.CostOfRobots[factory.RobotToBuild];
             return factory.Ores < cost.Ores || factory.Clays < cost.Clays || factory.Obsidians < cost.Obsidians;
