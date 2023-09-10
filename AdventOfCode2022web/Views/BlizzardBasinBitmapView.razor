@@ -33,11 +33,6 @@
     {
         Busy = true;
         await Task.Delay(1);
-
-        // to do
-        // Button to Generate animated Gif
-        // Code to read attributes of pages instead of puzzles. @attribute [Route(Constants.CounterRoute)]
-
         if (PuzzleSolution == null || PuzzleSolution.Tree.Count == 0)
             return;
         var width = PuzzleSolution!.GridWidth;
@@ -52,7 +47,7 @@
 
         // Set animation loop repeat count to 5.
         var gifMetaData = gif.Metadata.GetGifMetadata();
-        gifMetaData.RepeatCount = 5;
+        gifMetaData.RepeatCount = 0;
 
         GifFrameMetadata metadata = gif.Frames.RootFrame.Metadata.GetGifMetadata();
         metadata.FrameDelay = frameDelay;
