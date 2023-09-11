@@ -3,7 +3,7 @@
 namespace AdventOfCode2022Solutions.PuzzleSolutions.TuningTrouble
 {
     [Puzzle(6, "Tuning Trouble")]
-    public class TuningTroubleSolution : IPuzzleSolution
+    public class TuningTroubleSolution : IPuzzleSolutionIter
     {
         private string _puzzleInput = string.Empty;
         public void Initialize(string puzzleInput)
@@ -28,13 +28,13 @@ namespace AdventOfCode2022Solutions.PuzzleSolutions.TuningTrouble
             return processedCharacters;
         }
 
-        public string SolveFirstPart()
+        public IEnumerable<string> SolveFirstPart()
         {
-            return Format(FindMarkerPosition(_puzzleInput, 4));
+            yield return Format(FindMarkerPosition(_puzzleInput, 4));
         }
-        public string SolveSecondPart()
+        public IEnumerable<string> SolveSecondPart()
         {
-            return Format(FindMarkerPosition(_puzzleInput, 14));
+            yield return Format(FindMarkerPosition(_puzzleInput, 14));
         }
     }
 }

@@ -1,8 +1,12 @@
 ﻿@page "/RucksackReorganizationPage"
-@inject PuzzleBasicSolutionViewModel<RucksackReorganizationSolution> PuzzleSolutionViewModel
+@inherits PuzzleSolutionPage
+@inject RucksackReorganizationSolution PuzzleSolution
 <h2>Rucksack Reorganization</h2>
-<CascadingValue Name="PuzzleSolutionViewModel" Value=@PuzzleSolutionViewModel>
-    <PuzzleCodeViewer />
-    <PuzzleInputForm />
-    <PuzzleControler />
+<CascadingValue Name="PuzzleSolutionPage" Value=@this>
+    <CascadingValue Name="PuzzleSolution" Value=@PuzzleSolution>
+        <PuzzleCodeViewer />
+        <PuzzleInputForm />
+        <PuzzleControler />
+    </CascadingValue>
 </CascadingValue>
+

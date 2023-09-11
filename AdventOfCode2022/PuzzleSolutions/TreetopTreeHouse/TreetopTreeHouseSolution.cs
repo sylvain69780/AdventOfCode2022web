@@ -3,7 +3,7 @@
 namespace AdventOfCode2022Solutions.PuzzleSolutions.TreetopTreeHouse
 {
     [Puzzle(8, "Treetop Tree House")]
-    public class TreetopTreeHouseSolution : IPuzzleSolution
+    public class TreetopTreeHouseSolution : IPuzzleSolutionIter
     {
         private string _puzzleInput = string.Empty;
         public void Initialize(string puzzleInput)
@@ -29,7 +29,7 @@ namespace AdventOfCode2022Solutions.PuzzleSolutions.TreetopTreeHouse
 
         private static readonly (int, int)[] Directions = new (int x, int y)[] { (1, 0), (-1, 0), (0, 1), (0, -1) };
 
-        public string SolveFirstPart()
+        public IEnumerable<string> SolveFirstPart()
         {
             var map = new HeightMap(ToLines(_puzzleInput));
             var visibleTrees = 0;
@@ -55,10 +55,10 @@ namespace AdventOfCode2022Solutions.PuzzleSolutions.TreetopTreeHouse
                         }
                     }
                 }
-            return Format(visibleTrees);
+            yield return Format(visibleTrees);
         }
 
-        public string SolveSecondPart()
+        public IEnumerable<string> SolveSecondPart()
         {
             var map = new HeightMap(ToLines(_puzzleInput));
             var scoreMax = 0;
@@ -80,7 +80,7 @@ namespace AdventOfCode2022Solutions.PuzzleSolutions.TreetopTreeHouse
                     }
                     scoreMax = Math.Max(score, scoreMax);
                 }
-            return Format(scoreMax);
+            yield return Format(scoreMax);
         }
     }
 }

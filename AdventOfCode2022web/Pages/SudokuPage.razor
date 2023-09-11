@@ -1,15 +1,18 @@
 ﻿@page "/SudokuPage"
-@inject PuzzleSolutionViewModel<SudokuSolution> PuzzleSolutionViewModel
+@inherits PuzzleSolutionPage
+@inject SudokuSolution PuzzleSolution
 <h2>Sudoku Solver</h2>
-<CascadingValue Name="PuzzleSolutionViewModel" Value=@PuzzleSolutionViewModel>
-<div class="row">
-    <div class="col-lg-6">
-        <SudokuView />
-    </div>
-    <div class="col-lg-6">
-        <PuzzleCodeViewer/>
-        <PuzzleInputForm />
-        <PuzzleControler />
-    </div>
-</div>
+<CascadingValue Name="PuzzleSolutionPage" Value=@this>
+    <CascadingValue Name="PuzzleSolution" Value=@PuzzleSolution>
+        <div class="row">
+            <div class="col-lg-6">
+                <SudokuView />
+            </div>
+            <div class="col-lg-6">
+                <PuzzleCodeViewer />
+                <PuzzleInputForm />
+                <PuzzleControler />
+            </div>
+        </div>
+    </CascadingValue>
 </CascadingValue>

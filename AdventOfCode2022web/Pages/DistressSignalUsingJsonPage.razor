@@ -1,8 +1,11 @@
 ﻿@page "/DistressSignalUsingJsonPage"
-@inject PuzzleBasicSolutionViewModel<DistressSignalUsingJsonSolution> PuzzleSolutionViewModel
+@inherits PuzzleSolutionPage
+@inject DistressSignalUsingJsonSolution PuzzleSolution
 <h2>Distress Signal UsingJson</h2>
-<CascadingValue Name="PuzzleSolutionViewModel" Value=@PuzzleSolutionViewModel>
-    <PuzzleCodeViewer />
-    <PuzzleInputForm />
-    <PuzzleControler />
+<CascadingValue Name="PuzzleSolutionPage" Value=@this>
+    <CascadingValue Name="PuzzleSolution" Value=@PuzzleSolution>
+        <PuzzleCodeViewer />
+        <PuzzleInputForm />
+        <PuzzleControler />
+    </CascadingValue>
 </CascadingValue>

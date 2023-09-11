@@ -1,12 +1,15 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using AdventOfCode2022Solutions.PuzzleSolutions;
+using Microsoft.AspNetCore.Components;
 
 namespace AdventOfCode2022web
 {
     public class PuzzleViewBase : ComponentBase
     {
-        [CascadingParameter(Name = "PuzzleSolutionViewModel")]
-        protected IPuzzleSolutionModel? PuzzleSolutionViewModel { get; set; }
+        [CascadingParameter(Name = "PuzzleSolutionPage")]
+        protected PuzzleSolutionPage? PuzzleSolutionPage { get; set; }
+        [CascadingParameter(Name = "PuzzleSolution")]
+        protected IPuzzleSolutionIter? PuzzleSolution { get; set; }
 
-        protected int AnimationDuration => PuzzleSolutionViewModel?.AnimationDuration ?? 500;
+        protected int AnimationDuration => PuzzleSolutionPage?.AnimationDuration ?? 500;
     }
 }

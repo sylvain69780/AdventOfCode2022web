@@ -1,8 +1,12 @@
 ﻿@page "/PyroclasticFlowPage"
-@inject PuzzleBasicSolutionViewModel<PyroclasticFlowSolution> PuzzleSolutionViewModel
+@inherits PuzzleSolutionPage
+@inject PyroclasticFlowSolution PuzzleSolution
 <h2>Pyroclastic Flow</h2>
-<CascadingValue Name="PuzzleSolutionViewModel" Value=@PuzzleSolutionViewModel>
-    <PuzzleCodeViewer />
-    <PuzzleInputForm />
-    <PuzzleControler />
+<CascadingValue Name="PuzzleSolutionPage" Value=@this>
+    <CascadingValue Name="PuzzleSolution" Value=@PuzzleSolution>
+        <PuzzleCodeViewer />
+        <PuzzleInputForm />
+        <PuzzleControler />
+    </CascadingValue>
 </CascadingValue>
+

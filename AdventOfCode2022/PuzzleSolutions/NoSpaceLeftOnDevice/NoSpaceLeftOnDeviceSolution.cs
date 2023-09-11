@@ -3,7 +3,7 @@
 namespace AdventOfCode2022Solutions.PuzzleSolutions.NoSpaceLeftOnDevice
 {
     [Puzzle(7, "No Space Left On Device")]
-    public class NoSpaceLeftOnDeviceSolution : IPuzzleSolution
+    public class NoSpaceLeftOnDeviceSolution : IPuzzleSolutionIter
     {
         private string _puzzleInput = string.Empty;
         public void Initialize(string puzzleInput)
@@ -54,14 +54,14 @@ namespace AdventOfCode2022Solutions.PuzzleSolutions.NoSpaceLeftOnDevice
             return directoriesContentSize;
         }
 
-        public string SolveFirstPart()
+        public IEnumerable<string> SolveFirstPart()
         {
             var terminalOutputs = ToLines(_puzzleInput);
             var directoriesContentSize = BuildDirectoriesContentSize(terminalOutputs);
             var sumOfTotalSizesOfDirectories = directoriesContentSize.Values.Where(x => x <= 100000).Sum();
-            return Format(sumOfTotalSizesOfDirectories);
+            yield return Format(sumOfTotalSizesOfDirectories);
         }
-        public string SolveSecondPart()
+        public IEnumerable<string> SolveSecondPart()
         {
             var terminalOutputs = ToLines(_puzzleInput);
             var directoriesContentSize = BuildDirectoriesContentSize(terminalOutputs);
@@ -70,7 +70,7 @@ namespace AdventOfCode2022Solutions.PuzzleSolutions.NoSpaceLeftOnDevice
             var totalSpaceUsed = directoriesContentSize["#/"];
             var toBeFreed = freeSpaceRequired - (totalDiskSize - totalSpaceUsed);
             var totalSizeOfDirectoryToBeDeleted = directoriesContentSize.Values.Where(x => x >= toBeFreed).Min();
-            return Format(totalSizeOfDirectoryToBeDeleted);
+            yield return Format(totalSizeOfDirectoryToBeDeleted);
         }
     }
 }

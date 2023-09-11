@@ -7974,11 +7974,11 @@ namespace AdventOfCode2022test
 7982";
 
             solver.Initialize(input1);
-            Assert.That(solver.SolveFirstPart(), Is.EqualTo("3"));
-            Assert.That(solver.SolveSecondPart(), Is.EqualTo("1623178306"));
+            Assert.That(solver.SolveFirstPart().Last(), Is.EqualTo("3"));
+            Assert.That(solver.SolveSecondPart().Last(), Is.EqualTo("1623178306"));
             solver.Initialize(input2);
-            Assert.That(solver.SolveFirstPart(), Is.EqualTo("4426"));
-            Assert.That(solver.SolveSecondPart(), Is.EqualTo("8119137886612"));
+            Assert.That(solver.SolveFirstPart().Last(), Is.EqualTo("4426"));
+            Assert.That(solver.SolveSecondPart().Last(), Is.EqualTo("8119137886612"));
         }
         [Test]
         public void Test21()
@@ -9583,14 +9583,14 @@ zfqn: zdcs * hvrb";
             solver.Initialize(input1);
             Assert.Multiple(() =>
             {
-                Assert.That(solver.SolveFirstPart(), Is.EqualTo("152"));
-                Assert.That(solver.SolveSecondPart(), Is.EqualTo("301"));
+                Assert.That(solver.SolveFirstPart().Last(), Is.EqualTo("152"));
+                Assert.That(solver.SolveSecondPart().Last(), Is.EqualTo("301"));
             });
             solver.Initialize(input2);
             Assert.Multiple(() =>
             {
-                Assert.That(solver.SolveFirstPart(), Is.EqualTo("78342931359552"));
-                Assert.That(solver.SolveSecondPart(), Is.EqualTo("3296135418820"));
+                Assert.That(solver.SolveFirstPart().Last(), Is.EqualTo("78342931359552"));
+                Assert.That(solver.SolveSecondPart().Last(), Is.EqualTo("3296135418820"));
             });
         }
 

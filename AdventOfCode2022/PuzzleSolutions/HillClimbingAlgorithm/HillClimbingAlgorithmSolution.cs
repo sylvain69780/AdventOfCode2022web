@@ -4,7 +4,7 @@ using AdventOfCode2022Solutions.PuzzleSolutions;
 namespace AdventOfCode2022Solutions.PuzzleSolutions.HillClimbingAlgorithm
 {
     [Puzzle(12, "Hill Climbing Algorithm")]
-    public class HillClimbingAlgorithmSolution : IPuzzleSolution
+    public class HillClimbingAlgorithmSolution : IPuzzleSolutionIter
     {
         private string _puzzleInput = string.Empty;
         public void Initialize(string puzzleInput)
@@ -72,7 +72,7 @@ namespace AdventOfCode2022Solutions.PuzzleSolutions.HillClimbingAlgorithm
 
 
 
-        public string SolveFirstPart()
+        public IEnumerable<string> SolveFirstPart()
         {
             var map = new HillMap(_puzzleInput);
             map.SetAsExplored(map.Start);
@@ -105,9 +105,9 @@ namespace AdventOfCode2022Solutions.PuzzleSolutions.HillClimbingAlgorithm
                 }
                 breadthFirstSearchQueue = newQueue;
             }
-            return score.ToString();
+            yield return score.ToString();
         }
-        public string SolveSecondPart()
+        public IEnumerable<string> SolveSecondPart()
         {
             var map = new HillMap(_puzzleInput);
             map.SetAsExplored(map.Start);
@@ -125,7 +125,8 @@ namespace AdventOfCode2022Solutions.PuzzleSolutions.HillClimbingAlgorithm
                         continue;
                     if (map.IsExit(nextPosition))
                     {
-                        return distance.ToString();
+                        yield return distance.ToString();
+                        yield break;
                     }
                     newQueue.Enqueue(nextPosition);
                     map.SetAsExplored(nextPosition);
@@ -137,7 +138,7 @@ namespace AdventOfCode2022Solutions.PuzzleSolutions.HillClimbingAlgorithm
                         breadthFirstSearchQueue.Enqueue(item);
                 }
             }
-            return "Not found " + distance.ToString();
+            yield return "Not found " + distance.ToString();
         }
     }
 }

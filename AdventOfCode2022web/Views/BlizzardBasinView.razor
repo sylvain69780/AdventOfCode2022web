@@ -35,7 +35,7 @@
                 }
             </g>
             <g class=@BlizzardClass>
-                @foreach (var b in PuzzleSolution!.BlizzardsPositions!)
+                @foreach (var b in BlizzardBasinSolution!.BlizzardsPositions!)
                 {
                     if (b.Direction == Directions.Right)
                     {
@@ -74,30 +74,22 @@
         </g>
     </svg>
 }
-@*@if (_animationCompleted)
-{
-    <p>Animation Stopped</p>
-}
-else
-{
-    <p>Animation Running</p>
-}*@
 
 @code {
-    private IBlizzardBasinViewState? PuzzleSolution { get; set; }
+    private BlizzardBasinSolution? BlizzardBasinSolution { get; set; }
 
     protected override void OnInitialized()
     {
-        PuzzleSolution = (IBlizzardBasinViewState)(PuzzleSolutionViewModel!.PuzzleSolution!);
-        PuzzleSolutionViewModel.PuzzleOutputReturned += SetTimer;
-        PuzzleSolutionViewModel.PuzzleInputLoaded += StateHasChanged;
+        BlizzardBasinSolution = (BlizzardBasinSolution)(PuzzleSolution!);
+        PuzzleSolutionPage!.PuzzleOutputReturned += SetTimer;
+        PuzzleSolutionPage.PuzzleInputLoaded += StateHasChanged;
         base.OnInitialized();
     }
 
     public void Dispose()
     {
-        PuzzleSolutionViewModel!.PuzzleOutputReturned -= SetTimer;
-        PuzzleSolutionViewModel.PuzzleInputLoaded -= StateHasChanged;
+        PuzzleSolutionPage!.PuzzleOutputReturned -= SetTimer;
+        PuzzleSolutionPage.PuzzleInputLoaded -= StateHasChanged;
     }
 
     private Timer? _timer;
@@ -105,7 +97,7 @@ else
 
     private void SetTimer()
     {
-        _timer = new Timer(Callback, null, PuzzleSolutionViewModel!.AnimationDuration, Timeout.Infinite);
+        _timer = new Timer(Callback, null, PuzzleSolutionPage!.AnimationDuration, Timeout.Infinite);
         _animationCompleted = false;
         StateHasChanged();
     }
@@ -116,15 +108,15 @@ else
         StateHasChanged();
     }
 
-    private (int X, int Y) Exit => PuzzleSolution!.ExitPosition;
-    private (int X, int Y) Entrance => PuzzleSolution!.EntrancePosition;
-    private int RoundNumber => PuzzleSolution!.CurrentMinute;
-    private List<List<(int ParentId, (int X, int Y) Pos)>> Tree => PuzzleSolution!.Tree;
-    private int GridWidth => PuzzleSolution!.GridWidth;
-    private int GridHeight => PuzzleSolution!.GridHeight;
+    private (int X, int Y) Exit => BlizzardBasinSolution!.ExitPosition;
+    private (int X, int Y) Entrance => BlizzardBasinSolution!.EntrancePosition;
+    private int RoundNumber => BlizzardBasinSolution!.CurrentMinute;
+    private List<List<(int ParentId, (int X, int Y) Pos)>> Tree => BlizzardBasinSolution!.Tree;
+    private int GridWidth => BlizzardBasinSolution!.GridWidth;
+    private int GridHeight => BlizzardBasinSolution!.GridHeight;
     private string AnimationTimingStyle => $"--animation-duration: {AnimationDuration}ms;";
     private string ElfSearchClass => (_animationCompleted ? "elf-motionless" : "elf-moving");
     private string ElfKilledClass => (_animationCompleted ? "elf-hidden" : "elf-killed");
     private string BlizzardClass => (_animationCompleted ? "blizzard-motionless" : "blizzard-moving");
-    private bool IsPuzzleValid => PuzzleSolution != null && PuzzleSolution.Tree != null && PuzzleSolution.Tree.Count > 0;
+    private bool IsPuzzleValid => BlizzardBasinSolution != null && BlizzardBasinSolution.Tree != null && BlizzardBasinSolution.Tree.Count > 0;
 }

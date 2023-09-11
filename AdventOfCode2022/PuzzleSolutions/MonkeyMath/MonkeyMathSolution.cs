@@ -5,7 +5,7 @@ using AdventOfCode2022Solutions.PuzzleSolutions;
 namespace AdventOfCode2022Solutions.PuzzleSolutions.MonkeyMath
 {
     [Puzzle(21, "Monkey Math")]
-    public class MonkeyMathSolution : IPuzzleSolution
+    public class MonkeyMathSolution : IPuzzleSolutionIter
     {
         private string _puzzleInput = string.Empty;
         public void Initialize(string puzzleInput)
@@ -52,12 +52,12 @@ namespace AdventOfCode2022Solutions.PuzzleSolutions.MonkeyMath
             throw new NotImplementedException();
         }
 
-        public string SolveFirstPart()
+        public IEnumerable<string> SolveFirstPart()
         {
             var jobOfEachMonkey = ReadPuzzleInput(_puzzleInput);
-            return GetYelledNumber(jobOfEachMonkey, "root").ToString();
+            yield return GetYelledNumber(jobOfEachMonkey, "root").ToString();
         }
-        public string SolveSecondPart()
+        public IEnumerable<string> SolveSecondPart()
         {
             var jobOfEachMonkey = ReadPuzzleInput(_puzzleInput);
             var compute = (long guess) =>
@@ -93,7 +93,7 @@ namespace AdventOfCode2022Solutions.PuzzleSolutions.MonkeyMath
                 searchQueue.Enqueue((i.Lower + d / 2 + 1, i.Upper), p);
             }
             // there is several values that get 0 at the end !
-            return inputValuesGivingZero.Min().ToString();
+            yield return inputValuesGivingZero.Min().ToString();
         }
     }
 }

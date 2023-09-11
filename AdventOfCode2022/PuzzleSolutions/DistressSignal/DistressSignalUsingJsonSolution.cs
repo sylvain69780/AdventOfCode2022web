@@ -6,7 +6,7 @@ using AdventOfCode2022Solutions.PuzzleSolutions;
 namespace AdventOfCode2022Solutions.PuzzleSolutions.DistressSignal
 {
     [Puzzle(13, "Distress Signal")]
-    public class DistressSignalUsingJsonSolution : IPuzzleSolution
+    public class DistressSignalUsingJsonSolution : IPuzzleSolutionIter
     {
         private string _puzzleInput = string.Empty;
         public void Initialize(string puzzleInput)
@@ -56,7 +56,7 @@ namespace AdventOfCode2022Solutions.PuzzleSolutions.DistressSignal
             }
         }
 
-        public string SolveFirstPart()
+        public IEnumerable<string> SolveFirstPart()
         {
             var packetStrings = @"[" + _puzzleInput.Replace("\n\n", "\n").Replace("\n", ",") + "]";
             var packets = JsonSerializer.Deserialize<JsonElement[]>(packetStrings);
@@ -66,9 +66,9 @@ namespace AdventOfCode2022Solutions.PuzzleSolutions.DistressSignal
                 if (Compare(packets[pairId * 2], packets[pairId * 2 + 1]) < 0)
                     wellOrderedPackets += pairId + 1;
             }
-            return wellOrderedPackets.ToString();
+            yield return wellOrderedPackets.ToString();
         }
-        public string SolveSecondPart()
+        public IEnumerable<string> SolveSecondPart()
         {
             var packetStrings = @"[[[2]],[[6]]," + _puzzleInput.Replace("\n\n", "\n").Replace("\n", ",") + "]";
             var packets = JsonSerializer.Deserialize<JsonElement[]>(packetStrings);
@@ -84,7 +84,7 @@ namespace AdventOfCode2022Solutions.PuzzleSolutions.DistressSignal
                 else if (serializedPacket == "[[6]]")
                     secondPacket = index + 1;
             }
-            return (firstPacket * secondPacket).ToString(); // + "\n" + string.Join('\n',packets);
+            yield return (firstPacket * secondPacket).ToString(); // + "\n" + string.Join('\n',packets);
         }
     }
 }

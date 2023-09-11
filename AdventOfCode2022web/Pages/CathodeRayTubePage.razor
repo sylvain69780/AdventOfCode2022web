@@ -1,8 +1,11 @@
 ﻿@page "/CathodeRayTubePage"
-@inject PuzzleSolutionViewModel<CathodeRayTubeSolution> PuzzleSolutionViewModel
+@inherits PuzzleSolutionPage
+@inject CathodeRayTubeSolution PuzzleSolution
 <h2>Cathode Ray Tube</h2>
-<CascadingValue Name="PuzzleSolutionViewModel" Value=@PuzzleSolutionViewModel>
-    <PuzzleCodeViewer />
-    <PuzzleInputForm />
-    <PuzzleControler />
+<CascadingValue Name="PuzzleSolutionPage" Value=@this>
+    <CascadingValue Name="PuzzleSolution" Value=@PuzzleSolution>
+        <PuzzleCodeViewer />
+        <PuzzleInputForm />
+        <PuzzleControler />
+    </CascadingValue>
 </CascadingValue>

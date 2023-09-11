@@ -3,7 +3,7 @@
 namespace AdventOfCode2022Solutions.PuzzleSolutions.DistressSignal
 {
     [Puzzle(26, "Distress Signal2")]
-    public class DistressSignalSolution : IPuzzleSolution
+    public class DistressSignalSolution : IPuzzleSolutionIter
     {
         private string _puzzleInput = string.Empty;
         public void Initialize(string puzzleInput) => _puzzleInput = puzzleInput;
@@ -68,7 +68,7 @@ namespace AdventOfCode2022Solutions.PuzzleSolutions.DistressSignal
             }
         }
 
-        public string SolveFirstPart()
+        public IEnumerable<string> SolveFirstPart()
         {
             var packetStrings = ToLines(_puzzleInput);
             var wellOrderedPackets = 0;
@@ -79,16 +79,16 @@ namespace AdventOfCode2022Solutions.PuzzleSolutions.DistressSignal
                 if (((IComparable<Packet>)secondPacket).CompareTo(firstPacket) > 0)
                     wellOrderedPackets += pairId;
             }
-            return wellOrderedPackets.ToString();
+            yield return wellOrderedPackets.ToString();
         }
-        public string SolveSecondPart()
+        public IEnumerable<string> SolveSecondPart()
         {
             var packetStrings = ToLines(_puzzleInput).Where(x => x != "")
                 .Append("[[2]]").Append("[[6]]")
                 .Select(x => (PacketString: x, Packet: PacketHelper.BuildPacket(x)))
                 .OrderBy(x => x.Packet)
                 .Select(x => x.PacketString).ToList();
-            return ((1 + packetStrings.IndexOf("[[2]]")) * (1 + packetStrings.IndexOf("[[6]]"))).ToString();
+            yield return ((1 + packetStrings.IndexOf("[[2]]")) * (1 + packetStrings.IndexOf("[[6]]"))).ToString();
         }
     }
 }

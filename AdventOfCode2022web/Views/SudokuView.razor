@@ -27,13 +27,13 @@
     </defs>
     <rect x="-0.05" y="-0.05" width="9.1" height="9.1" fill="url(#gridPattern2)"></rect>
     @{
-        if (PuzzleSolution != null && PuzzleSolution.PuzzleState.Length == 81)
+        if (SudokuSolution != null && SudokuSolution.PuzzleState.Length == 81)
         {
-            var s = PuzzleSolution.PuzzleState;
+            var s = SudokuSolution!.PuzzleState;
             var dfs = Array.Empty<string>();
-            if (PuzzleSolution.DFS != null)
+            if (SudokuSolution.DFS != null)
             {
-                dfs = PuzzleSolution.DFS.ToArray();
+                dfs = SudokuSolution.DFS.ToArray();
             }
             foreach (var y in Enumerable.Range(0, 9))
                 foreach (var x in Enumerable.Range(0, 9))
@@ -41,7 +41,7 @@
                     var c = s[x + y * 9];
                     if (c == '.')
                     {
-                        var r = PuzzleSolution.Entropy(x + y * 9).Length;
+                        var r = SudokuSolution.Entropy(x + y * 9).Length;
                         if (r == 0)
                         {
                             <use href="#sudoku-bad-cell" x="@x" y="@y" />
@@ -91,17 +91,17 @@
 </svg>
 
 @code {
-    private SudokuSolution? PuzzleSolution;
+    private SudokuSolution? SudokuSolution;
 
     protected override void OnInitialized()
     {
-        PuzzleSolution = (SudokuSolution)(PuzzleSolutionViewModel!.PuzzleSolution!);
-        PuzzleSolutionViewModel.PuzzleOutputReturned += StateHasChanged;
+        SudokuSolution = (SudokuSolution)(PuzzleSolution!);
+        PuzzleSolutionPage!.PuzzleOutputReturned += StateHasChanged;
         base.OnInitialized();
     }
 
     public void Dispose()
     {
-        PuzzleSolutionViewModel!.PuzzleOutputReturned -= StateHasChanged;
+        PuzzleSolutionPage!.PuzzleOutputReturned -= StateHasChanged;
     }
 }

@@ -3,7 +3,7 @@
 namespace AdventOfCode2022Solutions.PuzzleSolutions.RockPaperScissors
 {
     [Puzzle(2, "Rock Paper Scissors")]
-    public class RockPaperScissorsSolution : IPuzzleSolution
+    public class RockPaperScissorsSolution : IPuzzleSolutionIter
     {
         private string _puzzleInput = string.Empty;
         public void Initialize(string puzzleInput)
@@ -11,7 +11,6 @@ namespace AdventOfCode2022Solutions.PuzzleSolutions.RockPaperScissors
             _puzzleInput = puzzleInput;
         }
         private static string[] ToLines(string s) => s.Split("\n");
-        private static string Format(int v) => v.ToString();
 
         private enum Moves { Rock = 0, Paper = 1, Scissors = 2 };
         private enum GameResults { Lose = 0, Draw = 1, Win = 2 };
@@ -37,7 +36,7 @@ namespace AdventOfCode2022Solutions.PuzzleSolutions.RockPaperScissors
         private static (Moves OpponentPlayed, GameResults ExpectedResult) DecodeMovesPart2(string s)
             => ((Moves)(s[0] - 'A'), (GameResults)(s[2] - 'X'));
 
-        public string SolveFirstPart()
+        public IEnumerable<string> SolveFirstPart()
         {
             var score = 0;
             foreach (var round in ToLines(_puzzleInput).Select(x => DecodeMovesPart1(x)))
@@ -48,10 +47,10 @@ namespace AdventOfCode2022Solutions.PuzzleSolutions.RockPaperScissors
                 else if (!FirstPlayerWins.Contains(round))
                     score += 6;
             }
-            return Format(score);
+            yield return score.ToString();
         }
 
-        public string SolveSecondPart()
+        public IEnumerable<string> SolveSecondPart()
         {
             var score = 0;
             foreach (var (opponentPlayed, expectedResult) in ToLines(_puzzleInput).Select(x => DecodeMovesPart2(x)))
@@ -64,7 +63,7 @@ namespace AdventOfCode2022Solutions.PuzzleSolutions.RockPaperScissors
                 score += (int)youPlay + 1;
                 score += (int)expectedResult * 3;
             }
-            return Format(score);
+            yield return score.ToString();
         }
     }
 }

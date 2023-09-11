@@ -1,8 +1,11 @@
 ﻿@page "/RockPaperScissorsPage"
-@inject PuzzleBasicSolutionViewModel<RockPaperScissorsSolution> PuzzleSolutionViewModel
+@inherits PuzzleSolutionPage
+@inject RockPaperScissorsSolution PuzzleSolution
 <h2>Rock Paper Scissors</h2>
-<CascadingValue Name="PuzzleSolutionViewModel" Value=@PuzzleSolutionViewModel>
-    <PuzzleCodeViewer />
-    <PuzzleInputForm />
-    <PuzzleControler />
+<CascadingValue Name="PuzzleSolutionPage" Value=@this>
+    <CascadingValue Name="PuzzleSolution" Value=@PuzzleSolution>
+        <PuzzleCodeViewer />
+        <PuzzleInputForm />
+        <PuzzleControler />
+    </CascadingValue>
 </CascadingValue>

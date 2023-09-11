@@ -1,8 +1,12 @@
 ﻿@page "/CalorieCountingPage"
-@inject PuzzleSolutionViewModel<CalorieCountingSolution> PuzzleSolutionViewModel
+@inherits PuzzleSolutionPage
+@inject CalorieCountingSolution PuzzleSolution
 <h2>Calorie Counting</h2>
-<CascadingValue Name="PuzzleSolutionViewModel" Value=@PuzzleSolutionViewModel>
-    <PuzzleCodeViewer />
-    <PuzzleInputForm />
-    <PuzzleControler />
+<CascadingValue Name="PuzzleSolutionPage" Value=@this>
+    <CascadingValue Name="PuzzleSolution" Value=@PuzzleSolution>
+        <PuzzleCodeViewer />
+        <PuzzleInputForm />
+        <PuzzleControler />
+    </CascadingValue>
 </CascadingValue>
+

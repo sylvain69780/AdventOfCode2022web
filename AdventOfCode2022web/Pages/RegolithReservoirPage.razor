@@ -1,15 +1,18 @@
 ﻿@page "/RegolithReservoirPage"
-@inject PuzzleSolutionViewModel<RegolithReservoirSolution> PuzzleSolutionViewModel
+@inherits PuzzleSolutionPage
+@inject RegolithReservoirSolution PuzzleSolution
 <h2>Regolith Reservoir</h2>
-<CascadingValue Name="PuzzleSolutionViewModel" Value=@PuzzleSolutionViewModel>
-<div class="row">
-    <div class="col-lg-6">
-        <RegolithReservoirView />
-    </div>
-    <div class="col-lg-6">
-        <PuzzleCodeViewer/>
-        <PuzzleInputForm />
-        <PuzzleControler />
-    </div>
-</div>
+<CascadingValue Name="PuzzleSolutionPage" Value=@this>
+    <CascadingValue Name="PuzzleSolution" Value=@PuzzleSolution>
+        <div class="row">
+            <div class="col-lg-6">
+                <RegolithReservoirView />
+            </div>
+            <div class="col-lg-6">
+                <PuzzleCodeViewer />
+                <PuzzleInputForm />
+                <PuzzleControler />
+            </div>
+        </div>
+    </CascadingValue>
 </CascadingValue>

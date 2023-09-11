@@ -6,7 +6,7 @@ using AdventOfCode2022Solutions.PuzzleSolutions;
 namespace AdventOfCode2022Solutions.PuzzleSolutions.ProboscideaVolcanium
 {
     [Puzzle(16, "Proboscidea Volcanium")]
-    public class ProboscideaVolcaniumSolution : IPuzzleSolution
+    public class ProboscideaVolcaniumSolution : IPuzzleSolutionIter
     {
         private string _puzzleInput = string.Empty;
         public void Initialize(string puzzleInput)
@@ -111,7 +111,7 @@ namespace AdventOfCode2022Solutions.PuzzleSolutions.ProboscideaVolcanium
         private const int MinutesAllowedFirstPart = 30;
         private const int MinutesAllowedSecondPart = 26;
 
-        public string SolveFirstPart()
+        public IEnumerable<string> SolveFirstPart()
         {
             var valves = GetValves(_puzzleInput);
             var valvesToVisit = valves.Values.Where(x => x.Rate > 0).Select(x => x.Name).ToArray();
@@ -122,9 +122,9 @@ namespace AdventOfCode2022Solutions.PuzzleSolutions.ProboscideaVolcanium
                 if (pressureReleased > optimalPressureReleased)
                     (optimalPressureReleased, optimalFlow) = (pressureReleased, flow);
             }
-            return optimalFlow + '\n' + optimalPressureReleased.ToString();
+            yield return optimalFlow + '\n' + optimalPressureReleased.ToString();
         }
-        public string SolveSecondPart()
+        public IEnumerable<string> SolveSecondPart()
         {
             var valves = GetValves(_puzzleInput);
             var valvesToVisit = valves.Values.Where(x => x.Rate > 0).Select(x => x.Name).ToArray();
@@ -168,7 +168,7 @@ namespace AdventOfCode2022Solutions.PuzzleSolutions.ProboscideaVolcanium
                     }
                 }
             }
-            return optimalFlowPrimary + "\n" + optimalPressureReleasedPrimary.ToString() + "\n"
+            yield return optimalFlowPrimary + "\n" + optimalPressureReleasedPrimary.ToString() + "\n"
                 + optimalFlowSecondary + "\n" + optimalPressureReleasedSecondary.ToString() + "\n"
                 + optimalPressureReleasedCombined.ToString();
         }

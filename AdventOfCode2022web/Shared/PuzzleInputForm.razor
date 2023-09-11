@@ -3,7 +3,7 @@
 @inject PuzzleHelper PuzzleHelper
 <h3>Puzzle Input</h3>
 <div>
-    <label class="form-label">The data below is what is provided as example in the problem statement. Paste your own user input from <a href="https://adventofcode.com/2022/day/@(PuzzleNumber)">Advent Of Code</a>.</label>
+    <label class="form-label">The data below is what is provided as example in the problem statement. You can paste your own user input.</label>
     <button class="btn-primary" @onclick=LoadFullPuzzleInput>Load a full puzzle input</button>
     <pre><textarea spellcheck="false" class="form-control" aria-label="Puzzle Input" rows="10" @bind="_input" maxlength="10000000"></textarea></pre>
 </div>
@@ -17,19 +17,15 @@
     string _input = string.Empty;
     string _inputBefore = string.Empty;
 
-    private int PuzzleNumber { get; set; }
-
     protected override async Task OnInitializedAsync()
     {
-        var puzzle = PuzzleSolutionViewModel!.PuzzleSolution!.GetType();
-        if (puzzle == typeof(PuzzleSolutionWrapper))
-            puzzle = ((PuzzleSolutionWrapper)(PuzzleSolutionViewModel!.PuzzleSolution!)).PuzzleType;
-        PuzzleNumber = PuzzleHelper.Puzzles.Where(x => x.Value.Type == puzzle).Single().Key;
         await LoadDefaultPuzzleInput();
-        PuzzleSolutionViewModel.PuzzleInputNeeded += InitializePuzzle;
+        PuzzleSolutionPage!.PuzzleInputNeeded += InitializePuzzle;
         InitializePuzzle();
         await base.OnInitializedAsync();
     }
+
+    public void Dispose() => PuzzleSolutionPage!.PuzzleInputNeeded -= InitializePuzzle;
 
     private async Task LoadDefaultPuzzleInput()
     {
@@ -45,10 +41,8 @@
 
     private string GetInputFile()
     {
-        var puzzleType = PuzzleSolutionViewModel!.PuzzleSolution!.GetType();
+        var puzzleType = PuzzleSolution!.GetType();
         var puzzleInputFile = puzzleType.Name;
-        if (puzzleType == typeof(PuzzleSolutionWrapper))
-            puzzleInputFile = ((PuzzleSolutionWrapper)(PuzzleSolutionViewModel.PuzzleSolution)).PuzzleType.Name;
         if (puzzleInputFile.Contains("Solution"))
             puzzleInputFile = puzzleInputFile.Replace("Solution", "");
         return puzzleInputFile;
@@ -56,10 +50,7 @@
 
     private void InitializePuzzle()
     {
-        PuzzleSolutionViewModel!.PuzzleSolution!.Initialize(_input);
-        PuzzleSolutionViewModel.NotifyPuzzleInputLoaded();
+        PuzzleSolution!.Initialize(_input);
+        PuzzleSolutionPage!.NotifyPuzzleInputLoaded();
     }
-
-    public void Dispose() => PuzzleSolutionViewModel!.PuzzleInputNeeded -= InitializePuzzle;
-
 }

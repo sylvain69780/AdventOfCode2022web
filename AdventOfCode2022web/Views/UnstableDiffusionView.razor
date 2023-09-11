@@ -3,10 +3,10 @@
 <p>We need to simulate the diffusion of strangely behaving particules.</p>
 @if ((PuzzleSolution != null))
 {
-    if (PuzzleSolution.Elves.Length > 0)
+    if (UnstableDiffusionSolution!.Elves.Length > 0)
     {
-        var positions = PuzzleSolution.Elves;
-        var prevPositions = PuzzleSolution.ElvesPrevPosition;
+        var positions = UnstableDiffusionSolution.Elves;
+        var prevPositions = UnstableDiffusionSolution.ElvesPrevPosition;
         foreach (var p in positions)
         {
             if (p.X < ViewBox.xMin)
@@ -89,18 +89,18 @@
 
 @code {
 
-    private UnstableDiffusionSolution? PuzzleSolution { get; set; }
+    private UnstableDiffusionSolution? UnstableDiffusionSolution { get; set; }
 
     protected override void OnInitialized()
     {
-        PuzzleSolution = (UnstableDiffusionSolution)(PuzzleSolutionViewModel!.PuzzleSolution!);
-        PuzzleSolutionViewModel.PuzzleOutputReturned += SetTimer;
+        UnstableDiffusionSolution = (UnstableDiffusionSolution)(PuzzleSolution!);
+        PuzzleSolutionPage!.PuzzleOutputReturned += SetTimer;
         base.OnInitialized();
     }
 
     public void Dispose()
     {
-        PuzzleSolutionViewModel!.PuzzleOutputReturned -= SetTimer;
+        PuzzleSolutionPage!.PuzzleOutputReturned -= SetTimer;
     }
 
     (int xMin, int yMin, int xMax, int yMax) ViewBox = (-4, -4, 4, 4);

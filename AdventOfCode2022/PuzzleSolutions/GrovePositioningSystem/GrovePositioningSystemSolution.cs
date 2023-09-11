@@ -3,7 +3,7 @@
 namespace AdventOfCode2022Solutions.PuzzleSolutions.GrovePositioningSystem
 {
     [Puzzle(20, "Grove Positioning System")]
-    public class GrovePositioningSystemSolution : IPuzzleSolution
+    public class GrovePositioningSystemSolution : IPuzzleSolutionIter
     {
         private string _puzzleInput = string.Empty;
         public void Initialize(string puzzleInput)
@@ -11,15 +11,15 @@ namespace AdventOfCode2022Solutions.PuzzleSolutions.GrovePositioningSystem
             _puzzleInput = puzzleInput;
         }
 
-        public string SolveFirstPart()
+        public IEnumerable<string> SolveFirstPart()
         {
             var arrangement = LoadArrangement(_puzzleInput);
             Mix(arrangement);
             var groveCoordinates = DecodeGroveCoordinates(arrangement);
-            return groveCoordinates.ToString();
+            yield return groveCoordinates.ToString();
         }
 
-        public string SolveSecondPart()
+        public IEnumerable<string> SolveSecondPart()
         {
             var arrangement = LoadArrangement(_puzzleInput);
             const long decryptionKey = 811589153;
@@ -27,7 +27,7 @@ namespace AdventOfCode2022Solutions.PuzzleSolutions.GrovePositioningSystem
             for (var turns = 0; turns < 10; turns++)
                 Mix(arrangement);
             var groveCoordinates = DecodeGroveCoordinates(arrangement);
-            return groveCoordinates.ToString();
+            yield return groveCoordinates.ToString();
         }
 
         private static List<(int Id, long Number)> LoadArrangement(string puzzleInput)

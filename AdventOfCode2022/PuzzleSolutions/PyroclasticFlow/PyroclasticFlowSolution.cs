@@ -4,7 +4,7 @@ using AdventOfCode2022Solutions.PuzzleSolutions;
 namespace AdventOfCode2022Solutions.PuzzleSolutions.PyroclasticFlow
 {
     [Puzzle(17, "Pyroclastic Flow")]
-    public class PyroclasticFlowSolution : IPuzzleSolution
+    public class PyroclasticFlowSolution : IPuzzleSolutionIter
     {
         private string _puzzleInput = string.Empty;
         public void Initialize(string puzzleInput)
@@ -58,7 +58,7 @@ namespace AdventOfCode2022Solutions.PuzzleSolutions.PyroclasticFlow
             return sb.ToString();
         }
 
-        public string SolveFirstPart()
+        public IEnumerable<string> SolveFirstPart()
         {
             var jetGenerator = new JetGenerator { JetPattern = _puzzleInput };
             var rockGenerator = new RockGenerator();
@@ -86,9 +86,9 @@ namespace AdventOfCode2022Solutions.PuzzleSolutions.PyroclasticFlow
 
             }
             Console.WriteLine(Visualize(occupiedSlots, highestPoint));
-            return $"After {maxIterations} rocks fallen, the Tower highest point is at y={highestPoint}";
+            yield return $"After {maxIterations} rocks fallen, the Tower highest point is at y={highestPoint}";
         }
-        public string SolveSecondPart()
+        public IEnumerable<string> SolveSecondPart()
         {
             var jetGenerator = new JetGenerator { JetPattern = _puzzleInput };
             var rockGenerator = new RockGenerator();
@@ -140,7 +140,7 @@ namespace AdventOfCode2022Solutions.PuzzleSolutions.PyroclasticFlow
             var heightAtCycleStart = fallenRocksRecording[cycleStart + notCompletedCycle].Height;
             var numberOfCycles = (numberOfExpectedFallenRocks - cycleStart) / slidingWindowSize;
             var heightOfACycle = fallenRocksRecording[cycleStart + slidingWindowSize].Height - fallenRocksRecording[cycleStart].Height;
-            return $"{numberOfCycles} X {heightOfACycle} + {heightAtCycleStart} = {numberOfCycles * heightOfACycle + heightAtCycleStart}";
+            yield return $"{numberOfCycles} X {heightOfACycle} + {heightAtCycleStart} = {numberOfCycles * heightOfACycle + heightAtCycleStart}";
         }
     }
 }

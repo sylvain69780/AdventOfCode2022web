@@ -7,10 +7,10 @@
 <button disabled=@IsMoveNextForbidden @onclick=@MoveUntilCompleted>Run all Steps</button>
 <button disabled=@IsStopDisabled @onclick=@Stop>Stop</button>
 <p class="border border-2 m-1 p-1">@(_isCompleted ? "Click to start solving one of the the 2 parts." : "Click to run the next step, adjust the animation speed using the slider.")</p>
-<p>Step @(PuzzleSolutionViewModel?.SolvingStep ?? 0)</p>
+<p>Step @(PuzzleSolutionPage?.SolvingStep ?? 0)</p>
 <div class="row">
-    <input type="range" id="delayRange" @bind="PuzzleSolutionViewModel!.AnimationDuration" min="0" max="5000" step="50">
-    <label class="form-label" for="delayRange">Run a step every @PuzzleSolutionViewModel!.AnimationDuration ms</label>
+    <input type="range" id="delayRange" @bind="PuzzleSolutionPage!.AnimationDuration" min="0" max="5000" step="50">
+    <label class="form-label" for="delayRange">Run a step every @PuzzleSolutionPage!.AnimationDuration ms</label>
 </div>
 <h3>Output</h3>
 <p><pre>@_result</pre></p>
@@ -23,21 +23,21 @@
 
     private void StartPart1()
     {
-        _results = PuzzleSolutionViewModel!.PuzzleSolution!.SolveFirstPart().GetEnumerator();
-        PuzzleSolutionViewModel!.NotifyPuzzleInputNeeded();
+        _results = PuzzleSolution!.SolveFirstPart().GetEnumerator();
+        PuzzleSolutionPage!.NotifyPuzzleInputNeeded();
         SetAsRunning();
     }
 
     private void StartPart2()
     {
-        _results = PuzzleSolutionViewModel!.PuzzleSolution!.SolveSecondPart().GetEnumerator();
-        PuzzleSolutionViewModel!.NotifyPuzzleInputNeeded();
+        _results = PuzzleSolution!.SolveSecondPart().GetEnumerator();
+        PuzzleSolutionPage!.NotifyPuzzleInputNeeded();
         SetAsRunning();
     }
 
     private void SetAsRunning()
     {
-        PuzzleSolutionViewModel!.SolvingStep = 0;
+        PuzzleSolutionPage!.SolvingStep = 0;
         _result = string.Empty;
         _isCompleted = false;
         _result = _results!.Current;
@@ -48,8 +48,8 @@
     {
         if (_results!.MoveNext())
         {
-            PuzzleSolutionViewModel!.NotifyPuzzleOutputReturned();
-            PuzzleSolutionViewModel!.SolvingStep++;
+            PuzzleSolutionPage!.NotifyPuzzleOutputReturned();
+            PuzzleSolutionPage!.SolvingStep++;
             _result = _results!.Current;
             StateHasChanged();
         }
@@ -71,20 +71,20 @@
         _isProcessing = true;
         var stopwatch = new Stopwatch();
         stopwatch.Start();
-        var delay = PuzzleSolutionViewModel!.AnimationDuration;
-        var solvingStep = PuzzleSolutionViewModel.SolvingStep;
+        var delay = PuzzleSolutionPage!.AnimationDuration;
+        var solvingStep = PuzzleSolutionPage.SolvingStep;
         async Task notifyStepCompleted(int waitTime)
         {
-            PuzzleSolutionViewModel.SolvingStep = solvingStep;
+            PuzzleSolutionPage.SolvingStep = solvingStep;
             _result = _results!.Current;
             await Task.Delay(delay + 100);
             stopwatch.Restart();
-            delay = PuzzleSolutionViewModel.AnimationDuration;
+            delay = PuzzleSolutionPage.AnimationDuration;
             StateHasChanged();
         }
         while (_results!.MoveNext())
         {
-            PuzzleSolutionViewModel!.NotifyPuzzleOutputReturned();
+            PuzzleSolutionPage!.NotifyPuzzleOutputReturned();
             solvingStep++;
             if (delay > 0)
                 await notifyStepCompleted(delay + 100);

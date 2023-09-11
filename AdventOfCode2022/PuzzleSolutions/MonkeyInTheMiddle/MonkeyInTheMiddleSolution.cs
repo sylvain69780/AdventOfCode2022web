@@ -5,7 +5,7 @@ using AdventOfCode2022Solutions.PuzzleSolutions;
 namespace AdventOfCode2022Solutions.PuzzleSolutions.MonkeyInTheMiddle
 {
     [Puzzle(11, "Monkey In The Middle")]
-    public class MonkeyInTheMiddleSolution : IPuzzleSolution
+    public class MonkeyInTheMiddleSolution : IPuzzleSolutionIter
     {
         private string _puzzleInput = string.Empty;
         public void Initialize(string puzzleInput)
@@ -65,7 +65,7 @@ namespace AdventOfCode2022Solutions.PuzzleSolutions.MonkeyInTheMiddle
                 .ToString();
         }
 
-        public string SolveFirstPart()
+        public IEnumerable<string> SolveFirstPart()
         {
             var monkeys = BuildMonkeyList(_puzzleInput);
             const int maxRound = 20;
@@ -91,9 +91,9 @@ namespace AdventOfCode2022Solutions.PuzzleSolutions.MonkeyInTheMiddle
                     monkey.WorryLevelOfItems.Clear();
                 }
             }
-            return Visualize(monkeys, maxRound);
+            yield return Visualize(monkeys, maxRound);
         }
-        public string SolveSecondPart()
+        public IEnumerable<string> SolveSecondPart()
         {
             var monkeys = BuildMonkeyList(_puzzleInput);
             var bigDiv = monkeys.Select(x => x.DivisibilityToTest).Aggregate(1L, (x, y) => y * x);
@@ -127,7 +127,7 @@ namespace AdventOfCode2022Solutions.PuzzleSolutions.MonkeyInTheMiddle
                     stopwatch.Restart();
                 }
             }
-            return Visualize(monkeys, maxRound);
+            yield return Visualize(monkeys, maxRound);
         }
     }
 }

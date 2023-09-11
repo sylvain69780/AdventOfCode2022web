@@ -5,7 +5,7 @@ using AdventOfCode2022Solutions.PuzzleSolutions;
 namespace AdventOfCode2022Solutions.PuzzleSolutions.SupplyStacks
 {
     [Puzzle(5, "Supply Stacks")]
-    public class SupplyStacksSolution : IPuzzleSolution
+    public class SupplyStacksSolution : IPuzzleSolutionIter
     {
         private string _puzzleInput = string.Empty;
         public void Initialize(string puzzleInput)
@@ -51,7 +51,7 @@ namespace AdventOfCode2022Solutions.PuzzleSolutions.SupplyStacks
             return moves;
         }
 
-        public string SolveFirstPart()
+        public IEnumerable<string> SolveFirstPart()
         {
             var stacks = ReadStacks(_puzzleInput);
             var moves = ReadMovesToDo(_puzzleInput);
@@ -63,9 +63,9 @@ namespace AdventOfCode2022Solutions.PuzzleSolutions.SupplyStacks
                     stacks[to - 1].Push(c);
                 }
             }
-            return string.Join("", stacks.Select(x => x.Count == 0 ? ' ' : x.Peek()));
+            yield return string.Join("", stacks.Select(x => x.Count == 0 ? ' ' : x.Peek()));
         }
-        public string SolveSecondPart()
+        public IEnumerable<string> SolveSecondPart()
         {
             var stacks = ReadStacks(_puzzleInput);
             var moves = ReadMovesToDo(_puzzleInput);
@@ -77,7 +77,7 @@ namespace AdventOfCode2022Solutions.PuzzleSolutions.SupplyStacks
                 for (int i = 0; i < count; i++)
                     stacks[to - 1].Push(tmp.Pop());
             }
-            return string.Join("", stacks.Select(x => x.Count == 0 ? ' ' : x.Peek()));
+            yield return string.Join("", stacks.Select(x => x.Count == 0 ? ' ' : x.Peek()));
         }
     }
 }

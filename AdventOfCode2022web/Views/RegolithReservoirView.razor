@@ -2,28 +2,28 @@
 <img style="width:100%; image-rendering:pixelated" src=@Visualize() />
 
 @code {
-    private RegolithReservoirSolution? PuzzleSolution;
+    private RegolithReservoirSolution? RegolithReservoirSolution;
 
     protected override void OnInitialized()
     {
-        PuzzleSolution = (RegolithReservoirSolution)(PuzzleSolutionViewModel!.PuzzleSolution!);
-        PuzzleSolutionViewModel.PuzzleOutputReturned += StateHasChanged;
+        RegolithReservoirSolution = (RegolithReservoirSolution)(PuzzleSolution!);
+        PuzzleSolutionPage!.PuzzleOutputReturned += StateHasChanged;
         base.OnInitialized();
     }
 
     public void Dispose()
     {
-        PuzzleSolutionViewModel!.PuzzleOutputReturned -= StateHasChanged;
+        PuzzleSolutionPage!.PuzzleOutputReturned -= StateHasChanged;
     }
 
     public string _image64 = string.Empty;
 
     private string Visualize()
     {
-        if (PuzzleSolution == null || PuzzleSolution.OccupiedPositions.Count == 0)
+        if (RegolithReservoirSolution == null || RegolithReservoirSolution.OccupiedPositions.Count == 0)
             return string.Empty;
-        var Width = PuzzleSolution!.xMax - PuzzleSolution.xMin;
-        var Height = PuzzleSolution!.yMax - PuzzleSolution.yMin;
+        var Width = RegolithReservoirSolution!.xMax - RegolithReservoirSolution.xMin;
+        var Height = RegolithReservoirSolution!.yMax - RegolithReservoirSolution.yMin;
         if (Width == 0 || Height == 0)
             return string.Empty;
         var response = string.Empty;
@@ -39,11 +39,11 @@
                         for (int x = 0; x < pixelRow.Length; x++)
                         {
                             ref Rgba32 pixel = ref pixelRow[x];
-                            if (PuzzleSolution.InitialPositions!.Contains((PuzzleSolution.xMin + x, PuzzleSolution.yMin + y)))
+                            if (RegolithReservoirSolution.InitialPositions!.Contains((RegolithReservoirSolution.xMin + x, RegolithReservoirSolution.yMin + y)))
                                 pixel = Color.Blue;
-                            else if (PuzzleSolution.OccupiedPositions!.Contains((PuzzleSolution.xMin + x, PuzzleSolution.yMin + y)))
+                            else if (RegolithReservoirSolution.OccupiedPositions!.Contains((RegolithReservoirSolution.xMin + x, RegolithReservoirSolution.yMin + y)))
                                 pixel = Color.Green;
-                            else if (PuzzleSolution.SandPosition == (PuzzleSolution.xMin + x, PuzzleSolution.yMin + y))
+                            else if (RegolithReservoirSolution.SandPosition == (RegolithReservoirSolution.xMin + x, RegolithReservoirSolution.yMin + y))
                                 pixel = Color.Red;
                         }
                     }

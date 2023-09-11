@@ -1,8 +1,10 @@
 ﻿@page "/UnstableDiffusionPage"
-@inject PuzzleSolutionViewModel<UnstableDiffusionSolution> PuzzleSolutionViewModel
+@inherits PuzzleSolutionPage
+@inject UnstableDiffusionSolution PuzzleSolution
 <h2>Unstable Diffusion</h2>
-<CascadingValue Name="PuzzleSolutionViewModel" Value=@PuzzleSolutionViewModel>
-    <div class="row">
+<CascadingValue Name="PuzzleSolutionPage" Value=@this>
+    <CascadingValue Name="PuzzleSolution" Value=@PuzzleSolution>
+        <div class="row">
         <div class="col-lg-6">
             <UnstableDiffusionView />
         </div>
@@ -12,4 +14,5 @@
             <PuzzleControler />
         </div>
     </div>
+    </CascadingValue>
 </CascadingValue>

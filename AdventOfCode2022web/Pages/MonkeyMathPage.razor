@@ -1,9 +1,12 @@
 ﻿@page "/MonkeyMathPage"
-@inject PuzzleBasicSolutionViewModel<MonkeyMathSolution> PuzzleSolutionViewModel
+@inherits PuzzleSolutionPage
+@inject MonkeyMathSolution PuzzleSolution
 <h2>Monkey Math</h2>
-<CascadingValue Name="PuzzleSolutionViewModel" Value=@PuzzleSolutionViewModel>
-    <PuzzleCodeViewer />
-    <PuzzleInputForm />
-    <PuzzleControler />
+<CascadingValue Name="PuzzleSolutionPage" Value=@this>
+    <CascadingValue Name="PuzzleSolution" Value=@PuzzleSolution>
+        <PuzzleCodeViewer />
+        <PuzzleInputForm />
+        <PuzzleControler />
+    </CascadingValue>
 </CascadingValue>
 

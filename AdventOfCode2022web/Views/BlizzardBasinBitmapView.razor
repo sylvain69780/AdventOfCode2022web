@@ -7,18 +7,18 @@
 @code {
     private bool Busy { get; set; }
     private string ComputingMessage { get; set; } = string.Empty;
-    private IBlizzardBasinViewState? PuzzleSolution;
+    private BlizzardBasinSolution? BlizzardBasinSolution;
 
     protected override void OnInitialized()
     {
-        PuzzleSolution = (IBlizzardBasinViewState)(PuzzleSolutionViewModel!.PuzzleSolution!);
-        PuzzleSolutionViewModel.PuzzleOutputReturned += UpdateBitmap;
+        BlizzardBasinSolution = (BlizzardBasinSolution)(PuzzleSolution!);
+        PuzzleSolutionPage!.PuzzleOutputReturned += UpdateBitmap;
         base.OnInitialized();
     }
 
     public void Dispose()
     {
-        PuzzleSolutionViewModel!.PuzzleOutputReturned -= UpdateBitmap;
+        PuzzleSolutionPage!.PuzzleOutputReturned -= UpdateBitmap;
     }
 
     public string Image64 { get; set; } = string.Empty;
@@ -33,13 +33,13 @@
     {
         Busy = true;
         await Task.Delay(1);
-        if (PuzzleSolution == null || PuzzleSolution.Tree.Count == 0)
+        if (BlizzardBasinSolution == null || BlizzardBasinSolution.Tree.Count == 0)
             return;
-        var width = PuzzleSolution!.GridWidth;
-        var height = PuzzleSolution!.GridHeight;
+        var width = BlizzardBasinSolution!.GridWidth;
+        var height = BlizzardBasinSolution!.GridHeight;
         if (width == 0 || height == 0)
             return;
-        var tree = PuzzleSolution!.Tree;
+        var tree = BlizzardBasinSolution!.Tree;
 
         const int frameDelay = 5;
         // Create empty image.
@@ -82,10 +82,10 @@
 
     private string Visualize()
     {
-        if (PuzzleSolution == null || PuzzleSolution.Tree.Count == 0)
+        if (BlizzardBasinSolution == null || BlizzardBasinSolution.Tree.Count == 0)
             return string.Empty;
-        var Width = PuzzleSolution!.GridWidth;
-        var Height = PuzzleSolution!.GridHeight;
+        var Width = BlizzardBasinSolution!.GridWidth;
+        var Height = BlizzardBasinSolution!.GridHeight;
         if (Width == 0 || Height == 0)
             return string.Empty;
         var response = string.Empty;
@@ -93,7 +93,7 @@
         {
             using (Image<Rgba32> img = new(Width, Height, Color.White))
             {
-                CreateVisualization(img, PuzzleSolution!.Tree.Count);
+                CreateVisualization(img, BlizzardBasinSolution!.Tree.Count);
                 img.SaveAsPng(outStream);
             }
             response = "data:image/png;base64, " + Convert.ToBase64String(outStream.ToArray());
@@ -105,8 +105,8 @@
 
     private void CreateVisualization(Image<Rgba32> img, int minute)
     {
-        var exit = PuzzleSolution!.ExitPosition;
-        var tree = PuzzleSolution!.Tree;
+        var exit = BlizzardBasinSolution!.ExitPosition;
+        var tree = BlizzardBasinSolution!.Tree;
         var level0 = tree[minute - 1].Select(x => x.Pos).ToHashSet();
         var level1 = minute > 1 ? tree[minute - 2].Select(x => x.Pos).ToHashSet() : new HashSet<(int X, int Y)>();
         var level2 = minute > 2 ? tree[minute - 3].Select(x => x.Pos).ToHashSet() : new HashSet<(int X, int Y)>();

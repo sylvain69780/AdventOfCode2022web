@@ -1,16 +1,5 @@
 ﻿namespace AdventOfCode2022Solutions.PuzzleSolutions.BlizzardBasin
 {
-    public interface IBlizzardBasinViewState
-    {
-        int GridWidth { get; }
-        int GridHeight { get; }
-        int CurrentMinute { get; }
-        (int X, int Y) EntrancePosition { get; }
-        (int X, int Y) ExitPosition { get; }
-        IEnumerable<((int X, int Y) Position, Directions Direction)>? BlizzardsPositions { get; }
-        List<List<(int ParentId, (int X, int Y) Pos)>> Tree { get; }
-    }
-
     public enum Directions
     {
         Halt = 0,
@@ -21,7 +10,7 @@
     }
 
     [Puzzle(24, "Blizzard Basin", true)]
-    public class BlizzardBasinSolution : IPuzzleSolutionIter, IBlizzardBasinViewState
+    public class BlizzardBasinSolution : IPuzzleSolutionIter
     {
         public int GridWidth { get; set; }
         public int GridHeight { get; set; }
