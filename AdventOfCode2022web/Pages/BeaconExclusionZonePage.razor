@@ -4,7 +4,7 @@
 <h2>Beacon Exclusion Zone</h2>
 <CascadingValue Name="PuzzleSolutionPage" Value=@this>
     <CascadingValue Name="PuzzleSolution" Value=@PuzzleSolution>
-        <PuzzleCodeViewer />
+        <PuzzleCodeViewer PuzzleType=@(PuzzleSolution.GetType().Name) />
         <PuzzleInputForm />
         <PuzzleControler />
     </CascadingValue>

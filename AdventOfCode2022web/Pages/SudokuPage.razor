@@ -9,7 +9,7 @@
                 <SudokuView />
             </div>
             <div class="col-lg-6">
-                <PuzzleCodeViewer />
+                <PuzzleCodeViewer PuzzleType=@(PuzzleSolution.GetType().Name) />
                 <PuzzleInputForm />
                 <PuzzleControler />
             </div>
