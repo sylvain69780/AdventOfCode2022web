@@ -1,3 +1,154 @@
+/* /Pages/BlizzardBasinPage.razor.rz.scp.css */
+:root[b-z7e165z5dw] {
+    --animation-duration: 0;
+    --dx: 0px;
+    --dy: 0px;
+    --dax: 0px;
+    --day: 0px;
+    --dbx: 0px;
+    --dby: 0px;
+}
+
+.elf-motionless > use[b-z7e165z5dw] {
+    transform: translate(var(--dbx),var(--dby));
+}
+
+.elf-moving > use[b-z7e165z5dw] {
+    animation-name: elf-moving-anim-b-z7e165z5dw;
+    animation-fill-mode: forwards;
+    animation-iteration-count: 1;
+    animation-duration: var(--animation-duration);
+}
+
+@keyframes elf-moving-anim-b-z7e165z5dw {
+    from {
+        transform: translate(var(--dax),var(--day));
+    }
+
+    to {
+        transform: translate(var(--dbx),var(--dby));
+    }
+}
+
+.elf-killed > use[b-z7e165z5dw] {
+    animation-name: elf-killed-anim-b-z7e165z5dw;
+    animation-fill-mode: forwards;
+    animation-iteration-count: 1;
+    animation-duration: var(--animation-duration);
+    transform-origin: 0.5px 0.5px;
+}
+
+.elf-hidden > use[b-z7e165z5dw] {
+    opacity: 0;
+}
+
+@keyframes elf-killed-anim-b-z7e165z5dw {
+    from {
+        opacity: 1.0;
+        transform: translate(var(--dbx),var(--dby)) rotate(0deg) scale(1);
+    }
+
+    50% {
+        opacity: 1.0;
+        transform: translate(var(--dbx),var(--dby)) rotate(0deg) scale(1);
+    }
+
+    75% {
+        opacity: 0.5;
+        transform: translate(var(--dbx),var(--dby)) rotate(180deg) scale(1.5);
+    }
+
+    to {
+        opacity: 0;
+        transform: translate(var(--dbx),var(--dby)) rotate(180deg) scale(1);
+    }
+}
+
+.blizzard-motionless > use[b-z7e165z5dw] {
+    transform: translate(var(--dbx),var(--dby));
+}
+
+.blizzard-moving > use[b-z7e165z5dw] {
+    animation-name: blizzard-moving-anim-b-z7e165z5dw;
+    animation-fill-mode: forwards;
+    animation-iteration-count: 1;
+    animation-duration: var(--animation-duration);
+}
+
+@keyframes blizzard-moving-anim-b-z7e165z5dw {
+    from {
+        transform: translate(var(--dax),var(--day));
+    }
+
+    to {
+        transform: translate(var(--dbx),var(--dby));
+    }
+}
+/* /Pages/UnstableDiffusionPage.razor.rz.scp.css */
+
+.elf-move-right[b-012x46rh6b] {
+    animation-name: elf-move-right-anim-b-012x46rh6b;
+    animation-fill-mode: forwards;
+    animation-iteration-count: 1;
+}
+
+@keyframes elf-move-right-anim-b-012x46rh6b {
+    from {
+        transform: translate(0px,0px);
+    }
+    to {
+        transform: translate(1px,0px);
+    }
+}
+
+.elf-move-left[b-012x46rh6b] {
+    animation-name: elf-move-left-anim-b-012x46rh6b;
+    animation-fill-mode: forwards;
+    animation-iteration-count: 1;
+}
+
+@keyframes elf-move-left-anim-b-012x46rh6b {
+    from {
+        transform: translate(0px,0px);
+    }
+
+    to {
+        transform: translate(-1px,0px);
+    }
+}
+
+.elf-move-down[b-012x46rh6b] {
+    animation-name: elf-move-down-anim-b-012x46rh6b;
+    animation-fill-mode: forwards;
+    animation-iteration-count: 1;
+}
+
+@keyframes elf-move-down-anim-b-012x46rh6b {
+    from {
+        transform: translate(0px,0px);
+    }
+
+    to {
+        transform: translate(0px,1px);
+    }
+}
+
+.elf-move-up[b-012x46rh6b] {
+    animation-name: elf-move-up-anim-b-012x46rh6b;
+    animation-fill-mode: forwards;
+    animation-iteration-count: 1;
+}
+
+@keyframes elf-move-up-anim-b-012x46rh6b {
+    from {
+        transform: translate(0px,0px);
+    }
+
+    to {
+        transform: translate(0px,-1px);
+    }
+}
+
 /* /Shared/MainLayout.razor.rz.scp.css */
 
 .page[b-qs7qgbma46] {
@@ -160,154 +311,4 @@ main[b-qs7qgbma46] {
     margin-left: 5px; /* Adjust this value as needed */
     font-weight: bold;
     color:green;
-}
-/* /Views/BlizzardBasinView.razor.rz.scp.css */
-:root[b-xkn240tyyb] {
-    --animation-duration: 0;
-    --dx: 0px;
-    --dy: 0px;
-    --dax: 0px;
-    --day: 0px;
-    --dbx: 0px;
-    --dby: 0px;
-}
-
-.elf-motionless > use[b-xkn240tyyb] {
-    transform: translate(var(--dbx),var(--dby));
-}
-
-.elf-moving > use[b-xkn240tyyb] {
-    animation-name: elf-moving-anim-b-xkn240tyyb;
-    animation-fill-mode: forwards;
-    animation-iteration-count: 1;
-    animation-duration: var(--animation-duration);
-}
-
-@keyframes elf-moving-anim-b-xkn240tyyb {
-    from {
-        transform: translate(var(--dax),var(--day));
-    }
-
-    to {
-        transform: translate(var(--dbx),var(--dby));
-    }
-}
-
-.elf-killed > use[b-xkn240tyyb] {
-    animation-name: elf-killed-anim-b-xkn240tyyb;
-    animation-fill-mode: forwards;
-    animation-iteration-count: 1;
-    animation-duration: var(--animation-duration);
-    transform-origin: 0.5px 0.5px;
-}
-
-.elf-hidden > use[b-xkn240tyyb] {
-    opacity: 0;
-}
-
-@keyframes elf-killed-anim-b-xkn240tyyb {
-    from {
-        opacity: 1.0;
-        transform: translate(var(--dbx),var(--dby)) rotate(0deg) scale(1);
-    }
-
-    50% {
-        opacity: 1.0;
-        transform: translate(var(--dbx),var(--dby)) rotate(0deg) scale(1);
-    }
-
-    75% {
-        opacity: 0.5;
-        transform: translate(var(--dbx),var(--dby)) rotate(180deg) scale(1.5);
-    }
-
-    to {
-        opacity: 0;
-        transform: translate(var(--dbx),var(--dby)) rotate(180deg) scale(1);
-    }
-}
-
-.blizzard-motionless > use[b-xkn240tyyb] {
-    transform: translate(var(--dbx),var(--dby));
-}
-
-.blizzard-moving > use[b-xkn240tyyb] {
-    animation-name: blizzard-moving-anim-b-xkn240tyyb;
-    animation-fill-mode: forwards;
-    animation-iteration-count: 1;
-    animation-duration: var(--animation-duration);
-}
-
-@keyframes blizzard-moving-anim-b-xkn240tyyb {
-    from {
-        transform: translate(var(--dax),var(--day));
-    }
-
-    to {
-        transform: translate(var(--dbx),var(--dby));
-    }
-}
-/* /Views/UnstableDiffusionView.razor.rz.scp.css */
-
-.elf-move-right[b-hkn9qycfq2] {
-    animation-name: elf-move-right-anim-b-hkn9qycfq2;
-    animation-fill-mode: forwards;
-    animation-iteration-count: 1;
-}
-
-@keyframes elf-move-right-anim-b-hkn9qycfq2 {
-    from {
-        transform: translate(0px,0px);
-    }
-    to {
-        transform: translate(1px,0px);
-    }
-}
-
-.elf-move-left[b-hkn9qycfq2] {
-    animation-name: elf-move-left-anim-b-hkn9qycfq2;
-    animation-fill-mode: forwards;
-    animation-iteration-count: 1;
-}
-
-@keyframes elf-move-left-anim-b-hkn9qycfq2 {
-    from {
-        transform: translate(0px,0px);
-    }
-
-    to {
-        transform: translate(-1px,0px);
-    }
-}
-
-.elf-move-down[b-hkn9qycfq2] {
-    animation-name: elf-move-down-anim-b-hkn9qycfq2;
-    animation-fill-mode: forwards;
-    animation-iteration-count: 1;
-}
-
-@keyframes elf-move-down-anim-b-hkn9qycfq2 {
-    from {
-        transform: translate(0px,0px);
-    }
-
-    to {
-        transform: translate(0px,1px);
-    }
-}
-
-.elf-move-up[b-hkn9qycfq2] {
-    animation-name: elf-move-up-anim-b-hkn9qycfq2;
-    animation-fill-mode: forwards;
-    animation-iteration-count: 1;
-}
-
-@keyframes elf-move-up-anim-b-hkn9qycfq2 {
-    from {
-        transform: translate(0px,0px);
-    }
-
-    to {
-        transform: translate(0px,-1px);
-    }
 }
