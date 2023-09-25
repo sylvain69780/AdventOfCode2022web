@@ -1,18 +1,139 @@
 ﻿@page "/BlizzardBasinBitmapPage"
-@inherits PuzzleSolutionPage
-@inject BlizzardBasinSolution PuzzleSolution
+@using SixLabors.ImageSharp.Formats.Gif;
+@inherits PuzzleSolutionPageBase<BlizzardBasinSolution>
 <h2>Blizzard Basin Page (Bitmap visualization)</h2>
-<CascadingValue Name="PuzzleSolutionPage" Value=@this>
-    <CascadingValue Name="PuzzleSolution" Value=@PuzzleSolution>
-        <div class="row">
-            <div class="col-lg-6">
-                <BlizzardBasinBitmapView />
-            </div>
-            <div class="col-lg-6">
-                <PuzzleControler />
-                <PuzzleCodeViewer PuzzleType=@(PuzzleSolution.GetType().Name) />
-                <PuzzleInputForm />
-            </div>
-        </div>
-    </CascadingValue>
-</CascadingValue>
+<div class="row">
+    <div class="col-lg-6">
+        @if (SolvingStep != _previousStep && AnimationDuration > 0)
+        {
+            UpdateBitmap();
+        }
+        <img style="width:100%; image-rendering:pixelated" src=@Image64 />
+        <button disabled=@Busy class="btn-primary" @onclick=CreateAnimation>Generate GIF</button>
+        <span>@ComputingMessage</span>
+    </div>
+    <div class="col-lg-6">
+        <PuzzleSolutionViewer Page=@this />
+    </div>
+</div>
+
+@code {
+    private bool Busy { get; set; }
+    private string ComputingMessage { get; set; } = string.Empty;
+    public string Image64 { get; set; } = string.Empty;
+    private int _previousStep = -1;
+    private void UpdateBitmap()
+    {
+        Image64 = Visualize();
+        _previousStep = SolvingStep;
+    }
+
+    private async Task CreateAnimation()
+    {
+        Busy = true;
+        await Task.Delay(1);
+        if (PuzzleSolution == null || PuzzleSolution.Tree.Count == 0)
+            return;
+        var width = PuzzleSolution!.GridWidth;
+        var height = PuzzleSolution!.GridHeight;
+        if (width == 0 || height == 0)
+            return;
+        var tree = PuzzleSolution!.Tree;
+
+        const int frameDelay = 5;
+        // Create empty image.
+        using Image<Rgba32> gif = new(width, height, Color.White);
+
+        // Set animation loop repeat count to 5.
+        var gifMetaData = gif.Metadata.GetGifMetadata();
+        gifMetaData.RepeatCount = 0;
+
+        GifFrameMetadata metadata = gif.Frames.RootFrame.Metadata.GetGifMetadata();
+        metadata.FrameDelay = frameDelay;
+
+        for (int i = 1; i < tree.Count; i++)
+        {
+            // Create a color image, which will be added to the gif.
+            using Image<Rgba32> image = new(width, height, Color.White);
+            CreateVisualization(image, i);
+            // Set the delay until the next image is displayed.
+            metadata = image.Frames.RootFrame.Metadata.GetGifMetadata();
+            metadata.FrameDelay = frameDelay;
+
+            // Add the color image to the gif.
+            gif.Frames.AddFrame(image.Frames.RootFrame);
+
+            ComputingMessage = $"computing frame {i} on {tree.Count} ...";
+            StateHasChanged();
+            await Task.Delay(1);
+        }
+        ComputingMessage = $"Compiling frames to Gif ...";
+        StateHasChanged();
+        await Task.Delay(1);
+        // Save the final result.
+        using MemoryStream outStream = new();
+        gif.SaveAsGif(outStream);
+        Image64 = "data:image/gif;base64, " + Convert.ToBase64String(outStream.ToArray());
+        Busy = false;
+        ComputingMessage = "Gif done";
+        StateHasChanged();
+    }
+
+    private string Visualize()
+    {
+        if (PuzzleSolution == null || PuzzleSolution.Tree.Count == 0)
+            return string.Empty;
+        var Width = PuzzleSolution!.GridWidth;
+        var Height = PuzzleSolution!.GridHeight;
+        if (Width == 0 || Height == 0)
+            return string.Empty;
+        var response = string.Empty;
+        using (MemoryStream outStream = new())
+        {
+            using (Image<Rgba32> img = new(Width, Height, Color.White))
+            {
+                CreateVisualization(img, PuzzleSolution!.Tree.Count);
+                img.SaveAsPng(outStream);
+            }
+            response = "data:image/png;base64, " + Convert.ToBase64String(outStream.ToArray());
+        }
+        return response;
+    }
+
+    private static int ManhattanDistance((int x, int y) a, (int x, int y) b) => Math.Abs(a.x - b.x) + Math.Abs(a.y - b.y);
+
+    private void CreateVisualization(Image<Rgba32> img, int minute)
+    {
+        var exit = PuzzleSolution!.ExitPosition;
+        var tree = PuzzleSolution!.Tree;
+        var level0 = tree[minute - 1].Select(x => x.Pos).ToHashSet();
+        var level1 = minute > 1 ? tree[minute - 2].Select(x => x.Pos).ToHashSet() : new HashSet<(int X, int Y)>();
+        var level2 = minute > 2 ? tree[minute - 3].Select(x => x.Pos).ToHashSet() : new HashSet<(int X, int Y)>();
+        var level3 = minute > 3 ? tree[minute - 4].Select(x => x.Pos).ToHashSet() : new HashSet<(int X, int Y)>();
+        img.ProcessPixelRows(accessor =>
+        {
+            for (int y = 0; y < accessor.Height; y++)
+            {
+                Span<Rgba32> pixelRow = accessor.GetRowSpan(y);
+                for (int x = 0; x < pixelRow.Length; x++)
+                {
+                    ref Rgba32 pixel = ref pixelRow[x];
+                    if (level0.Contains((x, y)))
+                        pixel = new Rgba32(0, 255, 0, 255);
+                    else if (level1.Contains((x, y)))
+                        pixel = new Rgba32(128, 255, 128, 255);
+                    else if (level2.Contains((x, y)))
+                        pixel = new Rgba32(200, 255, 200, 255);
+                    else if (level3.Contains((x, y)))
+                        pixel = new Rgba32(200, 255, 220, 255);
+                }
+            }
+            var bestSolution = tree[minute - 1].OrderBy(x => ManhattanDistance(x.Pos, exit)).First();
+            for (var i = 2; i < minute; i++)
+            {
+                img[bestSolution.Pos.X, bestSolution.Pos.Y] = Color.Red;
+                bestSolution = tree[minute - i][bestSolution.ParentId];
+            }
+        });
+    }
+}

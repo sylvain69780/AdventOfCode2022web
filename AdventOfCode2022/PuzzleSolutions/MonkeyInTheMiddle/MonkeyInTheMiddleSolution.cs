@@ -4,7 +4,6 @@ using AdventOfCode2022Solutions.PuzzleSolutions;
 
 namespace AdventOfCode2022Solutions.PuzzleSolutions.MonkeyInTheMiddle
 {
-    [Puzzle(11, "Monkey In The Middle")]
     public class MonkeyInTheMiddleSolution : IPuzzleSolutionIter
     {
         private string _puzzleInput = string.Empty;

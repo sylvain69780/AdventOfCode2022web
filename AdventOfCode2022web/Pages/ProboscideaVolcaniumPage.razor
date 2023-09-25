@@ -1,13 +1,7 @@
 ﻿@page "/ProboscideaVolcaniumPage"
-@inherits PuzzleSolutionPage
-@inject ProboscideaVolcaniumSolution PuzzleSolution
+@inherits PuzzleSolutionPageBase<ProboscideaVolcaniumSolution>
 <h2>Proboscidea Volcanium</h2>
-<CascadingValue Name="PuzzleSolutionPage" Value=@this>
-    <CascadingValue Name="PuzzleSolution" Value=@PuzzleSolution>
-        <PuzzleCodeViewer PuzzleType=@(PuzzleSolution.GetType().Name) />
-        <PuzzleInputForm />
-        <PuzzleControler />
-    </CascadingValue>
-</CascadingValue>
+<PuzzleSolutionViewer Page=@this/>
+
 
 

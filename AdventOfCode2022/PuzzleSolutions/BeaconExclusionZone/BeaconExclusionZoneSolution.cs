@@ -1,17 +1,10 @@
 ﻿using System.Text.RegularExpressions;
-using AdventOfCode2022Solutions.PuzzleSolutions;
 
 namespace AdventOfCode2022Solutions.PuzzleSolutions.BeaconExclusionZone
 {
-    [Puzzle(15, "Beacon Exclusion Zone")]
     public class BeaconExclusionZoneSolution : IPuzzleSolutionIter
     {
-        private class SensorPositionAndClosestBeacon
-        {
-            public (int x, int y) Sensor;
-            public (int x, int y) Beacon;
-            public int ManhattanDistance;
-        }
+        private List<SensorPositionAndClosestBeacon>? _sensorsPositionsAndClosestBeacon;
 
         private static int ManhattanDistance((int x, int y) a, (int x, int y) b) => Math.Abs(a.x - b.x) + Math.Abs(a.y - b.y);
 
@@ -34,18 +27,16 @@ namespace AdventOfCode2022Solutions.PuzzleSolutions.BeaconExclusionZone
                 .ToList();
         }
 
-        private List<SensorPositionAndClosestBeacon>? SensorsPositionsAndClosestBeacon;
-
         public void Initialize(string puzzleInput)
         {
-            SensorsPositionsAndClosestBeacon = GetSensorPositionAndClosestBeacons(puzzleInput);
+            _sensorsPositionsAndClosestBeacon = GetSensorPositionAndClosestBeacons(puzzleInput);
         }
 
         public IEnumerable<string> SolveFirstPart()
         {
-            var verticalPositionOfRowToAnalyze = SensorsPositionsAndClosestBeacon!.Count <= 14 ? 10 : 2000000;
+            var verticalPositionOfRowToAnalyze = _sensorsPositionsAndClosestBeacon!.Count <= 14 ? 10 : 2000000;
             var horizontalIntervalsOnRowToAnalyze = new List<(int begin, int end)>();
-            foreach (var record in SensorsPositionsAndClosestBeacon)
+            foreach (var record in _sensorsPositionsAndClosestBeacon)
             {
                 var distanceOfSensorToRowToAnalyze = Math.Abs(record.Sensor.y - verticalPositionOfRowToAnalyze);
                 if (distanceOfSensorToRowToAnalyze <= record.ManhattanDistance)
@@ -57,9 +48,9 @@ namespace AdventOfCode2022Solutions.PuzzleSolutions.BeaconExclusionZone
             var start = horizontalIntervalsOnRowToAnalyze.Select(x => x.begin).Min();
             var end = horizontalIntervalsOnRowToAnalyze.Select(x => x.end).Max();
             var score = 0;
-            var discard = SensorsPositionsAndClosestBeacon
+            var discard = _sensorsPositionsAndClosestBeacon
                 .Select(x => (x.Beacon.x, x.Beacon.y))
-                .Concat(SensorsPositionsAndClosestBeacon
+                .Concat(_sensorsPositionsAndClosestBeacon
                 .Select(x => (x.Sensor.x, x.Sensor.y)))
                 .ToHashSet();
             for (var x = start; x <= end; x++)
@@ -79,13 +70,13 @@ namespace AdventOfCode2022Solutions.PuzzleSolutions.BeaconExclusionZone
         }
         public IEnumerable<string> SolveSecondPart()
         {
-            var discard = SensorsPositionsAndClosestBeacon!
+            var discard = _sensorsPositionsAndClosestBeacon!
                 .Select(x => (x.Beacon.x, x.Beacon.y))
-                .Concat(SensorsPositionsAndClosestBeacon!
+                .Concat(_sensorsPositionsAndClosestBeacon!
                 .Select(x => (x.Sensor.x, x.Sensor.y)))
                 .ToHashSet();
             var squares = new Queue<((int X, int Y) Min, (int X, int Y) Max)>();
-            var mapMaxSize = SensorsPositionsAndClosestBeacon!.Count <= 14 ? 20 : 4000000;
+            var mapMaxSize = _sensorsPositionsAndClosestBeacon!.Count <= 14 ? 20 : 4000000;
             var maxIterations = (int)Math.Log2(mapMaxSize) + 1;
             squares.Enqueue(((0, 0), (mapMaxSize, mapMaxSize)));
             do
@@ -94,7 +85,7 @@ namespace AdventOfCode2022Solutions.PuzzleSolutions.BeaconExclusionZone
                 while (squares.Count > 0)
                 {
                     var (min, max) = squares.Dequeue();
-                    var isFullyCoveredBySensor = SensorsPositionsAndClosestBeacon
+                    var isFullyCoveredBySensor = _sensorsPositionsAndClosestBeacon
                         .Any(x => ManhattanDistance(x.Sensor, (min.X, min.Y)) <= x.ManhattanDistance
                             && ManhattanDistance(x.Sensor, (min.X, max.Y)) <= x.ManhattanDistance
                             && ManhattanDistance(x.Sensor, (max.X, max.Y)) <= x.ManhattanDistance

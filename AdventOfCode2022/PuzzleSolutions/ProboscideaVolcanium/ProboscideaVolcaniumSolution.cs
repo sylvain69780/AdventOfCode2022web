@@ -5,7 +5,6 @@ using AdventOfCode2022Solutions.PuzzleSolutions;
 
 namespace AdventOfCode2022Solutions.PuzzleSolutions.ProboscideaVolcanium
 {
-    [Puzzle(16, "Proboscidea Volcanium")]
     public class ProboscideaVolcaniumSolution : IPuzzleSolutionIter
     {
         private string _puzzleInput = string.Empty;

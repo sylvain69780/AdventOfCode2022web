@@ -4,7 +4,6 @@ using AdventOfCode2022Solutions.PuzzleSolutions;
 
 namespace AdventOfCode2022Solutions.PuzzleSolutions.MonkeyMath
 {
-    [Puzzle(21, "Monkey Math")]
     public class MonkeyMathSolution : IPuzzleSolutionIter
     {
         private string _puzzleInput = string.Empty;

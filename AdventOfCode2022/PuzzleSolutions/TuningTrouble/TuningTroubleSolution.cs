@@ -2,7 +2,6 @@
 
 namespace AdventOfCode2022Solutions.PuzzleSolutions.TuningTrouble
 {
-    [Puzzle(6, "Tuning Trouble")]
     public class TuningTroubleSolution : IPuzzleSolutionIter
     {
         private string _puzzleInput = string.Empty;

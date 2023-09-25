@@ -2,7 +2,6 @@
 
 namespace AdventOfCode2022Solutions.PuzzleSolutions.CalorieCounting
 {
-    [Puzzle(1, "Calorie Counting")]
     public class CalorieCountingSolution : IPuzzleSolutionIter
     {
         private static string[] ToLines(string s) => s.Split("\n");

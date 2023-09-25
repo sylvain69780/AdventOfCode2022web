@@ -1,11 +1,4 @@
 ﻿@page "/BeaconExclusionZonePage"
-@inherits PuzzleSolutionPage
-@inject BeaconExclusionZoneSolution PuzzleSolution
+@inherits PuzzleSolutionPageBase<BeaconExclusionZoneSolution>
 <h2>Beacon Exclusion Zone</h2>
-<CascadingValue Name="PuzzleSolutionPage" Value=@this>
-    <CascadingValue Name="PuzzleSolution" Value=@PuzzleSolution>
-        <PuzzleCodeViewer PuzzleType=@(PuzzleSolution.GetType().Name) />
-        <PuzzleInputForm />
-        <PuzzleControler />
-    </CascadingValue>
-</CascadingValue>
+<PuzzleSolutionViewer Page=@this />

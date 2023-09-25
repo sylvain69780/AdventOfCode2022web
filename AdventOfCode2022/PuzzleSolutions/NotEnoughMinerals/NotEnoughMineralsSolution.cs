@@ -25,7 +25,6 @@ namespace AdventOfCode2022Solutions.PuzzleSolutions.NotEnoughMinerals
         public IReadOnlyDictionary<RobotType, (int Ores, int Clays, int Obsidians)>? CostOfRobots;
     }
 
-    [Puzzle(19, "Not Enough Minerals")]
     public class NotEnoughMineralsSolution : IPuzzleSolutionIter
     {
         public List<List<FactoryData>> BestSolutions { get; } = new();

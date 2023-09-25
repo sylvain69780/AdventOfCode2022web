@@ -1,11 +1,5 @@
 ﻿@page "/GrovePositioningSystemPage"
-@inherits PuzzleSolutionPage
-@inject GrovePositioningSystemSolution PuzzleSolution
+@inherits PuzzleSolutionPageBase<GrovePositioningSystemSolution>
 <h2>Grove Positioning System</h2>
-<CascadingValue Name="PuzzleSolutionPage" Value=@this>
-    <CascadingValue Name="PuzzleSolution" Value=@PuzzleSolution>
-        <PuzzleCodeViewer PuzzleType=@(PuzzleSolution.GetType().Name) />
-        <PuzzleInputForm />
-        <PuzzleControler />
-    </CascadingValue>
-</CascadingValue>
+<PuzzleSolutionViewer Page=@this/>
+

@@ -3,7 +3,6 @@ using AdventOfCode2022Solutions.PuzzleSolutions;
 
 namespace AdventOfCode2022Solutions.PuzzleSolutions.PyroclasticFlow
 {
-    [Puzzle(17, "Pyroclastic Flow")]
     public class PyroclasticFlowSolution : IPuzzleSolutionIter
     {
         private string _puzzleInput = string.Empty;

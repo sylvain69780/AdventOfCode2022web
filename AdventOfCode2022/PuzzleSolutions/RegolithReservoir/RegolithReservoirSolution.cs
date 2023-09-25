@@ -3,7 +3,6 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace AdventOfCode2022Solutions.PuzzleSolutions.RegolithReservoir
 {
-    [Puzzle(14, "Regolith Reservoir", true)]
     public class RegolithReservoirSolution : IPuzzleSolutionIter
     {
         private string _puzzleInput = string.Empty;

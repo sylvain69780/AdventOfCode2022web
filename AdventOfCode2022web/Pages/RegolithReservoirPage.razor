@@ -1,18 +1,52 @@
 ﻿@page "/RegolithReservoirPage"
-@inherits PuzzleSolutionPage
-@inject RegolithReservoirSolution PuzzleSolution
+@inherits PuzzleSolutionPageBase<RegolithReservoirSolution>
 <h2>Regolith Reservoir</h2>
-<CascadingValue Name="PuzzleSolutionPage" Value=@this>
-    <CascadingValue Name="PuzzleSolution" Value=@PuzzleSolution>
-        <div class="row">
-            <div class="col-lg-6">
-                <RegolithReservoirView />
-            </div>
-            <div class="col-lg-6">
-                <PuzzleCodeViewer PuzzleType=@(PuzzleSolution.GetType().Name) />
-                <PuzzleInputForm />
-                <PuzzleControler />
-            </div>
-        </div>
-    </CascadingValue>
-</CascadingValue>
+<div class="row">
+    <div class="col-lg-6">
+        <img style="width:100%; image-rendering:pixelated" src=@Visualize() />
+    </div>
+    <div class="col-lg-6">
+        <PuzzleSolutionViewer Page=@this />
+    </div>
+</div>
+
+@code {
+    public string _image64 = string.Empty;
+
+    private string Visualize()
+    {
+        if (PuzzleSolution == null || PuzzleSolution.OccupiedPositions.Count == 0)
+            return string.Empty;
+        var Width = PuzzleSolution!.xMax - PuzzleSolution.xMin;
+        var Height = PuzzleSolution!.yMax - PuzzleSolution.yMin;
+        if (Width == 0 || Height == 0)
+            return string.Empty;
+        var response = string.Empty;
+        using (MemoryStream outStream = new())
+        {
+            using (Image<Rgba32> img = new(Width, Height))
+            {
+                img.ProcessPixelRows(accessor =>
+                {
+                    for (int y = 0; y < accessor.Height; y++)
+                    {
+                        Span<Rgba32> pixelRow = accessor.GetRowSpan(y);
+                        for (int x = 0; x < pixelRow.Length; x++)
+                        {
+                            ref Rgba32 pixel = ref pixelRow[x];
+                            if (PuzzleSolution.InitialPositions!.Contains((PuzzleSolution.xMin + x, PuzzleSolution.yMin + y)))
+                                pixel = Color.Blue;
+                            else if (PuzzleSolution.OccupiedPositions!.Contains((PuzzleSolution.xMin + x, PuzzleSolution.yMin + y)))
+                                pixel = Color.Green;
+                            else if (PuzzleSolution.SandPosition == (PuzzleSolution.xMin + x, PuzzleSolution.yMin + y))
+                                pixel = Color.Red;
+                        }
+                    }
+                });
+                img.SaveAsPng(outStream);
+            }
+            response = "data:image/png;base64, " + Convert.ToBase64String(outStream.ToArray());
+        }
+        return response;
+    }
+}

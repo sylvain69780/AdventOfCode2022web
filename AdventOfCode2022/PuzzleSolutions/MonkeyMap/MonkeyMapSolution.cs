@@ -4,7 +4,6 @@ using AdventOfCode2022Solutions.PuzzleSolutions;
 
 namespace AdventOfCode2022Solutions.PuzzleSolutions.MonkeyMap
 {
-    [Puzzle(22, "Monkey Map")]
     public class MonkeyMapSolution : IPuzzleSolutionIter
     {
         private struct Simulation

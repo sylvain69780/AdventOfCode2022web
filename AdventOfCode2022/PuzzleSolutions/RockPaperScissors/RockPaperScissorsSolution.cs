@@ -2,7 +2,6 @@
 
 namespace AdventOfCode2022Solutions.PuzzleSolutions.RockPaperScissors
 {
-    [Puzzle(2, "Rock Paper Scissors")]
     public class RockPaperScissorsSolution : IPuzzleSolutionIter
     {
         private string _puzzleInput = string.Empty;

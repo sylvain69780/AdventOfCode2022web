@@ -1,11 +1,5 @@
 ﻿@page "/DistressSignalUsingJsonPage"
-@inherits PuzzleSolutionPage
-@inject DistressSignalUsingJsonSolution PuzzleSolution
+@inherits PuzzleSolutionPageBase<DistressSignalUsingJsonSolution>
 <h2>Distress Signal UsingJson</h2>
-<CascadingValue Name="PuzzleSolutionPage" Value=@this>
-    <CascadingValue Name="PuzzleSolution" Value=@PuzzleSolution>
-        <PuzzleCodeViewer PuzzleType=@(PuzzleSolution.GetType().Name) />
-        <PuzzleInputForm />
-        <PuzzleControler />
-    </CascadingValue>
-</CascadingValue>
+<PuzzleSolutionViewer Page=@this />
+

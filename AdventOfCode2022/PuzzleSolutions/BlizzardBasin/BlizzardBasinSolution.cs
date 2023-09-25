@@ -9,7 +9,6 @@
         Down = 4
     }
 
-    [Puzzle(24, "Blizzard Basin", true)]
     public class BlizzardBasinSolution : IPuzzleSolutionIter
     {
         public int GridWidth { get; set; }

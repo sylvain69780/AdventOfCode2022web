@@ -2,7 +2,6 @@
 
 namespace AdventOfCode2022Solutions.PuzzleSolutions.NoSpaceLeftOnDevice
 {
-    [Puzzle(7, "No Space Left On Device")]
     public class NoSpaceLeftOnDeviceSolution : IPuzzleSolutionIter
     {
         private string _puzzleInput = string.Empty;

@@ -4,7 +4,6 @@ using AdventOfCode2022Solutions.PuzzleSolutions;
 
 namespace AdventOfCode2022Solutions.PuzzleSolutions.SupplyStacks
 {
-    [Puzzle(5, "Supply Stacks")]
     public class SupplyStacksSolution : IPuzzleSolutionIter
     {
         private string _puzzleInput = string.Empty;

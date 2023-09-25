@@ -3,7 +3,6 @@ using AdventOfCode2022Solutions.PuzzleSolutions;
 
 namespace AdventOfCode2022Solutions.PuzzleSolutions.UnstableDiffusion
 {
-    [Puzzle(23, "Unstable Diffusion", true)]
     public class UnstableDiffusionSolution : IPuzzleSolutionIter
     {
         private string[]? Input { get; set; }

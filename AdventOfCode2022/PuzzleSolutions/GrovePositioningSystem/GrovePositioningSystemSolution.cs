@@ -2,7 +2,6 @@
 
 namespace AdventOfCode2022Solutions.PuzzleSolutions.GrovePositioningSystem
 {
-    [Puzzle(20, "Grove Positioning System")]
     public class GrovePositioningSystemSolution : IPuzzleSolutionIter
     {
         private string _puzzleInput = string.Empty;

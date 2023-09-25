@@ -1,12 +1,6 @@
 ﻿@page "/MonkeyMathPage"
-@inherits PuzzleSolutionPage
-@inject MonkeyMathSolution PuzzleSolution
+@inherits PuzzleSolutionPageBase<MonkeyMathSolution>
 <h2>Monkey Math</h2>
-<CascadingValue Name="PuzzleSolutionPage" Value=@this>
-    <CascadingValue Name="PuzzleSolution" Value=@PuzzleSolution>
-        <PuzzleCodeViewer PuzzleType=@(PuzzleSolution.GetType().Name) />
-        <PuzzleInputForm />
-        <PuzzleControler />
-    </CascadingValue>
-</CascadingValue>
+<PuzzleSolutionViewer Page=@this />
+
 

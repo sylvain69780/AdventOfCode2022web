@@ -1,12 +1,5 @@
 ﻿@page "/FullOfHotAirPage"
-@inherits PuzzleSolutionPage
-@inject FullOfHotAirSolution PuzzleSolution
+@inherits PuzzleSolutionPageBase<FullOfHotAirSolution>
 <h2>Full Of Hot Air</h2>
-<CascadingValue Name="PuzzleSolutionPage" Value=@this>
-    <CascadingValue Name="PuzzleSolution" Value=@PuzzleSolution>
-        <PuzzleCodeViewer PuzzleType=@(PuzzleSolution.GetType().Name) />
-        <PuzzleInputForm />
-        <PuzzleControler />
-    </CascadingValue>
-</CascadingValue>
+<PuzzleSolutionViewer Page=@this />
 

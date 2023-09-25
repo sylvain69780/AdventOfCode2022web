@@ -1,12 +1,5 @@
 ﻿@page "/RucksackReorganizationPage"
-@inherits PuzzleSolutionPage
-@inject RucksackReorganizationSolution PuzzleSolution
+@inherits PuzzleSolutionPageBase<RucksackReorganizationSolution>
 <h2>Rucksack Reorganization</h2>
-<CascadingValue Name="PuzzleSolutionPage" Value=@this>
-    <CascadingValue Name="PuzzleSolution" Value=@PuzzleSolution>
-        <PuzzleCodeViewer PuzzleType=@(PuzzleSolution.GetType().Name) />
-        <PuzzleInputForm />
-        <PuzzleControler />
-    </CascadingValue>
-</CascadingValue>
+<PuzzleSolutionViewer Page=@this />
 

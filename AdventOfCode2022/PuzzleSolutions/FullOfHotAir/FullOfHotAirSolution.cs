@@ -2,7 +2,6 @@
 
 namespace AdventOfCode2022Solutions.PuzzleSolutions.FullOfHotAir
 {
-    [Puzzle(25, "Full of Hot Air")]
     public class FullOfHotAirSolution : IPuzzleSolutionIter
     {
         public void Initialize(string inp)

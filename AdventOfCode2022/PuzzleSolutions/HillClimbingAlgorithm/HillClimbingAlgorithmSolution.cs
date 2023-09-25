@@ -3,7 +3,6 @@ using AdventOfCode2022Solutions.PuzzleSolutions;
 
 namespace AdventOfCode2022Solutions.PuzzleSolutions.HillClimbingAlgorithm
 {
-    [Puzzle(12, "Hill Climbing Algorithm")]
     public class HillClimbingAlgorithmSolution : IPuzzleSolutionIter
     {
         private string _puzzleInput = string.Empty;

@@ -2,7 +2,6 @@
 
 namespace AdventOfCode2022Solutions.PuzzleSolutions.DistressSignal
 {
-    [Puzzle(26, "Distress Signal2")]
     public class DistressSignalSolution : IPuzzleSolutionIter
     {
         private string _puzzleInput = string.Empty;

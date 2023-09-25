@@ -3,7 +3,6 @@ using AdventOfCode2022Solutions.PuzzleSolutions;
 
 namespace AdventOfCode2022Solutions.PuzzleSolutions.CampCleanup
 {
-    [Puzzle(4, "Camp Cleanup")]
     public class CampCleanupSolution : IPuzzleSolutionIter
     {
 

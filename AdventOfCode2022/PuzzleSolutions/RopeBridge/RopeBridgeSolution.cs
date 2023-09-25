@@ -3,7 +3,6 @@ using AdventOfCode2022Solutions.PuzzleSolutions;
 
 namespace AdventOfCode2022Solutions.PuzzleSolutions.RopeBridge
 {
-    [Puzzle(9, "Rope Bridge")]
     public class RopeBridgeSolution : IPuzzleSolutionIter
     {
         private string _puzzleInput = string.Empty;
