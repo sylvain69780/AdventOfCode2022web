@@ -19,34 +19,19 @@ namespace AdventOfCode2022web
         public string SampleInputFile()
         {
             var puzzleType = PuzzleSolution!.GetType();
-            var puzzleInputFile = puzzleType.Name;
-            if (puzzleInputFile.Contains("Solution"))
-                puzzleInputFile = puzzleInputFile.Replace("Solution", "");
+            var puzzleInputFile = puzzleType.Name.Replace("Solution", "");
             return puzzleInputFile;
         }
 
-        public string FullInputFile()
-        {
-            var puzzleType = PuzzleSolution!.GetType();
-            var puzzleInputFile = puzzleType.Name;
-            if (puzzleInputFile.Contains("Solution"))
-                puzzleInputFile = puzzleInputFile.Replace("Solution", "");
-            return puzzleInputFile + "_full";
-        }
-
+        public string FullInputFile() => SampleInputFile() + "_full";
+       
         public string PuzzleSolutionCode => $"https://github.com/sylvain69780/AdventOfCode2022web/blob/master/AdventOfCode2022/PuzzleSolutions/{PuzzleSolution.GetType().Name.Replace("Solution","")}";
 
-        public async Task LoadDefaultPuzzleInput()
-        {
-            var puzzleInputFile = SampleInputFile();
-            Input = (await Http!.GetStringAsync($"sample-data/{puzzleInputFile}.txt")).Replace("\r", "");
-            Stop();
-            PuzzleSolution.Initialize(Input);
-        }
+        public async Task LoadDefaultPuzzleInput() => await LoadPuzzleInput(SampleInputFile());
+        public async Task LoadFullPuzzleInput() => await LoadPuzzleInput(FullInputFile());
 
-        public async Task LoadFullPuzzleInput()
+        public async Task LoadPuzzleInput(string puzzleInputFile)
         {
-            var puzzleInputFile = FullInputFile();
             Input = (await Http!.GetStringAsync($"sample-data/{puzzleInputFile}.txt")).Replace("\r", "");
             Stop();
             PuzzleSolution.Initialize(Input);
@@ -91,6 +76,7 @@ namespace AdventOfCode2022web
 
         public void MoveUntilCompleted()
         {
+            _stepComputationTimer.Stop();
             MoveNext();
             if ( AnimationDuration == 0)
             {
@@ -98,11 +84,9 @@ namespace AdventOfCode2022web
                 while (!Finished && stopWatch.ElapsedMilliseconds < 2000)
                     MoveNext();
             }
-            if (Finished)
-                _stepComputationTimer!.Stop();
-            else
+            if (!Finished)
             {
-                _stepComputationTimer!.Interval = AnimationDuration+1;
+                _stepComputationTimer!.Interval = AnimationDuration == 0 ? 100 : AnimationDuration;
                 _stepComputationTimer.Start();
             }
             StateHasChanged();
