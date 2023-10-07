@@ -1,5 +1,4 @@
-﻿@typeparam T where T : IPuzzleSolutionIter, new()
-@if (Page is not null )
+﻿@if (Page is not null )
 {
     <h3>View the code of the solution</h3>
     <p class="form-label">No code viewer here, view the solution directly on <a href=@Page.PuzzleSolutionCode>GitHub</a>.</p>
@@ -11,12 +10,27 @@
         <pre><textarea spellcheck="false" class="form-control" aria-label="Puzzle Input" rows="10" @bind="Page.Input" maxlength="10000000"></textarea></pre>
     </div>
     <h3>Puzzle Controler</h3>
-    <button disabled=@_isStartProcessingForbidden @onclick=@Page.StartPart1>Initialize Part 1</button>
-    <button disabled=@_isStartProcessingForbidden @onclick=@Page.StartPart2>Initialize Part 2</button>
-    <button disabled=@Page.Finished @onclick=@Page.MoveNext>Move to next Step</button>
-    <button disabled=@Page.Finished @onclick=@Page.MoveUntilCompleted>Move until completed</button>
-    <button disabled=@Page.Finished @onclick=@Page.Stop>Stop</button>
-    <p class="border border-2 m-1 p-1">@(_isCompleted ? "Click to start solving one of the the 2 parts." : "Click to run the next step, adjust the animation speed using the slider.")</p>
+    <button disabled=@(Page.PageState != PageState.Loaded && Page.PageState != PageState.Finished) @onclick=@Page.StartPart1>Initialize Part 1</button>
+    <button disabled=@(Page.PageState != PageState.Loaded && Page.PageState != PageState.Finished) @onclick=@Page.StartPart2>Initialize Part 2</button>
+    <button disabled=@(Page.PageState != PageState.Processing) @onclick=@Page.MoveNext>Move to next Step</button>
+    <button disabled=@(Page.PageState != PageState.Processing) @onclick=@Page.MoveUntilCompleted>Move until completed</button>
+    <button disabled=@(Page.PageState != PageState.Processing && Page.PageState != PageState.ProcessingAuto) @onclick=@Page.Stop>Stop</button>
+    @if (Page.PageState == PageState.Loaded)
+    {
+        <p class="border border-2 m-1 p-1">Click to start solving one of the the 2 parts.</p>
+    }
+    @if (Page.PageState == PageState.Finished)
+    {
+        <p class="border border-2 m-1 p-1">Solution found ! Please check the output value.</p>
+    }
+    @if (Page.PageState == PageState.Processing)
+    {
+        <p class="border border-2 m-1 p-1">Click to run the next step, adjust the animation speed using the slider.</p>
+    }
+    @if (Page.PageState == PageState.ProcessingAuto)
+    {
+        <p class="border border-2 m-1 p-1">Adjust processing speed using the slider, set it to Zero for best performance.</p>
+    }
     <p>Step @Page.SolvingStep</p>
     <div class="row">
         <input type="range" id="delayRange" @bind=Page.AnimationDuration min="0" max="5000" step="50">
@@ -35,8 +49,5 @@
 
 @code {
     [Parameter]
-    public PuzzleSolutionPageBase<T>? Page { get; set; }
-
-    private bool _isStartProcessingForbidden = false;
-    private bool _isCompleted = true;
+    public IPuzzleSolutionPage? Page { get; set; }
 }

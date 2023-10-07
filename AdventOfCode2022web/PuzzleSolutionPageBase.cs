@@ -5,14 +5,14 @@ using System.Timers;
 
 namespace AdventOfCode2022web
 {
-    public class PuzzleSolutionPageBase<T> : ComponentBase where T : IPuzzleSolutionIter, new()
+    public class PuzzleSolutionPageBase<T> : ComponentBase, IPuzzleSolutionPage where T : IPuzzleSolutionIter, new()
     {
         [Inject]
         public HttpClient? Http { get; set; }
 
         public int AnimationDuration { get; set; } = 500;
         public int SolvingStep { get; private set; } = 0;
-        public bool Finished = true;
+        public PageState PageState { get; set; } = PageState.Loaded;
         public T PuzzleSolution { get; } = new T();
         public string Input { get; set; } = string.Empty;
 
@@ -24,8 +24,8 @@ namespace AdventOfCode2022web
         }
 
         public string FullInputFile() => SampleInputFile() + "_full";
-       
-        public string PuzzleSolutionCode => $"https://github.com/sylvain69780/AdventOfCode2022web/blob/master/AdventOfCode2022/PuzzleSolutions/{PuzzleSolution.GetType().Name.Replace("Solution","")}";
+
+        public string PuzzleSolutionCode => $"https://github.com/sylvain69780/AdventOfCode2022web/blob/master/AdventOfCode2022/PuzzleSolutions/{PuzzleSolution.GetType().Name.Replace("Solution", "")}";
 
         public async Task LoadDefaultPuzzleInput() => await LoadPuzzleInput(SampleInputFile());
         public async Task LoadFullPuzzleInput() => await LoadPuzzleInput(FullInputFile());
@@ -50,14 +50,14 @@ namespace AdventOfCode2022web
         public void StartPart1()
         {
             _results = PuzzleSolution!.SolveFirstPart().GetEnumerator();
-            Finished = false;
+            PageState = PageState.Processing;
             SolvingStep = 0;
         }
 
         public void StartPart2()
         {
             _results = PuzzleSolution!.SolveSecondPart().GetEnumerator();
-            Finished = false;
+            PageState = PageState.Processing;
             SolvingStep = 0;
         }
 
@@ -69,22 +69,22 @@ namespace AdventOfCode2022web
                 SolvingStep++;
             }
             else
-                Finished = true;
+                PageState = PageState.Finished;
         }
 
-        private System.Timers.Timer _stepComputationTimer = new ();
+        private System.Timers.Timer _stepComputationTimer = new();
 
         public void MoveUntilCompleted()
         {
             _stepComputationTimer.Stop();
             MoveNext();
-            if ( AnimationDuration == 0)
+            if (AnimationDuration == 0)
             {
                 var stopWatch = Stopwatch.StartNew();
-                while (!Finished && stopWatch.ElapsedMilliseconds < 2000)
+                while (PageState != PageState.Finished && stopWatch.ElapsedMilliseconds < 2000)
                     MoveNext();
             }
-            if (!Finished)
+            if (PageState != PageState.Finished)
             {
                 _stepComputationTimer!.Interval = AnimationDuration == 0 ? 100 : AnimationDuration;
                 _stepComputationTimer.Start();
@@ -102,7 +102,7 @@ namespace AdventOfCode2022web
         {
             _results = null;
             _stepComputationTimer.Stop();
-            Finished = true;
+            PageState = PageState.Finished;
         }
     }
 }
