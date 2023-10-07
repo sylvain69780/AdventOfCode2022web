@@ -76,6 +76,7 @@ namespace AdventOfCode2022web
 
         public void MoveUntilCompleted()
         {
+            PageState = PageState.ProcessingAuto;
             _stepComputationTimer.Stop();
             MoveNext();
             if (AnimationDuration == 0)
@@ -102,7 +103,7 @@ namespace AdventOfCode2022web
         {
             _results = null;
             _stepComputationTimer.Stop();
-            PageState = PageState.Finished;
+            PageState = PageState.Loaded;
         }
     }
 }
