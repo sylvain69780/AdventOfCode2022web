@@ -17,42 +17,8 @@
         {
             var (gridWidth, gridHeight) = (GridWidth - 2, GridHeight - 2);
             <svg viewBox="0 0 @GridWidth @GridHeight" class="img-fluid">
-                <defs>
-                    <radialGradient id="elf-skin-gradient">
-                        <stop offset="10%" stop-color="chartreuse" />
-                        <stop offset="80%" stop-color="green" />
-                    </radialGradient>
-                    <g id="elf-possible">
-                        <g transform="translate(0.5,0.5)">
-                            <g transform="scale(.5)">
-                                <circle r="0.5" fill="url('#elf-skin-gradient')" />
-                                <g transform="translate(0, -0.05)">
-                                    <g id="eye">
-                                        <circle cx="0.15" r="0.13" fill="green" />
-                                        <circle cx="0.15" r="0.1" fill="white" />
-                                        <circle cx="0.12" r="0.05" fill="black" />
-                                    </g>
-                                    <use transform="scale(-1, 1)" href="#eye" />
-                                </g>
-                            </g>
-                        </g>
-                    </g>
-                    <g id="blizzard">
-                        <path d="M 0,0 -0.1,-0.2 0.2,0 -0.1,0.2 0,0" fill="gray" />
-                    </g>
-                    <g id="blizzard-right">
-                        <use href="#blizzard" transform="translate(0.75,0.25)" />
-                    </g>
-                    <g id="blizzard-left">
-                        <use href="#blizzard" transform="translate(0.25,0.75) rotate(180)" />
-                    </g>
-                    <g id="blizzard-down">
-                        <use href="#blizzard" transform="translate(0.75,0.75) rotate(90) " />
-                    </g>
-                    <g id="blizzard-up">
-                        <use href="#blizzard" transform="translate(0.25,0.25) rotate(-90) " />
-                    </g>
-                </defs>
+                <GraphicsDefinitionElf/>
+                <GraphicsDefinitionBlizzard/>
                 <pattern id="gridPattern" width="1" height="1" patternUnits="userSpaceOnUse">
                     <rect width="1" height="1" fill="white" stroke="gray" stroke-width="0.1" />
                 </pattern>
@@ -65,7 +31,7 @@
                         @foreach (var child in Tree[RoundNumber])
                         {
                             var parent = RoundNumber > 0 ? Tree[RoundNumber - 1][child.ParentId] : Tree[0][0];
-                            <use href="#elf-possible" style=@($"--dax:{parent.Pos.X}px;--day:{parent.Pos.Y}px;--dbx:{child.Pos.X }px;--dby:{child.Pos.Y}px;") />
+                            <use href="#elf" style=@($"--dax:{parent.Pos.X}px;--day:{parent.Pos.Y}px;--dbx:{child.Pos.X }px;--dby:{child.Pos.Y}px;") />
                         }
                     </g>
                     <g class=@ElfKilledClass>
@@ -77,7 +43,7 @@
                                 if (parentIds.Contains(parentId))
                                     continue;
                                 var parent = Tree[RoundNumber - 1][parentId];
-                                <use href="#elf-possible" style=@($"--dbx:{parent.Pos.X }px;--dby:{parent.Pos.Y}px;") />
+                                <use href="#elf" style=@($"--dbx:{parent.Pos.X }px;--dby:{parent.Pos.Y}px;") />
                             }
                         }
                     </g>

@@ -25,31 +25,11 @@
                         _viewBox.yMax *= 2;
                 }
                 <svg viewBox="@_viewBox.xMin @_viewBox.yMin @(_viewBox.xMax-_viewBox.xMin) @(_viewBox.yMax-_viewBox.yMin)" class="img-fluid">
-                    <defs>
-                        <radialGradient id="myGradient">
-                            <stop offset="10%" stop-color="chartreuse" />
-                            <stop offset="80%" stop-color="green" />
-                        </radialGradient>
-                    </defs>
+                    <GraphicsDefinitionElf />
                     <pattern id="gridPattern" width="1" height="1" patternUnits="userSpaceOnUse">
                         <rect width="1" height="1" fill="white" stroke="gray" stroke-width="0.1" />
                     </pattern>
                     <rect x="@_viewBox.xMin" y="@_viewBox.yMin" width="@(_viewBox.xMax-_viewBox.xMin)" height="@(_viewBox.yMax-_viewBox.yMin)" fill="url(#gridPattern)" />
-                    <g visibility="hidden">
-                        <g id="myImage">
-                            <g transform="translate(0.5,0.5)">
-                                <circle r="0.5" fill="url('#myGradient')" />
-                                <g transform="translate(0, -0.05)">
-                                    <g id="eye">
-                                        <circle cx="0.15" r="0.13" fill="green" />
-                                        <circle cx="0.15" r="0.1" fill="white" />
-                                        <circle cx="0.12" r="0.05" fill="black" />
-                                    </g>
-                                    <use transform="scale(-1, 1)" href="#eye" />
-                                </g>
-                            </g>
-                        </g>
-                    </g>
                     @if (AnimationDuration > 0 && !_animationCompleted)
                     {
                         var style = $"animation-duration : {AnimationDuration * 80 / 100}ms;";
@@ -69,7 +49,7 @@
                                     anim = "elf-move-down";
                                 if (d == (0, -1))
                                     anim = "elf-move-up";
-                                <use href="#myImage" x="@(p.X)" y="@(p.Y)" class="@anim" style="@style" />
+                                <use href="#elf" x="@(p.X)" y="@(p.Y)" class="@anim" style="@style" />
                             }
                         }
                     }
@@ -78,7 +58,7 @@
                         for (var i = 0; i < positions.Length; i++)
                         {
                             var pp = positions[i];
-                            <use href="#myImage" x="@(pp.X)" y="@(pp.Y)" />
+                            <use href="#elf" x="@(pp.X)" y="@(pp.Y)" />
                         }
                     }
                 </svg>
