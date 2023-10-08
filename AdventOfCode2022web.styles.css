@@ -84,6 +84,42 @@
         transform: translate(var(--dbx),var(--dby));
     }
 }
+/* /Pages/CalorieCountingPage.razor.rz.scp.css */
+:root[b-sn73autjqm] {
+    --animation-duration: 500ms;
+}
+
+.elf-moving-0[b-sn73autjqm] {
+    animation-name: elf-moving-anim-0-b-sn73autjqm;
+    animation-fill-mode: forwards;
+    animation-iteration-count: 1;
+    animation-duration: var(--animation-duration);
+}
+
+.elf-moving-1[b-sn73autjqm] {
+    animation-name: elf-moving-anim-1-b-sn73autjqm;
+    animation-fill-mode: forwards;
+    animation-iteration-count: 1;
+    animation-duration: var(--animation-duration);
+}
+
+@keyframes elf-moving-anim-0-b-sn73autjqm {
+    from {
+        transform: translate(-1px,0px);
+    }
+    to {
+        transform: translate(0px,0px);
+    }
+}
+
+@keyframes elf-moving-anim-1-b-sn73autjqm {
+    from {
+        transform: translate(-1px,0px);
+    }
+    to {
+        transform: translate(0px,0px);
+    }
+}
 /* /Pages/UnstableDiffusionPage.razor.rz.scp.css */
 
 .elf-move-right[b-012x46rh6b] {
