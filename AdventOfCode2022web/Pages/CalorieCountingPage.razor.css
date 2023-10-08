@@ -1,0 +1,35 @@
+﻿:root {
+    --animation-duration: 500ms;
+}
+
+.elf-moving-0 {
+    animation-name: elf-moving-anim-0;
+    animation-fill-mode: forwards;
+    animation-iteration-count: 1;
+    animation-duration: var(--animation-duration);
+}
+
+.elf-moving-1 {
+    animation-name: elf-moving-anim-1;
+    animation-fill-mode: forwards;
+    animation-iteration-count: 1;
+    animation-duration: var(--animation-duration);
+}
+
+@keyframes elf-moving-anim-0 {
+    from {
+        transform: translate(-1px,0px);
+    }
+    to {
+        transform: translate(0px,0px);
+    }
+}
+
+@keyframes elf-moving-anim-1 {
+    from {
+        transform: translate(-1px,0px);
+    }
+    to {
+        transform: translate(0px,0px);
+    }
+}

@@ -14,6 +14,7 @@
         public void Initialize(string input)
         {
             _puzzleInput = ToLines(input);
+            sumOfCalories = 0;
         }
 
         public IEnumerable<string> SolveFirstPart()

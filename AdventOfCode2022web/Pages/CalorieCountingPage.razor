@@ -13,21 +13,23 @@
                         <text font-family="Comic Sans" font-weight="bold" font-size=".3" dominant-baseline="middle" text-anchor="middle" fill="black">@PuzzleSolution.CurrentSum</text>
                     </g>
                 </g>
-                @for (var i = 0; i < MaxElfes; i++)
-                {
-                    var x = MaxElfes - 1 - i;
-                    var idx = SolvingStep + i;
-                    if (idx >= PuzzleSolution.GroupsOfElves.Length)
-                        continue;
-                    var line = PuzzleSolution.GroupsOfElves[idx];
-                    if (line != string.Empty)
+                <g class="elf-moving-@(SolvingStep %2)" style=@AnimationTimingStyle>
+                    @for (var i = 0; i <= MaxElfes; i++)
                     {
-                        <g transform="translate(.5,.76)">
-                            <text x="@x" y="0" font-family="Comic Sans" font-size=".3" dominant-baseline="middle" text-anchor="middle" fill="black">@line</text>
-                        </g>
-                        <use href="#elf" x="@x" y="1" />
+                        var x = MaxElfes - i;
+                        var idx = SolvingStep + i - 1;
+                        if (idx <0 || idx >= PuzzleSolution.GroupsOfElves.Length)
+                            continue;
+                        var line = PuzzleSolution.GroupsOfElves[idx];
+                        if (line != string.Empty)
+                        {
+                            <use href="#elf" x="@x" y="1"/>
+                            <g transform="translate(.5,.76)">
+                                <text x="@x" y="0" font-family="Comic Sans" font-size=".3" dominant-baseline="middle" text-anchor="middle" fill="black">@line</text>
+                            </g>
+                        }
                     }
-                }
+                </g>
             </svg>
             @if (Result != string.Empty)
             {
@@ -43,4 +45,5 @@
 @code
 {
     const int MaxElfes = 15;
+    private string AnimationTimingStyle => $"--animation-duration: {AnimationDuration}ms;";
 }
