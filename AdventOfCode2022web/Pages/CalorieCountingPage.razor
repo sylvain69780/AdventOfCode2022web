@@ -17,7 +17,7 @@
                     @for (var i = 0; i <= MaxElfes; i++)
                     {
                         var x = MaxElfes - i;
-                        var idx = SolvingStep + i - 1;
+                        var idx = SolvingStep + i - 2;
                         if (idx <0 || idx >= PuzzleSolution.GroupsOfElves.Length)
                             continue;
                         var line = PuzzleSolution.GroupsOfElves[idx];
@@ -45,5 +45,5 @@
 @code
 {
     const int MaxElfes = 15;
-    private string AnimationTimingStyle => $"--animation-duration: {AnimationDuration}ms;";
+    private string AnimationTimingStyle => $"--animation-duration: {AnimationDuration*90/100}ms;";
 }
