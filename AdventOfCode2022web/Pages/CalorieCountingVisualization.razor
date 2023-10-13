@@ -1,0 +1,38 @@
+﻿@if (Page!.PuzzleSolution!.GroupsOfElves is not null)
+{
+    <svg viewBox="0,-1,@MaxElfes,3">
+        <GraphicsDefinitionElf />
+        <rect x="@(MaxElfes-1)" y="0" width="1" height="2" stroke="blue" stroke-width="0.05" fill="yellow" />
+        <g transform="translate(@(MaxElfes-1),0)">
+            <g transform="translate(.5,.36)">
+                <text font-family="Comic Sans" font-weight="bold" font-size=".3" dominant-baseline="middle" text-anchor="middle" fill="black">@Page.PuzzleSolution.CurrentSum</text>
+            </g>
+        </g>
+        <g class="elf-moving-@(Page.SolvingStep %2)" style=@AnimationTimingStyle>
+            @for (var i = 0; i <= MaxElfes; i++)
+            {
+                var x = MaxElfes - i;
+                var idx = Page.SolvingStep + i - 2;
+                if (idx < 0 || idx >= Page.PuzzleSolution.GroupsOfElves.Length)
+                    continue;
+                var line = Page.PuzzleSolution.GroupsOfElves[idx];
+                if (line != string.Empty)
+                {
+                    <use href="#elf" x="@x" y="1" />
+                    <g transform="translate(.5,.76)">
+                        <text x="@x" y="0" font-family="Comic Sans" font-size=".3" dominant-baseline="middle" text-anchor="middle" fill="black">@line</text>
+                    </g>
+                }
+            }
+        </g>
+    </svg>
+}
+
+@code {
+    [Parameter]
+    public CalorieCountingPage? Page { get; set; }
+
+    const int MaxElfes = 15;
+    string AnimationTimingStyle => $"--animation-duration: {Page!.AnimationDuration * 90 / 100}ms;";
+
+}

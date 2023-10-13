@@ -1,0 +1,94 @@
+<p class="p-1">
+    This is a Sudoku solver, and it has really no relation with Advent Of Code !
+</p>
+<p class="p-1">
+    All empty cells are adorned with the count of potential numbers.
+    When the count of potential numbers is greater than 1, we should make a guess and explore until an inconsistency arises (colored in red).
+    The visualization displays a guessed number in blue.
+    The number of dots under the numbers indicates the depth of the search.
+</p>
+
+<svg viewBox="-0.1 -0.1 9.2 9.8" class="img-fluid m-1">
+    <defs>
+        <g id="sudoku-cell">
+            <rect x=".1" y=".1" width=".8" height=".8" fill="orange"></rect>
+        </g>
+        <g id="sudoku-bad-cell">
+            <rect x=".1" y=".1" width=".8" height=".8" fill="red"></rect>
+        </g>
+        <pattern id="gridPattern" width="1" height="1" patternUnits="userSpaceOnUse">
+            <rect width="1" height="1" fill="white" stroke="black" stroke-width="0.025" />
+        </pattern>
+        <pattern id="gridPattern2" width="3" height="3" patternUnits="userSpaceOnUse">
+            <rect width="3" height="3" fill="url(#gridPattern)" stroke="black" stroke-width="0.1" />
+        </pattern>
+    </defs>
+    <rect x="-0.05" y="-0.05" width="9.1" height="9.1" fill="url(#gridPattern2)"></rect>
+    @{
+        if (Page.PuzzleSolution != null && Page.PuzzleSolution.PuzzleState.Length == 81)
+        {
+            var s = Page.PuzzleSolution!.PuzzleState;
+            var dfs = Array.Empty<string>();
+            if (Page.PuzzleSolution.DFS != null)
+            {
+                dfs = Page.PuzzleSolution.DFS.ToArray();
+            }
+            foreach (var y in Enumerable.Range(0, 9))
+                foreach (var x in Enumerable.Range(0, 9))
+                {
+                    var c = s[x + y * 9];
+                    if (c == '.')
+                    {
+                        var r = Page.PuzzleSolution.Entropy(x + y * 9).Length;
+                        if (r == 0)
+                        {
+                            <use href="#sudoku-bad-cell" x="@x" y="@y" />
+                        }
+                        else
+                        {
+                            var e = (double)(10 - r) / 9;
+                            <use href="#sudoku-cell" x="@x" y="@y" opacity="@(e.ToStringCSS())" />
+                            <g transform="translate(.75,.76)">
+                                <text x="@x" y="@y" font-family="Comic Sans" font-size=".3" dominant-baseline="middle" text-anchor="middle">@r</text>
+                            </g>
+                        }
+                    }
+                    else
+                    {
+                        var fcolor = "black";
+                        var questions = string.Empty;
+                        var other = ' ';
+                        if (dfs.Length > 1)
+                        {
+                            for (var i = 1; i < dfs.Length; i++)
+                            {
+                                var b = dfs[^i][x + 9 * y];
+                                if (s[x + 9 * y] != b)
+                                {
+                                    fcolor = b == '.' ? "gray" : "blue";
+                                    if (b != '.')
+                                        other = b;
+                                    questions = questions + '.';
+                                }
+                            }
+                        }
+                        <g transform="translate(.5,.56)">
+                            <text x="@x" y="@y" font-family="Comic Sans" font-size=".8" dominant-baseline="middle" text-anchor="middle" fill="@fcolor">@c</text>
+                        </g>
+                        <g transform="translate(.5,.8)">
+                            <text x="@x" y="@y" font-family="Comic Sans" font-size=".3" dominant-baseline="middle" text-anchor="middle">@questions</text>
+                        </g>
+                        <g transform="translate(.1,.8)">
+                            <text x="@x" y="@y" font-family="Comic Sans" font-size=".3" dominant-baseline="middle">@other</text>
+                        </g>
+
+                    }
+                }
+        }
+    }
+</svg>
+
+@code {
+    [Parameter]
+    public SudokuPage? Page { get; set; }
+}

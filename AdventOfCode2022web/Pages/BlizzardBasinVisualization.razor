@@ -1,0 +1,127 @@
+@using System.Timers;
+
+@if (_previousStep != Page!.SolvingStep)
+{
+    SetTimer();
+}
+<h3>Visualization of the solution</h3>
+<p>
+    You have to find the shortest way from one point to another, avoiding the "blizzards".<br />
+    I'm using a breadth-search algorithm here, the difficulty being that the pattern of "blizzards" changes over time.
+</p>
+@if (IsPuzzleValid)
+{
+    var (gridWidth, gridHeight) = (GridWidth - 2, GridHeight - 2);
+    <svg viewBox="0 0 @GridWidth @GridHeight" class="img-fluid">
+        <GraphicsDefinitionElfSmall />
+        <GraphicsDefinitionBlizzard />
+        <pattern id="gridPattern" width="1" height="1" patternUnits="userSpaceOnUse">
+            <rect width="1" height="1" fill="white" stroke="gray" stroke-width="0.1" />
+        </pattern>
+        <rect x="0" y="0" width=@GridWidth height=@GridHeight fill="grey" />
+        <rect x="1" y="1" width=@(GridWidth-2) height=@(GridHeight-2) fill="url(#gridPattern)" />
+        <rect x=@Entrance.X y=@Entrance.Y width="1" height="1" fill="PaleGreen" stroke-width="0.1" stroke="green" />
+        <rect x=@Exit.X y=@Exit.Y width="1" height="1" fill="PaleGreen" stroke-width="0.1" stroke="green" />
+        <g style=@AnimationTimingStyle>
+            <g class=@ElfSearchClass>
+                @foreach (var child in Tree[RoundNumber])
+                {
+                    var parent = RoundNumber > 0 ? Tree[RoundNumber - 1][child.ParentId] : Tree[0][0];
+                    <use href="#elf" style=@($"--dax:{parent.Pos.X}px;--day:{parent.Pos.Y}px;--dbx:{child.Pos.X }px;--dby:{child.Pos.Y}px;") />
+                }
+            </g>
+            <g class=@ElfKilledClass>
+                @if (RoundNumber > 0)
+                {
+                    var parentIds = Tree[RoundNumber].Select(x => x.ParentId).ToHashSet();
+                    for (var parentId = 0; parentId < Tree[RoundNumber - 1].Count; parentId++)
+                    {
+                        if (parentIds.Contains(parentId))
+                            continue;
+                        var parent = Tree[RoundNumber - 1][parentId];
+                        <use href="#elf" style=@($"--dbx:{parent.Pos.X }px;--dby:{parent.Pos.Y}px;") />
+                    }
+                }
+            </g>
+            <g class=@BlizzardClass>
+                @foreach (var b in Page.PuzzleSolution!.BlizzardsPositions!)
+                {
+                    if (b.Direction == Directions.Right)
+                    {
+                        <use href="#blizzard-right" style=@($"--dax:{b.Position.X-1}px;--day:{b.Position.Y}px;--dbx:{b.Position.X }px;--dby:{b.Position.Y}px;") />
+                        if (b.Position.X == 1)
+                        {
+                            <use href="#blizzard-right" style=@($"--dax:{gridWidth}px;--day:{b.Position.Y}px;--dbx:{gridWidth+1}px;--dby:{b.Position.Y}px;") />
+                        }
+                    }
+                    if (b.Direction == Directions.Left)
+                    {
+                        <use href="#blizzard-left" style=@($"--dax:{b.Position.X+1}px;--day:{b.Position.Y}px;--dbx:{b.Position.X }px;--dby:{b.Position.Y}px;") />
+                        if (b.Position.X == gridWidth)
+                        {
+                            <use href="#blizzard-left" style=@($"--dax:1px;--day:{b.Position.Y}px;--dbx:0px;--dby:{b.Position.Y}px;") />
+                        }
+                    }
+                    if (b.Direction == Directions.Down)
+                    {
+                        <use href="#blizzard-down" style=@($"--dax:{b.Position.X}px;--day:{b.Position.Y-1}px;--dbx:{b.Position.X}px;--dby:{b.Position.Y}px;") />
+                        if (b.Position.Y == 1)
+                        {
+                            <use href="#blizzard-down" style=@($"--dax:{b.Position.X}px;--day:{gridHeight}px;--dbx:{b.Position.X}px;--dby:{gridHeight+1}px;") />
+                        }
+                    }
+                    if (b.Direction == Directions.Up)
+                    {
+                        <use href="#blizzard-up" style=@($"--dax:{b.Position.X}px;--day:{b.Position.Y+1}px;--dbx:{b.Position.X}px;--dby:{b.Position.Y}px;") />
+                        if (b.Position.Y == gridHeight)
+                        {
+                            <use href="#blizzard-up" style=@($"--dax:{b.Position.X}px;--day:1px;--dbx:{b.Position.X }px;--dby:0px;") />
+                        }
+                    }
+                }
+            </g>
+        </g>
+    </svg>
+}
+
+@code {
+    [Parameter]
+    public BlizzardBasinPage? Page { get; set; }
+
+    private Timer _animationTimer = new();
+    private bool _animationCompleted = true;
+    private int _previousStep = 0;
+
+    protected override void OnInitialized()
+    {
+        _animationTimer.Elapsed += (object? sender, System.Timers.ElapsedEventArgs e) => StopAnimation();
+        base.OnInitialized();
+    }
+
+    private void StopAnimation()
+    {
+        _animationCompleted = true;
+        _animationTimer.Stop();
+        StateHasChanged();
+    }
+
+    private void SetTimer()
+    {
+        _previousStep = Page!.SolvingStep;
+        _animationTimer.Interval = Page.AnimationDuration * 90 / 100 + 1;
+        _animationTimer.Start();
+        _animationCompleted = false;
+    }
+
+    private (int X, int Y) Exit => Page!.PuzzleSolution!.ExitPosition;
+    private (int X, int Y) Entrance => Page!.PuzzleSolution!.EntrancePosition;
+    private int RoundNumber => Page!.PuzzleSolution!.CurrentMinute;
+    private List<List<(int ParentId, (int X, int Y) Pos)>> Tree => Page!.PuzzleSolution!.Tree;
+    private int GridWidth => Page!.PuzzleSolution!.GridWidth;
+    private int GridHeight => Page!.PuzzleSolution!.GridHeight;
+    private string AnimationTimingStyle => $"--animation-duration: {Page!.AnimationDuration}ms;";
+    private string ElfSearchClass => (_animationCompleted ? "elf-motionless" : "elf-moving");
+    private string ElfKilledClass => (_animationCompleted ? "elf-hidden" : "elf-killed");
+    private string BlizzardClass => (_animationCompleted ? "blizzard-motionless" : "blizzard-moving");
+    private bool IsPuzzleValid => Page!.PuzzleSolution != null && Page!.PuzzleSolution.Tree != null && Page!.PuzzleSolution.Tree.Count > 0;
+}

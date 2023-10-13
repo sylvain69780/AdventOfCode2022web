@@ -1,49 +1,6 @@
 ﻿@page "/CalorieCountingPage"
 @inherits PuzzleSolutionPageBase<CalorieCountingSolution>
 <h2>Calorie Counting</h2>
-<div class="row">
-    <div class="col-lg-6">
-        @if (PuzzleSolution!.GroupsOfElves is not null)
-        {
-            <svg viewBox="0,0,@MaxElfes,2">
-                <GraphicsDefinitionElf />
-                <rect x="@(MaxElfes-1)" y="0" width="1" height="2" stroke="blue" stroke-width="0.05" fill="yellow" />
-                <g transform="translate(@(MaxElfes-1),0)">
-                    <g transform="translate(.5,.36)">
-                        <text font-family="Comic Sans" font-weight="bold" font-size=".3" dominant-baseline="middle" text-anchor="middle" fill="black">@PuzzleSolution.CurrentSum</text>
-                    </g>
-                </g>
-                <g class="elf-moving-@(SolvingStep %2)" style=@AnimationTimingStyle>
-                    @for (var i = 0; i <= MaxElfes; i++)
-                    {
-                        var x = MaxElfes - i;
-                        var idx = SolvingStep + i - 2;
-                        if (idx <0 || idx >= PuzzleSolution.GroupsOfElves.Length)
-                            continue;
-                        var line = PuzzleSolution.GroupsOfElves[idx];
-                        if (line != string.Empty)
-                        {
-                            <use href="#elf" x="@x" y="1"/>
-                            <g transform="translate(.5,.76)">
-                                <text x="@x" y="0" font-family="Comic Sans" font-size=".3" dominant-baseline="middle" text-anchor="middle" fill="black">@line</text>
-                            </g>
-                        }
-                    }
-                </g>
-            </svg>
-            @if (Result != string.Empty)
-            {
-                <p class="alert-info m-2 p-2">@Result</p>
-            }
-        }
-    </div>
-    <div class="col-lg-6">
-        <PuzzleSolutionViewer Page=@this />
-    </div>
-</div>
-
-@code
-{
-    const int MaxElfes = 15;
-    private string AnimationTimingStyle => $"--animation-duration: {AnimationDuration*90/100}ms;";
-}
+<PuzzleSolutionViewer Page=@this>
+    <CalorieCountingVisualization Page=@this/>
+</PuzzleSolutionViewer>

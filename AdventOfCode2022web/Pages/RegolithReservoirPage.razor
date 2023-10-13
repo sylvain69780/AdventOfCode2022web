@@ -1,14 +1,9 @@
 ﻿@page "/RegolithReservoirPage"
 @inherits PuzzleSolutionPageBase<RegolithReservoirSolution>
 <h2>Regolith Reservoir</h2>
-<div class="row">
-    <div class="col-lg-6">
-        <img style="width:100%; image-rendering:pixelated" src=@Visualize() />
-    </div>
-    <div class="col-lg-6">
-        <PuzzleSolutionViewer Page=@this />
-    </div>
-</div>
+<PuzzleSolutionViewer Page=@this>
+    <img style="width:100%; image-rendering:pixelated" src=@Visualize() />
+</PuzzleSolutionViewer>
 
 @code {
     public string _image64 = string.Empty;

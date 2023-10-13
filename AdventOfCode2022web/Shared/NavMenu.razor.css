@@ -53,6 +53,7 @@
     max-height: 90%;
     overflow-y: auto;
 }
+
 @media (min-width: 641px) {
     .navbar-toggler {
         display: none;
@@ -75,5 +76,5 @@
 .puzzle-title-visu {
     margin-left: 5px; /* Adjust this value as needed */
     font-weight: bold;
-    color:green;
+    color: green;
 }

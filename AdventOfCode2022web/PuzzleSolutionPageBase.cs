@@ -41,6 +41,8 @@ namespace AdventOfCode2022web
         {
             await LoadDefaultPuzzleInput();
             _stepComputationTimer.Elapsed += (object? sender, ElapsedEventArgs e) => MoveUntilCompleted();
+            StartPart1();
+            MoveUntilCompleted();
         }
 
         private IEnumerator<string>? _results;
