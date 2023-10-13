@@ -1,5 +1,5 @@
-/* /Pages/BlizzardBasinPage.razor.rz.scp.css */
-:root[b-z7e165z5dw] {
+/* /Pages/BlizzardBasinVisualization.razor.rz.scp.css */
+:root[b-e9jb9r58lg] {
     --animation-duration: 0;
     --dx: 0px;
     --dy: 0px;
@@ -9,18 +9,18 @@
     --dby: 0px;
 }
 
-.elf-motionless > use[b-z7e165z5dw] {
+.elf-motionless > use[b-e9jb9r58lg] {
     transform: translate(var(--dbx),var(--dby));
 }
 
-.elf-moving > use[b-z7e165z5dw] {
-    animation-name: elf-moving-anim-b-z7e165z5dw;
+.elf-moving > use[b-e9jb9r58lg] {
+    animation-name: elf-moving-anim-b-e9jb9r58lg;
     animation-fill-mode: forwards;
     animation-iteration-count: 1;
     animation-duration: var(--animation-duration);
 }
 
-@keyframes elf-moving-anim-b-z7e165z5dw {
+@keyframes elf-moving-anim-b-e9jb9r58lg {
     from {
         transform: translate(var(--dax),var(--day));
     }
@@ -30,19 +30,19 @@
     }
 }
 
-.elf-killed > use[b-z7e165z5dw] {
-    animation-name: elf-killed-anim-b-z7e165z5dw;
+.elf-killed > use[b-e9jb9r58lg] {
+    animation-name: elf-killed-anim-b-e9jb9r58lg;
     animation-fill-mode: forwards;
     animation-iteration-count: 1;
     animation-duration: var(--animation-duration);
     transform-origin: 0.5px 0.5px;
 }
 
-.elf-hidden > use[b-z7e165z5dw] {
+.elf-hidden > use[b-e9jb9r58lg] {
     opacity: 0;
 }
 
-@keyframes elf-killed-anim-b-z7e165z5dw {
+@keyframes elf-killed-anim-b-e9jb9r58lg {
     from {
         opacity: 1.0;
         transform: translate(var(--dbx),var(--dby)) rotate(0deg) scale(1);
@@ -64,18 +64,18 @@
     }
 }
 
-.blizzard-motionless > use[b-z7e165z5dw] {
+.blizzard-motionless > use[b-e9jb9r58lg] {
     transform: translate(var(--dbx),var(--dby));
 }
 
-.blizzard-moving > use[b-z7e165z5dw] {
-    animation-name: blizzard-moving-anim-b-z7e165z5dw;
+.blizzard-moving > use[b-e9jb9r58lg] {
+    animation-name: blizzard-moving-anim-b-e9jb9r58lg;
     animation-fill-mode: forwards;
     animation-iteration-count: 1;
     animation-duration: var(--animation-duration);
 }
 
-@keyframes blizzard-moving-anim-b-z7e165z5dw {
+@keyframes blizzard-moving-anim-b-e9jb9r58lg {
     from {
         transform: translate(var(--dax),var(--day));
     }
@@ -84,26 +84,26 @@
         transform: translate(var(--dbx),var(--dby));
     }
 }
-/* /Pages/CalorieCountingPage.razor.rz.scp.css */
-:root[b-sn73autjqm] {
+/* /Pages/CalorieCountingVisualization.razor.rz.scp.css */
+:root[b-mmd0c1rbfk] {
     --animation-duration: 500ms;
 }
 
-.elf-moving-0[b-sn73autjqm] {
-    animation-name: elf-moving-anim-0-b-sn73autjqm;
+.elf-moving-0[b-mmd0c1rbfk] {
+    animation-name: elf-moving-anim-0-b-mmd0c1rbfk;
     animation-fill-mode: forwards;
     animation-iteration-count: 1;
     animation-duration: var(--animation-duration);
 }
 
-.elf-moving-1[b-sn73autjqm] {
-    animation-name: elf-moving-anim-1-b-sn73autjqm;
+.elf-moving-1[b-mmd0c1rbfk] {
+    animation-name: elf-moving-anim-1-b-mmd0c1rbfk;
     animation-fill-mode: forwards;
     animation-iteration-count: 1;
     animation-duration: var(--animation-duration);
 }
 
-@keyframes elf-moving-anim-0-b-sn73autjqm {
+@keyframes elf-moving-anim-0-b-mmd0c1rbfk {
     from {
         transform: translate(-1px,0px);
     }
@@ -112,7 +112,7 @@
     }
 }
 
-@keyframes elf-moving-anim-1-b-sn73autjqm {
+@keyframes elf-moving-anim-1-b-mmd0c1rbfk {
     from {
         transform: translate(-1px,0px);
     }
@@ -120,15 +120,15 @@
         transform: translate(0px,0px);
     }
 }
-/* /Pages/UnstableDiffusionPage.razor.rz.scp.css */
+/* /Pages/UnstableDiffusionVisualization.razor.rz.scp.css */
 
-.elf-move-right[b-012x46rh6b] {
-    animation-name: elf-move-right-anim-b-012x46rh6b;
+.elf-move-right[b-0ec0yl0uss] {
+    animation-name: elf-move-right-anim-b-0ec0yl0uss;
     animation-fill-mode: forwards;
     animation-iteration-count: 1;
 }
 
-@keyframes elf-move-right-anim-b-012x46rh6b {
+@keyframes elf-move-right-anim-b-0ec0yl0uss {
     from {
         transform: translate(0px,0px);
     }
@@ -137,13 +137,13 @@
     }
 }
 
-.elf-move-left[b-012x46rh6b] {
-    animation-name: elf-move-left-anim-b-012x46rh6b;
+.elf-move-left[b-0ec0yl0uss] {
+    animation-name: elf-move-left-anim-b-0ec0yl0uss;
     animation-fill-mode: forwards;
     animation-iteration-count: 1;
 }
 
-@keyframes elf-move-left-anim-b-012x46rh6b {
+@keyframes elf-move-left-anim-b-0ec0yl0uss {
     from {
         transform: translate(0px,0px);
     }
@@ -153,13 +153,13 @@
     }
 }
 
-.elf-move-down[b-012x46rh6b] {
-    animation-name: elf-move-down-anim-b-012x46rh6b;
+.elf-move-down[b-0ec0yl0uss] {
+    animation-name: elf-move-down-anim-b-0ec0yl0uss;
     animation-fill-mode: forwards;
     animation-iteration-count: 1;
 }
 
-@keyframes elf-move-down-anim-b-012x46rh6b {
+@keyframes elf-move-down-anim-b-0ec0yl0uss {
     from {
         transform: translate(0px,0px);
     }
@@ -169,13 +169,13 @@
     }
 }
 
-.elf-move-up[b-012x46rh6b] {
-    animation-name: elf-move-up-anim-b-012x46rh6b;
+.elf-move-up[b-0ec0yl0uss] {
+    animation-name: elf-move-up-anim-b-0ec0yl0uss;
     animation-fill-mode: forwards;
     animation-iteration-count: 1;
 }
 
-@keyframes elf-move-up-anim-b-012x46rh6b {
+@keyframes elf-move-up-anim-b-0ec0yl0uss {
     from {
         transform: translate(0px,0px);
     }
@@ -324,6 +324,7 @@ main[b-qs7qgbma46] {
     max-height: 90%;
     overflow-y: auto;
 }
+
 @media (min-width: 641px) {
     .navbar-toggler[b-3abgficp7i] {
         display: none;
@@ -346,5 +347,5 @@ main[b-qs7qgbma46] {
 .puzzle-title-visu[b-3abgficp7i] {
     margin-left: 5px; /* Adjust this value as needed */
     font-weight: bold;
-    color:green;
+    color: green;
 }
