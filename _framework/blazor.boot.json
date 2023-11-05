@@ -1,7 +1,7 @@
 {
   "entryAssembly": "AdventOfCode2022web",
   "resources": {
-    "hash": "sha256-cI6M8PTcM/3BJCBdLx5b5siUwsuLermsu1TdZKzp108=",
+    "hash": "sha256-4nv/OKiSEJiaXxdt1S225W3yMxoVy7km9gPJks2fnC4=",
     "runtime": {
       "dotnet.6.0.23.xuuf4lh6eg.js": "sha256-YYG9NE7FnTlr1qMbQzBTzUGZOcLX64xP2Z1+An1jT6U=",
       "dotnet.timezones.blat": "sha256-LkY3Fufh0g5N20FCmf40Ihcr4PHqCCF7W+W9FtR7VyE=",
@@ -11,8 +11,8 @@
       "icudt_no_CJK.dat": "sha256-OxylFgLJlFqixsj+nLxYVsv5iZLvfIKMpLf9hrWaChA="
     },
     "assembly": {
-      "AdventOfCode2022Solutions.dll": "sha256-lAZiVkC1Fpd8hfRqEdf/Isy/QeHrOCX55snP6ZbU7aY=",
-      "AdventOfCode2022web.dll": "sha256-yHzKTAkPSh9uwnUEPRkGvMGAQe1w7wLMtiO5OgupJrY=",
+      "AdventOfCode2022Solutions.dll": "sha256-FKxaSOaDliXQRYejmVm9k7zmFj1VehqnZjswtewwJU4=",
+      "AdventOfCode2022web.dll": "sha256-oOsnrZ6kv2F/TwG8mQ8p26ehbyCRfFw4QlisvIl4n4M=",
       "Microsoft.AspNetCore.Components.dll": "sha256-bC9I25eh3GaOtBY2xGtndZgABxu1rsJh2J1c0Up0n14=",
       "Microsoft.AspNetCore.Components.Web.dll": "sha256-V85w+qPAX8WZzQnb26YGwsox0D9tdm8/EoclVLSv7Ws=",
       "Microsoft.AspNetCore.Components.WebAssembly.dll": "sha256-k5luRRQL9VtNvTTnhxeiUgCRzfmIhKou4imsKZzkKoY=",
