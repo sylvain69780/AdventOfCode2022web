@@ -1,8 +1,6 @@
-﻿using AdventOfCode2022Solutions.PuzzleSolutions;
-
-namespace AdventOfCode2022test
+﻿namespace AdventOfCode2022test
 {
-    public class Test23
+    public class UnstableDiffusionTests
     {
         private IPuzzleSolutionIter _solver;
         string input1;

@@ -1,6 +1,4 @@
-﻿using AdventOfCode2022Solutions.PuzzleSolutions;
-
-namespace AdventOfCode2022Solutions.PuzzleSolutions.RockPaperScissors
+﻿namespace AdventOfCode2022Solutions.PuzzleSolutions.RockPaperScissors
 {
     public class RockPaperScissorsSolution : IPuzzleSolutionIter
     {

@@ -7,13 +7,11 @@ namespace AdventOfCode2022Solutions.PuzzleSolutions.CathodeRayTube
     {
         private static string Format(int v) => v.ToString();
 
-        private static string[] ToLines(string s) => s.Split("\n");
-
         private string[] program = Array.Empty<string>();
 
         public void Initialize(string s)
         {
-            program = ToLines(s);
+            program = s.Split("\n");
         }
 
         public IEnumerable<string> SolveFirstPart()

@@ -2,8 +2,6 @@
 {
     public class CalorieCountingSolution : IPuzzleSolutionIter
     {
-        private static string[] ToLines(string s) => s.Split("\n");
-
         private string[]? _puzzleInput;
 
         public string[]? GroupsOfElves => _puzzleInput;
@@ -13,7 +11,7 @@
 
         public void Initialize(string input)
         {
-            _puzzleInput = ToLines(input);
+            _puzzleInput = input.Split("\n");
             sumOfCalories = 0;
         }
 
