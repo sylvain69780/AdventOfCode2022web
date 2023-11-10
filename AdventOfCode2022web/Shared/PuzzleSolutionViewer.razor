@@ -1,24 +1,20 @@
 ﻿@using System.Collections.ObjectModel;
-<p class="form-label">View the solution on <a href=@Page!.PuzzleSolutionCode>GitHub</a>.</p>
+<p>The code of this solution on <a href=@Page!.PuzzleSolutionCode>GitHub</a>.</p>
 <div class="row">
     <div class="col-lg-6">
-@*        <div class="container mt-2">
-            <div class="alert alert-info">
-                @_message[Page.PageState]
-            </div>
-        </div>
-*@        <div class="row">
+        <div class="row">
             <input type="range" id="delayRange" @bind=Page.AnimationDuration min="0" max="5000" step="50">
             <label class="form-label" for="delayRange">@(Page.AnimationDuration == 0 ? "High performance solving mode !" : $"Run a step every {Page.AnimationDuration} ms")</label>
         </div>
         <button class="btn-primary" @onclick="@( () => { Page.StartPart1(); @Page.MoveUntilCompleted(); })">Solution to part 1</button>
         <button class="btn-primary" @onclick="@( () => { Page.StartPart2(); @Page.MoveUntilCompleted(); })">Solution to part 2</button>
         <button class="btn-primary" @onclick="@( () => { _showPuzzleInput = !_showPuzzleInput; })">Toggle Puzzle input</button>
+        <p>@Message()</p>
+        @ChildContent
         @if (Page.Result != string.Empty)
         {
             <pre class="alert-info m-2 p-2">@Page.Result</pre>
         }
-        @ChildContent
     </div>
     <div class="col-lg-6">
         <div class=@(_showPuzzleInput ? null : "collapse")>
@@ -29,13 +25,6 @@
                 <pre><textarea spellcheck="false" class="form-control" aria-label="Puzzle Input" rows="10" @bind="Page.Input" maxlength="10000000"></textarea></pre>
             </div>
         </div>
-        <!--
-        <button disabled=@(Page.PageState == PageState.Processing || Page.PageState == PageState.ProcessingAuto) @onclick=@Page.StartPart1>Initialize Part 1</button>
-        <button disabled=@(Page.PageState == PageState.Processing || Page.PageState == PageState.ProcessingAuto) @onclick=@Page.StartPart2>Initialize Part 2</button>
-        <button disabled=@(Page.PageState != PageState.Processing) @onclick=@Page.MoveNext>Move to next Step</button>
-        <button disabled=@(Page.PageState != PageState.Processing) @onclick=@Page.MoveUntilCompleted>Move until completed</button>
-        <button disabled=@(Page.PageState != PageState.Processing && Page.PageState != PageState.ProcessingAuto) @onclick=@Page.Stop>Stop</button>
-        -->
     </div>
 </div>
 @code {
@@ -44,13 +33,15 @@
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
 
-    private readonly ReadOnlyDictionary<PageState, string> _message = new ReadOnlyDictionary<PageState, string>(new Dictionary<PageState, string>
+    private readonly ReadOnlyDictionary<PageState, string> _messageText = new ReadOnlyDictionary<PageState, string>(new Dictionary<PageState, string>
     {
     {PageState.Loaded,"Click to start solving one of the the parts." },
     {PageState.Finished,"Computation completed !" },
     {PageState.Processing,"Click to run the next step, adjust the animation speed using the slider." },
     {PageState.ProcessingAuto,"Adjust processing speed using the slider. Zero means no delay." }
     });
+
+    private string Message() => _messageText[Page!.PageState];
 
     private bool _showPuzzleInput = false;
 }
