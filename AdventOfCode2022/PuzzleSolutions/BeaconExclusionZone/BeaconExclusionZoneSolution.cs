@@ -27,7 +27,7 @@ namespace AdventOfCode2022Solutions.PuzzleSolutions.BeaconExclusionZone
                 .ToList();
         }
 
-        public IEnumerable<PuzzleSolverDTO> SolveFirstPart(string input)
+        public IEnumerable<PuzzleOutput> SolveFirstPart(string input)
         {
             _sensorsPositionsAndClosestBeacon = GetSensorPositionAndClosestBeacons(input);
             var step = 0;
@@ -64,9 +64,9 @@ namespace AdventOfCode2022Solutions.PuzzleSolutions.BeaconExclusionZone
                 }
             }
             step++;
-            yield return new PuzzleSolverDTO() { Step = step, Output = score.ToString() };
+            yield return new PuzzleOutput() { Step = step, Output = score.ToString() };
         }
-        public IEnumerable<PuzzleSolverDTO> SolveSecondPart(string input)
+        public IEnumerable<PuzzleOutput> SolveSecondPart(string input)
         {
             _sensorsPositionsAndClosestBeacon = GetSensorPositionAndClosestBeacons(input);
             var step = 0;
@@ -134,12 +134,12 @@ namespace AdventOfCode2022Solutions.PuzzleSolutions.BeaconExclusionZone
                 var (Min, Max) = squares.Peek();
                 var squareSize = Max.X - Min.X + 1;
                 step++;
-                yield return new PuzzleSolverDTO() { Output = $"{squares.Count} quads evaluated with a side size of {squareSize}" , Step = step};
+                yield return new PuzzleOutput() { Output = $"{squares.Count} quads evaluated with a side size of {squareSize}" , Step = step};
 
             } while (squares.Count > 1 && maxIterations-- != 0);
             var res = squares.Dequeue();
             // too big for int
-            yield return new PuzzleSolverDTO() { Step = step, Output = ((long)res.Min.X * 4000000 + res.Min.Y).ToString() };
+            yield return new PuzzleOutput() { Step = step, Output = ((long)res.Min.X * 4000000 + res.Min.Y).ToString() };
         }
     }
 }

@@ -4,7 +4,7 @@ namespace AdventOfCode2022web
 {
     public class VisualizationContext
     {
-        public PuzzleSolverDTO? Data { get; set; }
+        public PuzzleOutput? Data { get; set; }
         public VisualizationSettings? Settings { get; set; }
     }
 }

@@ -3,7 +3,7 @@
 <PuzzleSolutionController PuzzleSolver="@_solution">
     @if (context.Data is not null && context.Settings is not null)
     {
-        <CalorieCountingVisualization Data=@((CalorieCountingDTO)(context.Data)) Settings="@context.Settings" />
+        <CalorieCountingVisualization Data=@((CalorieCountingOutput)(context.Data)) Settings="@context.Settings" />
         <DefaultVisualization Data="@context.Data" />
     }
 

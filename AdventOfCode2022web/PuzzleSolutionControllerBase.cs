@@ -46,8 +46,8 @@ namespace AdventOfCode2022web
             MoveUntilCompleted();
         }
 
-        private IEnumerator<PuzzleSolverDTO>? _results;
-        public PuzzleSolverDTO? Result { get; private set; }
+        private IEnumerator<PuzzleOutput>? _results;
+        public PuzzleOutput? Result { get; private set; }
 
 
         public void StartPart1()

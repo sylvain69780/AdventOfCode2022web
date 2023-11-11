@@ -2,7 +2,7 @@
 {
     public interface IPuzzleSolver
     {
-        IEnumerable<PuzzleSolverDTO> SolveFirstPart(string input);
-        IEnumerable<PuzzleSolverDTO> SolveSecondPart(string input);
+        IEnumerable<PuzzleOutput> SolveFirstPart(string input);
+        IEnumerable<PuzzleOutput> SolveSecondPart(string input);
     }
 }
