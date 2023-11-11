@@ -3,7 +3,7 @@ using System.Globalization;
 
 namespace AdventOfCode2022Solutions.PuzzleSolutions.BoilingBoulders
 {
-    public class BoilingBouldersSolution : IPuzzleSolutionIter
+    public class BoilingBouldersSolution : IPuzzleSolution
     {
         private List<Voxel>? Voxels;
 

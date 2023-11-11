@@ -1,6 +1,6 @@
 ﻿namespace AdventOfCode2022Solutions.PuzzleSolutions.RockPaperScissors
 {
-    public class RockPaperScissorsSolution : IPuzzleSolutionIter
+    public class RockPaperScissorsSolution : IPuzzleSolution
     {
         private string _puzzleInput = string.Empty;
         public void Initialize(string puzzleInput)

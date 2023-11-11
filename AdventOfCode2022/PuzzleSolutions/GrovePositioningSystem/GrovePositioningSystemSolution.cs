@@ -2,7 +2,7 @@
 
 namespace AdventOfCode2022Solutions.PuzzleSolutions.GrovePositioningSystem
 {
-    public class GrovePositioningSystemSolution : IPuzzleSolutionIter
+    public class GrovePositioningSystemSolution : IPuzzleSolution
     {
         private string _puzzleInput = string.Empty;
         public void Initialize(string puzzleInput)

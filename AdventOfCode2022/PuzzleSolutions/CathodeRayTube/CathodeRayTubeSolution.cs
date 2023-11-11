@@ -3,7 +3,7 @@ using AdventOfCode2022Solutions.PuzzleSolutions;
 
 namespace AdventOfCode2022Solutions.PuzzleSolutions.CathodeRayTube
 {
-    public class CathodeRayTubeSolution : IPuzzleSolutionIter
+    public class CathodeRayTubeSolution : IPuzzleSolution
     {
         private static string Format(int v) => v.ToString();
 

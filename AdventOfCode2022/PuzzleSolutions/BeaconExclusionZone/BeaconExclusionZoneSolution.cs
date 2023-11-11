@@ -2,7 +2,7 @@
 
 namespace AdventOfCode2022Solutions.PuzzleSolutions.BeaconExclusionZone
 {
-    public class BeaconExclusionZoneSolution : IPuzzleSolutionIter
+    public class BeaconExclusionZoneSolution : IPuzzleSolution
     {
         private List<SensorPositionAndClosestBeacon>? _sensorsPositionsAndClosestBeacon;
 

@@ -3,7 +3,7 @@ using AdventOfCode2022Solutions.PuzzleSolutions;
 
 namespace AdventOfCode2022Solutions.PuzzleSolutions.CampCleanup
 {
-    public class CampCleanupSolution : IPuzzleSolutionIter
+    public class CampCleanupSolution : IPuzzleSolution
     {
 
         private string[] _lines = Array.Empty<string>();

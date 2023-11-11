@@ -3,7 +3,7 @@ using AdventOfCode2022Solutions.PuzzleSolutions;
 
 namespace AdventOfCode2022Solutions.PuzzleSolutions.UnstableDiffusion
 {
-    public class UnstableDiffusionSolution : IPuzzleSolutionIter
+    public class UnstableDiffusionSolution : IPuzzleSolution
     {
         private string[]? Input { get; set; }
         public (int X, int Y)[] Elves = Array.Empty<(int X, int Y)>();

@@ -2,7 +2,7 @@
 
 namespace AdventOfCode2022Solutions.PuzzleSolutions.RucksackReorganization
 {
-    public class RucksackReorganizationSolution : IPuzzleSolutionIter
+    public class RucksackReorganizationSolution : IPuzzleSolution
     {
         private string _puzzleInput = string.Empty;
         public void Initialize(string puzzleInput)

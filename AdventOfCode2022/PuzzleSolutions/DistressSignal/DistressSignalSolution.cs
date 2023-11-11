@@ -2,7 +2,7 @@
 
 namespace AdventOfCode2022Solutions.PuzzleSolutions.DistressSignal
 {
-    public class DistressSignalSolution : IPuzzleSolutionIter
+    public class DistressSignalSolution : IPuzzleSolution
     {
         private string _puzzleInput = string.Empty;
         public void Initialize(string puzzleInput) => _puzzleInput = puzzleInput;

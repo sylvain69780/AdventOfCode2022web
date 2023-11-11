@@ -5,7 +5,7 @@ using AdventOfCode2022Solutions.PuzzleSolutions;
 
 namespace AdventOfCode2022Solutions.PuzzleSolutions.DistressSignal
 {
-    public class DistressSignalUsingJsonSolution : IPuzzleSolutionIter
+    public class DistressSignalUsingJsonSolution : IPuzzleSolution
     {
         private string _puzzleInput = string.Empty;
         public void Initialize(string puzzleInput)

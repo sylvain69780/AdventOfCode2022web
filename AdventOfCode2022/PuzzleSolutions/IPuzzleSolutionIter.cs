@@ -4,7 +4,7 @@ using System.Reflection;
 namespace AdventOfCode2022Solutions.PuzzleSolutions
 {
 
-    public interface IPuzzleSolutionIter
+    public interface IPuzzleSolution
     {
         void Initialize(string puzzleInput);
         IEnumerable<string> SolveFirstPart();

@@ -5,27 +5,27 @@ using System.Timers;
 
 namespace AdventOfCode2022web
 {
-    public class PuzzleSolutionPageBase<T> : ComponentBase, IPuzzleSolutionController where T : IPuzzleSolution, new()
+    public class PuzzleSolutionPageBaseV2 : ComponentBase, IPuzzleSolutionControllerV2
     {
         [Inject]
         public HttpClient? Http { get; set; }
+        public IPuzzleSolver? PuzzleSolver { get; protected set; }
 
         public int AnimationDuration { get; set; } = 500;
         public int SolvingStep { get; private set; } = 0;
         public PageState PageState { get; set; } = PageState.Loaded;
-        public T PuzzleSolution { get; } = new T();
         public string Input { get; set; } = string.Empty;
 
         public string SampleInputFile()
         {
-            var puzzleType = PuzzleSolution!.GetType();
+            var puzzleType = PuzzleSolver!.GetType();
             var puzzleInputFile = puzzleType.Name.Replace("Solution", "");
             return puzzleInputFile;
         }
 
         public string FullInputFile() => SampleInputFile() + "_full";
 
-        public string PuzzleSolutionCode => $"https://github.com/sylvain69780/AdventOfCode2022web/blob/master/AdventOfCode2022/PuzzleSolutions/{PuzzleSolution.GetType().Name.Replace("Solution", "")}";
+        public string PuzzleSolutionCode => $"https://github.com/sylvain69780/AdventOfCode2022web/blob/master/AdventOfCode2022/PuzzleSolutions/{PuzzleSolver.GetType().Name.Replace("Solution", "")}";
 
         public async Task LoadDefaultPuzzleInput() => await LoadPuzzleInput(SampleInputFile());
         public async Task LoadFullPuzzleInput() => await LoadPuzzleInput(FullInputFile());
@@ -34,7 +34,6 @@ namespace AdventOfCode2022web
         {
             Input = (await Http!.GetStringAsync($"sample-data/{puzzleInputFile}.txt")).Replace("\r", "");
             Stop();
-            PuzzleSolution.Initialize(Input);
         }
 
         protected override async Task OnInitializedAsync()
@@ -45,20 +44,20 @@ namespace AdventOfCode2022web
             MoveUntilCompleted();
         }
 
-        private IEnumerator<string>? _results;
-        public string Result { get; private set; } = string.Empty;
+        private IEnumerator<IPuzzleSolverDTO>? _results;
+        public IPuzzleSolverDTO? Result { get; private set; }
 
 
         public void StartPart1()
         {
-            _results = PuzzleSolution!.SolveFirstPart().GetEnumerator();
+            _results = PuzzleSolver!.SolveFirstPart(Input).GetEnumerator();
             PageState = PageState.Processing;
             SolvingStep = 0;
         }
 
         public void StartPart2()
         {
-            _results = PuzzleSolution!.SolveSecondPart().GetEnumerator();
+            _results = PuzzleSolver!.SolveSecondPart(Input).GetEnumerator();
             PageState = PageState.Processing;
             SolvingStep = 0;
         }

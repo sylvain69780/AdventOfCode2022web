@@ -2,7 +2,7 @@
 
 namespace AdventOfCode2022Solutions.PuzzleSolutions.ProboscideaVolcanium
 {
-    public class ProboscideaVolcaniumSolution : IPuzzleSolutionIter
+    public class ProboscideaVolcaniumSolution : IPuzzleSolution
     {
         private string _puzzleInput = string.Empty;
         private const string StartingValve = "AA";

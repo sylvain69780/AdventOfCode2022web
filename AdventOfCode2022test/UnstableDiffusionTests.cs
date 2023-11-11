@@ -2,7 +2,7 @@
 {
     public class UnstableDiffusionTests
     {
-        private IPuzzleSolutionIter _solver;
+        private IPuzzleSolution _solver;
         string input1;
         string input0;
         string input2;

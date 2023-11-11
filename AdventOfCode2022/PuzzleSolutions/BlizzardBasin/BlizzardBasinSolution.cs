@@ -9,7 +9,7 @@
         Down = 4
     }
 
-    public class BlizzardBasinSolution : IPuzzleSolutionIter
+    public class BlizzardBasinSolution : IPuzzleSolution
     {
         public int GridWidth { get; set; }
         public int GridHeight { get; set; }

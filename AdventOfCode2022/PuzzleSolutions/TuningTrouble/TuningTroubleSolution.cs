@@ -2,7 +2,7 @@
 
 namespace AdventOfCode2022Solutions.PuzzleSolutions.TuningTrouble
 {
-    public class TuningTroubleSolution : IPuzzleSolutionIter
+    public class TuningTroubleSolution : IPuzzleSolution
     {
         private string _puzzleInput = string.Empty;
         public void Initialize(string puzzleInput)

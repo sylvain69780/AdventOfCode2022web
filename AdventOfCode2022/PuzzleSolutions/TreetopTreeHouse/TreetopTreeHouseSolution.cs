@@ -2,7 +2,7 @@
 
 namespace AdventOfCode2022Solutions.PuzzleSolutions.TreetopTreeHouse
 {
-    public class TreetopTreeHouseSolution : IPuzzleSolutionIter
+    public class TreetopTreeHouseSolution : IPuzzleSolution
     {
         private string _puzzleInput = string.Empty;
         public void Initialize(string puzzleInput)

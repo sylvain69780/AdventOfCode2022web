@@ -3,7 +3,7 @@ using AdventOfCode2022Solutions.PuzzleSolutions;
 
 namespace AdventOfCode2022Solutions.PuzzleSolutions.Sudoku
 {
-    public class SudokuSolution : IPuzzleSolutionIter
+    public class SudokuSolution : IPuzzleSolution
     {
         public void Initialize(string input)
         {

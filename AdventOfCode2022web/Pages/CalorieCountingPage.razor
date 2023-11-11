@@ -1,6 +1,47 @@
 ﻿@page "/CalorieCountingPage"
-@inherits PuzzleSolutionPageBase<CalorieCountingSolution>
-<h2>Calorie Counting</h2>
-<PuzzleSolutionViewer Page=@this>
-    <CalorieCountingVisualization Page=@this/>
-</PuzzleSolutionViewer>
+@inherits PuzzleSolutionPageBaseV2
+<PuzzleSolutionViewerV2 Data="@((CalorieCountingDTO?)Result)" Page=@this>
+    @if (context.Data is not null && context.Item2 is not null)
+    {
+        <svg viewBox="0,-1,@MaxElfesDisplayed,3">
+            <GraphicsDefinitionElf />
+            @if (context.Data.CurrentSum > 0)
+            {
+                <g transform="translate(@(MaxElfesDisplayed / 2+1),0.5)">
+                    <g transform="translate(.5,-.5)">
+                        <text font-family="Comic Sans" font-weight="bold" font-size=".5" dominant-baseline="middle" text-anchor="middle" fill="black">@context.Data.CurrentSum</text>
+                    </g>
+                </g>
+            }
+            <g class="elf-moving-@(context.Data.Step %2)" style=@($"--animation-duration: {context.Item2.AnimationDuration * 90 / 100}ms;")>
+                @for (var elfDisplayed = 0; elfDisplayed <= MaxElfesDisplayed; elfDisplayed++)
+                {
+                    var elfIndex = context.Data.Step + elfDisplayed - MaxElfesDisplayed / 2;
+                    if (elfIndex < 0 || elfIndex >= context.Data.CaloriesHoldByElves.Count)
+                        continue;
+                    var calories = context.Data.CaloriesHoldByElves[elfIndex];
+                    if (calories != 0)
+                    {
+                        var x = MaxElfesDisplayed - elfDisplayed;
+                        var y = 1;
+                        <use href="#elf" x="@x" y="@y" />
+                        if (elfIndex >= context.Data.Step)
+                        {
+                            <g transform="translate(.5,-0.2)">
+                                <text x="@x" y="@y" font-family="Comic Sans" font-size=".3" dominant-baseline="middle" text-anchor="middle" fill="black">@calories</text>
+                            </g>
+                        }
+                    }
+                }
+            </g>
+        </svg>
+    }
+</PuzzleSolutionViewerV2>
+@code {
+    const int MaxElfesDisplayed = 15;
+
+    public CalorieCountingPage()
+    {
+        PuzzleSolver = new CalorieCountingSolution();
+    }
+}
