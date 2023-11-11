@@ -1,19 +1,19 @@
 ﻿@using System.Collections.ObjectModel;
-@typeparam TData where TData : IPuzzleSolverDTO;
+@typeparam TData;
 <p>The code of this solution on <a href=@Page!.PuzzleSolutionCode>GitHub</a>.</p>
 <div class="row">
     <div class="col-lg-6">
         <div class="row">
-            <input type="range" id="delayRange" @bind=_settings.AnimationDuration min="0" max="5000" step="50">
-            <label class="form-label" for="delayRange">@(_settings.AnimationDuration == 0 ? "Fastest" : $"Run a step every {_settings.AnimationDuration} ms")</label>
+            <input type="range" id="delayRange" @bind=_param.AnimationDuration min="0" max="5000" step="50">
+            <label class="form-label" for="delayRange">@(_param.AnimationDuration == 0 ? "Fastest" : $"Run a step every {_param.AnimationDuration} ms")</label>
         </div>
         <button class="btn-primary" @onclick="@( () => { Page.StartPart1(); @Page.MoveUntilCompleted(); })">Solution to part 1</button>
         <button class="btn-primary" @onclick="@( () => { Page.StartPart2(); @Page.MoveUntilCompleted(); })">Solution to part 2</button>
         <button class="btn-primary" @onclick="@( () => { _showPuzzleInput = !_showPuzzleInput; })">Toggle Puzzle input</button>
         <p>@Message()</p>
-        @if ( Data is not null)
+        @if ( Page.Result is not null)
         {
-            @ChildContent((Data,Settings :_settings))
+            @ChildContent(new VisualizationContext<TData>() { Data = (TData)Page.Result,  Settings = _param })
         }
         @if (Page.Result is not null)
         {
@@ -36,9 +36,7 @@
     [Parameter]
     public IPuzzleSolutionControllerV2? Page { get; set; }
     [Parameter]
-    public TData? Data { get; set; }
-    [Parameter]
-    public RenderFragment<(TData Data,VisualizationSettings Settings)>? ChildContent { get; set; }
+    public RenderFragment<VisualizationContext<TData>>? ChildContent { get; set; }
 
     private readonly ReadOnlyDictionary<PageState, string> _messageText = new ReadOnlyDictionary<PageState, string>(new Dictionary<PageState, string>
     {
@@ -52,5 +50,5 @@
 
     private bool _showPuzzleInput = false;
 
-    private VisualizationSettings _settings = new() { AnimationDuration = 100 };
+    private VisualizationSettings _param = new() { AnimationDuration = 100 };
 }

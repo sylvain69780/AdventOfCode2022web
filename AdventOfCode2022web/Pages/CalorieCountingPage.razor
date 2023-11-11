@@ -1,8 +1,9 @@
 ﻿@page "/CalorieCountingPage"
 @inherits PuzzleSolutionPageBaseV2
-<PuzzleSolutionViewerV2 Data="@((CalorieCountingDTO?)Result)" Page=@this>
-    @if (context.Data is not null && context.Item2 is not null)
+<PuzzleSolutionViewerV2 TData="CalorieCountingDTO" Page=@this>
+    @if (context.Data is not null && context.Settings is not null)
     {
+        <p>@context.Settings.AnimationDuration</p>
         <svg viewBox="0,-1,@MaxElfesDisplayed,3">
             <GraphicsDefinitionElf />
             @if (context.Data.CurrentSum > 0)
@@ -13,7 +14,7 @@
                     </g>
                 </g>
             }
-            <g class="elf-moving-@(context.Data.Step %2)" style=@($"--animation-duration: {context.Item2.AnimationDuration * 90 / 100}ms;")>
+            <g class="elf-moving-@(context.Data.Step %2)" style=@($"--animation-duration: {context.Settings.AnimationDuration * 90 / 100}ms;")>
                 @for (var elfDisplayed = 0; elfDisplayed <= MaxElfesDisplayed; elfDisplayed++)
                 {
                     var elfIndex = context.Data.Step + elfDisplayed - MaxElfesDisplayed / 2;
