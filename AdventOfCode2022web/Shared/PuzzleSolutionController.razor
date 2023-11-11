@@ -1,6 +1,5 @@
 ﻿@using System.Collections.ObjectModel;
 @inherits PuzzleSolutionControllerBase
-@typeparam TData where TData : PuzzleSolverDTO;
 <p>The code of this solution on <a href=@PuzzleSolutionCode>GitHub</a>.</p>
 <div class="row">
     <div class="col-lg-6">
@@ -14,8 +13,7 @@
         <p>@Message()</p>
         @if ( Result is not null)
         {
-            var res = Result as TData;
-            @ChildContent!(new VisualizationContext<TData>() { Data = res,  Settings = _settings })
+            @ChildContent!(new VisualizationContext() { Data = Result,  Settings = _settings })
         }
     </div>
     <div class="col-lg-6">
@@ -31,7 +29,7 @@
 </div>
 @code {
     [Parameter]
-    public RenderFragment<VisualizationContext<TData>>? ChildContent { get; set; }
+    public RenderFragment<VisualizationContext>? ChildContent { get; set; }
 
     private readonly ReadOnlyDictionary<PageState, string> _messageText = new ReadOnlyDictionary<PageState, string>(new Dictionary<PageState, string>
     {

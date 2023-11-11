@@ -1,14 +1,15 @@
 ﻿@page "/CalorieCountingPage"
-<PuzzleSolutionController PuzzleSolver="@_solution" TData="CalorieCountingDTO">
+<PuzzleSolutionController PuzzleSolver="@_solution">
     @if (context.Data is not null && context.Settings is not null)
     {
+        var data = ((CalorieCountingDTO)(context.Data));
         <svg viewBox="0,-1,@MaxElfesDisplayed,3">
             <GraphicsDefinitionElf />
-            @if (context.Data.CurrentSum > 0)
+            @if (data.CurrentSum > 0)
             {
                 <g transform="translate(@(MaxElfesDisplayed / 2+1),0.5)">
                     <g transform="translate(.5,-.5)">
-                        <text font-family="Comic Sans" font-weight="bold" font-size=".5" dominant-baseline="middle" text-anchor="middle" fill="black">@context.Data.CurrentSum</text>
+                        <text font-family="Comic Sans" font-weight="bold" font-size=".5" dominant-baseline="middle" text-anchor="middle" fill="black">@data.CurrentSum</text>
                     </g>
                 </g>
             }
@@ -16,9 +17,9 @@
                 @for (var elfDisplayed = 0; elfDisplayed <= MaxElfesDisplayed; elfDisplayed++)
                 {
                     var elfIndex = context.Data.Step + elfDisplayed - MaxElfesDisplayed / 2;
-                    if (elfIndex < 0 || elfIndex >= context.Data.CaloriesHoldByElves.Count)
+                    if (elfIndex < 0 || elfIndex >= data.CaloriesHoldByElves.Count)
                         continue;
-                    var calories = context.Data.CaloriesHoldByElves[elfIndex];
+                    var calories = data.CaloriesHoldByElves[elfIndex];
                     if (calories != 0)
                     {
                         var x = MaxElfesDisplayed - elfDisplayed;

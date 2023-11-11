@@ -1,8 +1,10 @@
-﻿namespace AdventOfCode2022web
+﻿using AdventOfCode2022Solutions.PuzzleSolutions;
+
+namespace AdventOfCode2022web
 {
-    public class VisualizationContext<TData>
+    public class VisualizationContext
     {
-        public TData? Data { get; set; }
+        public PuzzleSolverDTO? Data { get; set; }
         public VisualizationSettings? Settings { get; set; }
     }
 }
