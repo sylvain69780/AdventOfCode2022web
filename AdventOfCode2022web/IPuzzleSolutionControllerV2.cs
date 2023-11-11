@@ -4,7 +4,6 @@ namespace AdventOfCode2022web
 {
     public interface IPuzzleSolutionControllerV2
     {
-        int AnimationDuration { get; set; }
         string PuzzleSolutionCode { get; }
         string Input { get; set; }
         IPuzzleSolverDTO? Result { get; }

@@ -1,9 +1,7 @@
 ﻿@page "/CalorieCountingPage"
-@inherits PuzzleSolutionPageBaseV2
-<PuzzleSolutionViewerV2 TData="CalorieCountingDTO" Page=@this>
+<PuzzleSolutionViewerV2 PuzzleSolver="@_solution" TData="CalorieCountingDTO">
     @if (context.Data is not null && context.Settings is not null)
     {
-        <p>@context.Settings.AnimationDuration</p>
         <svg viewBox="0,-1,@MaxElfesDisplayed,3">
             <GraphicsDefinitionElf />
             @if (context.Data.CurrentSum > 0)
@@ -40,9 +38,5 @@
 </PuzzleSolutionViewerV2>
 @code {
     const int MaxElfesDisplayed = 15;
-
-    public CalorieCountingPage()
-    {
-        PuzzleSolver = new CalorieCountingSolution();
-    }
+    CalorieCountingSolution _solution = new ();
 }

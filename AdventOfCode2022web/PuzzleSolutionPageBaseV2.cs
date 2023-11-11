@@ -9,9 +9,11 @@ namespace AdventOfCode2022web
     {
         [Inject]
         public HttpClient? Http { get; set; }
-        public IPuzzleSolver? PuzzleSolver { get; protected set; }
+        [Parameter]
+        public IPuzzleSolver? PuzzleSolver { get; set; }
 
-        public int AnimationDuration { get; set; } = 500;
+        protected VisualizationSettings _settings = new() { AnimationDuration = 500 };
+
         public int SolvingStep { get; private set; } = 0;
         public PageState PageState { get; set; } = PageState.Loaded;
         public string Input { get; set; } = string.Empty;
@@ -80,7 +82,7 @@ namespace AdventOfCode2022web
             PageState = PageState.ProcessingAuto;
             _stepComputationTimer.Stop();
             MoveNext();
-            if (AnimationDuration == 0)
+            if (_settings.AnimationDuration == 0)
             {
                 var stopWatch = Stopwatch.StartNew();
                 while (PageState != PageState.Finished && stopWatch.ElapsedMilliseconds < 2000)
@@ -88,7 +90,7 @@ namespace AdventOfCode2022web
             }
             if (PageState != PageState.Finished)
             {
-                _stepComputationTimer!.Interval = AnimationDuration == 0 ? 100 : AnimationDuration;
+                _stepComputationTimer!.Interval = _settings.AnimationDuration == 0 ? 100 : _settings.AnimationDuration;
                 _stepComputationTimer.Start();
             }
             StateHasChanged();
