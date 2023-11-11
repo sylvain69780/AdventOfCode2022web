@@ -17,11 +17,6 @@
             var res = Result as TData;
             @ChildContent!(new VisualizationContext<TData>() { Data = res,  Settings = _settings })
         }
-        @if (Result is not null)
-        {
-            <p>Step @Result.Step</p>
-            <pre class="alert-info m-2 p-2">@Result.Output</pre>
-        }
     </div>
     <div class="col-lg-6">
         <div class=@(_showPuzzleInput ? null : "collapse")>

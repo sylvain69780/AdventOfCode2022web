@@ -1,0 +1,11 @@
+﻿<h3>DefaultVisualization</h3>
+@if (Data is not null)
+{
+    <p>Step @Data.Step</p>
+    <pre class="alert-info m-2 p-2">@Data.Output</pre>
+}
+
+@code {
+    [Parameter]
+    public PuzzleSolverDTO? Data { get; set; }
+}

@@ -1,8 +1,6 @@
 ﻿@page "/BeaconExclusionZonePage"
 <PuzzleSolutionController PuzzleSolver="@_solution" TData="PuzzleSolverDTO" >
-<p>
-    @(context.Data?.Step ?? 0)
-</p>
+<DefaultVisualization Data="@context.Data" />
 </PuzzleSolutionController>
 @code {
     BeaconExclusionZoneSolution _solution = new();
