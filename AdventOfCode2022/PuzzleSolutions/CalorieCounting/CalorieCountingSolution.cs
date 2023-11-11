@@ -30,7 +30,7 @@ namespace AdventOfCode2022Solutions.PuzzleSolutions.CalorieCounting
                 .Select(x => CaloriesCarriedOrZero(x)).ToList();
             _step = 0;
         }
-        public IEnumerable<IPuzzleSolverDTO> SolveFirstPart(string input)
+        public IEnumerable<PuzzleSolverDTO> SolveFirstPart(string input)
         {
             ParseInput(input);
             int sumOfCalories = 0;
@@ -50,7 +50,7 @@ namespace AdventOfCode2022Solutions.PuzzleSolutions.CalorieCounting
             yield return ProvideResult(maxCalories.ToString(), sumOfCalories);
         }
         private static IEnumerable<int> Top3(List<int> sumOfCalories) => sumOfCalories.OrderByDescending(x => x).Take(3);
-        public IEnumerable<IPuzzleSolverDTO> SolveSecondPart(string input)
+        public IEnumerable<PuzzleSolverDTO> SolveSecondPart(string input)
         {
             ParseInput(input);
             int sumOfCalories = 0;

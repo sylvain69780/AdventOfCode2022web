@@ -5,7 +5,7 @@ using System.Timers;
 
 namespace AdventOfCode2022web
 {
-    public class PuzzleSolutionPageBaseV2 : ComponentBase, IPuzzleSolutionControllerV2
+    public class PuzzleSolutionControllerBase : ComponentBase
     {
         [Inject]
         public HttpClient? Http { get; set; }
@@ -46,8 +46,8 @@ namespace AdventOfCode2022web
             MoveUntilCompleted();
         }
 
-        private IEnumerator<IPuzzleSolverDTO>? _results;
-        public IPuzzleSolverDTO? Result { get; private set; }
+        private IEnumerator<PuzzleSolverDTO>? _results;
+        public PuzzleSolverDTO? Result { get; private set; }
 
 
         public void StartPart1()

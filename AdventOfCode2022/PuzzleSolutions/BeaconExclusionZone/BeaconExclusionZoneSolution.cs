@@ -2,7 +2,7 @@
 
 namespace AdventOfCode2022Solutions.PuzzleSolutions.BeaconExclusionZone
 {
-    public class BeaconExclusionZoneSolution : IPuzzleSolution
+    public class BeaconExclusionZoneSolution : IPuzzleSolver
     {
         private List<SensorPositionAndClosestBeacon>? _sensorsPositionsAndClosestBeacon;
 
@@ -27,13 +27,10 @@ namespace AdventOfCode2022Solutions.PuzzleSolutions.BeaconExclusionZone
                 .ToList();
         }
 
-        public void Initialize(string puzzleInput)
+        public IEnumerable<PuzzleSolverDTO> SolveFirstPart(string input)
         {
-            _sensorsPositionsAndClosestBeacon = GetSensorPositionAndClosestBeacons(puzzleInput);
-        }
-
-        public IEnumerable<string> SolveFirstPart()
-        {
+            _sensorsPositionsAndClosestBeacon = GetSensorPositionAndClosestBeacons(input);
+            var step = 0;
             var verticalPositionOfRowToAnalyze = _sensorsPositionsAndClosestBeacon!.Count <= 14 ? 10 : 2000000;
             var horizontalIntervalsOnRowToAnalyze = new List<(int begin, int end)>();
             foreach (var record in _sensorsPositionsAndClosestBeacon)
@@ -66,10 +63,13 @@ namespace AdventOfCode2022Solutions.PuzzleSolutions.BeaconExclusionZone
                     }
                 }
             }
-            yield return score.ToString();
+            step++;
+            yield return new PuzzleSolverDTO() { Step = step, Output = score.ToString() };
         }
-        public IEnumerable<string> SolveSecondPart()
+        public IEnumerable<PuzzleSolverDTO> SolveSecondPart(string input)
         {
+            _sensorsPositionsAndClosestBeacon = GetSensorPositionAndClosestBeacons(input);
+            var step = 0;
             var discard = _sensorsPositionsAndClosestBeacon!
                 .Select(x => (x.Beacon.x, x.Beacon.y))
                 .Concat(_sensorsPositionsAndClosestBeacon!
@@ -133,12 +133,13 @@ namespace AdventOfCode2022Solutions.PuzzleSolutions.BeaconExclusionZone
                 squares = subdividedSquares;
                 var (Min, Max) = squares.Peek();
                 var squareSize = Max.X - Min.X + 1;
-                yield return $"{squares.Count} quads evaluated with a side size of {squareSize}";
+                step++;
+                yield return new PuzzleSolverDTO() { Output = $"{squares.Count} quads evaluated with a side size of {squareSize}" , Step = step};
 
             } while (squares.Count > 1 && maxIterations-- != 0);
             var res = squares.Dequeue();
             // too big for int
-            yield return ((long)res.Min.X * 4000000 + res.Min.Y).ToString();
+            yield return new PuzzleSolverDTO() { Step = step, Output = ((long)res.Min.X * 4000000 + res.Min.Y).ToString() };
         }
     }
 }

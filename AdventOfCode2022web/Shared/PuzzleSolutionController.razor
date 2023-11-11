@@ -1,6 +1,6 @@
 ﻿@using System.Collections.ObjectModel;
-@inherits PuzzleSolutionPageBaseV2
-@typeparam TData;
+@inherits PuzzleSolutionControllerBase
+@typeparam TData where TData : PuzzleSolverDTO;
 <p>The code of this solution on <a href=@PuzzleSolutionCode>GitHub</a>.</p>
 <div class="row">
     <div class="col-lg-6">
@@ -14,7 +14,8 @@
         <p>@Message()</p>
         @if ( Result is not null)
         {
-            @ChildContent!(new VisualizationContext<TData>() { Data = (TData)Result,  Settings = _settings })
+            var res = Result as TData;
+            @ChildContent!(new VisualizationContext<TData>() { Data = res,  Settings = _settings })
         }
         @if (Result is not null)
         {
@@ -46,7 +47,5 @@
     });
 
     private string Message() => _messageText[PageState];
-
     private bool _showPuzzleInput = false;
-
 }

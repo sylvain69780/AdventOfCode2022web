@@ -1,4 +1,9 @@
 ﻿@page "/BeaconExclusionZonePage"
-@inherits PuzzleSolutionPageBase<BeaconExclusionZoneSolution>
-<h2>Beacon Exclusion Zone</h2>
-<PuzzleSolutionViewer Page=@this />
+<PuzzleSolutionController PuzzleSolver="@_solution" TData="PuzzleSolverDTO" >
+<p>
+    @(context.Data?.Step ?? 0)
+</p>
+</PuzzleSolutionController>
+@code {
+    BeaconExclusionZoneSolution _solution = new();
+}
