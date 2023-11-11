@@ -1,6 +1,7 @@
 ﻿@page "/BeaconExclusionZonePage"
-<PuzzleSolutionController PuzzleSolver="@_solution" >
-<DefaultVisualization Data="@context.Data" />
+@using AdventOfCode2022Solutions.PuzzleSolutions.BeaconExclusionZone
+<PuzzleSolutionController PuzzleSolver="@_solution">
+    <DefaultVisualization Data="@context.Data" />
 </PuzzleSolutionController>
 @code {
     BeaconExclusionZoneSolution _solution = new();

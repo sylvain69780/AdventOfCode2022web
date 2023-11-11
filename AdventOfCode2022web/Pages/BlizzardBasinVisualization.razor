@@ -1,5 +1,5 @@
 @using System.Timers;
-
+@using AdventOfCode2022web.Shared.GraphicsDefinition
 @if (_previousStep != Page!.SolvingStep)
 {
     SetTimer();
@@ -13,8 +13,8 @@
 {
     var (gridWidth, gridHeight) = (GridWidth - 2, GridHeight - 2);
     <svg viewBox="0 0 @GridWidth @GridHeight" class="img-fluid">
-        <GraphicsDefinitionElfSmall />
-        <GraphicsDefinitionBlizzard />
+        <ElfSmall />
+        <Blizzard />
         <pattern id="gridPattern" width="1" height="1" patternUnits="userSpaceOnUse">
             <rect width="1" height="1" fill="white" stroke="gray" stroke-width="0.1" />
         </pattern>

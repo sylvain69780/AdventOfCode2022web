@@ -1,45 +1,13 @@
 ﻿@page "/CalorieCountingPage"
+@using AdventOfCode2022Solutions.PuzzleSolutions.CalorieCounting
 <PuzzleSolutionController PuzzleSolver="@_solution">
     @if (context.Data is not null && context.Settings is not null)
     {
-        var data = ((CalorieCountingDTO)(context.Data));
-        <svg viewBox="0,-1,@MaxElfesDisplayed,3">
-            <GraphicsDefinitionElf />
-            @if (data.CurrentSum > 0)
-            {
-                <g transform="translate(@(MaxElfesDisplayed / 2+1),0.5)">
-                    <g transform="translate(.5,-.5)">
-                        <text font-family="Comic Sans" font-weight="bold" font-size=".5" dominant-baseline="middle" text-anchor="middle" fill="black">@data.CurrentSum</text>
-                    </g>
-                </g>
-            }
-            <g class="elf-moving-@(context.Data.Step %2)" style=@($"--animation-duration: {context.Settings.AnimationDuration * 90 / 100}ms;")>
-                @for (var elfDisplayed = 0; elfDisplayed <= MaxElfesDisplayed; elfDisplayed++)
-                {
-                    var elfIndex = context.Data.Step + elfDisplayed - MaxElfesDisplayed / 2;
-                    if (elfIndex < 0 || elfIndex >= data.CaloriesHoldByElves.Count)
-                        continue;
-                    var calories = data.CaloriesHoldByElves[elfIndex];
-                    if (calories != 0)
-                    {
-                        var x = MaxElfesDisplayed - elfDisplayed;
-                        var y = 1;
-                        <use href="#elf" x="@x" y="@y" />
-                        if (elfIndex >= context.Data.Step)
-                        {
-                            <g transform="translate(.5,-0.2)">
-                                <text x="@x" y="@y" font-family="Comic Sans" font-size=".3" dominant-baseline="middle" text-anchor="middle" fill="black">@calories</text>
-                            </g>
-                        }
-                    }
-                }
-            </g>
-        </svg>
+        <CalorieCountingVisualization Data=@((CalorieCountingDTO)(context.Data)) Settings="@context.Settings" />
+        <DefaultVisualization Data="@context.Data" />
     }
-    <DefaultVisualization Data="@context.Data" />
 
 </PuzzleSolutionController>
 @code {
-    const int MaxElfesDisplayed = 15;
-    CalorieCountingSolution _solution = new ();
+    CalorieCountingSolution _solution = new();
 }
