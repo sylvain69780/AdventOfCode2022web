@@ -1,125 +1,3 @@
-/* /Pages/BlizzardBasinVisualization.razor.rz.scp.css */
-:root[b-e9jb9r58lg] {
-    --animation-duration: 0;
-    --dx: 0px;
-    --dy: 0px;
-    --dax: 0px;
-    --day: 0px;
-    --dbx: 0px;
-    --dby: 0px;
-}
-
-.elf-motionless > use[b-e9jb9r58lg] {
-    transform: translate(var(--dbx),var(--dby));
-}
-
-.elf-moving > use[b-e9jb9r58lg] {
-    animation-name: elf-moving-anim-b-e9jb9r58lg;
-    animation-fill-mode: forwards;
-    animation-iteration-count: 1;
-    animation-duration: var(--animation-duration);
-}
-
-@keyframes elf-moving-anim-b-e9jb9r58lg {
-    from {
-        transform: translate(var(--dax),var(--day));
-    }
-
-    to {
-        transform: translate(var(--dbx),var(--dby));
-    }
-}
-
-.elf-killed > use[b-e9jb9r58lg] {
-    animation-name: elf-killed-anim-b-e9jb9r58lg;
-    animation-fill-mode: forwards;
-    animation-iteration-count: 1;
-    animation-duration: var(--animation-duration);
-    transform-origin: 0.5px 0.5px;
-}
-
-.elf-hidden > use[b-e9jb9r58lg] {
-    opacity: 0;
-}
-
-@keyframes elf-killed-anim-b-e9jb9r58lg {
-    from {
-        opacity: 1.0;
-        transform: translate(var(--dbx),var(--dby)) rotate(0deg) scale(1);
-    }
-
-    50% {
-        opacity: 1.0;
-        transform: translate(var(--dbx),var(--dby)) rotate(0deg) scale(1);
-    }
-
-    75% {
-        opacity: 0.5;
-        transform: translate(var(--dbx),var(--dby)) rotate(180deg) scale(1.5);
-    }
-
-    to {
-        opacity: 0;
-        transform: translate(var(--dbx),var(--dby)) rotate(180deg) scale(1);
-    }
-}
-
-.blizzard-motionless > use[b-e9jb9r58lg] {
-    transform: translate(var(--dbx),var(--dby));
-}
-
-.blizzard-moving > use[b-e9jb9r58lg] {
-    animation-name: blizzard-moving-anim-b-e9jb9r58lg;
-    animation-fill-mode: forwards;
-    animation-iteration-count: 1;
-    animation-duration: var(--animation-duration);
-}
-
-@keyframes blizzard-moving-anim-b-e9jb9r58lg {
-    from {
-        transform: translate(var(--dax),var(--day));
-    }
-
-    to {
-        transform: translate(var(--dbx),var(--dby));
-    }
-}
-/* /Pages/CalorieCountingVisualization.razor.rz.scp.css */
-:root[b-mmd0c1rbfk] {
-    --animation-duration: 500ms;
-}
-
-.elf-moving-0[b-mmd0c1rbfk] {
-    animation-name: elf-moving-anim-0-b-mmd0c1rbfk;
-    animation-fill-mode: forwards;
-    animation-iteration-count: 1;
-    animation-duration: var(--animation-duration);
-}
-
-.elf-moving-1[b-mmd0c1rbfk] {
-    animation-name: elf-moving-anim-1-b-mmd0c1rbfk;
-    animation-fill-mode: forwards;
-    animation-iteration-count: 1;
-    animation-duration: var(--animation-duration);
-}
-
-@keyframes elf-moving-anim-0-b-mmd0c1rbfk {
-    from {
-        transform: translate(-1px,0px);
-    }
-    to {
-        transform: translate(0px,0px);
-    }
-}
-
-@keyframes elf-moving-anim-1-b-mmd0c1rbfk {
-    from {
-        transform: translate(-1px,0px);
-    }
-    to {
-        transform: translate(0px,0px);
-    }
-}
 /* /Pages/UnstableDiffusionVisualization.razor.rz.scp.css */
 
 .elf-move-right[b-0ec0yl0uss] {
@@ -348,4 +226,126 @@ main[b-qs7qgbma46] {
     margin-left: 5px; /* Adjust this value as needed */
     font-weight: bold;
     color: green;
+}
+/* /Shared/Visualizations/BlizzardBasinVisualization.razor.rz.scp.css */
+:root[b-g83vrug5fz] {
+    --animation-duration: 0;
+    --dx: 0px;
+    --dy: 0px;
+    --dax: 0px;
+    --day: 0px;
+    --dbx: 0px;
+    --dby: 0px;
+}
+
+.elf-motionless > use[b-g83vrug5fz] {
+    transform: translate(var(--dbx),var(--dby));
+}
+
+.elf-moving > use[b-g83vrug5fz] {
+    animation-name: elf-moving-anim-b-g83vrug5fz;
+    animation-fill-mode: forwards;
+    animation-iteration-count: 1;
+    animation-duration: var(--animation-duration);
+}
+
+@keyframes elf-moving-anim-b-g83vrug5fz {
+    from {
+        transform: translate(var(--dax),var(--day));
+    }
+
+    to {
+        transform: translate(var(--dbx),var(--dby));
+    }
+}
+
+.elf-killed > use[b-g83vrug5fz] {
+    animation-name: elf-killed-anim-b-g83vrug5fz;
+    animation-fill-mode: forwards;
+    animation-iteration-count: 1;
+    animation-duration: var(--animation-duration);
+    transform-origin: 0.5px 0.5px;
+}
+
+.elf-hidden > use[b-g83vrug5fz] {
+    opacity: 0;
+}
+
+@keyframes elf-killed-anim-b-g83vrug5fz {
+    from {
+        opacity: 1.0;
+        transform: translate(var(--dbx),var(--dby)) rotate(0deg) scale(1);
+    }
+
+    50% {
+        opacity: 1.0;
+        transform: translate(var(--dbx),var(--dby)) rotate(0deg) scale(1);
+    }
+
+    75% {
+        opacity: 0.5;
+        transform: translate(var(--dbx),var(--dby)) rotate(180deg) scale(1.5);
+    }
+
+    to {
+        opacity: 0;
+        transform: translate(var(--dbx),var(--dby)) rotate(180deg) scale(1);
+    }
+}
+
+.blizzard-motionless > use[b-g83vrug5fz] {
+    transform: translate(var(--dbx),var(--dby));
+}
+
+.blizzard-moving > use[b-g83vrug5fz] {
+    animation-name: blizzard-moving-anim-b-g83vrug5fz;
+    animation-fill-mode: forwards;
+    animation-iteration-count: 1;
+    animation-duration: var(--animation-duration);
+}
+
+@keyframes blizzard-moving-anim-b-g83vrug5fz {
+    from {
+        transform: translate(var(--dax),var(--day));
+    }
+
+    to {
+        transform: translate(var(--dbx),var(--dby));
+    }
+}
+/* /Shared/Visualizations/CalorieCountingVisualization.razor.rz.scp.css */
+:root[b-i2mt2qzt80] {
+    --animation-duration: 500ms;
+}
+
+.elf-moving-0[b-i2mt2qzt80] {
+    animation-name: elf-moving-anim-0-b-i2mt2qzt80;
+    animation-fill-mode: forwards;
+    animation-iteration-count: 1;
+    animation-duration: var(--animation-duration);
+}
+
+.elf-moving-1[b-i2mt2qzt80] {
+    animation-name: elf-moving-anim-1-b-i2mt2qzt80;
+    animation-fill-mode: forwards;
+    animation-iteration-count: 1;
+    animation-duration: var(--animation-duration);
+}
+
+@keyframes elf-moving-anim-0-b-i2mt2qzt80 {
+    from {
+        transform: translate(-1px,0px);
+    }
+    to {
+        transform: translate(0px,0px);
+    }
+}
+
+@keyframes elf-moving-anim-1-b-i2mt2qzt80 {
+    from {
+        transform: translate(-1px,0px);
+    }
+    to {
+        transform: translate(0px,0px);
+    }
 }
