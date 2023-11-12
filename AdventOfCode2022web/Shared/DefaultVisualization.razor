@@ -1,11 +1,11 @@
 ﻿<h3>DefaultVisualization</h3>
-@if (Data is not null)
+@if (PuzzleOutput is not null)
 {
-    <p>Step @Data.Step</p>
-    <pre class="alert-info m-2 p-2">@Data.Output</pre>
+    <p>Step @PuzzleOutput.Step</p>
+    <pre class="alert-info m-2 p-2">@PuzzleOutput.Output</pre>
 }
 
 @code {
     [Parameter]
-    public PuzzleOutput? Data { get; set; }
+    public PuzzleOutput? PuzzleOutput { get; set; }
 }

@@ -1,7 +1,7 @@
 ﻿@page "/BoilingBouldersPage"
 @using AdventOfCode2022Solutions.PuzzleSolutions.BoilingBoulders
 <PuzzleSolutionController PuzzleSolver="@_solution">
-    <DefaultVisualization Data="@context.Data" />
+    <DefaultVisualization PuzzleOutput="@context.PuzzleOutput" />
 </PuzzleSolutionController>
 @code {
     BoilingBouldersSolution _solution = new();

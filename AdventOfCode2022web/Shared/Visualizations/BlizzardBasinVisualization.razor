@@ -1,6 +1,6 @@
 @using System.Timers;
 @using AdventOfCode2022web.Shared.GraphicsDefinition
-@if (_previousStep != Data!.Step)
+@if (_previousStep != Step)
 {
     SetTimer();
 }
@@ -44,7 +44,7 @@
                 }
             </g>
             <g class=@BlizzardClass>
-                @foreach (var b in Data!.BlizzardsPositions!)
+                @foreach (var b in Info!.BlizzardsPositions!)
                 {
                     if (b.Direction == Directions.Right)
                     {
@@ -86,7 +86,9 @@
 
 @code {
     [Parameter]
-    public BlizzardBasinOutput? Data { get; set; }
+    public int Step { get; set; }
+    [Parameter]
+    public BlizzardBasinInfo? Info { get; set; }
     [Parameter]
     public VisualizationSettings? Settings { get; set; }
 
@@ -109,21 +111,21 @@
 
     private void SetTimer()
     {
-        _previousStep = Data!.Step;
+        _previousStep = Step;
         _animationTimer.Interval = Settings!.AnimationDuration * 90 / 100 + 1;
         _animationTimer.Start();
         _animationCompleted = false;
     }
 
-    private (int X, int Y) Exit => Data!.ExitPosition;
-    private (int X, int Y) Entrance => Data!.EntrancePosition;
-    private int RoundNumber => Data!.CurrentMinute;
-    private List<List<(int ParentId, (int X, int Y) Pos)>> Tree => Data!.Tree!;
-    private int GridWidth => Data!.GridWidth;
-    private int GridHeight => Data!.GridHeight;
+    private (int X, int Y) Exit => Info!.ExitPosition;
+    private (int X, int Y) Entrance => Info!.EntrancePosition;
+    private int RoundNumber => Info!.CurrentMinute;
+    private List<List<(int ParentId, (int X, int Y) Pos)>> Tree => Info!.Tree!;
+    private int GridWidth => Info!.GridWidth;
+    private int GridHeight => Info!.GridHeight;
     private string AnimationTimingStyle => $"--animation-duration: {Settings!.AnimationDuration}ms;";
     private string ElfSearchClass => (_animationCompleted ? "elf-motionless" : "elf-moving");
     private string ElfKilledClass => (_animationCompleted ? "elf-hidden" : "elf-killed");
     private string BlizzardClass => (_animationCompleted ? "blizzard-motionless" : "blizzard-moving");
-    private bool IsPuzzleValid => Data != null && Data.Tree != null && Data.Tree.Count > 0;
+    private bool IsPuzzleValid => Info != null && Info.Tree != null && Info.Tree.Count > 0;
 }

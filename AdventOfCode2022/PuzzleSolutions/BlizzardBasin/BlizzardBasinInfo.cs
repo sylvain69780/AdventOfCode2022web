@@ -1,6 +1,6 @@
 ﻿namespace AdventOfCode2022Solutions.PuzzleSolutions.BlizzardBasin
 {
-    public class BlizzardBasinOutput : PuzzleOutput
+    public class BlizzardBasinInfo
     {
         public List<List<(int ParentId, (int X, int Y) Pos)>>? Tree { get; set; }
         public int GridWidth { get; set; }

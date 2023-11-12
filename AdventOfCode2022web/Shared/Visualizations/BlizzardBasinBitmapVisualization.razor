@@ -1,5 +1,5 @@
 @using SixLabors.ImageSharp.Formats.Gif;
-@if (Data!.Step != _previousStep)
+@if (Step != _previousStep)
 {
     UpdateBitmap();
 }
@@ -8,9 +8,10 @@
         <span>@ComputingMessage</span>
 
 @code {
-
     [Parameter]
-    public BlizzardBasinOutput? Data { get; set; }
+    public int Step { get; set; }
+    [Parameter]
+    public BlizzardBasinInfo? Info { get; set; }
     [Parameter]
     public VisualizationSettings? Settings { get; set; }
 
@@ -21,20 +22,20 @@
     private void UpdateBitmap()
     {
         Image64 = Visualize();
-        _previousStep = Data!.Step;
+        _previousStep = Step;
     }
 
     private async Task CreateAnimation()
     {
         Busy = true;
         await Task.Delay(1);
-        if (Data?.Tree is null || Data.Tree.Count == 0)
+        if (Info?.Tree is null || Info.Tree.Count == 0)
             return;
-        var width = Data.GridWidth;
-        var height = Data.GridHeight;
+        var width = Info.GridWidth;
+        var height = Info.GridHeight;
         if (width == 0 || height == 0)
             return;
-        var tree = Data.Tree;
+        var tree = Info.Tree;
 
         const int frameDelay = 5;
         // Create empty image.
@@ -77,10 +78,10 @@
 
     private string Visualize()
     {
-        if (Data?.Tree == null || Data.Tree.Count == 0)
+        if (Info?.Tree == null || Info.Tree.Count == 0)
             return string.Empty;
-        var Width = Data.GridWidth;
-        var Height = Data.GridHeight;
+        var Width = Info.GridWidth;
+        var Height = Info.GridHeight;
         if (Width == 0 || Height == 0)
             return string.Empty;
         var response = string.Empty;
@@ -88,7 +89,7 @@
         {
             using (Image<Rgba32> img = new(Width, Height, Color.White))
             {
-                CreateVisualization(img, Data.Tree.Count);
+                CreateVisualization(img, Info.Tree.Count);
                 img.SaveAsPng(outStream);
             }
             response = "data:image/png;base64, " + Convert.ToBase64String(outStream.ToArray());
@@ -100,8 +101,8 @@
 
     private void CreateVisualization(Image<Rgba32> img, int minute)
     {
-        var exit = Data!.ExitPosition;
-        var tree = Data.Tree!;
+        var exit = Info!.ExitPosition;
+        var tree = Info.Tree!;
         var level0 = tree[minute - 1].Select(x => x.Pos).ToHashSet();
         var level1 = minute > 1 ? tree[minute - 2].Select(x => x.Pos).ToHashSet() : new HashSet<(int X, int Y)>();
         var level2 = minute > 2 ? tree[minute - 3].Select(x => x.Pos).ToHashSet() : new HashSet<(int X, int Y)>();

@@ -101,31 +101,44 @@ namespace AdventOfCode2022Solutions.PuzzleSolutions.BlizzardBasin
             .Select(b => (X: Mod(b.X, _gridWidth - 2), Y: Mod(b.Y, _gridHeight - 2), b.Direction))
             .Select(b => ((b.X + 1, b.Y + 1), b.Direction));
 
+        private BlizzardBasinInfo UpdateInfo(BlizzardBasinInfo info)
+        {
+            info.GridWidth = _gridWidth;
+            info.GridHeight = _gridHeight;
+            info.CurrentMinute = _currentMinute;
+            info.EntrancePosition = _entrancePosition;
+            info.ExitPosition = _exitPosition;
+            info.Tree = _tree;
+            info.BlizzardsPositions = GetBlizzardsPositionAtTime(_currentMinute);
+            return info;
+        }
         public IEnumerable<PuzzleOutput> SolveFirstPart(string puzzleInput)
         {
             Initialize(puzzleInput);
-            var output = new BlizzardBasinOutputProvider();
-            yield return output.Put("Starting",_gridWidth,_gridHeight,_currentMinute,_entrancePosition,_exitPosition,_tree, GetBlizzardsPositionAtTime(_currentMinute));
+            var output = new PuzzleOutputProvider();
+            var info = new BlizzardBasinInfo();
+            yield return output.Put("Starting",UpdateInfo(info));
             var treeLevels = GetTreeLevelsAndIncrementCurrentMinute(_entrancePosition, _exitPosition);
             foreach (var treeLevel in treeLevels)
             {
                 _tree.Add(treeLevel);
-                yield return output.Put($"{_currentMinute}", _gridWidth, _gridHeight, _currentMinute, _entrancePosition, _exitPosition, _tree, GetBlizzardsPositionAtTime(_currentMinute));
+                yield return output.Put($"{_currentMinute}", UpdateInfo(info));
             }
         }
 
         public IEnumerable<PuzzleOutput> SolveSecondPart(string puzzleInput)
         {
             Initialize(puzzleInput);
-            var output = new BlizzardBasinOutputProvider();
-            yield return output.Put("Starting", _gridWidth, _gridHeight, _currentMinute, _entrancePosition, _exitPosition, _tree, GetBlizzardsPositionAtTime(_currentMinute));
+            var output = new PuzzleOutputProvider();
+            var info = new BlizzardBasinInfo();
+            yield return output.Put("Starting", UpdateInfo(info));
             var treeLevels = GetTreeLevelsAndIncrementCurrentMinute(_entrancePosition, _exitPosition)
                 .Concat(GetTreeLevelsAndIncrementCurrentMinute(_exitPosition, _entrancePosition)
                 .Concat(GetTreeLevelsAndIncrementCurrentMinute(_entrancePosition, _exitPosition)));
             foreach (var treeLevel in treeLevels)
             {
                 _tree.Add(treeLevel);
-                yield return output.Put($"{_currentMinute}", _gridWidth, _gridHeight, _currentMinute, _entrancePosition, _exitPosition, _tree, GetBlizzardsPositionAtTime(_currentMinute));
+                yield return output.Put($"{_currentMinute}", UpdateInfo(info));
             }
         }
 

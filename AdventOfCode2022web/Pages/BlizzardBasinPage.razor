@@ -1,10 +1,10 @@
 ﻿@page "/BlizzardBasinPage"
 @using AdventOfCode2022Solutions.PuzzleSolutions.BlizzardBasin
 <PuzzleSolutionController PuzzleSolver="@_solution">
-    @if (context.Data is not null && context.Settings is not null)
+    @if (context.PuzzleOutput is not null && context.Settings is not null)
     {
-        <BlizzardBasinVisualization Data=@((BlizzardBasinOutput)(context.Data)) Settings="@context.Settings" />
-        <DefaultVisualization Data="@context.Data" />
+        <BlizzardBasinVisualization Step=@context.PuzzleOutput.Step Info=@((BlizzardBasinInfo?)(context.PuzzleOutput.Info)) Settings="@context.Settings" />
+        <DefaultVisualization PuzzleOutput="@context.PuzzleOutput" />
     }
 </PuzzleSolutionController>
 @code {

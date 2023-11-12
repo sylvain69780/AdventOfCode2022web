@@ -11,5 +11,14 @@
                 Output = output
             };
         }
+        public PuzzleOutput Put(string output,object info)
+        {
+            return new PuzzleOutput()
+            {
+                Step = _step++,
+                Output = output,
+                Info  = info,
+            };
+        }
     }
 }

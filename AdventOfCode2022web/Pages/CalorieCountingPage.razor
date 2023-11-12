@@ -1,10 +1,10 @@
 ﻿@page "/CalorieCountingPage"
 @using AdventOfCode2022Solutions.PuzzleSolutions.CalorieCounting
 <PuzzleSolutionController PuzzleSolver="@_solution">
-    @if (context.Data is not null && context.Settings is not null)
+    @if (context.PuzzleOutput is not null && context.Settings is not null)
     {
-        <CalorieCountingVisualization Data=@((CalorieCountingOutput)(context.Data)) Settings="@context.Settings" />
-        <DefaultVisualization Data="@context.Data" />
+        <CalorieCountingVisualization Step=@(context.PuzzleOutput.Step) Settings="@context.Settings" Info="@((CalorieCountingInfo?)context.PuzzleOutput?.Info)"/>
+        <DefaultVisualization PuzzleOutput="@context.PuzzleOutput" />
     }
 
 </PuzzleSolutionController>

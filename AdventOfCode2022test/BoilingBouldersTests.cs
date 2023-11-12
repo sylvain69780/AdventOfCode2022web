@@ -2948,14 +2948,10 @@ namespace AdventOfCode2022test
 15,10,16
 10,14,17
 11,12,4";
-            solver.Initialize(input1);
-            Assert.That(solver.SolveFirstPart().Last(), Is.EqualTo("64"));
-            solver.Initialize(input1);
-            Assert.That(solver.SolveSecondPart().Last(), Is.EqualTo("58"));
-            solver.Initialize(input2);
-            Assert.That(solver.SolveFirstPart().Last(), Is.EqualTo("4282"));
-            solver.Initialize(input2);
-            Assert.That(solver.SolveSecondPart().Last(), Is.EqualTo("2452"));
+            Assert.That(solver.SolveFirstPart(input1).Last().Output, Is.EqualTo("64"));
+            Assert.That(solver.SolveSecondPart(input1).Last().Output, Is.EqualTo("58"));
+            Assert.That(solver.SolveFirstPart(input2).Last().Output, Is.EqualTo("4282"));
+            Assert.That(solver.SolveSecondPart(input2).Last().Output, Is.EqualTo("2452"));
         }
     }
 }

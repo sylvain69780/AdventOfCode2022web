@@ -4,7 +4,7 @@ namespace AdventOfCode2022test
 {
     public class BlizzardBasinTests
     {
-        private IPuzzleSolution _solver;
+        private IPuzzleSolver _solver;
         string input1;
         string input0;
         string input2;
@@ -58,26 +58,22 @@ namespace AdventOfCode2022test
         [Test]
         public void TestFirstPart()
         {
-            _solver.Initialize(input1);
-            Assert.That(_solver.SolveFirstPart().Last(), Is.EqualTo("18"));
+            Assert.That(_solver.SolveFirstPart(input1).Last().Output, Is.EqualTo("18"));
         }
         [Test]
         public void TestFirstPartFull()
         {
-            _solver.Initialize(input2);
-            Assert.That(_solver.SolveFirstPart().Last(), Is.EqualTo("277"));
+            Assert.That(_solver.SolveFirstPart(input2).Last().Output, Is.EqualTo("277"));
         }
         [Test]
         public void TestSecondPart()
         {
-            _solver.Initialize(input1);
-            Assert.That(_solver.SolveSecondPart().Last(), Is.EqualTo("54"));
+            Assert.That(_solver.SolveSecondPart(input1).Last().Output, Is.EqualTo("54"));
         }
         [Test]
         public void TestSecondPartFull()
         {
-            _solver.Initialize(input2);
-            Assert.That(_solver.SolveSecondPart().Last(), Is.EqualTo("877"));
+            Assert.That(_solver.SolveSecondPart(input2).Last().Output, Is.EqualTo("877"));
         }
     }
 }

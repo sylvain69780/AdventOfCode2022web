@@ -13,7 +13,7 @@
         <p>@Message()</p>
         @if ( Result is not null)
         {
-            @ChildContent!(new VisualizationContext() { Data = Result,  Settings = _settings })
+            @ChildContent!(new VisualizationContext() { PuzzleOutput = Result,  Settings = _settings })
         }
     </div>
     <div class="col-lg-6">
