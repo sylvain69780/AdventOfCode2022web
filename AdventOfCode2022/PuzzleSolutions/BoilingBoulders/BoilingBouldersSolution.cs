@@ -3,7 +3,7 @@ using System.Globalization;
 
 namespace AdventOfCode2022Solutions.PuzzleSolutions.BoilingBoulders
 {
-    public class BoilingBouldersSolution : IPuzzleSolution
+    public class BoilingBouldersSolution : IPuzzleSolver
     {
         private List<Voxel>? Voxels;
 
@@ -24,8 +24,11 @@ namespace AdventOfCode2022Solutions.PuzzleSolutions.BoilingBoulders
                 new Voxel(0,0,-1)
             };
 
-        public IEnumerable<string> SolveFirstPart()
+        public IEnumerable<PuzzleOutput> SolveFirstPart(string puzzleInput)
         {
+            Initialize(puzzleInput);
+            var output = new PuzzleOutputProvider();
+            yield return output.Put("Starting");
             var map = Voxels!.ToHashSet();
             var CountOfFacesNotConnected = 0;
             foreach (var cube in Voxels!)
@@ -36,10 +39,13 @@ namespace AdventOfCode2022Solutions.PuzzleSolutions.BoilingBoulders
                         CountOfFacesNotConnected++;
                 }
             }
-            yield return CountOfFacesNotConnected.ToString();
+            yield return output.Put(CountOfFacesNotConnected.ToString());
         }
-        public IEnumerable<string> SolveSecondPart()
+        public IEnumerable<PuzzleOutput> SolveSecondPart(string puzzleInput)
         {
+            Initialize(puzzleInput);
+            var output = new PuzzleOutputProvider();
+            output.Put("Starting");
             var dropletVoxels = Voxels!.ToHashSet();
             var rangeOfCoordinates = new RangeOfCoordinates(
                 LowerCoordinates: new Voxel(dropletVoxels.Min(p => p.X) - 1, dropletVoxels.Min(p => p.Y) - 1, dropletVoxels.Min(p => p.Z) - 1),
@@ -76,7 +82,7 @@ namespace AdventOfCode2022Solutions.PuzzleSolutions.BoilingBoulders
                     }
                 }
             }
-            yield return exteriorSurfaceArea.ToString();
+            yield return output.Put(exteriorSurfaceArea.ToString());
         }
     }
 

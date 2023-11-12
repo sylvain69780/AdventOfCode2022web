@@ -1,4 +1,8 @@
 ﻿@page "/BoilingBouldersPage"
-@inherits PuzzleSolutionPageBase<BoilingBouldersSolution>
-<h2>Boiling Boulders</h2>
-<PuzzleSolutionViewer Page=@this />
+@using AdventOfCode2022Solutions.PuzzleSolutions.BoilingBoulders
+<PuzzleSolutionController PuzzleSolver="@_solution">
+    <DefaultVisualization Data="@context.Data" />
+</PuzzleSolutionController>
+@code {
+    BoilingBouldersSolution _solution = new();
+}
