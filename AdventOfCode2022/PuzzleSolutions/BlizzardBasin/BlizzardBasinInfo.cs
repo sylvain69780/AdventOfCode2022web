@@ -2,7 +2,7 @@
 {
     public class BlizzardBasinInfo
     {
-        public List<List<(int ParentId, (int X, int Y) Pos)>>? Tree { get; set; }
+        public List<List<(int ParentId, (int X, int Y) Pos)>> Tree { get; set; } = new ();
         public int GridWidth { get; set; }
         public int GridHeight { get; set; }
         public int CurrentMinute { get; set; }

@@ -13,14 +13,7 @@ namespace AdventOfCode2022Solutions.PuzzleSolutions.BlizzardBasin
 
     public class BlizzardBasinSolution : IPuzzleSolver
     {
-        private int _gridWidth;
-        private int _gridHeight;
-        private int _currentMinute;
-        private (int X, int Y) _entrancePosition;
-        private (int X, int Y) _exitPosition;
-        private List<List<(int ParentId, (int X, int Y) Pos)>>? _tree = new();
         private List<((int X, int Y) Position, Directions Direction)>? _blizzardsInitialPosition;
-
         private static readonly List<(int dx, int dy)> AllowedMoves = new()
         {
             (0,0),
@@ -30,39 +23,39 @@ namespace AdventOfCode2022Solutions.PuzzleSolutions.BlizzardBasin
             (0,1),
         };
 
-        private HashSet<(int x, int y)>? Walls;
-        private string[]? Input { get; set; }
+        private HashSet<(int x, int y)>? _walls;
+        private string[]? _input { get; set; }
 
-        public void Initialize(string puzzleInput)
+        public void Initialize(BlizzardBasinInfo info,string puzzleInput)
         {
-            Input = puzzleInput.Split("\n");
-            Reset();
+            _input = puzzleInput.Split("\n");
+            Reset(info);
         }
 
-        private void Reset()
+        private void Reset(BlizzardBasinInfo info)
         {
-            ResetSimulationTime();
-            GetGridDimensions();
-            GetEntranceAndExitPositions();
+            ResetSimulationTime(info);
+            GetGridDimensions(info);
+            GetEntranceAndExitPositions(info);
             GetWallPositions();
             GetBlizzardsPositions();
-            InitializeBFSSearchTree();
+            InitializeBFSSearchTree(info);
         }
 
-        private void ResetSimulationTime()
+        private void ResetSimulationTime(BlizzardBasinInfo info)
         {
-            _currentMinute = 0;
+            info.CurrentMinute = 0;
         }
 
-        private void InitializeBFSSearchTree()
+        private void InitializeBFSSearchTree(BlizzardBasinInfo info)
         {
-            _tree.Clear();
-            _tree.Add(new List<(int ParentId, (int X, int Y) Pos)>() { (0, _entrancePosition) });
+            info.Tree!.Clear();
+            info.Tree.Add(new List<(int ParentId, (int X, int Y) Pos)>() { (0, info.EntrancePosition) });
         }
 
         private void GetBlizzardsPositions()
         {
-            _blizzardsInitialPosition = Input!
+            _blizzardsInitialPosition = _input!
                 .SelectMany((line, row) => line.Select((c, col) => (c, col, row))
                 .Where(y => "><^v".Contains(y.c)))
                 .Select(e => ((x: e.col, y: e.row), e.c == '>' ? Directions.Right : e.c == '<' ? Directions.Left : e.c == '^' ? Directions.Up : Directions.Down))
@@ -71,83 +64,77 @@ namespace AdventOfCode2022Solutions.PuzzleSolutions.BlizzardBasin
 
         private void GetWallPositions()
         {
-            Walls = Input!
+            _walls = _input!
                 .SelectMany((line, row) => line.Select((c, col) => (c, col, row))
                 .Where(y => y.c == '#'))
                 .Select(e => (x: e.col, y: e.row))
                 .ToHashSet();
         }
 
-        private void GetEntranceAndExitPositions()
+        private void GetEntranceAndExitPositions(BlizzardBasinInfo info)
         {
-            _entrancePosition = (Input![0].IndexOf('.'), 0);
-            _exitPosition = (Input[^1].IndexOf('.'), Input.Length - 1);
+            info.EntrancePosition = (_input![0].IndexOf('.'), 0);
+            info.ExitPosition = (_input[^1].IndexOf('.'), _input.Length - 1);
         }
 
-        private void GetGridDimensions()
+        private void GetGridDimensions(BlizzardBasinInfo info)
         {
-            _gridWidth = Input![0].Length;
-            _gridHeight = Input.Length;
+            info.GridWidth = _input![0].Length;
+            info.GridHeight = _input.Length;
         }
 
         private static int Mod(int x, int m) => (x % m + m) % m;
 
         private static int ManhattanDistance((int x, int y) a, (int x, int y) b) => Math.Abs(a.x - b.x) + Math.Abs(a.y - b.y);
 
-        private IEnumerable<((int X, int Y) Position, Directions Direction)> GetBlizzardsPositionAtTime(int minute)
+        private IEnumerable<((int X, int Y) Position, Directions Direction)> GetBlizzardsPositionAtTime(BlizzardBasinInfo info,int minute)
             => _blizzardsInitialPosition!
             .Select(b => (X: b.Position.X - 1, Y: b.Position.Y - 1, b.Direction))
             .Select(b => (X: b.X + minute * AllowedMoves[(int)b.Direction].dx, Y: b.Y + minute * AllowedMoves[(int)b.Direction].dy, b.Direction))
-            .Select(b => (X: Mod(b.X, _gridWidth - 2), Y: Mod(b.Y, _gridHeight - 2), b.Direction))
+            .Select(b => (X: Mod(b.X, info.GridWidth - 2), Y: Mod(b.Y, info.GridHeight - 2), b.Direction))
             .Select(b => ((b.X + 1, b.Y + 1), b.Direction));
 
         private BlizzardBasinInfo UpdateInfo(BlizzardBasinInfo info)
         {
-            info.GridWidth = _gridWidth;
-            info.GridHeight = _gridHeight;
-            info.CurrentMinute = _currentMinute;
-            info.EntrancePosition = _entrancePosition;
-            info.ExitPosition = _exitPosition;
-            info.Tree = _tree;
-            info.BlizzardsPositions = GetBlizzardsPositionAtTime(_currentMinute);
+            info.BlizzardsPositions = GetBlizzardsPositionAtTime(info,info.CurrentMinute);
             return info;
         }
         public IEnumerable<PuzzleOutput> SolveFirstPart(string puzzleInput)
         {
-            Initialize(puzzleInput);
             var output = new PuzzleOutputProvider();
             var info = new BlizzardBasinInfo();
+            Initialize(info, puzzleInput);
             yield return output.Put("Starting",UpdateInfo(info));
-            var treeLevels = GetTreeLevelsAndIncrementCurrentMinute(_entrancePosition, _exitPosition);
+            var treeLevels = GetTreeLevelsAndIncrementCurrentMinute(info,info.EntrancePosition, info.ExitPosition);
             foreach (var treeLevel in treeLevels)
             {
-                _tree.Add(treeLevel);
-                yield return output.Put($"{_currentMinute}", UpdateInfo(info));
+                info.Tree.Add(treeLevel);
+                yield return output.Put($"{info.CurrentMinute}", UpdateInfo(info));
             }
         }
 
         public IEnumerable<PuzzleOutput> SolveSecondPart(string puzzleInput)
         {
-            Initialize(puzzleInput);
             var output = new PuzzleOutputProvider();
             var info = new BlizzardBasinInfo();
+            Initialize(info,puzzleInput);
             yield return output.Put("Starting", UpdateInfo(info));
-            var treeLevels = GetTreeLevelsAndIncrementCurrentMinute(_entrancePosition, _exitPosition)
-                .Concat(GetTreeLevelsAndIncrementCurrentMinute(_exitPosition, _entrancePosition)
-                .Concat(GetTreeLevelsAndIncrementCurrentMinute(_entrancePosition, _exitPosition)));
+            var treeLevels = GetTreeLevelsAndIncrementCurrentMinute(info,info.EntrancePosition, info.ExitPosition)
+                .Concat(GetTreeLevelsAndIncrementCurrentMinute(info,info.ExitPosition, info.EntrancePosition)
+                .Concat(GetTreeLevelsAndIncrementCurrentMinute(info,info.EntrancePosition, info.ExitPosition)));
             foreach (var treeLevel in treeLevels)
             {
-                _tree.Add(treeLevel);
-                yield return output.Put($"{_currentMinute}", UpdateInfo(info));
+                info.Tree.Add(treeLevel);
+                yield return output.Put($"{info.CurrentMinute}", UpdateInfo(info));
             }
         }
 
-        private IEnumerable<List<(int ParentId, (int X, int Y) Pos)>> GetTreeLevelsAndIncrementCurrentMinute((int X, int Y) start, (int X, int Y) end)
+        private IEnumerable<List<(int ParentId, (int X, int Y) Pos)>> GetTreeLevelsAndIncrementCurrentMinute(BlizzardBasinInfo info, (int X, int Y) start, (int X, int Y) end)
         {
             var currentTreeLevel = CreateTreeLevelWithSingleNode(start, 0);
             do
             {
-                IncrementCurrentMinute();
+                IncrementCurrentMinute(info);
                 var searchResult = GetNextTreeLevel(end, currentTreeLevel);
                 currentTreeLevel = searchResult.NextTreeLevel;
                 yield return currentTreeLevel;
@@ -159,7 +146,7 @@ namespace AdventOfCode2022Solutions.PuzzleSolutions.BlizzardBasin
 
             (bool IsDestinationFound, List<(int ParentId, (int X, int Y) Pos)> NextTreeLevel) GetNextTreeLevel((int X, int Y) end, List<(int ParentId, (int X, int Y) Pos)> currentTreeLevel)
             {
-                var boxesOccupiedByBlizzards = GetBoxesOccupiedByBlizzards();
+                var boxesOccupiedByBlizzards = GetBoxesOccupiedByBlizzards(info);
                 bool isSolutionFound = false;
                 var nextTreeLevel = NewEmptyTreeLevel();
                 for (var parentId = 0; parentId < currentTreeLevel.Count && !isSolutionFound; parentId++)
@@ -168,7 +155,7 @@ namespace AdventOfCode2022Solutions.PuzzleSolutions.BlizzardBasin
                     foreach (var move in AllowedMoves)
                     {
                         var box = (X: x + move.dx, Y: y + move.dy);
-                        if (IsBoxOutOfGrid(box))
+                        if (IsBoxOutOfGrid(info,box))
                             continue;
                         if (IsBoxBlockedByBlizzardsOrWalls(box, boxesOccupiedByBlizzards))
                             continue;
@@ -190,12 +177,12 @@ namespace AdventOfCode2022Solutions.PuzzleSolutions.BlizzardBasin
 
             bool IsBoxBlockedByBlizzardsOrWalls((int X, int Y) child, HashSet<(int X, int Y)> blizzardsPosition)
             {
-                return blizzardsPosition.Contains(child) || Walls!.Contains(child);
+                return blizzardsPosition.Contains(child) || _walls!.Contains(child);
             }
 
-            bool IsBoxOutOfGrid((int X, int Y) child)
+            bool IsBoxOutOfGrid(BlizzardBasinInfo info, (int X, int Y) child)
             {
-                return child.Y < 0 || child.Y >= _gridHeight;
+                return child.Y < 0 || child.Y >= info.GridHeight;
             }
 
             static bool IsBoxAlreadyInTreeLevel((int X, int Y) box, List<(int ParentId, (int X, int Y) Pos)> queue)
@@ -221,15 +208,15 @@ namespace AdventOfCode2022Solutions.PuzzleSolutions.BlizzardBasin
                 return new List<(int ParentId, (int X, int Y) Pos)>();
             }
 
-            HashSet<(int X, int Y)> GetBoxesOccupiedByBlizzards()
+            HashSet<(int X, int Y)> GetBoxesOccupiedByBlizzards(BlizzardBasinInfo info)
             {
-                return GetBlizzardsPositionAtTime(_currentMinute).Select(b => (b.Position.X, b.Position.Y)).ToHashSet();
+                return GetBlizzardsPositionAtTime(info,info.CurrentMinute).Select(b => (b.Position.X, b.Position.Y)).ToHashSet();
             }
         }
 
-        private void IncrementCurrentMinute()
+        private void IncrementCurrentMinute(BlizzardBasinInfo info)
         {
-            _currentMinute++;
+            info.CurrentMinute++;
         }
     }
 }
