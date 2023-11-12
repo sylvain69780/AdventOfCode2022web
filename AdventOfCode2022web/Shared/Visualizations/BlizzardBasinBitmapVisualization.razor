@@ -1,5 +1,5 @@
 @using SixLabors.ImageSharp.Formats.Gif;
-@if (Page!.SolvingStep != _previousStep)
+@if (Data!.Step != _previousStep)
 {
     UpdateBitmap();
 }
@@ -9,8 +9,10 @@
 
 @code {
 
-        [Parameter]
-    public BlizzardBasinBitmapPage? Page { get; set; }
+    [Parameter]
+    public BlizzardBasinOutput? Data { get; set; }
+    [Parameter]
+    public VisualizationSettings? Settings { get; set; }
 
     private bool Busy { get; set; }
     private string ComputingMessage { get; set; } = string.Empty;
@@ -19,20 +21,20 @@
     private void UpdateBitmap()
     {
         Image64 = Visualize();
-        _previousStep = Page!.SolvingStep;
+        _previousStep = Data!.Step;
     }
 
     private async Task CreateAnimation()
     {
         Busy = true;
         await Task.Delay(1);
-        if (Page!.PuzzleSolution == null || Page.PuzzleSolution.Tree.Count == 0)
+        if (Data?.Tree is null || Data.Tree.Count == 0)
             return;
-        var width = Page.PuzzleSolution!.GridWidth;
-        var height = Page.PuzzleSolution!.GridHeight;
+        var width = Data.GridWidth;
+        var height = Data.GridHeight;
         if (width == 0 || height == 0)
             return;
-        var tree = Page.PuzzleSolution!.Tree;
+        var tree = Data.Tree;
 
         const int frameDelay = 5;
         // Create empty image.
@@ -75,10 +77,10 @@
 
     private string Visualize()
     {
-        if (Page!.PuzzleSolution == null || Page.PuzzleSolution.Tree.Count == 0)
+        if (Data?.Tree == null || Data.Tree.Count == 0)
             return string.Empty;
-        var Width = Page.PuzzleSolution!.GridWidth;
-        var Height = Page.PuzzleSolution!.GridHeight;
+        var Width = Data.GridWidth;
+        var Height = Data.GridHeight;
         if (Width == 0 || Height == 0)
             return string.Empty;
         var response = string.Empty;
@@ -86,7 +88,7 @@
         {
             using (Image<Rgba32> img = new(Width, Height, Color.White))
             {
-                CreateVisualization(img, Page.PuzzleSolution!.Tree.Count);
+                CreateVisualization(img, Data.Tree.Count);
                 img.SaveAsPng(outStream);
             }
             response = "data:image/png;base64, " + Convert.ToBase64String(outStream.ToArray());
@@ -98,8 +100,8 @@
 
     private void CreateVisualization(Image<Rgba32> img, int minute)
     {
-        var exit = Page!.PuzzleSolution!.ExitPosition;
-        var tree = Page.PuzzleSolution!.Tree;
+        var exit = Data!.ExitPosition;
+        var tree = Data.Tree!;
         var level0 = tree[minute - 1].Select(x => x.Pos).ToHashSet();
         var level1 = minute > 1 ? tree[minute - 2].Select(x => x.Pos).ToHashSet() : new HashSet<(int X, int Y)>();
         var level2 = minute > 2 ? tree[minute - 3].Select(x => x.Pos).ToHashSet() : new HashSet<(int X, int Y)>();

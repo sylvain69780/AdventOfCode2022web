@@ -1,4 +1,6 @@
-﻿namespace AdventOfCode2022Solutions.PuzzleSolutions.BlizzardBasin
+﻿using AdventOfCode2022Solutions.PuzzleSolutions.CalorieCounting;
+
+namespace AdventOfCode2022Solutions.PuzzleSolutions.BlizzardBasin
 {
     public enum Directions
     {
@@ -9,17 +11,15 @@
         Down = 4
     }
 
-    public class BlizzardBasinSolution : IPuzzleSolution
+    public class BlizzardBasinSolution : IPuzzleSolver
     {
-        public int GridWidth { get; set; }
-        public int GridHeight { get; set; }
-        public int CurrentMinute { get; set; }
-        public (int X, int Y) EntrancePosition { get; set; }
-        public (int X, int Y) ExitPosition { get; set; }
-        public List<List<(int ParentId, (int X, int Y) Pos)>> Tree { get; set; } = new();
-        public IEnumerable<((int X, int Y) Position, Directions Direction)> BlizzardsPositions => GetBlizzardsPositionAtTime(CurrentMinute);
-
-        private List<((int X, int Y) Position, Directions Direction)>? BlizzardsInitialPosition { get; set; }
+        private int _gridWidth;
+        private int _gridHeight;
+        private int _currentMinute;
+        private (int X, int Y) _entrancePosition;
+        private (int X, int Y) _exitPosition;
+        private List<List<(int ParentId, (int X, int Y) Pos)>>? _tree = new();
+        private List<((int X, int Y) Position, Directions Direction)>? _blizzardsInitialPosition;
 
         private static readonly List<(int dx, int dy)> AllowedMoves = new()
         {
@@ -51,18 +51,18 @@
 
         private void ResetSimulationTime()
         {
-            CurrentMinute = 0;
+            _currentMinute = 0;
         }
 
         private void InitializeBFSSearchTree()
         {
-            Tree.Clear();
-            Tree.Add(new List<(int ParentId, (int X, int Y) Pos)>() { (0, EntrancePosition) });
+            _tree.Clear();
+            _tree.Add(new List<(int ParentId, (int X, int Y) Pos)>() { (0, _entrancePosition) });
         }
 
         private void GetBlizzardsPositions()
         {
-            BlizzardsInitialPosition = Input!
+            _blizzardsInitialPosition = Input!
                 .SelectMany((line, row) => line.Select((c, col) => (c, col, row))
                 .Where(y => "><^v".Contains(y.c)))
                 .Select(e => ((x: e.col, y: e.row), e.c == '>' ? Directions.Right : e.c == '<' ? Directions.Left : e.c == '^' ? Directions.Up : Directions.Down))
@@ -80,14 +80,14 @@
 
         private void GetEntranceAndExitPositions()
         {
-            EntrancePosition = (Input![0].IndexOf('.'), 0);
-            ExitPosition = (Input[^1].IndexOf('.'), Input.Length - 1);
+            _entrancePosition = (Input![0].IndexOf('.'), 0);
+            _exitPosition = (Input[^1].IndexOf('.'), Input.Length - 1);
         }
 
         private void GetGridDimensions()
         {
-            GridWidth = Input![0].Length;
-            GridHeight = Input.Length;
+            _gridWidth = Input![0].Length;
+            _gridHeight = Input.Length;
         }
 
         private static int Mod(int x, int m) => (x % m + m) % m;
@@ -95,33 +95,37 @@
         private static int ManhattanDistance((int x, int y) a, (int x, int y) b) => Math.Abs(a.x - b.x) + Math.Abs(a.y - b.y);
 
         private IEnumerable<((int X, int Y) Position, Directions Direction)> GetBlizzardsPositionAtTime(int minute)
-            => BlizzardsInitialPosition!
+            => _blizzardsInitialPosition!
             .Select(b => (X: b.Position.X - 1, Y: b.Position.Y - 1, b.Direction))
             .Select(b => (X: b.X + minute * AllowedMoves[(int)b.Direction].dx, Y: b.Y + minute * AllowedMoves[(int)b.Direction].dy, b.Direction))
-            .Select(b => (X: Mod(b.X, GridWidth - 2), Y: Mod(b.Y, GridHeight - 2), b.Direction))
+            .Select(b => (X: Mod(b.X, _gridWidth - 2), Y: Mod(b.Y, _gridHeight - 2), b.Direction))
             .Select(b => ((b.X + 1, b.Y + 1), b.Direction));
 
-        public IEnumerable<string> SolveFirstPart()
+        public IEnumerable<PuzzleOutput> SolveFirstPart(string puzzleInput)
         {
-            Reset();
-            var treeLevels = GetTreeLevelsAndIncrementCurrentMinute(EntrancePosition, ExitPosition);
+            Initialize(puzzleInput);
+            var output = new BlizzardBasinOutputProvider();
+            yield return output.Put("Starting",_gridWidth,_gridHeight,_currentMinute,_entrancePosition,_exitPosition,_tree, GetBlizzardsPositionAtTime(_currentMinute));
+            var treeLevels = GetTreeLevelsAndIncrementCurrentMinute(_entrancePosition, _exitPosition);
             foreach (var treeLevel in treeLevels)
             {
-                Tree.Add(treeLevel);
-                yield return $"{CurrentMinute}";
+                _tree.Add(treeLevel);
+                yield return output.Put($"{_currentMinute}", _gridWidth, _gridHeight, _currentMinute, _entrancePosition, _exitPosition, _tree, GetBlizzardsPositionAtTime(_currentMinute));
             }
         }
 
-        public IEnumerable<string> SolveSecondPart()
+        public IEnumerable<PuzzleOutput> SolveSecondPart(string puzzleInput)
         {
-            Reset();
-            var treeLevels = GetTreeLevelsAndIncrementCurrentMinute(EntrancePosition, ExitPosition)
-                .Concat(GetTreeLevelsAndIncrementCurrentMinute(ExitPosition, EntrancePosition)
-                .Concat(GetTreeLevelsAndIncrementCurrentMinute(EntrancePosition, ExitPosition)));
+            Initialize(puzzleInput);
+            var output = new BlizzardBasinOutputProvider();
+            yield return output.Put("Starting", _gridWidth, _gridHeight, _currentMinute, _entrancePosition, _exitPosition, _tree, GetBlizzardsPositionAtTime(_currentMinute));
+            var treeLevels = GetTreeLevelsAndIncrementCurrentMinute(_entrancePosition, _exitPosition)
+                .Concat(GetTreeLevelsAndIncrementCurrentMinute(_exitPosition, _entrancePosition)
+                .Concat(GetTreeLevelsAndIncrementCurrentMinute(_entrancePosition, _exitPosition)));
             foreach (var treeLevel in treeLevels)
             {
-                Tree.Add(treeLevel);
-                yield return $"{CurrentMinute}";
+                _tree.Add(treeLevel);
+                yield return output.Put($"{_currentMinute}", _gridWidth, _gridHeight, _currentMinute, _entrancePosition, _exitPosition, _tree, GetBlizzardsPositionAtTime(_currentMinute));
             }
         }
 
@@ -178,7 +182,7 @@
 
             bool IsBoxOutOfGrid((int X, int Y) child)
             {
-                return child.Y < 0 || child.Y >= GridHeight;
+                return child.Y < 0 || child.Y >= _gridHeight;
             }
 
             static bool IsBoxAlreadyInTreeLevel((int X, int Y) box, List<(int ParentId, (int X, int Y) Pos)> queue)
@@ -206,13 +210,13 @@
 
             HashSet<(int X, int Y)> GetBoxesOccupiedByBlizzards()
             {
-                return GetBlizzardsPositionAtTime(CurrentMinute).Select(b => (b.Position.X, b.Position.Y)).ToHashSet();
+                return GetBlizzardsPositionAtTime(_currentMinute).Select(b => (b.Position.X, b.Position.Y)).ToHashSet();
             }
         }
 
         private void IncrementCurrentMinute()
         {
-            CurrentMinute++;
+            _currentMinute++;
         }
     }
 }

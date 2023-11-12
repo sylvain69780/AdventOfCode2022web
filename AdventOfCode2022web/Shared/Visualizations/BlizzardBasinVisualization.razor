@@ -1,6 +1,6 @@
 @using System.Timers;
 @using AdventOfCode2022web.Shared.GraphicsDefinition
-@if (_previousStep != Page!.SolvingStep)
+@if (_previousStep != Data!.Step)
 {
     SetTimer();
 }
@@ -44,7 +44,7 @@
                 }
             </g>
             <g class=@BlizzardClass>
-                @foreach (var b in Page.PuzzleSolution!.BlizzardsPositions!)
+                @foreach (var b in Data!.BlizzardsPositions!)
                 {
                     if (b.Direction == Directions.Right)
                     {
@@ -86,7 +86,9 @@
 
 @code {
     [Parameter]
-    public BlizzardBasinPage? Page { get; set; }
+    public BlizzardBasinOutput? Data { get; set; }
+    [Parameter]
+    public VisualizationSettings? Settings { get; set; }
 
     private Timer _animationTimer = new();
     private bool _animationCompleted = true;
@@ -107,21 +109,21 @@
 
     private void SetTimer()
     {
-        _previousStep = Page!.SolvingStep;
-        _animationTimer.Interval = Page.AnimationDuration * 90 / 100 + 1;
+        _previousStep = Data!.Step;
+        _animationTimer.Interval = Settings!.AnimationDuration * 90 / 100 + 1;
         _animationTimer.Start();
         _animationCompleted = false;
     }
 
-    private (int X, int Y) Exit => Page!.PuzzleSolution!.ExitPosition;
-    private (int X, int Y) Entrance => Page!.PuzzleSolution!.EntrancePosition;
-    private int RoundNumber => Page!.PuzzleSolution!.CurrentMinute;
-    private List<List<(int ParentId, (int X, int Y) Pos)>> Tree => Page!.PuzzleSolution!.Tree;
-    private int GridWidth => Page!.PuzzleSolution!.GridWidth;
-    private int GridHeight => Page!.PuzzleSolution!.GridHeight;
-    private string AnimationTimingStyle => $"--animation-duration: {Page!.AnimationDuration}ms;";
+    private (int X, int Y) Exit => Data!.ExitPosition;
+    private (int X, int Y) Entrance => Data!.EntrancePosition;
+    private int RoundNumber => Data!.CurrentMinute;
+    private List<List<(int ParentId, (int X, int Y) Pos)>> Tree => Data!.Tree!;
+    private int GridWidth => Data!.GridWidth;
+    private int GridHeight => Data!.GridHeight;
+    private string AnimationTimingStyle => $"--animation-duration: {Settings!.AnimationDuration}ms;";
     private string ElfSearchClass => (_animationCompleted ? "elf-motionless" : "elf-moving");
     private string ElfKilledClass => (_animationCompleted ? "elf-hidden" : "elf-killed");
     private string BlizzardClass => (_animationCompleted ? "blizzard-motionless" : "blizzard-moving");
-    private bool IsPuzzleValid => Page!.PuzzleSolution != null && Page!.PuzzleSolution.Tree != null && Page!.PuzzleSolution.Tree.Count > 0;
+    private bool IsPuzzleValid => Data != null && Data.Tree != null && Data.Tree.Count > 0;
 }

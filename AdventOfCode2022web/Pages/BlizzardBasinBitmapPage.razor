@@ -1,6 +1,12 @@
 ﻿@page "/BlizzardBasinBitmapPage"
-@inherits PuzzleSolutionPageBase<BlizzardBasinSolution>
-<h2>Blizzard Basin Page (Bitmap visualization)</h2>
-<PuzzleSolutionViewer Page=@this>
-    <BlizzardBasinBitmapVisualization Page="@this" />
-</PuzzleSolutionViewer>
+@using AdventOfCode2022Solutions.PuzzleSolutions.BlizzardBasin
+<PuzzleSolutionController PuzzleSolver="@_solution">
+    @if (context.Data is not null && context.Settings is not null)
+    {
+        <BlizzardBasinBitmapVisualization Data=@((BlizzardBasinOutput)(context.Data)) Settings="@context.Settings" />
+        <DefaultVisualization Data="@context.Data" />
+    }
+</PuzzleSolutionController>
+@code {
+    BlizzardBasinSolution _solution = new();
+}

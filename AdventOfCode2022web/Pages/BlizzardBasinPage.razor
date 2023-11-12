@@ -1,7 +1,12 @@
 ﻿@page "/BlizzardBasinPage"
-@inherits PuzzleSolutionPageBase<BlizzardBasinSolution>
-<h2>Blizzard Basin</h2>
-<PuzzleSolutionViewer Page=@this>
-    <BlizzardBasinVisualization Page="@this" />
-</PuzzleSolutionViewer>
-
+@using AdventOfCode2022Solutions.PuzzleSolutions.BlizzardBasin
+<PuzzleSolutionController PuzzleSolver="@_solution">
+    @if (context.Data is not null && context.Settings is not null)
+    {
+        <BlizzardBasinVisualization Data=@((BlizzardBasinOutput)(context.Data)) Settings="@context.Settings" />
+        <DefaultVisualization Data="@context.Data" />
+    }
+</PuzzleSolutionController>
+@code {
+    BlizzardBasinSolution _solution = new();
+}
