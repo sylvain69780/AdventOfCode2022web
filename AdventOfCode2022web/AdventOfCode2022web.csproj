@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AdventOfCode2022\AdventOfCode2022Solutions.csproj" />
+    <ProjectReference Include="..\AdventOfCode2022\Domain.csproj" />
   </ItemGroup>
 
   <ItemGroup>
