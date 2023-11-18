@@ -10,7 +10,7 @@ namespace AdventOfCode2022web.Shared
         [Inject]
         public HttpClient? Http { get; set; }
         [Parameter]
-        public IPuzzleContext? PuzzleContext { get; set; }
+        public IPuzzleModel? PuzzleContext { get; set; }
 
         protected VisualizationSettings _settings = new() { AnimationDuration = 500 };
 
@@ -22,20 +22,21 @@ namespace AdventOfCode2022web.Shared
         public string SampleInputFile()
         {
             var puzzleType = PuzzleContext!.GetType();
-            var puzzleInputFile = puzzleType.Name.Replace("Context", "");
+            var puzzleInputFile = puzzleType.Name.Replace("Model", "");
             return puzzleInputFile;
         }
 
         public string FullInputFile() => SampleInputFile() + "_full";
 
-        public string PuzzleSolutionCode => $"https://github.com/sylvain69780/AdventOfCode2022web/blob/master/AdventOfCode2022/PuzzleSolutions/{PuzzleContext!.GetType().Name.Replace("Context", "")}";
+        public string PuzzleSolutionCode => $"https://github.com/sylvain69780/AdventOfCode2022web/blob/master/AdventOfCode2022/PuzzleSolutions/{PuzzleContext!.GetType().Name.Replace("Model", "")}";
 
         public async Task LoadDefaultPuzzleInput() => await LoadPuzzleInput(SampleInputFile());
         public async Task LoadFullPuzzleInput() => await LoadPuzzleInput(FullInputFile());
 
-        public async Task LoadPuzzleInput(string puzzleInputFile)
+        public async Task LoadPuzzleInput(string puzzleInputFile) 
+            => _input = (await Http!.GetStringAsync($"sample-data/{puzzleInputFile}.txt")).Replace("\r", "");
+        public void StartProcessing()
         {
-            _input = (await Http!.GetStringAsync($"sample-data/{puzzleInputFile}.txt")).Replace("\r", "");
             _stepsToSolution = PuzzleContext!.GetStepsToSolution(_input).GetEnumerator();
             MoveUntilCompleted();
         }
@@ -44,6 +45,7 @@ namespace AdventOfCode2022web.Shared
         {
             _stepComputationTimer.Elapsed += (sender, e) => MoveUntilCompleted();
             await LoadDefaultPuzzleInput();
+            StartProcessing();
         }
 
         public void MoveNext()

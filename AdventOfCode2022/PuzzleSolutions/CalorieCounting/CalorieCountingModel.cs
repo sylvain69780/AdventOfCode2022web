@@ -2,14 +2,14 @@
 
 namespace AdventOfCode2022Solutions.PuzzleSolutions.CalorieCounting
 {
-    public class CalorieCountingContext : IPuzzleContext
+    public class CalorieCountingModel : IPuzzleModel
     {
         ICalorieCountingStrategy _strategy;
         int _currentSum;
         List<int> _caloriesHoldByElves = new();
         string _message;
         ProgressInfo _progress;
-        public CalorieCountingContext(ICalorieCountingStrategy strategy)
+        public CalorieCountingModel(ICalorieCountingStrategy strategy)
         {
             _strategy = strategy;
             _message = string.Empty;

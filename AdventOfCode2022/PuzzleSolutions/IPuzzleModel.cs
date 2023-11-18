@@ -1,6 +1,6 @@
 ﻿namespace AdventOfCode2022Solutions.PuzzleSolutions
 {
-    public interface IPuzzleContext
+    public interface IPuzzleModel
     {
         string Message { get; }
         int Step { get;  }

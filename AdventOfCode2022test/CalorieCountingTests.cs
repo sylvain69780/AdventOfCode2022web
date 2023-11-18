@@ -16,7 +16,7 @@ namespace AdventOfCode2022test
         [Test]
         public void Part1_1()
         {
-            var context = new CalorieCountingContext(new CalorieCountingPart1Strategy());
+            var context = new CalorieCountingModel(new CalorieCountingPart1Strategy());
             var lastStep = context.GetStepsToSolution(_input1).Last();
             Assert.Multiple(() =>
             {
@@ -27,7 +27,7 @@ namespace AdventOfCode2022test
         [Test]
         public void Part1_2()
         {
-            var context = new CalorieCountingContext(new CalorieCountingPart1Strategy());
+            var context = new CalorieCountingModel(new CalorieCountingPart1Strategy());
             var lastStep = context.GetStepsToSolution(_input2).Last();
             Assert.Multiple(() =>
             {
