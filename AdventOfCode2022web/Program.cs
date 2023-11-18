@@ -64,7 +64,6 @@ builder.Services.AddTransient(sp => new HttpClient { BaseAddress = new Uri(build
 
 builder.Services.AddScoped(sp => new BlizzardBasinSolution());
 builder.Services.AddScoped(sp => new BeaconExclusionZoneSolution());
-builder.Services.AddScoped(sp => new CalorieCountingSolution());
 builder.Services.AddScoped(sp => new RockPaperScissorsSolution());
 builder.Services.AddScoped(sp => new RucksackReorganizationSolution());
 builder.Services.AddScoped(sp => new CampCleanupSolution());
