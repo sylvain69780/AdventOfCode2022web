@@ -15,8 +15,8 @@
             <div>
                 <label class="form-label">The data below is what is provided as example in the problem statement. You can paste your own user input.</label>
                 <button class="btn-primary" @onclick=@( () => { StartProcessing(); _showPuzzleInput = false;})>Restart Processing</button>
-                <button class="btn-primary" @onclick=@LoadDefaultPuzzleInput>Load default puzzle input</button>
                 <button class="btn-primary" @onclick=@LoadFullPuzzleInput>Load a full puzzle input</button>
+                <button class="btn-primary" @onclick=@LoadDefaultPuzzleInput>Load sample puzzle input</button>
                 <pre><textarea spellcheck="false" class="form-control" aria-label="Puzzle Input" rows="10" @bind="_input" maxlength="10000000"></textarea></pre>
             </div>
         </div>
