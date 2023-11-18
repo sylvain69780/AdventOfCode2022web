@@ -5,6 +5,8 @@
     <p>@_puzzleContext.CurrentSum</p>
     <p>@context.AnimationDuration</p>
     <CalorieCountingVisualization Model="@_puzzleContext" Settings="@context" />
+    <p>Step @_puzzleContext.Step</p>
+    <pre class="alert-info m-2 p-2">@_puzzleContext.Message</pre>
 </PuzzleSolutionControllerNEW>
 @code {
     CalorieCountingContext _puzzleContext = new(new CalorieCountingPart1Strategy());

@@ -36,15 +36,14 @@ namespace AdventOfCode2022web.Shared
         public async Task LoadPuzzleInput(string puzzleInputFile)
         {
             _input = (await Http!.GetStringAsync($"sample-data/{puzzleInputFile}.txt")).Replace("\r", "");
-            Stop();
+            _stepsToSolution = PuzzleContext!.GetStepsToSolution(_input).GetEnumerator();
+            MoveUntilCompleted();
         }
 
         protected override async Task OnInitializedAsync()
         {
-            await LoadDefaultPuzzleInput();
             _stepComputationTimer.Elapsed += (sender, e) => MoveUntilCompleted();
-            _stepsToSolution = PuzzleContext!.GetStepsToSolution(_input).GetEnumerator();
-            MoveUntilCompleted();
+            await LoadDefaultPuzzleInput();
         }
 
         public void MoveNext()
