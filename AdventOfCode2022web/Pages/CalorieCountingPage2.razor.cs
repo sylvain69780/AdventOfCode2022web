@@ -1,4 +1,4 @@
-﻿using AdventOfCode2022Solutions.PuzzleSolutions.CalorieCounting;
+﻿using sylvain69780.AdventOfCode2022.Domain.CalorieCounting;
 
 namespace AdventOfCode2022web.Pages
 {

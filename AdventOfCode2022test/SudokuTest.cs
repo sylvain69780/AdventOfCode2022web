@@ -1,7 +1,4 @@
-﻿using AdventOfCode2022Solutions.PuzzleSolutions.Sudoku;
-using AdventOfCode2022Solutions.PuzzleSolutions;
-
-namespace AdventOfCode2022test
+﻿namespace sylvain69780.AdventOfCode2022.Tests
 {
     public class SudokuTest
     {

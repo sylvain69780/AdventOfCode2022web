@@ -1,4 +1,4 @@
-﻿using AdventOfCode2022Solutions.PuzzleSolutions;
+﻿using sylvain69780.AdventOfCode2022.Domain;
 using System.Reflection;
 
 namespace AdventOfCode2022web

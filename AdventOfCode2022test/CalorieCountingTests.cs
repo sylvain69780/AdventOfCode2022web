@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AdventOfCode2022test
+namespace sylvain69780.AdventOfCode2022.Tests
 {
     internal class CalorieCountingTests
     {

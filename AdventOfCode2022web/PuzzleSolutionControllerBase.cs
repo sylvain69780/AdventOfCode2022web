@@ -1,8 +1,7 @@
-﻿using AdventOfCode2022Solutions.PuzzleSolutions;
+﻿using sylvain69780.AdventOfCode2022.Domain;
 using Microsoft.AspNetCore.Components;
 using System.Diagnostics;
 using System.Timers;
-
 namespace AdventOfCode2022web
 {
     public class PuzzleSolutionControllerBase : ComponentBase

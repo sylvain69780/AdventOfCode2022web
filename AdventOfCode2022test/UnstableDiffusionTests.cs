@@ -1,4 +1,4 @@
-﻿namespace AdventOfCode2022test
+﻿namespace sylvain69780.AdventOfCode2022.Tests
 {
     public class UnstableDiffusionTests
     {
