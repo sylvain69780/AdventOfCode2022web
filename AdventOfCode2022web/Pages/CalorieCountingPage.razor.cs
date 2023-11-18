@@ -1,6 +1,6 @@
 ﻿using sylvain69780.AdventOfCode2022.Domain.CalorieCounting;
 
-namespace AdventOfCode2022web.Pages
+namespace sylvain69780.AdventOfCode2022.Blazor.Pages
 {
     public partial class CalorieCountingPage
     {

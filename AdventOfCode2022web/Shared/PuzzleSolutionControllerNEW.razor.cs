@@ -1,8 +1,7 @@
 ﻿using sylvain69780.AdventOfCode2022.Domain;
 using Microsoft.AspNetCore.Components;
 using System.Diagnostics;
-
-namespace AdventOfCode2022web.Shared
+namespace sylvain69780.AdventOfCode2022.Blazor.Shared
 {
     public partial class PuzzleSolutionControllerNEW
     {
@@ -32,7 +31,7 @@ namespace AdventOfCode2022web.Shared
         public async Task LoadDefaultPuzzleInput() => await LoadPuzzleInput(SampleInputFile());
         public async Task LoadFullPuzzleInput() => await LoadPuzzleInput(FullInputFile());
 
-        public async Task LoadPuzzleInput(string puzzleInputFile) 
+        public async Task LoadPuzzleInput(string puzzleInputFile)
             => _input = (await Http!.GetStringAsync($"sample-data/{puzzleInputFile}.txt")).Replace("\r", "");
         public void StartProcessing()
         {
@@ -100,4 +99,6 @@ namespace AdventOfCode2022web.Shared
             PageState = PageState.Loaded;
         }
     }
+
 }
+

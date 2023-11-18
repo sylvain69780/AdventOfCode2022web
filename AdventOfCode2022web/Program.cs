@@ -1,5 +1,5 @@
-using AdventOfCode2022web;
 using Microsoft.AspNetCore.Components.Web;
+using sylvain69780.AdventOfCode2022.Blazor;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using sylvain69780.AdventOfCode2022.Domain.BeaconExclusionZone;
 using sylvain69780.AdventOfCode2022.Domain.BlizzardBasin;

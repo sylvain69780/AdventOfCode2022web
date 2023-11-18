@@ -2,9 +2,9 @@
 using Microsoft.AspNetCore.Components;
 using System.Diagnostics;
 using System.Timers;
-
-namespace AdventOfCode2022web
+namespace sylvain69780.AdventOfCode2022.Blazor
 {
+
     public class PuzzleSolutionPageBase<T> : ComponentBase, IPuzzleSolutionController where T : IPuzzleSolution, new()
     {
         [Inject]

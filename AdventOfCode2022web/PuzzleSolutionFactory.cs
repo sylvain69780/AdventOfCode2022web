@@ -1,8 +1,8 @@
 ﻿using sylvain69780.AdventOfCode2022.Domain;
 using System.Reflection;
-
-namespace AdventOfCode2022web
+namespace sylvain69780.AdventOfCode2022.Blazor
 {
+
     public static class PuzzleSolutionFactory
     {
         private static PuzzleSolutionAttribute? GetAttribute(Type puzzle) => (PuzzleSolutionAttribute?)puzzle.GetCustomAttribute(typeof(PuzzleSolutionAttribute));
