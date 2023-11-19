@@ -1,6 +1,6 @@
 ﻿namespace Domain.RockPaperScissors
 {
-    public class RockPaperScissorsPart2Strategy : ISimplePuzzleStrategy<RockPaperScissorsModel>
+    public class RockPaperScissorsPart2Strategy : IPuzzleStrategy<RockPaperScissorsModel>
     {
         /// <summary>Decodes Input PART 2 X = Lose Y = Draw Z = Win</summary>
         /// <param name="s"></param>

@@ -3,8 +3,8 @@
     public class SimplePuzzleService<TModel> : IPuzzleService where TModel : IPuzzleModel,new()
     {
         protected readonly TModel _model;
-        protected readonly ISimplePuzzleStrategy<TModel> _strategy;
-        public SimplePuzzleService(ISimplePuzzleStrategy<TModel> strategy)
+        protected readonly IPuzzleStrategy<TModel> _strategy;
+        public SimplePuzzleService(IPuzzleStrategy<TModel> strategy)
         {
             _strategy = strategy;
             _model = new();
