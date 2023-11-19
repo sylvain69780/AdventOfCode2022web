@@ -4,6 +4,6 @@ namespace Blazor.Pages
 {
     public partial class CalorieCountingPage
     {
-        CalorieCountingService _puzzleModel = new(new CalorieCountingPart1Strategy());
+        CalorieCountingService _puzzleService = new(new CalorieCountingPart1Strategy());
     }
 }

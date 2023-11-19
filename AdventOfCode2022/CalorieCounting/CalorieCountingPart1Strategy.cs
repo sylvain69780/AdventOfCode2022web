@@ -2,7 +2,7 @@
 
 namespace Domain.CalorieCounting
 {
-    public class CalorieCountingPart1Strategy : ICalorieCountingStrategy
+    public class CalorieCountingPart1Strategy : ISimplePuzzleStrategy<CalorieCountingModel>
     {
         public IEnumerable<ProcessingProgressModel> GetSteps(CalorieCountingModel model,Func<ProcessingProgressModel> updateContext,Action<string> provideSolution)
         {

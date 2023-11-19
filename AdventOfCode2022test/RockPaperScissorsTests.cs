@@ -11,20 +11,27 @@ namespace Tests
         [Test]
         public void Part1_1()
         {
-            var service = new SimplePuzzleService<RockPaperScissorsModel>(new RockPaperScissorsPart1());
+            var service = new RockPaperScissorsService(new RockPaperScissorsPart1Strategy());
             var steps = service.GetStepsToSolution(_input1);
             var lastStep = steps.Last().Step;
-            Assert.That(lastStep, Is.GreaterThan(0));
-            Assert.That(service.Solution, Is.EqualTo("15")); // 9177
+            Assert.Multiple(() =>
+            {
+                Assert.That(lastStep, Is.GreaterThan(0));
+                Assert.That(service.Solution, Is.EqualTo("15")); // 9177
+            });
         }
+
         [Test]
         public void Part2_1()
         {
-            var service = new SimplePuzzleService<RockPaperScissorsModel>(new RockPaperScissorsPart2());
+            var service = new RockPaperScissorsService(new RockPaperScissorsPart2Strategy());
             var steps = service.GetStepsToSolution(_input1);
             var lastStep = steps.Last().Step;
-            Assert.That(lastStep, Is.GreaterThan(0));
-            Assert.That(service.Solution, Is.EqualTo("12")); // 12111
+            Assert.Multiple(() =>
+            {
+                Assert.That(lastStep, Is.GreaterThan(0));
+                Assert.That(service.Solution, Is.EqualTo("12")); // 12111
+            });
         }
 
         string _input1 = @"A Y

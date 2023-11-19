@@ -1,6 +1,5 @@
 ﻿@page "/CalorieCountingPage"
-@using Domain.CalorieCounting
-<PuzzleSolutionControllerNEW PuzzleContext="@_puzzleModel">
-    <CalorieCountingVisualization Model="@_puzzleModel" Settings="@context" />
-    <DefaultVisualizationNEW Step="@_puzzleModel.Step" Solution="@_puzzleModel.Message" />
+<PuzzleSolutionControllerNEW PuzzleContext="@_puzzleService">
+    <CalorieCountingVisualization Model="@_puzzleService" Settings="@context" />
+    <DefaultVisualizationNEW Step="@_puzzleService.Step" Solution="@_puzzleService.Solution" />
 </PuzzleSolutionControllerNEW>

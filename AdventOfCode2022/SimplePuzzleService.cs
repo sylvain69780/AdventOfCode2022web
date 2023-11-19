@@ -1,9 +1,9 @@
 ﻿namespace Domain
 {
-    public class SimplePuzzleService<TModel> : PuzzleServiceBase where TModel : IPuzzleModel,new()
+    public class SimplePuzzleService<TModel> : IPuzzleService where TModel : IPuzzleModel,new()
     {
-        readonly TModel _model;
-        readonly ISimplePuzzleStrategy<TModel> _strategy;
+        protected readonly TModel _model;
+        protected readonly ISimplePuzzleStrategy<TModel> _strategy;
         public SimplePuzzleService(ISimplePuzzleStrategy<TModel> strategy)
         {
             _strategy = strategy;
@@ -14,6 +14,21 @@
             _model.Parse(input);
             _progress = new ProcessingProgressModel();
             return _strategy.GetSteps(_model, Update, ProvideSolution);
+        }
+
+        protected ProcessingProgressModel _progress = new();
+        public string Message => _progress.Message;
+        public string Solution => _progress.Solution;
+        public int Step => _progress.Step;
+        protected ProcessingProgressModel Update()
+        {
+            _progress.Step++;
+            return _progress;
+        }
+
+        protected void ProvideSolution(string solution)
+        {
+            _progress.Solution = solution;
         }
     }
 }
