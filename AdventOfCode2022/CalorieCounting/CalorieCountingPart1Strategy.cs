@@ -1,24 +1,25 @@
-﻿namespace sylvain69780.AdventOfCode2022.Domain.CalorieCounting
+﻿using Domain.CalorieCounting;
+
+namespace Domain.CalorieCounting
 {
     public class CalorieCountingPart1Strategy : ICalorieCountingStrategy
     {
-        public IEnumerable<ProgressInfo> GetStepsToSolution(IEnumerable<int> caloriesHoldByElves,Func<int,ProgressInfo> updateContext,Action<string> provideSolution)
+        public IEnumerable<ProcessingProgressModel> GetSteps(CalorieCountingModel model,Func<ProcessingProgressModel> updateContext,Action<string> provideSolution)
         {
-            int maxCalories = 0;
-            int currentSum = 0;
-            foreach (var value in caloriesHoldByElves)
+            foreach (var value in model.CaloriesHoldByElves)
             {
                 if (value == 0)
-                    currentSum = 0;
+                    model.CurrentSum = 0;
                 else
                 {
+                    var currentSum = model.CurrentSum;
                     currentSum += value;
-                    if (currentSum > maxCalories)
-                        maxCalories = currentSum;
+                    if (currentSum > model.SumsOfCalories[0])
+                        model.SumsOfCalories[0] = currentSum;
                 }
-                yield return updateContext(currentSum);
+                yield return updateContext();
             }
-            provideSolution(maxCalories.ToString());
+            provideSolution(model.SumsOfCalories[0].ToString());
         }
     }
 }

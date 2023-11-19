@@ -1,4 +1,4 @@
-﻿namespace sylvain69780.AdventOfCode2022.Domain.TuningTrouble
+﻿namespace Domain.TuningTrouble
 {
     public class TuningTroubleSolution : IPuzzleSolution
     {

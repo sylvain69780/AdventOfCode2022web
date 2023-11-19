@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace sylvain69780.AdventOfCode2022.Tests
+namespace Tests
 {
     internal class CalorieCountingTests
     {
@@ -16,7 +16,7 @@ namespace sylvain69780.AdventOfCode2022.Tests
         [Test]
         public void Part1_1()
         {
-            var context = new CalorieCountingModel(new CalorieCountingPart1Strategy());
+            var context = new CalorieCountingService(new CalorieCountingPart1Strategy());
             var lastStep = context.GetStepsToSolution(_input1).Last();
             Assert.Multiple(() =>
             {
@@ -27,7 +27,7 @@ namespace sylvain69780.AdventOfCode2022.Tests
         [Test]
         public void Part1_2()
         {
-            var context = new CalorieCountingModel(new CalorieCountingPart1Strategy());
+            var context = new CalorieCountingService(new CalorieCountingPart1Strategy());
             var lastStep = context.GetStepsToSolution(_input2).Last();
             Assert.Multiple(() =>
             {

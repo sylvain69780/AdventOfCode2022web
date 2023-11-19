@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace sylvain69780.AdventOfCode2022.Domain.UnstableDiffusion
+namespace Domain.UnstableDiffusion
 {
     public class UnstableDiffusionSolution : IPuzzleSolution
     {

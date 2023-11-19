@@ -1,4 +1,4 @@
-﻿namespace sylvain69780.AdventOfCode2022.Domain.CampCleanup
+﻿namespace Domain.CampCleanup
 {
     public class CampCleanupSolution : IPuzzleSolution
     {

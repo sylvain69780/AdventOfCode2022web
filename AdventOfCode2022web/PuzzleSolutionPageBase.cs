@@ -1,8 +1,8 @@
-﻿using sylvain69780.AdventOfCode2022.Domain;
+﻿using Domain;
 using Microsoft.AspNetCore.Components;
 using System.Diagnostics;
 using System.Timers;
-namespace sylvain69780.AdventOfCode2022.Blazor
+namespace Blazor
 {
 
     public class PuzzleSolutionPageBase<T> : ComponentBase, IPuzzleSolutionController where T : IPuzzleSolution, new()

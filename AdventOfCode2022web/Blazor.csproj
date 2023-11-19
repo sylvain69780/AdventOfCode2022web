@@ -5,7 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <ServiceWorkerAssetsManifest>service-worker-assets.js</ServiceWorkerAssetsManifest>
-    <RootNamespace>sylvain69780.AdventOfCode2022.Blazor</RootNamespace>
+    <RootNamespace>Blazor</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

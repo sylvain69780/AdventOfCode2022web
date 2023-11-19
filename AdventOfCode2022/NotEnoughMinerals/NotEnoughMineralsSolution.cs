@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace sylvain69780.AdventOfCode2022.Domain.NotEnoughMinerals
+namespace Domain.NotEnoughMinerals
 {
     public enum RobotType { OreRobot, ClayRobot, ObsidianRobot, GeodeRobot }
 

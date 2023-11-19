@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Text;
 
-namespace sylvain69780.AdventOfCode2022.Domain.MonkeyInTheMiddle
+namespace Domain.MonkeyInTheMiddle
 {
     public class MonkeyInTheMiddleSolution : IPuzzleSolution
     {

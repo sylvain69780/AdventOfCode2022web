@@ -1,4 +1,4 @@
-﻿namespace sylvain69780.AdventOfCode2022.Blazor
+﻿namespace Blazor
 {
     public class VisualizationSettings
     {

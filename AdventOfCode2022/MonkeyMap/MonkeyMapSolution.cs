@@ -1,6 +1,6 @@
 ﻿using System.Text;
 using System.Text.RegularExpressions;
-namespace sylvain69780.AdventOfCode2022.Domain.MonkeyMap
+namespace Domain.MonkeyMap
 {
     public class MonkeyMapSolution : IPuzzleSolution
     {

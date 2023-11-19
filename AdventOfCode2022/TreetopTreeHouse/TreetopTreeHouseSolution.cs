@@ -1,4 +1,4 @@
-﻿namespace sylvain69780.AdventOfCode2022.Domain.TreetopTreeHouse
+﻿namespace Domain.TreetopTreeHouse
 {
     public class TreetopTreeHouseSolution : IPuzzleSolution
     {

@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace sylvain69780.AdventOfCode2022.Domain.ProboscideaVolcanium
+namespace Domain.ProboscideaVolcanium
 {
     public class ProboscideaVolcaniumSolution : IPuzzleSolution
     {

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
-namespace sylvain69780.AdventOfCode2022.Domain.SupplyStacks
+namespace Domain.SupplyStacks
 {
     public class SupplyStacksSolution : IPuzzleSolution
     {

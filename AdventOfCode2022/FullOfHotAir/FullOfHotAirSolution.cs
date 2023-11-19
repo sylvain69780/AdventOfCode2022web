@@ -1,4 +1,4 @@
-﻿namespace sylvain69780.AdventOfCode2022.Domain.FullOfHotAir
+﻿namespace Domain.FullOfHotAir
 {
     public class FullOfHotAirSolution : IPuzzleSolution
     {

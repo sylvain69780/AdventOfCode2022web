@@ -1,4 +1,4 @@
-﻿namespace sylvain69780.AdventOfCode2022.Domain.RucksackReorganization
+﻿namespace Domain.RucksackReorganization
 {
     public class RucksackReorganizationSolution : IPuzzleSolution
     {

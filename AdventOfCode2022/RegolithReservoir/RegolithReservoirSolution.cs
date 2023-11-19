@@ -1,4 +1,4 @@
-﻿namespace sylvain69780.AdventOfCode2022.Domain.RegolithReservoir
+﻿namespace Domain.RegolithReservoir
 {
     public class RegolithReservoirSolution : IPuzzleSolution
     {

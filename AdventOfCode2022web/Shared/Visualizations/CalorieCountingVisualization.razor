@@ -1,4 +1,4 @@
-﻿@using sylvain69780.AdventOfCode2022.Domain.CalorieCounting
+﻿@using Domain.CalorieCounting
 <svg viewBox="0,-1,@MaxElfesDisplayed,3">
     <Elf />
     @if (Model!.CaloriesHoldByElves is not null)
@@ -34,7 +34,7 @@
 
 @code {
     [Parameter]
-    public CalorieCountingModel? Model { get; set; }
+    public CalorieCountingService? Model { get; set; }
     [Parameter]
     public VisualizationSettings? Settings { get; set; }
     const int MaxElfesDisplayed = 15;

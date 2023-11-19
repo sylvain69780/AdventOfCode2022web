@@ -1,4 +1,4 @@
-﻿namespace sylvain69780.AdventOfCode2022.Domain.RockPaperScissors
+﻿namespace Domain.RockPaperScissors
 {
     public class RockPaperScissorsSolution : IPuzzleSolution
     {

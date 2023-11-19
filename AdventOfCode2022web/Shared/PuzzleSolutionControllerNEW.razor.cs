@@ -1,32 +1,32 @@
-﻿using sylvain69780.AdventOfCode2022.Domain;
+﻿using Domain;
 using Microsoft.AspNetCore.Components;
 using System.Diagnostics;
-namespace sylvain69780.AdventOfCode2022.Blazor.Shared
+namespace Blazor.Shared
 {
     public partial class PuzzleSolutionControllerNEW
     {
         [Inject]
         public HttpClient? Http { get; set; }
         [Parameter]
-        public IPuzzleModel? PuzzleContext { get; set; }
+        public IPuzzleService? PuzzleContext { get; set; }
 
         protected VisualizationSettings _settings = new() { AnimationDuration = 500 };
 
         public int SolvingStep { get; private set; } = 0;
         public PageState PageState { get; set; } = PageState.Loaded;
         private string _input = string.Empty;
-        private IEnumerator<ProgressInfo>? _stepsToSolution;
+        private IEnumerator<ProcessingProgressModel>? _stepsToSolution;
 
         public string SampleInputFile()
         {
             var puzzleType = PuzzleContext!.GetType();
-            var puzzleInputFile = puzzleType.Name.Replace("Model", "");
+            var puzzleInputFile = puzzleType.Name.Replace("Service", "");
             return puzzleInputFile;
         }
 
         public string FullInputFile() => SampleInputFile() + "_full";
 
-        public string PuzzleSolutionCode => $"https://github.com/sylvain69780/AdventOfCode2022web/blob/master/AdventOfCode2022/PuzzleSolutions/{PuzzleContext!.GetType().Name.Replace("Model", "")}";
+        public string PuzzleSolutionCode => $"https://github.com/sylvain69780/AdventOfCode2022web/blob/master/AdventOfCode2022/PuzzleSolutions/{PuzzleContext!.GetType().Name.Replace("Service", "")}";
 
         public async Task LoadDefaultPuzzleInput() => await LoadPuzzleInput(SampleInputFile());
         public async Task LoadFullPuzzleInput() => await LoadPuzzleInput(FullInputFile());
@@ -54,7 +54,7 @@ namespace sylvain69780.AdventOfCode2022.Blazor.Shared
                 PageState = PageState.Finished;
         }
 
-        public ProgressInfo? Result { get; private set; }
+        public ProcessingProgressModel? Result { get; private set; }
 
 
         public void StartPart1()

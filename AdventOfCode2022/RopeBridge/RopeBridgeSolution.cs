@@ -1,5 +1,5 @@
 ﻿using System.Text;
-namespace sylvain69780.AdventOfCode2022.Domain.RopeBridge
+namespace Domain.RopeBridge
 {
     public class RopeBridgeSolution : IPuzzleSolution
     {

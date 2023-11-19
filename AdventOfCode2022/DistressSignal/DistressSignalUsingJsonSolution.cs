@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Text;
 using System.Text.Json;
-namespace sylvain69780.AdventOfCode2022.Domain.DistressSignal
+namespace Domain.DistressSignal
 {
     public class DistressSignalUsingJsonSolution : IPuzzleSolution
     {

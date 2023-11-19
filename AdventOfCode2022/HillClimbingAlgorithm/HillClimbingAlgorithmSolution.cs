@@ -1,4 +1,4 @@
-﻿namespace sylvain69780.AdventOfCode2022.Domain.HillClimbingAlgorithm
+﻿namespace Domain.HillClimbingAlgorithm
 {
     public class HillClimbingAlgorithmSolution : IPuzzleSolution
     {

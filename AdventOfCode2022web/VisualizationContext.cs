@@ -1,5 +1,5 @@
-﻿using sylvain69780.AdventOfCode2022.Domain;
-namespace sylvain69780.AdventOfCode2022.Blazor
+﻿using Domain;
+namespace Blazor
 {
 
     public class VisualizationContext

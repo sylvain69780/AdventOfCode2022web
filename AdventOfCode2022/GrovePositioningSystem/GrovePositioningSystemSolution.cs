@@ -1,4 +1,4 @@
-﻿namespace sylvain69780.AdventOfCode2022.Domain.GrovePositioningSystem
+﻿namespace Domain.GrovePositioningSystem
 {
     public class GrovePositioningSystemSolution : IPuzzleSolution
     {

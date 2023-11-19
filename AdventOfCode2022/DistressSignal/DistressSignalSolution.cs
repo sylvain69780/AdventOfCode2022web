@@ -1,4 +1,4 @@
-﻿namespace sylvain69780.AdventOfCode2022.Domain.DistressSignal
+﻿namespace Domain.DistressSignal
 {
     public class DistressSignalSolution : IPuzzleSolution
     {

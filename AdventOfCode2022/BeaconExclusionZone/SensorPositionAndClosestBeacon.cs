@@ -1,4 +1,4 @@
-﻿namespace sylvain69780.AdventOfCode2022.Domain.BeaconExclusionZone
+﻿namespace Domain.BeaconExclusionZone
 {
     public struct SensorPositionAndClosestBeacon
     {

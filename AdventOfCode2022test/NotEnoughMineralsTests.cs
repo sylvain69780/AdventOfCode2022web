@@ -1,4 +1,4 @@
-﻿namespace sylvain69780.AdventOfCode2022.Tests
+﻿namespace Tests
 {
     public class NotEnoughMineralsTests
     {

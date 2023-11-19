@@ -1,7 +1,9 @@
-﻿namespace sylvain69780.AdventOfCode2022.Domain.CalorieCounting
+﻿using Domain.CalorieCounting;
+
+namespace Domain.CalorieCounting
 {
     public interface ICalorieCountingStrategy
     {
-        public IEnumerable<ProgressInfo> GetStepsToSolution(IEnumerable<int> caloriesHoldByElves, Func<int, ProgressInfo> progressInfo, Action<string> provideSolution);
+        public IEnumerable<ProcessingProgressModel> GetSteps(CalorieCountingModel model, Func<ProcessingProgressModel> progressInfo, Action<string> provideSolution);
     }
 }

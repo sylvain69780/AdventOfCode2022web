@@ -1,5 +1,5 @@
 ﻿using System.Text;
-namespace sylvain69780.AdventOfCode2022.Domain.PyroclasticFlow
+namespace Domain.PyroclasticFlow
 {
     public class PyroclasticFlowSolution : IPuzzleSolution
     {

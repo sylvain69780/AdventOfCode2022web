@@ -1,4 +1,4 @@
-﻿namespace sylvain69780.AdventOfCode2022.Domain.BlizzardBasin
+﻿namespace Domain.BlizzardBasin
 {
     public class BlizzardBasinInfo
     {

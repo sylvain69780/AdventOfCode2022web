@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace sylvain69780.AdventOfCode2022.Domain.BeaconExclusionZone
+namespace Domain.BeaconExclusionZone
 {
     public class BeaconExclusionZoneSolution : IPuzzleSolver
     {

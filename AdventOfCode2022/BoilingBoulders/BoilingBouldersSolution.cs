@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
 
-namespace sylvain69780.AdventOfCode2022.Domain.BoilingBoulders
+namespace Domain.BoilingBoulders
 {
     public class BoilingBouldersSolution : IPuzzleSolver
     {

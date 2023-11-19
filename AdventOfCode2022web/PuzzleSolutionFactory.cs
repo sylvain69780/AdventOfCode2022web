@@ -1,6 +1,6 @@
-﻿using sylvain69780.AdventOfCode2022.Domain;
+﻿using Domain;
 using System.Reflection;
-namespace sylvain69780.AdventOfCode2022.Blazor
+namespace Blazor
 {
 
     public static class PuzzleSolutionFactory
