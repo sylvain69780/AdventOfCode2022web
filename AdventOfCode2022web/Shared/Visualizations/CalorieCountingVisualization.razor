@@ -1,36 +1,38 @@
 ﻿@using Domain.CalorieCounting
-<svg viewBox="0,-1,@MaxElfesDisplayed,3">
-    <Elf />
-    @if (Model!.CaloriesHoldByElves is not null)
-    {
-        <g transform="translate(@(MaxElfesDisplayed / 2+1),0.5)">
-            <g transform="translate(.5,-.5)">
-                <text font-family="Comic Sans" font-weight="bold" font-size=".5" dominant-baseline="middle" text-anchor="middle" fill="black">@Model.CurrentSum</text>
-            </g>
-        </g>
-    }
-    <g class="elf-moving-@(Model.Step %2)" style=@($"--animation-duration: {Settings!.AnimationDuration * 90 / 100}ms;")>
-        @for (var elfDisplayed = 0; elfDisplayed <= MaxElfesDisplayed; elfDisplayed++)
+<div class="my-2 border border-2 border-dark rounded">
+    <svg viewBox="0,-1,@MaxElfesDisplayed,3">
+        <Elf />
+        @if (Model!.CaloriesHoldByElves is not null)
         {
-            var elfIndex = Model.Step + elfDisplayed - MaxElfesDisplayed / 2;
-            if (elfIndex < 0 || elfIndex >= Model.CaloriesHoldByElves!.Count)
-                continue;
-            var calories = Model.CaloriesHoldByElves[elfIndex];
-            if (calories != 0)
+            <g transform="translate(@(MaxElfesDisplayed / 2+1),0.5)">
+                <g transform="translate(.5,-.5)">
+                    <text font-family="Comic Sans" font-weight="bold" font-size=".5" dominant-baseline="middle" text-anchor="middle" fill="black">@Model.CurrentSum</text>
+                </g>
+            </g>
+        }
+        <g class="elf-moving-@(Model.Step %2)" style=@($"--animation-duration: {Settings!.AnimationDuration * 90 / 100}ms;")>
+            @for (var elfDisplayed = 0; elfDisplayed <= MaxElfesDisplayed; elfDisplayed++)
             {
-                var x = MaxElfesDisplayed - elfDisplayed;
-                var y = 1;
-                <use href="#elf" x="@x" y="@y" />
-                if (elfIndex >= Model.Step)
+                var elfIndex = Model.Step + elfDisplayed - MaxElfesDisplayed / 2;
+                if (elfIndex < 0 || elfIndex >= Model.CaloriesHoldByElves!.Count)
+                    continue;
+                var calories = Model.CaloriesHoldByElves[elfIndex];
+                if (calories != 0)
                 {
-                    <g transform="translate(.5,-0.2)">
-                        <text x="@x" y="@y" font-family="Comic Sans" font-size=".3" dominant-baseline="middle" text-anchor="middle" fill="black">@calories</text>
-                    </g>
+                    var x = MaxElfesDisplayed - elfDisplayed;
+                    var y = 1;
+                    <use href="#elf" x="@x" y="@y" />
+                    if (elfIndex >= Model.Step)
+                    {
+                        <g transform="translate(.5,-0.2)">
+                            <text x="@x" y="@y" font-family="Comic Sans" font-size=".3" dominant-baseline="middle" text-anchor="middle" fill="black">@calories</text>
+                        </g>
+                    }
                 }
             }
-        }
-    </g>
-</svg>
+        </g>
+    </svg>
+</div>
 
 @code {
     [Parameter]
