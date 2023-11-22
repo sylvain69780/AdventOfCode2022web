@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Domain.RucksackReorganization
 {
-    public class RucksackReorganizationPart1Strategy : IPuzzleStrategy<RuchsackReorganizationModel>
+    public class RucksackReorganizationPart1Strategy : RucksackReorganizationStrategyBase
     {
-        public IEnumerable<ProcessingProgressModel> GetSteps(RuchsackReorganizationModel model, Func<ProcessingProgressModel> updateContext, Action<string> provideSolution)
+        public override IEnumerable<ProcessingProgressModel> GetSteps(RuchsackReorganizationModel model, Func<ProcessingProgressModel> updateContext, Action<string> provideSolution)
         {
             var score = 0;
             foreach (var rucksack in model.Lines!)
@@ -16,7 +16,7 @@ namespace Domain.RucksackReorganization
                 var compartmentSize = rucksack.Length / 2;
                 var (compartmentA, compartmentB) = (rucksack[..compartmentSize], rucksack[compartmentSize..(compartmentSize + compartmentSize)]);
                 var sharedItem = compartmentA.First(x => compartmentB.Contains(x));
-                score += Helpers.Priority(sharedItem);
+                score += Priority(sharedItem);
                 yield return updateContext();
             }
             provideSolution(score.ToString());
