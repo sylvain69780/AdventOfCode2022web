@@ -1,6 +1,5 @@
 ﻿@page "/SudokuPage"
-@inherits PuzzleSolutionPageBase<SudokuSolution>
-<h2>Sudoku Solver</h2>
-<PuzzleSolutionViewer Page=@this>
-    <SudokuVisualization Page="@this" />
-</PuzzleSolutionViewer>
+<PuzzleSolutionControllerNEW PuzzleContext="@_puzzleService">
+    <SudokuVisualization Model="@_puzzleService" Settings="@context" />
+    <DefaultVisualizationNEW Step="@_puzzleService.Step" Solution="@_puzzleService.Solution" />
+</PuzzleSolutionControllerNEW>

@@ -25,13 +25,13 @@
     </defs>
     <rect x="-0.05" y="-0.05" width="9.1" height="9.1" fill="url(#gridPattern2)"></rect>
     @{
-        if (Page.PuzzleSolution != null && Page.PuzzleSolution.PuzzleState.Length == 81)
+        if (Model!.PuzzleState.Length == 81)
         {
-            var s = Page.PuzzleSolution!.PuzzleState;
+            var s = Model.PuzzleState;
             var dfs = Array.Empty<string>();
-            if (Page.PuzzleSolution.DFS != null)
+            if (Model.DFS != null)
             {
-                dfs = Page.PuzzleSolution.DFS.ToArray();
+                dfs = Model.DFS.ToArray();
             }
             foreach (var y in Enumerable.Range(0, 9))
                 foreach (var x in Enumerable.Range(0, 9))
@@ -39,7 +39,7 @@
                     var c = s[x + y * 9];
                     if (c == '.')
                     {
-                        var r = Page.PuzzleSolution.Entropy(x + y * 9).Length;
+                        var r = Model.Entropy(x + y * 9).Length;
                         if (r == 0)
                         {
                             <use href="#sudoku-bad-cell" x="@x" y="@y" />
@@ -90,5 +90,7 @@
 
 @code {
     [Parameter]
-    public SudokuPage? Page { get; set; }
+    public SudokuService? Model { get; set; }
+    [Parameter]
+    public VisualizationSettings? Settings { get; set; }
 }
