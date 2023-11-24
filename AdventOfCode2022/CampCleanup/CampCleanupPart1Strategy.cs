@@ -8,6 +8,8 @@ namespace Domain.CampCleanup
 {
     public class CampCleanupPart1Strategy : IPuzzleStrategy<CampCleanupModel>
     {
+        public string Name { get; set; } = "Part 1";
+
         public IEnumerable<ProcessingProgressModel> GetSteps(CampCleanupModel model, Func<ProcessingProgressModel> updateContext, Action<string> provideSolution)
         {
             var score = 0;

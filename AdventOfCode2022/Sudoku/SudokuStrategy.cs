@@ -9,7 +9,7 @@ namespace Domain.Sudoku
 {
     public class SudokuStrategy : IPuzzleStrategy<SudokuModel>
     {
-
+        public string Name { get; set; } = "Solution 1";
         public IEnumerable<ProcessingProgressModel> GetSteps(SudokuModel model, Func<ProcessingProgressModel> updateContext, Action<string> provideSolution)
         {
             model.DFS = new Stack<string>();

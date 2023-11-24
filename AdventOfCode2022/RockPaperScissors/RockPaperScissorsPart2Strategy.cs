@@ -2,6 +2,7 @@
 {
     public class RockPaperScissorsPart2Strategy : IPuzzleStrategy<RockPaperScissorsModel>
     {
+        public string Name { get; set; } = "Part 2";
         /// <summary>Decodes Input PART 2 X = Lose Y = Draw Z = Win</summary>
         /// <param name="s"></param>
         /// <returns>OpponentPlayed ExpectedResult tuple</returns>

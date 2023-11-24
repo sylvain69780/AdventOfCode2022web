@@ -8,6 +8,8 @@ namespace Domain.RucksackReorganization
 {
     public class RucksackReorganizationPart2Strategy : RucksackReorganizationStrategyBase
     {
+        public override string Name { get; set; } = "Part 2";
+
         public override IEnumerable<ProcessingProgressModel> GetSteps(RuchsackReorganizationModel model, Func<ProcessingProgressModel> updateContext, Action<string> provideSolution)
         {
             var score = 0;

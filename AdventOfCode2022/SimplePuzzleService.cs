@@ -2,18 +2,25 @@
 {
     public class SimplePuzzleService<TModel> : IPuzzleService where TModel : IPuzzleModel,new()
     {
-        protected readonly TModel _model;
-        protected readonly IPuzzleStrategy<TModel> _strategy;
+        protected readonly TModel _model = new();
+        protected readonly Dictionary<string,IPuzzleStrategy<TModel>> _strategies = new();
+        protected string _currentStrategy = string.Empty;
         public SimplePuzzleService(IPuzzleStrategy<TModel> strategy)
         {
-            _strategy = strategy;
-            _model = new();
+            _strategies.Add("Default",strategy);
+            _currentStrategy = "Default";
+        }
+        public SimplePuzzleService(IEnumerable<IPuzzleStrategy<TModel>> strategies)
+        {
+            foreach(var strategy in strategies)
+                _strategies.Add(strategy.Name, strategy);
+            _currentStrategy = strategies.First().Name;
         }
         public IEnumerable<ProcessingProgressModel> GetStepsToSolution(string input)
         {
             _model.Parse(input);
             _progress = new ProcessingProgressModel();
-            return _strategy.GetSteps(_model, Update, ProvideSolution);
+            return _strategies[_currentStrategy].GetSteps(_model, Update, ProvideSolution);
         }
 
         protected ProcessingProgressModel _progress = new();

@@ -4,6 +4,7 @@ namespace Domain.CalorieCounting
 {
     public class CalorieCountingPart1Strategy : IPuzzleStrategy<CalorieCountingModel>
     {
+        public string Name { get; set; } = "Part 1";
         public IEnumerable<ProcessingProgressModel> GetSteps(CalorieCountingModel model,Func<ProcessingProgressModel> updateContext,Action<string> provideSolution)
         {
             foreach (var value in model.CaloriesHoldByElves)

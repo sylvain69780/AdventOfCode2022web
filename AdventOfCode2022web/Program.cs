@@ -27,41 +27,19 @@ using Domain.SupplyStacks;
 using Domain.TreetopTreeHouse;
 using Domain.TuningTrouble;
 using Domain.UnstableDiffusion;
+using Domain;
+
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddTransient(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
-//builder.Services.AddScoped(sp => new PuzzleSolutionViewModel<CalorieCountingSolution>(new CalorieCountingSolution()));
-//builder.Services.AddScoped(sp => new PuzzleBasicSolutionViewModel<RockPaperScissorsSolution>(new RockPaperScissorsSolution()));
-//builder.Services.AddScoped(sp => new PuzzleBasicSolutionViewModel<RucksackReorganizationSolution>(new RucksackReorganizationSolution()));
-//builder.Services.AddScoped(sp => new PuzzleSolutionViewModel<CampCleanupSolution>(new CampCleanupSolution()));
-//builder.Services.AddScoped(sp => new PuzzleBasicSolutionViewModel<SupplyStacksSolution>(new SupplyStacksSolution()));
-//builder.Services.AddScoped(sp => new PuzzleBasicSolutionViewModel<TuningTroubleSolution>(new TuningTroubleSolution()));
-//builder.Services.AddScoped(sp => new PuzzleBasicSolutionViewModel<NoSpaceLeftOnDeviceSolution>(new NoSpaceLeftOnDeviceSolution()));
-//builder.Services.AddScoped(sp => new PuzzleBasicSolutionViewModel<TreetopTreeHouseSolution>(new TreetopTreeHouseSolution()));
-//builder.Services.AddScoped(sp => new PuzzleSolutionViewModel<RopeBridgeSolution>(new RopeBridgeSolution()));
-//builder.Services.AddScoped(sp => new PuzzleSolutionViewModel<CathodeRayTubeSolution>(new CathodeRayTubeSolution()));
-//builder.Services.AddScoped(sp => new PuzzleBasicSolutionViewModel<MonkeyInTheMiddleSolution>(new MonkeyInTheMiddleSolution()));
-//builder.Services.AddScoped(sp => new PuzzleBasicSolutionViewModel<HillClimbingAlgorithmSolution>(new HillClimbingAlgorithmSolution()));
-//builder.Services.AddScoped(sp => new PuzzleBasicSolutionViewModel<DistressSignalUsingJsonSolution>(new DistressSignalUsingJsonSolution()));
-//builder.Services.AddScoped(sp => new PuzzleSolutionViewModel<RegolithReservoirSolution>(new RegolithReservoirSolution()));
-//builder.Services.AddScoped(sp => new PuzzleSolutionViewModel<BeaconExclusionZoneSolution>(new BeaconExclusionZoneSolution()));
-//builder.Services.AddScoped(sp => new PuzzleBasicSolutionViewModel<ProboscideaVolcaniumSolution>(new ProboscideaVolcaniumSolution()));
-//builder.Services.AddScoped(sp => new PuzzleBasicSolutionViewModel<PyroclasticFlowSolution>(new PyroclasticFlowSolution()));
-//builder.Services.AddScoped(sp => new PuzzleSolutionViewModel<BoilingBouldersSolution>(new BoilingBouldersSolution()));
-//builder.Services.AddScoped(sp => new PuzzleSolutionViewModel<NotEnoughMineralsSolution>(new NotEnoughMineralsSolution()));
-//builder.Services.AddScoped(sp => new PuzzleBasicSolutionViewModel<GrovePositioningSystemSolution>(new GrovePositioningSystemSolution()));
-//builder.Services.AddScoped(sp => new PuzzleBasicSolutionViewModel<MonkeyMathSolution>(new MonkeyMathSolution()));
-//builder.Services.AddScoped(sp => new PuzzleSolutionViewModel<MonkeyMapSolution>(new MonkeyMapSolution()));
-//builder.Services.AddScoped(sp => new PuzzleSolutionViewModel<FullOfHotAirSolution>(new FullOfHotAirSolution()));
-//builder.Services.AddScoped(sp => new PuzzleBasicSolutionViewModel<DistressSignalSolution>(new DistressSignalSolution()));
-//builder.Services.AddScoped(sp => new PuzzleSolutionViewModel<SudokuSolution>(new SudokuSolution()));
-
-//builder.Services.AddScoped(sp => new PuzzleSolutionViewModel<UnstableDiffusionSolution>(new UnstableDiffusionSolution()));
-//builder.Services.AddScoped(sp => new PuzzleSolutionViewModel<BlizzardBasinSolution>(new BlizzardBasinSolution()));
-
+builder.Services.AddTransient<CalorieCountingService, CalorieCountingService>();
+builder.Services.AddTransient<IPuzzleStrategy<CalorieCountingModel>, CalorieCountingPart1Strategy>();
+// https://dev.to/davidkroell/strategy-design-pattern-with-dependency-injection-7ba
+// https://adamstorr.azurewebsites.net/blog/aspnetcore-and-the-strategy-pattern
+// to remove
 builder.Services.AddScoped(sp => new BlizzardBasinSolution());
 builder.Services.AddScoped(sp => new BeaconExclusionZoneSolution());
 builder.Services.AddScoped(sp => new RockPaperScissorsSolution());
