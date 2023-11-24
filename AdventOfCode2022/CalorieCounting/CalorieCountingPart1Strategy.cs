@@ -13,10 +13,9 @@ namespace Domain.CalorieCounting
                     model.CurrentSum = 0;
                 else
                 {
-                    var currentSum = model.CurrentSum;
-                    currentSum += value;
-                    if (currentSum > model.SumsOfCalories[0])
-                        model.SumsOfCalories[0] = currentSum;
+                    model.CurrentSum += value;
+                    if (model.CurrentSum > model.SumsOfCalories[0])
+                        model.SumsOfCalories[0] = model.CurrentSum;
                 }
                 yield return updateContext();
             }

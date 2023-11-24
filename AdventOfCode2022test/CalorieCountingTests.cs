@@ -8,6 +8,12 @@ namespace Tests
 {
     internal class CalorieCountingTests
     {
+        private List<IPuzzleStrategy<CalorieCountingModel>> _strategies = new()
+        {
+            new CalorieCountingPart1Strategy(),
+            new CalorieCountingPart2Strategy()
+        };
+
         [SetUp]
         public void Setup()
         {
@@ -16,26 +22,50 @@ namespace Tests
         [Test]
         public void Part1_1()
         {
-            var context = new CalorieCountingService(new CalorieCountingPart1Strategy());
+            var context = new CalorieCountingService(_strategies);
             var lastStep = context.GetStepsToSolution(_input1).Last();
             Assert.Multiple(() =>
             {
                 Assert.That(lastStep.Step, Is.EqualTo(14));
-                Assert.That(context.Message, Is.EqualTo("24000"));
+                Assert.That(context.Solution, Is.EqualTo("24000"));
             });
         }
         [Test]
         public void Part1_2()
         {
-            var context = new CalorieCountingService(new CalorieCountingPart1Strategy());
+            var context = new CalorieCountingService(_strategies);
             var lastStep = context.GetStepsToSolution(_input2).Last();
             Assert.Multiple(() =>
             {
                 Assert.That(lastStep.Step, Is.EqualTo(2254));
-                Assert.That(context.Message, Is.EqualTo("69693"));
+                Assert.That(context.Solution, Is.EqualTo("69693"));
             });
         }
 
+        [Test]
+        public void Part2_1()
+        {
+            var context = new CalorieCountingService(_strategies);
+            context.SetStrategy("Part 2");
+            var lastStep = context.GetStepsToSolution(_input1).Last();
+            Assert.Multiple(() =>
+            {
+                Assert.That(lastStep.Step, Is.EqualTo(14));
+                Assert.That(context.Solution, Is.EqualTo("45000"));
+            });
+        }
+        [Test]
+        public void Part2_2()
+        {
+            var context = new CalorieCountingService(_strategies);
+            context.SetStrategy("Part 2");
+            var lastStep = context.GetStepsToSolution(_input2).Last();
+            Assert.Multiple(() =>
+            {
+                Assert.That(lastStep.Step, Is.EqualTo(2254));
+                Assert.That(context.Solution, Is.EqualTo("200945"));
+            });
+        }
         string _input1 = @"1000
 2000
 3000

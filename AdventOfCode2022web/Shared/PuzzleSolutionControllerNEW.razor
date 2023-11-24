@@ -8,7 +8,13 @@
                 <span class="p-2 rounded bg-light">@(_settings.AnimationDuration == 0 ? "Fastest" : $"Run a step every {_settings.AnimationDuration} ms")</span>
             </div>
         </div>
-        <div><button class="btn-primary" @onclick="@( () => { _showPuzzleInput = !_showPuzzleInput; })">Toggle Puzzle input</button></div>
+        <div>
+            <button class="btn-primary" @onclick="@( () => { _showPuzzleInput = !_showPuzzleInput; })">Toggle Puzzle input</button>
+            @foreach (var strategyName in PuzzleContext!.Strategies)
+            {
+                <button class="btn-primary" @onclick="@( () => { PuzzleContext.SetStrategy(strategyName); StartProcessing();})">@strategyName</button>
+            }
+            </div>
         @ChildContent!(_settings)
     </div>
     <div class="col-lg-6">

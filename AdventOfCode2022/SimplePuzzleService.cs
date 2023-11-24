@@ -16,6 +16,13 @@
                 _strategies.Add(strategy.Name, strategy);
             _currentStrategy = strategies.First().Name;
         }
+
+        public string CurrentStrategy => _currentStrategy;
+        public void SetStrategy(string strategyName)
+        {
+            _currentStrategy = strategyName;
+        }
+        public IEnumerable<string> Strategies => _strategies.Select(x => x.Key);
         public IEnumerable<ProcessingProgressModel> GetStepsToSolution(string input)
         {
             _model.Parse(input);

@@ -8,6 +8,7 @@
         public void Parse(string input)
         {
             CurrentSum = 0;
+            SumsOfCalories = new() { 0 };
             CaloriesHoldByElves = input.Split('\n').Select(x => int.TryParse(x, out var value) ? value : 0).ToList();
         }
     }

@@ -4,7 +4,8 @@ namespace Domain.CalorieCounting
 {
     public class CalorieCountingService : SimplePuzzleService<CalorieCountingModel>
     {
-        public CalorieCountingService(IPuzzleStrategy<CalorieCountingModel> strategy) : base(strategy)
+
+        public CalorieCountingService(IEnumerable<IPuzzleStrategy<CalorieCountingModel>> strategies) : base(strategies)
         {
         }
 
