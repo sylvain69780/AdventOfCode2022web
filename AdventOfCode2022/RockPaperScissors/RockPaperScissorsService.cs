@@ -8,7 +8,7 @@ namespace Domain.RockPaperScissors
 {
     public class RockPaperScissorsService : SimplePuzzleService<RockPaperScissorsModel>
     {
-        public RockPaperScissorsService(IPuzzleStrategy<RockPaperScissorsModel> strategy) : base(strategy)
+        public RockPaperScissorsService(IEnumerable<IPuzzleStrategy<RockPaperScissorsModel>> strategies) : base(strategies)
         {
         }
     }

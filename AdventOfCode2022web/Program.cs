@@ -38,6 +38,11 @@ builder.Services.AddTransient(sp => new HttpClient { BaseAddress = new Uri(build
 builder.Services.AddTransient<CalorieCountingService, CalorieCountingService>();
 builder.Services.AddTransient<IPuzzleStrategy<CalorieCountingModel>, CalorieCountingPart1Strategy>();
 builder.Services.AddTransient<IPuzzleStrategy<CalorieCountingModel>, CalorieCountingPart2Strategy>();
+
+builder.Services.AddTransient<RockPaperScissorsService, RockPaperScissorsService>();
+builder.Services.AddTransient<IPuzzleStrategy<RockPaperScissorsModel>, RockPaperScissorsPart1Strategy>();
+builder.Services.AddTransient<IPuzzleStrategy<RockPaperScissorsModel>, RockPaperScissorsPart2Strategy>();
+
 // https://dev.to/davidkroell/strategy-design-pattern-with-dependency-injection-7ba
 // https://adamstorr.azurewebsites.net/blog/aspnetcore-and-the-strategy-pattern
 // to remove

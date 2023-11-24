@@ -8,10 +8,17 @@ namespace Tests
 {
     internal class RockPaperScissorsTests
     {
+        List<IPuzzleStrategy<RockPaperScissorsModel>> _strategies = new()
+        {
+            new RockPaperScissorsPart1Strategy(),
+            new RockPaperScissorsPart2Strategy()
+        };
+
         [Test]
         public void Part1_1()
         {
-            var service = new RockPaperScissorsService(new RockPaperScissorsPart1Strategy());
+            var service = new RockPaperScissorsService(_strategies);
+            service.SetStrategy("Part 1");
             var steps = service.GetStepsToSolution(_input1);
             var lastStep = steps.Last().Step;
             Assert.Multiple(() =>
@@ -24,7 +31,8 @@ namespace Tests
         [Test]
         public void Part2_1()
         {
-            var service = new RockPaperScissorsService(new RockPaperScissorsPart2Strategy());
+            var service = new RockPaperScissorsService(_strategies);
+            service.SetStrategy("Part 2");
             var steps = service.GetStepsToSolution(_input1);
             var lastStep = steps.Last().Step;
             Assert.Multiple(() =>
