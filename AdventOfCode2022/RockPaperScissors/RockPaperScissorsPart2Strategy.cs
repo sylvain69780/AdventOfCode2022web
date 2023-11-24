@@ -6,13 +6,13 @@
         /// <summary>Decodes Input PART 2 X = Lose Y = Draw Z = Win</summary>
         /// <param name="s"></param>
         /// <returns>OpponentPlayed ExpectedResult tuple</returns>
-        private static (Moves OpponentPlayed, GameResults ExpectedResult) DecodeMovesPart2(string s)
+        private static (Moves OpponentPlayed, GameResults ExpectedResult) DecodeMoves(string s)
             => ((Moves)(s[0] - 'A'), (GameResults)(s[2] - 'X'));
 
         public override IEnumerable<ProcessingProgressModel> GetSteps(RockPaperScissorsModel model, Func<ProcessingProgressModel> updateContext, Action<string> provideSolution)
         {
             model.Score = 0;
-            foreach (var (opponentPlayed, expectedResult) in model.RoundsPlayed.Select(x => DecodeMovesPart2(x)))
+            foreach (var (opponentPlayed, expectedResult) in model.RoundsPlayed.Select(x => DecodeMoves(x)))
             {
                 var youPlay = opponentPlayed; // Draw
                 if (expectedResult == GameResults.Win)
