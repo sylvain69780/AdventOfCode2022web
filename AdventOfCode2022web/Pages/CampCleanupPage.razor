@@ -1,4 +1,5 @@
 ﻿@page "/CampCleanupPage"
-<PuzzleSolutionControllerNEW PuzzleContext="@_puzzleService">
-    <DefaultVisualizationNEW Step="@_puzzleService.Step" Solution="@_puzzleService.Solution" />
+@inject Domain.CampCleanup.CampCleanupService PuzzleService
+<PuzzleSolutionControllerNEW PuzzleContext="@PuzzleService">
+    <DefaultVisualizationNEW Step="@PuzzleService.Step" Solution="@PuzzleService.Solution" />
 </PuzzleSolutionControllerNEW>

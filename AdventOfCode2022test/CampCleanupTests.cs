@@ -8,17 +8,24 @@ namespace Tests
 {
     internal class CampCleanupTests
     {
+        readonly List<IPuzzleStrategy<CampCleanupModel>> strategies = new()
+        {
+            new CampCleanupPart1Strategy(),
+            new CampCleanupPart2Strategy()
+        };
         [Test]
         public void Part1_1()
         {
-            var p = new CampCleanupService(new CampCleanupPart1Strategy());
+            var p = new CampCleanupService(strategies);
+            p.SetStrategy("Part 1");
             var s = p.GetStepsToSolution(input1).Last();
             Assert.That(p.Solution, Is.EqualTo("2"));
         }
         [Test]
         public void Part2_1()
         {
-            var p = new CampCleanupService(new CampCleanupPart2Strategy());
+            var p = new CampCleanupService(strategies);
+            p.SetStrategy("Part 2");
             var s = p.GetStepsToSolution(input1).Last();
             Assert.That(p.Solution, Is.EqualTo("4"));
         }

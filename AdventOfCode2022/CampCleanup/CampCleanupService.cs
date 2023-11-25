@@ -8,7 +8,7 @@ namespace Domain.CampCleanup
 {
     public class CampCleanupService : SimplePuzzleService<CampCleanupModel>
     {
-        public CampCleanupService(IPuzzleStrategy<CampCleanupModel> strategy) : base(strategy)
+        public CampCleanupService(IEnumerable<IPuzzleStrategy<CampCleanupModel>> strategies) : base(strategies)
         {
         }
     }
