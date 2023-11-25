@@ -10,7 +10,7 @@ namespace Domain.RucksackReorganization
     {
         public override string Name { get; set; } = "Part 2";
 
-        public override IEnumerable<ProcessingProgressModel> GetSteps(RuchsackReorganizationModel model, Func<ProcessingProgressModel> updateContext, Action<string> provideSolution)
+        public override IEnumerable<ProcessingProgressModel> GetSteps(RucksackReorganizationModel model, Func<ProcessingProgressModel> updateContext, Action<string> provideSolution)
         {
             var score = 0;
             for (var i = 0; i < model.Lines!.Length / 3; i++)

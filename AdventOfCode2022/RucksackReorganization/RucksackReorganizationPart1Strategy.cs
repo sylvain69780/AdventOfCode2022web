@@ -8,9 +8,9 @@ namespace Domain.RucksackReorganization
 {
     public class RucksackReorganizationPart1Strategy : RucksackReorganizationStrategyBase
     {
-        public override string Name { get; set; } = "Part 2";
+        public override string Name { get; set; } = "Part 1";
 
-        public override IEnumerable<ProcessingProgressModel> GetSteps(RuchsackReorganizationModel model, Func<ProcessingProgressModel> updateContext, Action<string> provideSolution)
+        public override IEnumerable<ProcessingProgressModel> GetSteps(RucksackReorganizationModel model, Func<ProcessingProgressModel> updateContext, Action<string> provideSolution)
         {
             var score = 0;
             foreach (var rucksack in model.Lines!)

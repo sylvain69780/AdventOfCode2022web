@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Domain.RucksackReorganization
 {
-    public class RucksackReorganizationService : SimplePuzzleService<RuchsackReorganizationModel>
+    public class RucksackReorganizationService : SimplePuzzleService<RucksackReorganizationModel>
     {
-        public RucksackReorganizationService(IPuzzleStrategy<RuchsackReorganizationModel> strategy) : base(strategy)
+        public RucksackReorganizationService(IEnumerable<IPuzzleStrategy<RucksackReorganizationModel>> strategies) : base(strategies)
         {
         }
     }

@@ -43,6 +43,10 @@ builder.Services.AddTransient<RockPaperScissorsService, RockPaperScissorsService
 builder.Services.AddTransient<IPuzzleStrategy<RockPaperScissorsModel>, RockPaperScissorsPart1Strategy>();
 builder.Services.AddTransient<IPuzzleStrategy<RockPaperScissorsModel>, RockPaperScissorsPart2Strategy>();
 
+builder.Services.AddTransient<RucksackReorganizationService, RucksackReorganizationService>();
+builder.Services.AddTransient<IPuzzleStrategy<RucksackReorganizationModel>, RucksackReorganizationPart1Strategy>();
+builder.Services.AddTransient<IPuzzleStrategy<RucksackReorganizationModel>, RucksackReorganizationPart2Strategy>();
+
 // https://dev.to/davidkroell/strategy-design-pattern-with-dependency-injection-7ba
 // https://adamstorr.azurewebsites.net/blog/aspnetcore-and-the-strategy-pattern
 // to remove

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Domain.RucksackReorganization
 {
-    public class RuchsackReorganizationModel : IPuzzleModel
+    public class RucksackReorganizationModel : IPuzzleModel
     {
         private string[]? _lines;
         public string[]? Lines => _lines;
