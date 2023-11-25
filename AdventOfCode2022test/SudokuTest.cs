@@ -2,7 +2,7 @@
 {
     public class SudokuTest
     {
-        SudokuSolution _sudoku = new SudokuSolution();
+        SudokuService service = new(new List<IPuzzleStrategy<SudokuModel>>() { new SudokuStrategy() });
         [SetUp]
         public void Setup()
         {
@@ -22,8 +22,11 @@
 .8.9...24";
             var solution = @"132865749598374612764129358349581276871296435256743981427658193915432867683917524";
 
-            _sudoku.Initialize(input);
-            var res = _sudoku.SolveFirstPart().Last().Replace("\n", "");
+            var steps = service.GetStepsToSolution(input);
+            var laststep = steps.Count();
+            // foreach (var s in steps)
+
+            var res = service.Solution.Replace("\n", "");
             Assert.That(res, Is.EqualTo(solution));
         }
         [Test]
@@ -41,10 +44,8 @@
 2....81..";
             var solution = @"628179354153486297974523681542817936361294875789365412415932768836741529297658143";
 
-            _sudoku.Initialize(input);
-            var algo = _sudoku.SolveFirstPart().ToArray();
-            var steps = algo.Length;
-            var res = algo[^1].Replace("\n", "");
+            var steps = service.GetStepsToSolution(input).Count();
+            var res = service.Solution.Replace("\n", "");
             Assert.That(res, Is.EqualTo(solution));
         }
         [Test]
@@ -62,10 +63,8 @@
 ..368..4.";
             var solution = @"461352987579168432832794156394816275218537694657429318945273861186945723723681549";
 
-            _sudoku.Initialize(input);
-            var algo = _sudoku.SolveFirstPart().ToArray();
-            var steps = algo.Length;
-            var res = algo[^1].Replace("\n", "");
+            var steps = service.GetStepsToSolution(input).Count();
+            var res = service.Solution.Replace("\n", "");
             Assert.That(res, Is.EqualTo(solution));
         }
     }

@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Domain.Sudoku
+﻿namespace Domain.Sudoku
 {
     public class SudokuService : SimplePuzzleService<SudokuModel>
     {
-        public SudokuService(IPuzzleStrategy<SudokuModel> strategy) : base(strategy)
+        public SudokuService(IEnumerable<IPuzzleStrategy<SudokuModel>> strategies) : base(strategies)
         {
         }
 

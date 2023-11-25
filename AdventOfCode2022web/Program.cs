@@ -51,6 +51,9 @@ builder.Services.AddTransient<CampCleanupService, CampCleanupService>();
 builder.Services.AddTransient<IPuzzleStrategy<CampCleanupModel>, CampCleanupPart1Strategy>();
 builder.Services.AddTransient<IPuzzleStrategy<CampCleanupModel>, CampCleanupPart2Strategy>();
 
+builder.Services.AddTransient<SudokuService, SudokuService>();
+builder.Services.AddTransient<IPuzzleStrategy<SudokuModel>, SudokuStrategy>();
+
 // https://dev.to/davidkroell/strategy-design-pattern-with-dependency-injection-7ba
 // https://adamstorr.azurewebsites.net/blog/aspnetcore-and-the-strategy-pattern
 // to remove
@@ -79,7 +82,6 @@ builder.Services.AddScoped(sp => new MonkeyMathSolution());
 builder.Services.AddScoped(sp => new MonkeyMapSolution());
 builder.Services.AddScoped(sp => new FullOfHotAirSolution());
 builder.Services.AddScoped(sp => new DistressSignalSolution());
-builder.Services.AddScoped(sp => new SudokuSolution());
 
 
 
