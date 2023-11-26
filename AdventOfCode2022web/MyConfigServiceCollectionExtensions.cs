@@ -9,6 +9,7 @@ using Domain.TreetopTreeHouse;
 using Domain.TuningTrouble;
 using Domain;
 using Domain.RopeBridge;
+using Domain.CathodeRayTube;
 
 namespace Blazor
 {
@@ -51,6 +52,10 @@ namespace Blazor
             services.AddTransient<RopeBridgeService, RopeBridgeService>();
             services.AddTransient<IPuzzleStrategy<RopeBridgeModel>, RopeBridgePart1Strategy>();
             services.AddTransient<IPuzzleStrategy<RopeBridgeModel>, RopeBridgePart2Strategy>();
+
+            services.AddTransient<CathodeRayTubeService, CathodeRayTubeService>();
+            services.AddTransient<IPuzzleStrategy<CathodeRayTubeModel>, CathodeRayTubePart1Strategy>();
+            services.AddTransient<IPuzzleStrategy<CathodeRayTubeModel>, CathodeRayTubePart2Strategy>();
 
             services.AddTransient<SudokuService, SudokuService>();
             services.AddTransient<IPuzzleStrategy<SudokuModel>, SudokuStrategy>();

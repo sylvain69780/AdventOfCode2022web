@@ -1,4 +1,5 @@
 ﻿@page "/CathodeRayTubePage"
-@inherits PuzzleSolutionPageBase<CathodeRayTubeSolution>
-<h2>Cathode Ray Tube</h2>
-<PuzzleSolutionViewer Page=@this />
+@inject Domain.CathodeRayTube.CathodeRayTubeService PuzzleService
+<PuzzleSolutionControllerNEW PuzzleContext="@PuzzleService">
+    <DefaultVisualizationNEW Step="@PuzzleService.Step" Solution="@PuzzleService.Solution" />
+</PuzzleSolutionControllerNEW>
