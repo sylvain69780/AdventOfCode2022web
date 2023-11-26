@@ -51,6 +51,14 @@ builder.Services.AddTransient<CampCleanupService, CampCleanupService>();
 builder.Services.AddTransient<IPuzzleStrategy<CampCleanupModel>, CampCleanupPart1Strategy>();
 builder.Services.AddTransient<IPuzzleStrategy<CampCleanupModel>, CampCleanupPart2Strategy>();
 
+builder.Services.AddTransient<SupplyStacksService, SupplyStacksService>();
+builder.Services.AddTransient<IPuzzleStrategy<SupplyStacksModel>, SupplyStacksPart1Strategy>();
+builder.Services.AddTransient<IPuzzleStrategy<SupplyStacksModel>, SupplyStacksPart2Strategy>();
+
+builder.Services.AddTransient<TuningTroubleService, TuningTroubleService>();
+builder.Services.AddTransient<IPuzzleStrategy<TuningTroubleModel>, TuningTroublePart1Strategy>();
+builder.Services.AddTransient<IPuzzleStrategy<TuningTroubleModel>, TuningTroublePart2Strategy>();
+
 builder.Services.AddTransient<SudokuService, SudokuService>();
 builder.Services.AddTransient<IPuzzleStrategy<SudokuModel>, SudokuStrategy>();
 

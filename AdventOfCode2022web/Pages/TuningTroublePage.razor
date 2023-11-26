@@ -1,5 +1,5 @@
 ﻿@page "/TuningTroublePage"
-@inherits PuzzleSolutionPageBase<TuningTroubleSolution>
-<h2>Tuning Trouble</h2>
-<PuzzleSolutionViewer Page=@this />
-
+@inject Domain.TuningTrouble.TuningTroubleService PuzzleService
+<PuzzleSolutionControllerNEW PuzzleContext="@PuzzleService">
+    <DefaultVisualizationNEW Step="@PuzzleService.Step" Solution="@PuzzleService.Solution" />
+</PuzzleSolutionControllerNEW>

@@ -1,4 +1,5 @@
 ﻿@page "/SupplyStacksPage"
-@inherits PuzzleSolutionPageBase<SupplyStacksSolution>
-<h2>Supply Stacks</h2>
-<PuzzleSolutionViewer Page=@this />
+@inject Domain.SupplyStacks.SupplyStacksService PuzzleService
+<PuzzleSolutionControllerNEW PuzzleContext="@PuzzleService">
+    <DefaultVisualizationNEW Step="@PuzzleService.Step" Solution="@PuzzleService.Solution" />
+</PuzzleSolutionControllerNEW>
