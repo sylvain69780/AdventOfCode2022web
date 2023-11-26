@@ -1,4 +1,5 @@
 ﻿@page "/NoSpaceLeftOnDevicePage"
-@inherits PuzzleSolutionPageBase<NoSpaceLeftOnDeviceSolution>
-<h2>No Space Left On Device</h2>
-<PuzzleSolutionViewer Page=@this />
+@inject Domain.NoSpaceLeftOnDevice.NoSpaceLeftOnDeviceService PuzzleService
+<PuzzleSolutionControllerNEW PuzzleContext="@PuzzleService">
+    <DefaultVisualizationNEW Step="@PuzzleService.Step" Solution="@PuzzleService.Solution" />
+</PuzzleSolutionControllerNEW>

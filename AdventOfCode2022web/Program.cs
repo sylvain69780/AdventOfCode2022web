@@ -59,6 +59,10 @@ builder.Services.AddTransient<TuningTroubleService, TuningTroubleService>();
 builder.Services.AddTransient<IPuzzleStrategy<TuningTroubleModel>, TuningTroublePart1Strategy>();
 builder.Services.AddTransient<IPuzzleStrategy<TuningTroubleModel>, TuningTroublePart2Strategy>();
 
+builder.Services.AddTransient<NoSpaceLeftOnDeviceService, NoSpaceLeftOnDeviceService>();
+builder.Services.AddTransient<IPuzzleStrategy<NoSpaceLeftOnDeviceModel>, NoSpaceLeftOnDevicePart1Strategy>();
+builder.Services.AddTransient<IPuzzleStrategy<NoSpaceLeftOnDeviceModel>, NoSpaceLeftOnDevicePart2Strategy>();
+
 builder.Services.AddTransient<SudokuService, SudokuService>();
 builder.Services.AddTransient<IPuzzleStrategy<SudokuModel>, SudokuStrategy>();
 
