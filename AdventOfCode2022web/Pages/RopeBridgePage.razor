@@ -1,4 +1,5 @@
 ﻿@page "/RopeBridgePage"
-@inherits PuzzleSolutionPageBase<RopeBridgeSolution>
-<h2>Rope Bridge</h2>
-<PuzzleSolutionViewer Page=@this />
+@inject Domain.RopeBridge.RopeBridgeService PuzzleService
+<PuzzleSolutionControllerNEW PuzzleContext="@PuzzleService">
+    <DefaultVisualizationNEW Step="@PuzzleService.Step" Solution="@PuzzleService.Solution" />
+</PuzzleSolutionControllerNEW>
