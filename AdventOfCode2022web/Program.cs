@@ -23,11 +23,12 @@ using Domain.RockPaperScissors;
 using Domain.RopeBridge;
 using Domain.RucksackReorganization;
 using Domain.Sudoku;
-using Domain.SupplyStacks;
+using Domain.TreetopTreeHouse;
 using Domain.TreetopTreeHouse;
 using Domain.TuningTrouble;
 using Domain.UnstableDiffusion;
 using Domain;
+using Domain.SupplyStacks;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -63,6 +64,10 @@ builder.Services.AddTransient<NoSpaceLeftOnDeviceService, NoSpaceLeftOnDeviceSer
 builder.Services.AddTransient<IPuzzleStrategy<NoSpaceLeftOnDeviceModel>, NoSpaceLeftOnDevicePart1Strategy>();
 builder.Services.AddTransient<IPuzzleStrategy<NoSpaceLeftOnDeviceModel>, NoSpaceLeftOnDevicePart2Strategy>();
 
+builder.Services.AddTransient<TreetopTreeHouseService, TreetopTreeHouseService>();
+builder.Services.AddTransient<IPuzzleStrategy<TreetopTreeHouseModel>, TreetopTreeHousePart1Strategy>();
+builder.Services.AddTransient<IPuzzleStrategy<TreetopTreeHouseModel>, TreetopTreeHousePart2Strategy>();
+
 builder.Services.AddTransient<SudokuService, SudokuService>();
 builder.Services.AddTransient<IPuzzleStrategy<SudokuModel>, SudokuStrategy>();
 
@@ -74,7 +79,7 @@ builder.Services.AddScoped(sp => new BeaconExclusionZoneSolution());
 builder.Services.AddScoped(sp => new RockPaperScissorsSolution());
 builder.Services.AddScoped(sp => new RucksackReorganizationSolution());
 builder.Services.AddScoped(sp => new CampCleanupSolution());
-builder.Services.AddScoped(sp => new SupplyStacksSolution());
+builder.Services.AddScoped(sp => new TreetopTreeHouseSolution());
 builder.Services.AddScoped(sp => new TuningTroubleSolution());
 builder.Services.AddScoped(sp => new NoSpaceLeftOnDeviceSolution());
 builder.Services.AddScoped(sp => new TreetopTreeHouseSolution());

@@ -5,11 +5,11 @@
         protected readonly TModel _model = new();
         protected readonly Dictionary<string,IPuzzleStrategy<TModel>> _strategies = new();
         protected string _currentStrategy = string.Empty;
-        public SimplePuzzleService(IPuzzleStrategy<TModel> strategy)
-        {
-            _strategies.Add("Default",strategy);
-            _currentStrategy = "Default";
-        }
+        //public SimplePuzzleService(IPuzzleStrategy<TModel> strategy)
+        //{
+        //    _strategies.Add("Default",strategy);
+        //    _currentStrategy = "Default";
+        //}
         public SimplePuzzleService(IEnumerable<IPuzzleStrategy<TModel>> strategies)
         {
             foreach(var strategy in strategies)

@@ -1,6 +1,5 @@
 ﻿@page "/TreetopTreeHousePage"
-@inherits PuzzleSolutionPageBase<TreetopTreeHouseSolution>
-<h2>Treetop Tree House</h2>
-<PuzzleSolutionViewer Page=@this/>
-
-
+@inject Domain.TreetopTreeHouse.TreetopTreeHouseService PuzzleService
+<PuzzleSolutionControllerNEW PuzzleContext="@PuzzleService">
+    <DefaultVisualizationNEW Step="@PuzzleService.Step" Solution="@PuzzleService.Solution" />
+</PuzzleSolutionControllerNEW>
