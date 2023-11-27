@@ -1,5 +1,6 @@
 ﻿@page "/MonkeyInTheMiddlePage"
-@inherits PuzzleSolutionPageBase<MonkeyInTheMiddleSolution>
-<h2>Monkey In The Middle</h2>
-<PuzzleSolutionViewer Page=@this />
+@inject Domain.MonkeyInTheMiddle.MonkeyInTheMiddleService PuzzleService
+<PuzzleSolutionControllerNEW PuzzleContext="@PuzzleService">
+    <DefaultVisualizationNEW Step="@PuzzleService.Step" Solution="@PuzzleService.Solution" />
+</PuzzleSolutionControllerNEW>
 

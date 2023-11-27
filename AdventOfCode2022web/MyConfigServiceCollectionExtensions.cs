@@ -10,6 +10,7 @@ using Domain.TuningTrouble;
 using Domain;
 using Domain.RopeBridge;
 using Domain.CathodeRayTube;
+using Domain.MonkeyInTheMiddle;
 
 namespace Blazor
 {
@@ -56,6 +57,10 @@ namespace Blazor
             services.AddTransient<CathodeRayTubeService, CathodeRayTubeService>();
             services.AddTransient<IPuzzleStrategy<CathodeRayTubeModel>, CathodeRayTubePart1Strategy>();
             services.AddTransient<IPuzzleStrategy<CathodeRayTubeModel>, CathodeRayTubePart2Strategy>();
+
+            services.AddTransient<MonkeyInTheMiddleService, MonkeyInTheMiddleService>();
+            services.AddTransient<IPuzzleStrategy<MonkeyInTheMiddleModel>, MonkeyInTheMiddlePart1Strategy>();
+            services.AddTransient<IPuzzleStrategy<MonkeyInTheMiddleModel>, MonkeyInTheMiddlePart2Strategy>();
 
             services.AddTransient<SudokuService, SudokuService>();
             services.AddTransient<IPuzzleStrategy<SudokuModel>, SudokuStrategy>();
