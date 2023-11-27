@@ -12,6 +12,7 @@ using Domain.RopeBridge;
 using Domain.CathodeRayTube;
 using Domain.MonkeyInTheMiddle;
 using Domain.HillClimbingAlgorithm;
+using Domain.DistressSignal;
 
 namespace Blazor
 {
@@ -66,6 +67,12 @@ namespace Blazor
             services.AddTransient<HillClimbingAlgorithmService, HillClimbingAlgorithmService>();
             services.AddTransient<IPuzzleStrategy<HillClimbingAlgorithmModel>, HillClimbingAlgorithmPart1Strategy>();
             services.AddTransient<IPuzzleStrategy<HillClimbingAlgorithmModel>, HillClimbingAlgorithmPart2Strategy>();
+
+            services.AddTransient<DistressSignalService, DistressSignalService>();
+            services.AddTransient<IPuzzleStrategy<DistressSignalModel>, DistressSignalPart1Strategy>();
+            services.AddTransient<IPuzzleStrategy<DistressSignalModel>, DistressSignalPart2Strategy>();
+            services.AddTransient<IPuzzleStrategy<DistressSignalModel>, DistressSignalPart1JsonStrategy>();
+            services.AddTransient<IPuzzleStrategy<DistressSignalModel>, DistressSignalPart2JsonStrategy>();
 
             services.AddTransient<SudokuService, SudokuService>();
             services.AddTransient<IPuzzleStrategy<SudokuModel>, SudokuStrategy>();

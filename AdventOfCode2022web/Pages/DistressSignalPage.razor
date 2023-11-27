@@ -1,5 +1,6 @@
 ﻿@page "/DistressSignalPage"
-@inherits PuzzleSolutionPageBase<DistressSignalSolution>
-<h2>Distress Signal</h2>
-<PuzzleSolutionViewer Page=@this/>
+@inject Domain.DistressSignal.DistressSignalService PuzzleService
+<PuzzleSolutionControllerNEW PuzzleContext="@PuzzleService">
+    <DefaultVisualizationNEW Step="@PuzzleService.Step" Solution="@PuzzleService.Solution" />
+</PuzzleSolutionControllerNEW>
 
