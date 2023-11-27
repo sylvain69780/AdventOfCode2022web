@@ -11,6 +11,7 @@ using Domain;
 using Domain.RopeBridge;
 using Domain.CathodeRayTube;
 using Domain.MonkeyInTheMiddle;
+using Domain.HillClimbingAlgorithm;
 
 namespace Blazor
 {
@@ -61,6 +62,10 @@ namespace Blazor
             services.AddTransient<MonkeyInTheMiddleService, MonkeyInTheMiddleService>();
             services.AddTransient<IPuzzleStrategy<MonkeyInTheMiddleModel>, MonkeyInTheMiddlePart1Strategy>();
             services.AddTransient<IPuzzleStrategy<MonkeyInTheMiddleModel>, MonkeyInTheMiddlePart2Strategy>();
+
+            services.AddTransient<HillClimbingAlgorithmService, HillClimbingAlgorithmService>();
+            services.AddTransient<IPuzzleStrategy<HillClimbingAlgorithmModel>, HillClimbingAlgorithmPart1Strategy>();
+            services.AddTransient<IPuzzleStrategy<HillClimbingAlgorithmModel>, HillClimbingAlgorithmPart2Strategy>();
 
             services.AddTransient<SudokuService, SudokuService>();
             services.AddTransient<IPuzzleStrategy<SudokuModel>, SudokuStrategy>();

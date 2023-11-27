@@ -1,5 +1,6 @@
 ﻿@page "/HillClimbingAlgorithmPage"
-@inherits PuzzleSolutionPageBase<HillClimbingAlgorithmSolution>
-<h2>Hill Climbing Algorithm</h2>
-<PuzzleSolutionViewer Page=@this />
+@inject Domain.HillClimbingAlgorithm.HillClimbingAlgorithmService PuzzleService
+<PuzzleSolutionControllerNEW PuzzleContext="@PuzzleService">
+    <DefaultVisualizationNEW Step="@PuzzleService.Step" Solution="@PuzzleService.Solution" />
+</PuzzleSolutionControllerNEW>
 
