@@ -1,19 +1,19 @@
 ﻿@page "/RegolithReservoirPage"
-@inherits PuzzleSolutionPageBase<RegolithReservoirSolution>
-<h2>Regolith Reservoir</h2>
-<PuzzleSolutionViewer Page=@this>
+@inject Domain.RegolithReservoir.RegolithReservoirService PuzzleService
+<PuzzleSolutionControllerNEW PuzzleContext="@PuzzleService">
     <img style="width:100%; image-rendering:pixelated" src=@Visualize() />
-</PuzzleSolutionViewer>
+    <DefaultVisualizationNEW Step="@PuzzleService.Step" Solution="@PuzzleService.Solution" />
+</PuzzleSolutionControllerNEW>
 
 @code {
     public string _image64 = string.Empty;
 
     private string Visualize()
     {
-        if (PuzzleSolution == null || PuzzleSolution.OccupiedPositions.Count == 0)
+        if (PuzzleService == null || PuzzleService.OccupiedPositions.Count == 0)
             return string.Empty;
-        var Width = PuzzleSolution!.xMax - PuzzleSolution.xMin;
-        var Height = PuzzleSolution!.yMax - PuzzleSolution.yMin;
+        var Width = PuzzleService!.xMax - PuzzleService.xMin;
+        var Height = PuzzleService!.yMax - PuzzleService.yMin;
         if (Width == 0 || Height == 0)
             return string.Empty;
         var response = string.Empty;
@@ -29,11 +29,11 @@
                         for (int x = 0; x < pixelRow.Length; x++)
                         {
                             ref Rgba32 pixel = ref pixelRow[x];
-                            if (PuzzleSolution.InitialPositions!.Contains((PuzzleSolution.xMin + x, PuzzleSolution.yMin + y)))
+                            if (PuzzleService.InitialPositions!.Contains((PuzzleService.xMin + x, PuzzleService.yMin + y)))
                                 pixel = Color.Blue;
-                            else if (PuzzleSolution.OccupiedPositions!.Contains((PuzzleSolution.xMin + x, PuzzleSolution.yMin + y)))
+                            else if (PuzzleService.OccupiedPositions!.Contains((PuzzleService.xMin + x, PuzzleService.yMin + y)))
                                 pixel = Color.Green;
-                            else if (PuzzleSolution.SandPosition == (PuzzleSolution.xMin + x, PuzzleSolution.yMin + y))
+                            else if (PuzzleService.SandPosition == (PuzzleService.xMin + x, PuzzleService.yMin + y))
                                 pixel = Color.Red;
                         }
                     }

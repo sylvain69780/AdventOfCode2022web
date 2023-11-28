@@ -13,6 +13,7 @@ using Domain.CathodeRayTube;
 using Domain.MonkeyInTheMiddle;
 using Domain.HillClimbingAlgorithm;
 using Domain.DistressSignal;
+using Domain.RegolithReservoir;
 
 namespace Blazor
 {
@@ -76,6 +77,10 @@ namespace Blazor
 
             services.AddTransient<SudokuService, SudokuService>();
             services.AddTransient<IPuzzleStrategy<SudokuModel>, SudokuStrategy>();
+
+            services.AddTransient<RegolithReservoirService, RegolithReservoirService>();
+            services.AddTransient<IPuzzleStrategy<RegolithReservoirModel>, RegolithReservoirPart1Strategy>();
+            services.AddTransient<IPuzzleStrategy<RegolithReservoirModel>, RegolithReservoirPart2Strategy>();
 
             return services;
         }
