@@ -14,6 +14,7 @@ using Domain.MonkeyInTheMiddle;
 using Domain.HillClimbingAlgorithm;
 using Domain.DistressSignal;
 using Domain.RegolithReservoir;
+using Domain.BeaconExclusionZone;
 
 namespace Blazor
 {
@@ -81,6 +82,10 @@ namespace Blazor
             services.AddTransient<RegolithReservoirService, RegolithReservoirService>();
             services.AddTransient<IPuzzleStrategy<RegolithReservoirModel>, RegolithReservoirPart1Strategy>();
             services.AddTransient<IPuzzleStrategy<RegolithReservoirModel>, RegolithReservoirPart2Strategy>();
+
+            services.AddTransient<BeaconExclusionZoneService, BeaconExclusionZoneService>();
+            services.AddTransient<IPuzzleStrategy<BeaconExclusionZoneModel>, BeaconExclusionZonePart1Strategy>();
+            services.AddTransient<IPuzzleStrategy<BeaconExclusionZoneModel>, BeaconExclusionZonePart2Strategy>();
 
             return services;
         }
