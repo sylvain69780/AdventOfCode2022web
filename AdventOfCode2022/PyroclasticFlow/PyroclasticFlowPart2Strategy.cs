@@ -1,63 +1,18 @@
-﻿using System.Text;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
 namespace Domain.PyroclasticFlow
 {
-    public class PyroclasticFlowSolution : IPuzzleSolution
+    public class PyroclasticFlowPart2Strategy : IPuzzleStrategy<PyroclasticFlowModel>
     {
-        private string _puzzleInput = string.Empty;
-        public void Initialize(string puzzleInput)
-        {
-            _puzzleInput = puzzleInput;
-        }
+        public string Name { get; set; } = "Part 2";
 
-
-        private string Visualize(HashSet<(int x, int y)> occupiedSlots, int highestPoint)
+        public IEnumerable<ProcessingProgressModel> GetSteps(PyroclasticFlowModel model, Func<ProcessingProgressModel> updateContext, Action<string> provideSolution)
         {
-            var sb = new StringBuilder();
-            for (var y = 0; y < 10; y++)
-            {
-                sb.Append('#');
-                for (var x = 0; x < 7; x++)
-                {
-                    sb.Append(occupiedSlots.Contains((x, highestPoint - y)) ? '@' : ' ');
-                }
-                sb.Append("#\n");
-            }
-            return sb.ToString();
-        }
-
-        public IEnumerable<string> SolveFirstPart()
-        {
-            var jetGenerator = new JetGenerator { JetPattern = _puzzleInput };
-            var rockGenerator = new RockGenerator();
-            var occupiedSlots = new HashSet<(int x, int y)>();
-            int highestPoint = 0;
-            const int maxIterations = 2022;
-            for (var i = 0; i <= maxIterations; i++)
-            {
-                var rock = rockGenerator.FetchRockShape();
-                highestPoint = occupiedSlots.Count == 0 ? 0 : occupiedSlots.Select(p => p.y).Max() + 1;
-                var rockPosition = (x: 2, y: highestPoint + 3);
-                var stop = false;
-                while (!stop)
-                {
-                    var direction = jetGenerator.FetchJetDirection() == '>' ? 1 : -1;
-                    if (!rock.Select(x => (x.Item1 + rockPosition.x + direction, x.Item2 + rockPosition.y)).Any(x => x.Item1 < 0 || x.Item1 >= 7 || occupiedSlots.Contains(x)))
-                        rockPosition.x += direction;
-                    if (rock.Select(p => (x: p.x + rockPosition.x, y: p.y + rockPosition.y - 1)).Any(p => p.y < 0 || occupiedSlots.Contains(p)))
-                        break;
-                    else
-                        rockPosition.y--;
-                }
-                foreach (var (x, y) in rock)
-                    occupiedSlots.Add((x + rockPosition.x, y + rockPosition.y));
-
-            }
-            Console.WriteLine(Visualize(occupiedSlots, highestPoint));
-            yield return $"After {maxIterations} rocks fallen, the Tower highest point is at y={highestPoint}";
-        }
-        public IEnumerable<string> SolveSecondPart()
-        {
-            var jetGenerator = new JetGenerator { JetPattern = _puzzleInput };
+            var jetGenerator = new JetGenerator { JetPattern = model.PuzzleInput };
             var rockGenerator = new RockGenerator();
             var occupiedPositions = new HashSet<(int x, int y)>();
             var fallenRocksRecording = new List<(int Height, string RockPosition)>();
@@ -107,7 +62,9 @@ namespace Domain.PyroclasticFlow
             var heightAtCycleStart = fallenRocksRecording[cycleStart + notCompletedCycle].Height;
             var numberOfCycles = (numberOfExpectedFallenRocks - cycleStart) / slidingWindowSize;
             var heightOfACycle = fallenRocksRecording[cycleStart + slidingWindowSize].Height - fallenRocksRecording[cycleStart].Height;
-            yield return $"{numberOfCycles} X {heightOfACycle} + {heightAtCycleStart} = {numberOfCycles * heightOfACycle + heightAtCycleStart}";
+            yield return updateContext();
+            //provideSolution($"{numberOfCycles} X {heightOfACycle} + {heightAtCycleStart} = {numberOfCycles * heightOfACycle + heightAtCycleStart}");
+            provideSolution($"{numberOfCycles * heightOfACycle + heightAtCycleStart}");
         }
     }
 }

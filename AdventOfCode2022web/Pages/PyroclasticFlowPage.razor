@@ -1,6 +1,7 @@
 ﻿@page "/PyroclasticFlowPage"
-@inherits PuzzleSolutionPageBase<PyroclasticFlowSolution>
-<h2>Pyroclastic Flow</h2>
-<PuzzleSolutionViewer Page=@this/>
+@inject Domain.PyroclasticFlow.PyroclasticFlowService PuzzleService
+<PuzzleSolutionControllerNEW PuzzleContext="@PuzzleService">
+    <DefaultVisualizationNEW Step="@PuzzleService.Step" Solution="@PuzzleService.Solution" />
+</PuzzleSolutionControllerNEW>
 
 
