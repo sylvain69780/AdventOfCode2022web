@@ -1,8 +1,5 @@
 ﻿@page "/BoilingBouldersPage"
-@using Domain.BoilingBoulders
-<PuzzleSolutionController PuzzleSolver="@_solution">
-    <DefaultVisualization PuzzleOutput="@context.PuzzleOutput" />
-</PuzzleSolutionController>
-@code {
-    BoilingBouldersSolution _solution = new();
-}
+@inject Domain.BoilingBoulders.BoilingBouldersService PuzzleService
+<PuzzleSolutionControllerNEW PuzzleContext="@PuzzleService">
+    <DefaultVisualizationNEW Step="@PuzzleService.Step" Solution="@PuzzleService.Solution" />
+</PuzzleSolutionControllerNEW>

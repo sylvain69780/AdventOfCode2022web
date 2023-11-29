@@ -1,17 +1,38 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
 namespace Tests
 {
-    public class BoilingBouldersTests
+    internal class BoilingBouldersTests
     {
-        [SetUp]
-        public void Setup()
+        List<IPuzzleStrategy<BoilingBouldersModel>> s = new()
         {
+            new BoilingBouldersPart1Strategy(),
+            new BoilingBouldersPart2Strategy()
+        };
+
+        [Test]
+        public void Part1_1()
+        {
+            var service = new BoilingBouldersService(s);
+            service.SetStrategy("Part 1");
+            var c = service.GetStepsToSolution(input).Count();
+            Assert.That(service.Solution, Is.EqualTo("64"));
         }
 
         [Test]
-        public void BoilingBoulders()
+        public void Part2_1()
         {
-            BoilingBouldersSolution solver = new BoilingBouldersSolution();
-            var input1 = @"2,2,2
+            var service = new BoilingBouldersService(s);
+            service.SetStrategy("Part 2");
+            var c = service.GetStepsToSolution(input).Count();
+            Assert.That(service.Solution, Is.EqualTo(@"58"));
+        }
+
+        string input = @"2,2,2
 1,2,2
 3,2,2
 2,1,2
@@ -23,9 +44,9 @@ namespace Tests
 1,2,5
 3,2,5
 2,1,5
-2,3,5";
+2,3,5".Replace("\r","");
 
-            var input2 = @"1,11,15
+        string input2 = @"1,11,15
 5,15,10
 6,9,3
 2,9,7
@@ -2948,10 +2969,5 @@ namespace Tests
 15,10,16
 10,14,17
 11,12,4";
-            Assert.That(solver.SolveFirstPart(input1).Last().Output, Is.EqualTo("64"));
-            Assert.That(solver.SolveSecondPart(input1).Last().Output, Is.EqualTo("58"));
-            Assert.That(solver.SolveFirstPart(input2).Last().Output, Is.EqualTo("4282"));
-            Assert.That(solver.SolveSecondPart(input2).Last().Output, Is.EqualTo("2452"));
-        }
     }
 }

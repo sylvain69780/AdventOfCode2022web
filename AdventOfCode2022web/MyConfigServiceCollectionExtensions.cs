@@ -17,6 +17,7 @@ using Domain.RegolithReservoir;
 using Domain.BeaconExclusionZone;
 using Domain.ProboscideaVolcanium;
 using Domain.PyroclasticFlow;
+using Domain.BoilingBoulders;
 
 namespace Blazor
 {
@@ -96,6 +97,10 @@ namespace Blazor
             services.AddTransient<PyroclasticFlowService, PyroclasticFlowService>();
             services.AddTransient<IPuzzleStrategy<PyroclasticFlowModel>, PyroclasticFlowPart1Strategy>();
             services.AddTransient<IPuzzleStrategy<PyroclasticFlowModel>, PyroclasticFlowPart2Strategy>();
+
+            services.AddTransient<BoilingBouldersService, BoilingBouldersService>();
+            services.AddTransient<IPuzzleStrategy<BoilingBouldersModel>, BoilingBouldersPart1Strategy>();
+            services.AddTransient<IPuzzleStrategy<BoilingBouldersModel>, BoilingBouldersPart2Strategy>();
 
             return services;
         }
