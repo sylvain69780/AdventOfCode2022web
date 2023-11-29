@@ -15,6 +15,7 @@ using Domain.HillClimbingAlgorithm;
 using Domain.DistressSignal;
 using Domain.RegolithReservoir;
 using Domain.BeaconExclusionZone;
+using Domain.ProboscideaVolcanium;
 
 namespace Blazor
 {
@@ -86,6 +87,10 @@ namespace Blazor
             services.AddTransient<BeaconExclusionZoneService, BeaconExclusionZoneService>();
             services.AddTransient<IPuzzleStrategy<BeaconExclusionZoneModel>, BeaconExclusionZonePart1Strategy>();
             services.AddTransient<IPuzzleStrategy<BeaconExclusionZoneModel>, BeaconExclusionZonePart2Strategy>();
+
+            services.AddTransient<ProboscideaVolcaniumService, ProboscideaVolcaniumService>();
+            services.AddTransient<IPuzzleStrategy<ProboscideaVolcaniumModel>, ProboscideaVolcaniumPart1Strategy>();
+            services.AddTransient<IPuzzleStrategy<ProboscideaVolcaniumModel>, ProboscideaVolcaniumPart2Strategy>();
 
             return services;
         }

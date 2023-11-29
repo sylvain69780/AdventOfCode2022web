@@ -2,7 +2,7 @@
 
 namespace Domain.ProboscideaVolcanium
 {
-    public class ProboscideaVolcaniumSolution : IPuzzleSolution
+    public partial class ProboscideaVolcaniumSolution : IPuzzleSolution
     {
         private string _puzzleInput = string.Empty;
         private const string StartingValve = "AA";
@@ -74,12 +74,6 @@ namespace Domain.ProboscideaVolcanium
         public void Initialize(string puzzleInput)
         {
             _puzzleInput = puzzleInput;
-        }
-        struct Valve
-        {
-            public string Name;
-            public int Rate;
-            public string[] LeadsToValves;
         }
 
         private static Dictionary<string, Valve> GetValves(string puzzleInput)

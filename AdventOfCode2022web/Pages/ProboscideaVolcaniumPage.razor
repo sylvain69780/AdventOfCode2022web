@@ -1,7 +1,8 @@
 ﻿@page "/ProboscideaVolcaniumPage"
-@inherits PuzzleSolutionPageBase<ProboscideaVolcaniumSolution>
-<h2>Proboscidea Volcanium</h2>
-<PuzzleSolutionViewer Page=@this/>
+@inject Domain.ProboscideaVolcanium.ProboscideaVolcaniumService PuzzleService
+<PuzzleSolutionControllerNEW PuzzleContext="@PuzzleService">
+    <DefaultVisualizationNEW Step="@PuzzleService.Step" Solution="@PuzzleService.Solution" />
+</PuzzleSolutionControllerNEW>
 
 
 
