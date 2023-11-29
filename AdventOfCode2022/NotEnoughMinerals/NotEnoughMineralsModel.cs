@@ -1,51 +1,21 @@
-﻿using System.Text.RegularExpressions;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace Domain.NotEnoughMinerals
 {
-
-    public class NotEnoughMineralsSolution : IPuzzleSolution
+    public class NotEnoughMineralsModel : IPuzzleModel
     {
-        public List<List<FactoryData>> BestSolutions { get; } = new();
+        private List<BluePrintData>? _bluePrints;
+        public List<BluePrintData>? BluePrints => _bluePrints ;
 
-        private string _puzzleInput = string.Empty;
-
-        public void Initialize(string puzzleInput)
-        {
-            _puzzleInput = puzzleInput;
-        }
-
-        public IEnumerable<string> SolveFirstPart()
-        {
-            var bluePrints = LoadBluePrints(_puzzleInput);
-            var quality = 0;
-            var maxMinutes = 24;
-            foreach (var bp in bluePrints)
-            {
-                var (maxGeodes, iterationsDone) = MaxGeodesPossible(bp, maxMinutes);
-                yield return $"Blueprint {bp.BlueprintNumber} gives at most {maxGeodes} geodes. {iterationsDone} iterations done.";
-                quality += maxGeodes * bp.BlueprintNumber;
-            }
-            yield return $"{quality}";
-        }
-
-        public IEnumerable<string> SolveSecondPart()
-        {
-            var blueprints = LoadBluePrints(_puzzleInput);
-            var quality = 1;
-            var maxMinutes = 32;
-            foreach (var bp in blueprints.Take(3))
-            {
-                var (maxGeodes, iterationsDone) = MaxGeodesPossible(bp, maxMinutes);
-                yield return $"Blueprint {bp.BlueprintNumber} gives at most {maxGeodes} geodes. {iterationsDone} iterations done.";
-                quality *= maxGeodes;
-            }
-            yield return $"{quality}";
-        }
-
-        private static List<BluePrintData> LoadBluePrints(string puzzleInput)
+        public void Parse(string puzzleInput)
         {
             var regex = new Regex(@"Blueprint (\d+): Each ore robot costs (\d+) ore. Each clay robot costs (\d+) ore. Each obsidian robot costs (\d+) ore and (\d+) clay. Each geode robot costs (\d+) ore and (\d+) obsidian.");
-            return puzzleInput.Split("\n")
+            _bluePrints = puzzleInput.Split("\n")
                 .Select(x => regex.Match(x).Groups.Values.Skip(1).Select(x => int.Parse(x.Value)).ToArray())
                 .Select(x => new BluePrintData
                 {
@@ -61,7 +31,7 @@ namespace Domain.NotEnoughMinerals
                 .ToList();
         }
 
-        private static (int MaxGeodes, int IterationsDone) MaxGeodesPossible(BluePrintData bluePrint, int maxMinutes)
+        public static (int MaxGeodes, int IterationsDone) MaxGeodesPossible(BluePrintData bluePrint, int maxMinutes)
         {
             var stack = new Stack<FactoryData>();
             stack.Push(FirstRobot(RobotType.ClayRobot));
@@ -90,7 +60,7 @@ namespace Domain.NotEnoughMinerals
             return (bestScore, iterationsDone);
         }
 
-        private static int MaxGeodesEstimated(FactoryData f, int timeRemaining)
+        public static int MaxGeodesEstimated(FactoryData f, int timeRemaining)
         {
             var maxNewGeodeRobots = timeRemaining;
             if (f.RobotToBuild != RobotType.GeodeRobot)
@@ -102,11 +72,11 @@ namespace Domain.NotEnoughMinerals
             if (maxNewGeodeRobots < 0)
                 maxNewGeodeRobots = 0;
             var geodesCollectedByNewRobots = maxNewGeodeRobots * (maxNewGeodeRobots + 1) / 2;
-            var maxGeodesPossible = f.Geodes + f.GeodeRobots * (timeRemaining+1) + geodesCollectedByNewRobots;
+            var maxGeodesPossible = f.Geodes + f.GeodeRobots * (timeRemaining + 1) + geodesCollectedByNewRobots;
             return maxGeodesPossible;
         }
 
-        private static FactoryData FirstRobot(RobotType robotType)
+        public static FactoryData FirstRobot(RobotType robotType)
         {
             return new FactoryData
             {
@@ -116,7 +86,7 @@ namespace Domain.NotEnoughMinerals
             };
         }
 
-        private static IEnumerable<FactoryData> TargetNewRobots(FactoryData currentFactoryData)
+        public static IEnumerable<FactoryData> TargetNewRobots(FactoryData currentFactoryData)
         {
             currentFactoryData.RobotToBuild = RobotType.OreRobot;
             yield return currentFactoryData;
@@ -130,7 +100,7 @@ namespace Domain.NotEnoughMinerals
                 yield return currentFactoryData;
         }
 
-        private static void CollectMinerals(ref FactoryData factory)
+        public static void CollectMinerals(ref FactoryData factory)
         {
             factory.Minutes++;
             factory.Ores += factory.OreRobots;
@@ -139,13 +109,13 @@ namespace Domain.NotEnoughMinerals
             factory.Geodes += factory.GeodeRobots;
         }
 
-        private static bool HasEnoughMineralsToBuildRobot(BluePrintData bp, FactoryData factory)
+        public static bool HasEnoughMineralsToBuildRobot(BluePrintData bp, FactoryData factory)
         {
             var cost = bp.CostOfRobots![factory.RobotToBuild];
             return factory.Ores < cost.Ores || factory.Clays < cost.Clays || factory.Obsidians < cost.Obsidians;
         }
 
-        private static void TargetRobotIsNowBuilt(BluePrintData bp, ref FactoryData factory)
+        public static void TargetRobotIsNowBuilt(BluePrintData bp, ref FactoryData factory)
         {
             var (ores, clays, obsidians) = bp.CostOfRobots![factory.RobotToBuild];
             if (factory.RobotToBuild == RobotType.OreRobot)

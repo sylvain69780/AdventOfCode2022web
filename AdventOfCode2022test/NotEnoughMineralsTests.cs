@@ -1,11 +1,41 @@
-﻿namespace Tests
-{
-    public class NotEnoughMineralsTests
-    {
-        private string Input1 { get; set; } = @"Blueprint 1: Each ore robot costs 4 ore. Each clay robot costs 2 ore. Each obsidian robot costs 3 ore and 14 clay. Each geode robot costs 2 ore and 7 obsidian.
-Blueprint 2: Each ore robot costs 2 ore. Each clay robot costs 3 ore. Each obsidian robot costs 3 ore and 8 clay. Each geode robot costs 3 ore and 12 obsidian.";
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-        private string Input2 { get; set; } = @"Blueprint 1: Each ore robot costs 3 ore. Each clay robot costs 4 ore. Each obsidian robot costs 4 ore and 18 clay. Each geode robot costs 3 ore and 13 obsidian.
+namespace Tests
+{
+    internal class NotEnoughMineralsTests
+    {
+        readonly List<IPuzzleStrategy<NotEnoughMineralsModel>> s = new()
+        {
+            new NotEnoughMineralsPart1Strategy(),
+            new NotEnoughMineralsPart2Strategy()
+        };
+
+        [Test]
+        public void Part1_1()
+        {
+            var service = new NotEnoughMineralsService(s);
+            service.SetStrategy("Part 1");
+            var c = service.GetStepsToSolution(input).Count();
+            Assert.That(service.Solution, Is.EqualTo("33"));
+        }
+
+        [Test]
+        public void Part2_1()
+        {
+            var service = new NotEnoughMineralsService(s);
+            service.SetStrategy("Part 2");
+            var c = service.GetStepsToSolution(input).Count();
+            Assert.That(service.Solution, Is.EqualTo("3472"));
+        }
+
+        string input = @"Blueprint 1: Each ore robot costs 4 ore. Each clay robot costs 2 ore. Each obsidian robot costs 3 ore and 14 clay. Each geode robot costs 2 ore and 7 obsidian.
+Blueprint 2: Each ore robot costs 2 ore. Each clay robot costs 3 ore. Each obsidian robot costs 3 ore and 8 clay. Each geode robot costs 3 ore and 12 obsidian.".Replace("\r", "");
+
+        string input2 = @"Blueprint 1: Each ore robot costs 3 ore. Each clay robot costs 4 ore. Each obsidian robot costs 4 ore and 18 clay. Each geode robot costs 3 ore and 13 obsidian.
 Blueprint 2: Each ore robot costs 4 ore. Each clay robot costs 4 ore. Each obsidian robot costs 2 ore and 11 clay. Each geode robot costs 4 ore and 8 obsidian.
 Blueprint 3: Each ore robot costs 3 ore. Each clay robot costs 3 ore. Each obsidian robot costs 2 ore and 15 clay. Each geode robot costs 3 ore and 9 obsidian.
 Blueprint 4: Each ore robot costs 2 ore. Each clay robot costs 2 ore. Each obsidian robot costs 2 ore and 8 clay. Each geode robot costs 2 ore and 14 obsidian.
@@ -34,45 +64,6 @@ Blueprint 26: Each ore robot costs 2 ore. Each clay robot costs 2 ore. Each obsi
 Blueprint 27: Each ore robot costs 2 ore. Each clay robot costs 4 ore. Each obsidian robot costs 2 ore and 20 clay. Each geode robot costs 3 ore and 15 obsidian.
 Blueprint 28: Each ore robot costs 4 ore. Each clay robot costs 4 ore. Each obsidian robot costs 2 ore and 16 clay. Each geode robot costs 4 ore and 16 obsidian.
 Blueprint 29: Each ore robot costs 3 ore. Each clay robot costs 4 ore. Each obsidian robot costs 4 ore and 5 clay. Each geode robot costs 3 ore and 12 obsidian.
-Blueprint 30: Each ore robot costs 4 ore. Each clay robot costs 3 ore. Each obsidian robot costs 3 ore and 20 clay. Each geode robot costs 2 ore and 19 obsidian.";
-
-
-        [SetUp]
-        public void Setup()
-        {
-
-        }
-        [Test]
-        public void Test1()
-        {
-            var puzzle = new NotEnoughMineralsSolution();
-            puzzle.Initialize(Input1);
-            var res = puzzle.SolveFirstPart().Last();
-            Assert.That(res, Is.EqualTo("33"));
-        }
-        [Test]
-        public void Test1_full()
-        {
-            var puzzle = new NotEnoughMineralsSolution();
-            puzzle.Initialize(Input2);
-            var res = puzzle.SolveFirstPart().Last();
-            Assert.That(res, Is.EqualTo("1413"));
-        }
-        [Test]
-        public void Test2()
-        {
-            var puzzle = new NotEnoughMineralsSolution();
-            puzzle.Initialize(Input1);
-            var res = puzzle.SolveSecondPart().Last();
-            Assert.That(res, Is.EqualTo("3472"));
-        }
-        [Test]
-        public void Test2_full()
-        {
-            var puzzle = new NotEnoughMineralsSolution();
-            puzzle.Initialize(Input2);
-            var res = puzzle.SolveSecondPart().Last();
-            Assert.That(res, Is.EqualTo("21080"));
-        }
+Blueprint 30: Each ore robot costs 4 ore. Each clay robot costs 3 ore. Each obsidian robot costs 3 ore and 20 clay. Each geode robot costs 2 ore and 19 obsidian.".Replace("\r","");
     }
 }
