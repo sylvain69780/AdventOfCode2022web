@@ -1,5 +1,5 @@
 ﻿@page "/GrovePositioningSystemPage"
-@inherits PuzzleSolutionPageBase<GrovePositioningSystemSolution>
-<h2>Grove Positioning System</h2>
-<PuzzleSolutionViewer Page=@this/>
-
+@inject Domain.GrovePositioningSystem.GrovePositioningSystemService PuzzleService
+<PuzzleSolutionControllerNEW PuzzleContext="@PuzzleService">
+    <DefaultVisualizationNEW Step="@PuzzleService.Step" Solution="@PuzzleService.Solution" />
+</PuzzleSolutionControllerNEW>

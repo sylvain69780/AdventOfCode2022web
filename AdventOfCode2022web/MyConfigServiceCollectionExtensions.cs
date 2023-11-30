@@ -19,6 +19,7 @@ using Domain.ProboscideaVolcanium;
 using Domain.PyroclasticFlow;
 using Domain.BoilingBoulders;
 using Domain.NotEnoughMinerals;
+using Domain.GrovePositioningSystem;
 
 namespace Blazor
 {
@@ -106,6 +107,10 @@ namespace Blazor
             services.AddTransient<NotEnoughMineralsService, NotEnoughMineralsService>();
             services.AddTransient<IPuzzleStrategy<NotEnoughMineralsModel>, NotEnoughMineralsPart1Strategy>();
             services.AddTransient<IPuzzleStrategy<NotEnoughMineralsModel>, NotEnoughMineralsPart2Strategy>();
+
+            services.AddTransient<GrovePositioningSystemService, GrovePositioningSystemService>();
+            services.AddTransient<IPuzzleStrategy<GrovePositioningSystemModel>, GrovePositioningSystemPart1Strategy>();
+            services.AddTransient<IPuzzleStrategy<GrovePositioningSystemModel>, GrovePositioningSystemPart2Strategy>();
 
             return services;
         }

@@ -1,45 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace Tests
 {
-    internal class GrovePositioningSystemTests
+    public class GrovePositioningSystemTests2
     {
-        List<IPuzzleStrategy<GrovePositioningSystemModel>> s = new()
+        [SetUp]
+        public void Setup()
         {
-            new GrovePositioningSystemPart1Strategy(),
-            new GrovePositioningSystemPart2Strategy()
-        };
-
-        [Test]
-        public void Part1_1()
-        {
-            var service = new GrovePositioningSystemService(S);
-            service.SetStrategy("Part 1");
-            var c = service.GetStepsToSolution(input).Count();
-            Assert.That(service.Solution, Is.EqualTo("3"));
         }
 
         [Test]
-        public void Part2_1()
+        public void GrovePositioningSystem()
         {
-            var service = new GrovePositioningSystemService(S);
-            service.SetStrategy("Part 2");
-            var c = service.GetStepsToSolution(input).Count();
-            Assert.That(service.Solution, Is.EqualTo(@"1623178306"));
-        }
-
-        readonly string input = @"1
+            var solver = new GrovePositioningSystemSolution();
+            var input1 = @"1
 2
 -3
 3
 -2
 0
-4".Replace("\r", "");
-        readonly string input2 = @"-8794
+4";
+            var input2 = @"-8794
 -1700
 -8487
 8795
@@ -5038,8 +5017,15 @@ namespace Tests
 -7061
 -6887
 9115
-7982".Replace("\r","");
+7982";
 
-        public List<IPuzzleStrategy<GrovePositioningSystemModel>> S { get => s; set => s = value; }
+            solver.Initialize(input1);
+            Assert.That(solver.SolveFirstPart().Last(), Is.EqualTo("3"));
+            Assert.That(solver.SolveSecondPart().Last(), Is.EqualTo("1623178306"));
+            solver.Initialize(input2);
+            Assert.That(solver.SolveFirstPart().Last(), Is.EqualTo("4426"));
+            Assert.That(solver.SolveSecondPart().Last(), Is.EqualTo("8119137886612"));
+        }
+
     }
 }
