@@ -1,58 +1,15 @@
-﻿using Domain.BlizzardBasin;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+
 namespace Domain.MonkeyMap
 {
-    public class MonkeyMapSolution : IPuzzleSolution
+    public class MonkeyMapModel : IPuzzleModel
     {
-        private string _puzzleInput = string.Empty;
-
-        public void Initialize(string puzzleInput)
-        {
-            _puzzleInput = puzzleInput;
-        }
-
-        public IEnumerable<string> SolveFirstPart()
-        {
-            var simulation = ProcessInput(_puzzleInput);
-            foreach (var (move, rotation) in simulation.Instructions)
-            {
-                for (var step = 0; step < move; step++)
-                {
-                    var tmp = ComputeNextPosition(simulation);
-                    if (Map(simulation, tmp) != '#')
-                        simulation.Position = tmp;
-                    simulation.Step++;
-                }
-                if (rotation == "R")
-                    simulation.Direction = (Direction)(((int)simulation.Direction + 1) % 4);
-                if (rotation == "L")
-                    simulation.Direction = (Direction)(((int)simulation.Direction - 1 + 4) % 4);
-            }
-            yield return (1000 * (simulation.Position.Y + 1) + 4 * (simulation.Position.X + 1) + (int)simulation.Direction).ToString();
-        }
-
-        public IEnumerable<string> SolveSecondPart()
-        {
-            var simulation = ProcessInput(_puzzleInput);
-            foreach (var (move, rotation) in simulation.Instructions)
-            {
-                for (var step = 0; step < move; step++)
-                {
-                    var tmp = ComputeNextPositionOnCube(simulation);
-                    if (Map(simulation, tmp.Position) != '#')
-                        (simulation.Position, simulation.Direction) = tmp;
-                    simulation.Step++;
-                }
-                if (rotation == "R")
-                    simulation.Direction = (Direction)(((int)simulation.Direction + 1) % 4);
-                if (rotation == "L")
-                    simulation.Direction = (Direction)(((int)simulation.Direction - 1 + 4) % 4);
-            }
-            yield return (1000 * (simulation.Position.Y + 1) + 4 * (simulation.Position.X + 1) + (int)simulation.Direction).ToString();
-        }
-
-        private static (int X, int Y) ComputeNextPosition(Simulation simulation)
+        public static (int X, int Y) ComputeNextPosition(Simulation simulation)
         {
             var pos = simulation.Position;
             do
@@ -69,7 +26,7 @@ namespace Domain.MonkeyMap
             } while (Map(simulation, pos) == ' ');
             return pos;
         }
-        private static ((int X, int Y) Position, Direction Direction) ComputeNextPositionOnCube(Simulation simulation)
+        public static ((int X, int Y) Position, Direction Direction) ComputeNextPositionOnCube(Simulation simulation)
         {
             var direction = simulation.Direction;
             var position = MoveInDirection(simulation.Position, direction);
@@ -157,14 +114,17 @@ namespace Domain.MonkeyMap
             throw new NotSupportedException("Target box not found on the map.");
         }
 
-        private static Simulation ProcessInput(string inputString)
+        Simulation? _simulation;
+        public Simulation? Simulation => _simulation;
+
+        public void Parse(string inputString)
         {
             var input = inputString.Split("\n");
             var inputCommands = input[^1];
             var regex = new Regex(@"(\d+)([L|R|E])");
             var instructions = regex.Matches(inputCommands + "E").Select(x => (Move: int.Parse(x.Groups[1].Value), Rotate: x.Groups[2].Value)).ToList();
             Array.Resize(ref input, input.Length - 2);
-            return new Simulation()
+            _simulation = new Simulation()
             {
                 Map = input,
                 Instructions = instructions,
@@ -175,8 +135,7 @@ namespace Domain.MonkeyMap
         }
 
 
-
-        private static char Map(Simulation puzzleInput, (int X, int Y) pos)
+        public static char Map(Simulation puzzleInput, (int X, int Y) pos)
         {
             if (pos.X < 0 || pos.Y < 0 || pos.Y > puzzleInput.MaxY || pos.X > puzzleInput.Map[pos.Y].Length - 1)
                 return ' ';
@@ -185,6 +144,7 @@ namespace Domain.MonkeyMap
         }
 
         private static readonly (int X, int Y)[] Directions2D = new (int X, int Y)[] { (1, 0), (0, 1), (-1, 0), (0, -1) };
+
 
         private static (int X, int Y) MoveInDirection((int X, int Y) pos, Direction orientationName)
         {
@@ -224,5 +184,6 @@ namespace Domain.MonkeyMap
             sb.Append($"Step {simulation.Step}\n");
             return sb.ToString();
         }
+
     }
 }

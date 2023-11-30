@@ -21,6 +21,7 @@ using Domain.BoilingBoulders;
 using Domain.NotEnoughMinerals;
 using Domain.GrovePositioningSystem;
 using Domain.MonkeyMath;
+using Domain.MonkeyMap;
 
 namespace Blazor
 {
@@ -116,6 +117,10 @@ namespace Blazor
             services.AddTransient<MonkeyMathService, MonkeyMathService>();
             services.AddTransient<IPuzzleStrategy<MonkeyMathModel>, MonkeyMathPart1Strategy>();
             services.AddTransient<IPuzzleStrategy<MonkeyMathModel>, MonkeyMathPart2Strategy>();
+
+            services.AddTransient<MonkeyMapService, MonkeyMapService>();
+            services.AddTransient<IPuzzleStrategy<MonkeyMapModel>, MonkeyMapPart1Strategy>();
+            services.AddTransient<IPuzzleStrategy<MonkeyMapModel>, MonkeyMapPart2Strategy>();
 
             return services;
         }
