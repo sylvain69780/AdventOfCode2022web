@@ -1,6 +1,7 @@
 ﻿@page "/MonkeyMathPage"
-@inherits PuzzleSolutionPageBase<MonkeyMathSolution>
-<h2>Monkey Math</h2>
-<PuzzleSolutionViewer Page=@this />
+@inject Domain.MonkeyMath.MonkeyMathService PuzzleService
+<PuzzleSolutionControllerNEW PuzzleContext="@PuzzleService">
+    <DefaultVisualizationNEW Step="@PuzzleService.Step" Solution="@PuzzleService.Solution" />
+</PuzzleSolutionControllerNEW>
 
 

@@ -9,11 +9,7 @@ namespace Domain.MonkeyMath
         {
             _puzzleInput = puzzleInput;
         }
-        private class JobOfEachMonkey
-        {
-            public Dictionary<string, (string Left, string Operator, string Right)>? ComputingMonkeys;
-            public Dictionary<string, long>? NumberYellingMonkeys;
-        }
+
 
         private static JobOfEachMonkey ReadPuzzleInput(string puzzleInput)
         {

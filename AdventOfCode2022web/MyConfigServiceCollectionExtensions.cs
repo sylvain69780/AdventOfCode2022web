@@ -20,6 +20,7 @@ using Domain.PyroclasticFlow;
 using Domain.BoilingBoulders;
 using Domain.NotEnoughMinerals;
 using Domain.GrovePositioningSystem;
+using Domain.MonkeyMath;
 
 namespace Blazor
 {
@@ -111,6 +112,10 @@ namespace Blazor
             services.AddTransient<GrovePositioningSystemService, GrovePositioningSystemService>();
             services.AddTransient<IPuzzleStrategy<GrovePositioningSystemModel>, GrovePositioningSystemPart1Strategy>();
             services.AddTransient<IPuzzleStrategy<GrovePositioningSystemModel>, GrovePositioningSystemPart2Strategy>();
+
+            services.AddTransient<MonkeyMathService, MonkeyMathService>();
+            services.AddTransient<IPuzzleStrategy<MonkeyMathModel>, MonkeyMathPart1Strategy>();
+            services.AddTransient<IPuzzleStrategy<MonkeyMathModel>, MonkeyMathPart2Strategy>();
 
             return services;
         }
