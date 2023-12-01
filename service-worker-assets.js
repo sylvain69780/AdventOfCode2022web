@@ -29,15 +29,15 @@
       "url": "_framework\/icudt_no_CJK.dat"
     },
     {
-      "hash": "sha256-bJIzwDFSgKbeWFaL3v2izLPziPNXp8PGFtELOcGBetk=",
+      "hash": "sha256-g8nTqo6SlO\/RZDBaWBQ2\/OVJose8FszsBhVfbrlcHHQ=",
       "url": "_framework\/blazor.boot.json"
     },
     {
-      "hash": "sha256-MzkLddhi2zFquumYmMBxMXC6EegzsY\/F8Cp+A536w70=",
+      "hash": "sha256-AyVOEz65mvBhO+X2JfZHYbdzy3OBtT2JLCZeUN8Mquc=",
       "url": "_framework\/Blazor.dll"
     },
     {
-      "hash": "sha256-CHdFWs2wcJu69ZvuN3hz8gzgSmc7rxVYunnfp525D1k=",
+      "hash": "sha256-rPIerXlAXeWFj8eXvUUyiyaSsRB9z7rWMh+1L7idkSQ=",
       "url": "_framework\/Domain.dll"
     },
     {
@@ -149,7 +149,7 @@
       "url": "_framework\/System.ObjectModel.dll"
     },
     {
-      "hash": "sha256-C5vlDEbm51IAzbyeWxwkYyzDDexOvMGlafT+xnyxYAs=",
+      "hash": "sha256-\/pIp9RaP1mWAgPDyFz49+\/YeuNldMWYaGzbbPlASAjo=",
       "url": "_framework\/System.Private.CoreLib.dll"
     },
     {
@@ -481,6 +481,14 @@
       "url": "sample-data\/SupplyStacks.txt"
     },
     {
+      "hash": "sha256-nPrPulmMJmx8htBZnvXll8ulrkwSA\/IdfUM+vsfqg3w=",
+      "url": "sample-data\/Trebuchet_full.txt"
+    },
+    {
+      "hash": "sha256-d22bY7jK0TVQp88lAXYOJj6vxx1NMqmu5sXwNMhAasc=",
+      "url": "sample-data\/Trebuchet.txt"
+    },
+    {
       "hash": "sha256-w0F8yo4ONLrtsqlMQm5UDQW7SLaIU6AYL421uB27bt8=",
       "url": "sample-data\/TreetopTreeHouse_full.txt"
     },
@@ -505,5 +513,5 @@
       "url": "sample-data\/UnstableDiffusion.txt"
     }
   ],
-  "version": "UNCMKAxF"
+  "version": "eeNrSVBu"
 };
