@@ -22,6 +22,7 @@ using Domain.NotEnoughMinerals;
 using Domain.GrovePositioningSystem;
 using Domain.MonkeyMath;
 using Domain.MonkeyMap;
+using Domain.Trebuchet;
 
 namespace Blazor
 {
@@ -121,6 +122,10 @@ namespace Blazor
             services.AddTransient<MonkeyMapService, MonkeyMapService>();
             services.AddTransient<IPuzzleStrategy<MonkeyMapModel>, MonkeyMapPart1Strategy>();
             services.AddTransient<IPuzzleStrategy<MonkeyMapModel>, MonkeyMapPart2Strategy>();
+
+            services.AddTransient<TrebuchetService, TrebuchetService>();
+            services.AddTransient<IPuzzleStrategy<TrebuchetModel>, TrebuchetPart1Strategy>();
+            services.AddTransient<IPuzzleStrategy<TrebuchetModel>, TrebuchetPart2Strategy>();
 
             return services;
         }
