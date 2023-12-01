@@ -26,7 +26,7 @@ namespace Blazor.Shared
 
         public string FullInputFile() => SampleInputFile() + "_full";
 
-        public string PuzzleSolutionCode => $"https://github.com/sylvain69780/AdventOfCode2022web/blob/master/AdventOfCode2022/PuzzleSolutions/{PuzzleContext!.GetType().Name.Replace("Service", "")}";
+        public string PuzzleSolutionCode => $"https://github.com/sylvain69780/AdventOfCode2022web/tree/master/AdventOfCode2022/{PuzzleContext!.GetType().Name.Replace("Service", "")}";
 
         public async Task LoadDefaultPuzzleInput() => await LoadPuzzleInput(SampleInputFile());
         public async Task LoadFullPuzzleInput() => await LoadPuzzleInput(FullInputFile());
