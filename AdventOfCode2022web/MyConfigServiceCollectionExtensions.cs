@@ -24,6 +24,7 @@ using Domain.MonkeyMath;
 using Domain.MonkeyMap;
 using Domain.Trebuchet;
 using Domain.CubeConundrum;
+using Domain.FullOfHotAir;
 
 namespace Blazor
 {
@@ -123,6 +124,10 @@ namespace Blazor
             services.AddTransient<MonkeyMapService, MonkeyMapService>();
             services.AddTransient<IPuzzleStrategy<MonkeyMapModel>, MonkeyMapPart1Strategy>();
             services.AddTransient<IPuzzleStrategy<MonkeyMapModel>, MonkeyMapPart2Strategy>();
+
+            services.AddTransient<FullOfHotAirService, FullOfHotAirService>();
+            services.AddTransient<IPuzzleStrategy<FullOfHotAirModel>, FullOfHotAirPart1Strategy>();
+
 
             services.AddTransient<TrebuchetService, TrebuchetService>();
             services.AddTransient<IPuzzleStrategy<TrebuchetModel>, TrebuchetPart1Strategy>();

@@ -1,5 +1,6 @@
 ﻿@page "/FullOfHotAirPage"
-@inherits PuzzleSolutionPageBase<FullOfHotAirSolution>
-<h2>Full Of Hot Air</h2>
-<PuzzleSolutionViewer Page=@this />
+@inject Domain.FullOfHotAir.FullOfHotAirService PuzzleService
+<PuzzleSolutionControllerNEW PuzzleContext="@PuzzleService">
+    <DefaultVisualizationNEW Step="@PuzzleService.Step" Solution="@PuzzleService.Solution" />
+</PuzzleSolutionControllerNEW>
 
