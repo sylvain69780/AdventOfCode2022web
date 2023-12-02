@@ -29,15 +29,15 @@
       "url": "_framework\/icudt_no_CJK.dat"
     },
     {
-      "hash": "sha256-EGUtqWv4m7lPC0iIEZCcqRH1WOLZKEV5yKCl8XQ0ho0=",
+      "hash": "sha256-mNnsnx5tkAFMPHusyuy0LVNaZTPJFMzApqPLRSmrEcg=",
       "url": "_framework\/blazor.boot.json"
     },
     {
-      "hash": "sha256-idWHBw5ZLthT6k1BA2GV2eDgXEsYiBGALz0j65WBCX0=",
+      "hash": "sha256-6xzKZea5aVuN7oCnKQlQ85bs2ia3MuhuwxZPduhzwqk=",
       "url": "_framework\/Blazor.dll"
     },
     {
-      "hash": "sha256-yTGSH8C9Pz4jw0AjiJzhyjue0Y56G7hxngPzdMR9X2o=",
+      "hash": "sha256-oO7eQb2Zw0Ay7sNZvLb9sySbopatMeGe2IEC4OJ5grg=",
       "url": "_framework\/Domain.dll"
     },
     {
@@ -341,6 +341,14 @@
       "url": "sample-data\/CathodeRayTube.txt"
     },
     {
+      "hash": "sha256-PVCpZWILoYiTFA7rwkthOcufnxQVyyLqYvI6MYK+G\/Y=",
+      "url": "sample-data\/CubeConundrum_full.txt"
+    },
+    {
+      "hash": "sha256-j9gd1082\/RZ16uh3H0G5DBfrPRVW1wZtHWlGvccWKyI=",
+      "url": "sample-data\/CubeConundrum.txt"
+    },
+    {
       "hash": "sha256-rbyr8Q3VZQLuv7yaK+9sDrkTtX+BlrucQYgcQtf8AVg=",
       "url": "sample-data\/DistressSignal_full.txt"
     },
@@ -513,5 +521,5 @@
       "url": "sample-data\/UnstableDiffusion.txt"
     }
   ],
-  "version": "vZOOQ8\/J"
+  "version": "RKFNThHh"
 };
