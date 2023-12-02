@@ -23,6 +23,7 @@ using Domain.GrovePositioningSystem;
 using Domain.MonkeyMath;
 using Domain.MonkeyMap;
 using Domain.Trebuchet;
+using Domain.CubeConundrum;
 
 namespace Blazor
 {
@@ -126,6 +127,10 @@ namespace Blazor
             services.AddTransient<TrebuchetService, TrebuchetService>();
             services.AddTransient<IPuzzleStrategy<TrebuchetModel>, TrebuchetPart1Strategy>();
             services.AddTransient<IPuzzleStrategy<TrebuchetModel>, TrebuchetPart2Strategy>();
+
+            services.AddTransient<CubeConundrumService, CubeConundrumService>();
+            services.AddTransient<IPuzzleStrategy<CubeConundrumModel>, CubeConundrumPart1Strategy>();
+            services.AddTransient<IPuzzleStrategy<CubeConundrumModel>, CubeConundrumPart2Strategy>();
 
             return services;
         }

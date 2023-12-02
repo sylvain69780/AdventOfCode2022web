@@ -1,0 +1,5 @@
+﻿@page "/CubeConundrumPage"
+@inject Domain.CubeConundrum.CubeConundrumService PuzzleService
+<PuzzleSolutionControllerNEW PuzzleContext="@PuzzleService">
+    <DefaultVisualizationNEW Step="@PuzzleService.Step" Solution="@PuzzleService.Solution" />
+</PuzzleSolutionControllerNEW>

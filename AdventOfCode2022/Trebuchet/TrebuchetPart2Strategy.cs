@@ -25,6 +25,7 @@ namespace Domain.Trebuchet
                     else
                         for (var d = 0; d < digits.Count; d++)
                             if (l.Length - i >= digits[d].Length && l.Substring(i, digits[d].Length) == digits[d])
+                            // if (l[i..] == digits[d])
                             {
                                 digitsFound.Add(d + 1);
                                 break;

@@ -60,7 +60,7 @@ zoneight234
             var service = new TrebuchetService(s);
             service.SetStrategy("Part 2");
             var c = service.GetStepsToSolution(input2).Count();
-            Assert.That(service.Solution, Is.EqualTo("MCD"));
+            Assert.That(service.Solution, Is.EqualTo("54100"));
         }
 
         string input = @"1abc2
