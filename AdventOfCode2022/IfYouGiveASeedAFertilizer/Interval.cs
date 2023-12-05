@@ -1,11 +1,17 @@
-﻿namespace Domain.CampCleanup
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Domain.IfYouGiveASeedAFertilizer
 {
     public readonly struct Interval
     {
-        public int Start { get; }
-        public int End { get; }
+        public long Start { get; }
+        public long End { get; }
 
-        public Interval(int start, int end)
+        public Interval(long start, long end)
         {
             if (end < start)
                 throw new ArgumentException("End must be greater than or equal to start.");
