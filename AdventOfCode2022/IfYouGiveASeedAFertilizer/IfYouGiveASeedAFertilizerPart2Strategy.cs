@@ -30,12 +30,9 @@ namespace Domain.IfYouGiveASeedAFertilizer
                     var found = false;
                     foreach (var (destinationRangeStart, sourceRangeStart, rangeLenght) in ranges)
                     {
-                        //var current = new Interval(element.start, element.start + element.lenght);
-                        //var source = new Interval(sourceRangeStart, sourceRangeStart + rangeLenght);
-                        var delta = destinationRangeStart - sourceRangeStart;
-
                         var start = Math.Max(sourceRangeStart, element.start);
                         var end = Math.Min(sourceRangeStart + rangeLenght, element.start + element.lenght);
+                        var delta = destinationRangeStart - sourceRangeStart;
                         if ( end - start > 0 )
                         {
                             dfs.Push((newCategory, start + delta, end-start));
@@ -46,26 +43,6 @@ namespace Domain.IfYouGiveASeedAFertilizer
                             found = true;
                             break;
                         }
-
-                        //if (sourceRangeStart >= element.start && sourceRangeStart <= element.start + element.lenght)
-                        //{
-                        //    // cut beggin
-                        //    if (sourceRangeStart - element.start > 0)
-                        //        dfs.Push((element.category, element.start, sourceRangeStart - element.start));
-                        //    // move other part
-                        //    var l = Math.Min(sourceRangeStart + rangeLenght, element.start + element.lenght) - sourceRangeStart;
-                        //    if (l > 0)
-                        //        dfs.Push((newCategory, sourceRangeStart, l));
-                        //}
-                        //if ( current.Contains(source))
-                        //{
-                        //    dfs.Push((newCategory, current.Start+delta,source.Start-current.Start));
-                        //    dfs.Push((newCategory, source.End+delta,current.End-source.End));
-                        //}
-                        //else if ( current.Overlaps(source))
-                        //{
-                        //    dfs.Push((newCategory,delta+ Math.Max(source.Start,current.Start),Math.Min(source.End,current.End)- Math.Max(source.Start, current.Start)));
-                        //}
                     }
                     if (!found)
                         dfs.Push((newCategory, element.start, element.lenght));
