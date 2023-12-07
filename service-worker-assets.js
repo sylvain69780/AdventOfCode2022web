@@ -29,15 +29,15 @@
       "url": "_framework\/icudt_no_CJK.dat"
     },
     {
-      "hash": "sha256-w\/BiYNHgm9DYrgAGtZqn4MBHp2xx6VkHdJklSff2vag=",
+      "hash": "sha256-uSWDfqYCnzjHTr3XFTcDS2jPCojkea+ptJB5DlrVPws=",
       "url": "_framework\/blazor.boot.json"
     },
     {
-      "hash": "sha256-Eh49qJxQsXlm31feEVePLbXds79PyC10EoqDYR2df1g=",
+      "hash": "sha256-\/osRQ2RuoW32d9MNHVqyu\/eLa+Q1b1L+wk3mj5C48lA=",
       "url": "_framework\/Blazor.dll"
     },
     {
-      "hash": "sha256-RlIammxcTUjK6UcJEL6uowXAr\/+vj4ZdBW7r51I1h8A=",
+      "hash": "sha256-Hl49U\/1qKmILPDS8JTUK44RfeF8yx4B7NwfLxsT7JWU=",
       "url": "_framework\/Domain.dll"
     },
     {
@@ -129,7 +129,7 @@
       "url": "_framework\/System.dll"
     },
     {
-      "hash": "sha256-O9TZMvgb4dkPPyX3xg4pFjcatxtqjkJ2E1WzR1iuvJ0=",
+      "hash": "sha256-XWnuW+cfc4i1JQdLwztUVOmvd4ZKEpQJlq+XAnObARA=",
       "url": "_framework\/System.Linq.dll"
     },
     {
@@ -149,7 +149,7 @@
       "url": "_framework\/System.ObjectModel.dll"
     },
     {
-      "hash": "sha256-\/pIp9RaP1mWAgPDyFz49+\/YeuNldMWYaGzbbPlASAjo=",
+      "hash": "sha256-1pTr\/eYPleEFW39a+NnJv5pIGxOfxE+54DpOspuCUGk=",
       "url": "_framework\/System.Private.CoreLib.dll"
     },
     {
@@ -157,7 +157,7 @@
       "url": "_framework\/System.Private.Uri.dll"
     },
     {
-      "hash": "sha256-7ML4Uu6oDAXURTDVR9izyz3PlFytv\/KZysf9I1sH1nk=",
+      "hash": "sha256-X0bJ4VgOs6Xp5W8uECxFPYj0xAJOkPTo11\/xoihSchc=",
       "url": "_framework\/System.Runtime.dll"
     },
     {
@@ -177,7 +177,7 @@
       "url": "_framework\/System.Text.Json.dll"
     },
     {
-      "hash": "sha256-ji6yt+iHoQV7lraOryvu3kEttRdnALJNJ2YC8MRxJhI=",
+      "hash": "sha256-hlGsS\/i7F4NXAIyLSl\/tlx2bbkvCITjRFANJnw8Op9o=",
       "url": "_framework\/System.Text.RegularExpressions.dll"
     },
     {
@@ -325,6 +325,14 @@
       "url": "sample-data\/CalorieCounting.txt"
     },
     {
+      "hash": "sha256-45v5m6P7Oyyub0ShCjGtu626MO3LrpAThXA0MTNDtCs=",
+      "url": "sample-data\/CamelCards_full.txt"
+    },
+    {
+      "hash": "sha256-5FfPbXDlDN2OSNb4wZDgIN40cAhIzYhqIf5LkrGOcIY=",
+      "url": "sample-data\/CamelCards.txt"
+    },
+    {
       "hash": "sha256-N5c8xj2g4Wx7Xr2pJwYaOErzKIZGlUsV81iiUad6Uy4=",
       "url": "sample-data\/CampCleanup_full.txt"
     },
@@ -369,6 +377,14 @@
       "url": "sample-data\/FullOfHotAir.txt"
     },
     {
+      "hash": "sha256-NOPJ2vUOIz7aNZyazl8PwRBUryjEEubvfs3a0UXRjfg=",
+      "url": "sample-data\/GearRatios_full.txt"
+    },
+    {
+      "hash": "sha256-2U0HqAej4xa6ewkciSsv7N0Hh\/6u2tebPpVXeLwrFJg=",
+      "url": "sample-data\/GearRatios.txt"
+    },
+    {
       "hash": "sha256-Fe9fwisD5eY8ioGRaAMYaod9MbyUBGT18FPMYnOiKps=",
       "url": "sample-data\/GrovePositioningSystem_full.txt"
     },
@@ -383,6 +399,14 @@
     {
       "hash": "sha256-cEWNWCMGzJF9V3dxzZG3XIJDanubgzbGzsbLE59uuEU=",
       "url": "sample-data\/HillClimbingAlgorithm.txt"
+    },
+    {
+      "hash": "sha256-0zLurwNN873K\/nCv3qX\/GI\/woy6AA\/eMgxOlYnuxHX0=",
+      "url": "sample-data\/IfYouGiveASeedAFertilizer_full.txt"
+    },
+    {
+      "hash": "sha256-NtveznTI\/QCQhI0BVPAJVTCM2yIFH4Q+2qG1BJqTjiM=",
+      "url": "sample-data\/IfYouGiveASeedAFertilizer.txt"
     },
     {
       "hash": "sha256-x\/wz4OFhLUFYVrk2fukOws2QLzSnqGk4yb05IP6fnfY=",
@@ -473,6 +497,14 @@
       "url": "sample-data\/RucksackReorganization.txt"
     },
     {
+      "hash": "sha256-QFR0BzgUbofuQ+xPgOjCcVkwJWofdWEc\/zrQlyF80kI=",
+      "url": "sample-data\/Scratchcards_full.txt"
+    },
+    {
+      "hash": "sha256-Y5FTrjVkgn5yqLMMgXZZItuWAYXnppzVT2T0BYySAxQ=",
+      "url": "sample-data\/Scratchcards.txt"
+    },
+    {
       "hash": "sha256-McOFGk1JMm656szQynmqq\/T3Vy7L43Xd2\/ezmXCpIdU=",
       "url": "sample-data\/Sudoku_full.txt"
     },
@@ -519,7 +551,15 @@
     {
       "hash": "sha256-vgVMH5PaJIe5MqMNluZz8LuCSPseT28\/jrdZQbW1TXY=",
       "url": "sample-data\/UnstableDiffusion.txt"
+    },
+    {
+      "hash": "sha256-UqcUnUw8kdSbvnrWRzjKRc9xHhwNNCiXdhPUQHvxgPI=",
+      "url": "sample-data\/WaitForIt_full.txt"
+    },
+    {
+      "hash": "sha256-dNzWsSUduG5efqnK0a3J4EDjaNQEB+5zSW1P+4z5Olo=",
+      "url": "sample-data\/WaitForIt.txt"
     }
   ],
-  "version": "9qqHs5fB"
+  "version": "00TXW2vD"
 };
