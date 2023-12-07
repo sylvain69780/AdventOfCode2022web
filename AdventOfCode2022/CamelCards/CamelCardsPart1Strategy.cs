@@ -12,13 +12,8 @@ namespace Domain.CamelCards
 
         public IEnumerable<ProcessingProgressModel> GetSteps(CamelCardsModel model, Func<ProcessingProgressModel> updateContext, Action<string> provideSolution)
         {
-            var hands = model.Hands!;
-            var r = hands.OrderBy(x => x.hand, new HandComparer()).ToArray();
-            var s = 0L;
-            for ( var i = 0; i<r.Length; i++)
-            {
-                s += (i+1) * r[i].bid;
-            }
+            var s = model.Hands!.OrderBy(x => x.hand, new HandComparer())
+                .Select((x, i) => x.bid * (i + 1)).Sum();
             yield return updateContext();
             provideSolution(s.ToString());
         }
