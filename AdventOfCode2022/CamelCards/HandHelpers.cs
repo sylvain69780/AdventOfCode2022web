@@ -26,7 +26,7 @@ internal static class HandHelpers
         if (handJocker.Length == 1)
             if (handJocker[0] == 'J')
                 foreach (var c in "AKQT98765432")
-                    yield return c + "";
+                    yield return c.ToString();
             else
                 yield return handJocker;
         else

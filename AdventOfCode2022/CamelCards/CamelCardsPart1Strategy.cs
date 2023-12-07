@@ -12,7 +12,9 @@ namespace Domain.CamelCards
 
         public IEnumerable<ProcessingProgressModel> GetSteps(CamelCardsModel model, Func<ProcessingProgressModel> updateContext, Action<string> provideSolution)
         {
-            var s = model.Hands!.OrderBy(x => x.hand, new HandComparer())
+            var s = model.Hands!
+                .OrderBy(x => x.hand, new HandTypeComparer())
+                .ThenBy(x => x.hand,new HandJokerFirstComparer())
                 .Select((x, i) => x.bid * (i + 1)).Sum();
             yield return updateContext();
             provideSolution(s.ToString());
