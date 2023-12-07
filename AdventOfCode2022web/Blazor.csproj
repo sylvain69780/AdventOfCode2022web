@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <_ContentIncludedByDefault Remove="wwwroot\sample-data\CamelCards.txt" />
     <_ContentIncludedByDefault Remove="wwwroot\sample-data\IfYouGiveASeedAFertilizer.txt" />
     <_ContentIncludedByDefault Remove="wwwroot\sample-data\WaitForIt.txt" />
   </ItemGroup>
