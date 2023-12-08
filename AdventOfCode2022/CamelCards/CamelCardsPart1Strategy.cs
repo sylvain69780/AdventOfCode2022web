@@ -14,7 +14,7 @@ namespace Domain.CamelCards
         {
             var s = model.Hands!
                 .OrderBy(x => x.hand, new HandTypeComparer())
-                .ThenBy(x => x.hand,new HandJokerFirstComparer())
+                .ThenBy(x => x.hand,new HandValuesComparer("AKQJT98765432"))
                 .Select((x, i) => x.bid * (i + 1)).Sum();
             yield return updateContext();
             provideSolution(s.ToString());

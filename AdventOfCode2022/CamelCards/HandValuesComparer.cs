@@ -6,15 +6,19 @@ using System.Threading.Tasks;
 
 namespace Domain.CamelCards
 {
-    internal class HandJokerLastComparer : IComparer<string>
+    internal class HandValuesComparer : IComparer<string>
     {
+        public HandValuesComparer(string values)
+        {
+            _cardsValues = values;
+        }
         public int Compare(string? x, string? y)
         {
             if (x == null || y == null)
                 throw new ArgumentNullException("Input strings cannot be null");
-            for (var i = 0; i < x.Length; i++)
+            for ( var i = 0; i<x.Length; i++)
             {
-                var (ix, iy) = (CardsTypes.IndexOf(x[i]), CardsTypes.IndexOf(y[i]));
+                var (ix, iy) = (_cardsValues.IndexOf(x[i]), _cardsValues.IndexOf(y[i]));
                 if (ix < iy)
                     return 1;
                 if (ix > iy)
@@ -22,7 +26,6 @@ namespace Domain.CamelCards
             }
             return 0;
         }
-
-        static readonly string CardsTypes = "AKQT98765432J";
+        readonly string _cardsValues;
     }
 }
