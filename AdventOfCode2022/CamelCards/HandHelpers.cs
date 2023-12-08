@@ -21,21 +21,17 @@ internal static class HandHelpers
         return HandType.HighCard;
     }
 
-    public static IEnumerable<string> PossibleHands(this string handJocker)
+    public static IEnumerable<string> PossibleHands(this string jockerString)
     {
-        if (handJocker.Length == 1)
-            if (handJocker[0] == 'J')
-                foreach (var c in "AKQT98765432")
-                    yield return c.ToString();
-            else
-                yield return handJocker;
+        if (jockerString == string.Empty)
+            yield return string.Empty;
         else
-        if (handJocker[0] == 'J')
+        if (jockerString[0] == 'J')
             foreach (var c in "AKQT98765432")
-                foreach (var sub in handJocker[1..].PossibleHands())
+                foreach (var sub in jockerString[1..].PossibleHands())
                     yield return c + sub;
         else
-            foreach (var sub in handJocker[1..].PossibleHands())
-                yield return handJocker[0] + sub;
+            foreach (var sub in jockerString[1..].PossibleHands())
+                yield return jockerString[0] + sub;
     }
 }

@@ -10,9 +10,11 @@ namespace Domain.CamelCards
     {
         public int Compare(string? x, string? y)
         {
-            for( var i = 0; i<x!.Length; i++)
+            if (x == null || y == null)
+                throw new ArgumentNullException("Input strings cannot be null");
+            for ( var i = 0; i<x.Length; i++)
             {
-                var (ix, iy) = (_cardsTypes.IndexOf(x[i]), _cardsTypes.IndexOf(y[i]));
+                var (ix, iy) = (CardsTypes.IndexOf(x[i]), CardsTypes.IndexOf(y[i]));
                 if (ix < iy)
                     return 1;
                 if (ix > iy)
@@ -20,6 +22,6 @@ namespace Domain.CamelCards
             }
             return 0;
         }
-        static readonly string _cardsTypes = "AKQJT98765432";
+        static readonly string CardsTypes = "AKQJT98765432";
     }
 }
