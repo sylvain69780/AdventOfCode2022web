@@ -29,15 +29,15 @@
       "url": "_framework\/icudt_no_CJK.dat"
     },
     {
-      "hash": "sha256-uSWDfqYCnzjHTr3XFTcDS2jPCojkea+ptJB5DlrVPws=",
+      "hash": "sha256-ZPkOlgLW2D0yR3aQWhcV1Hq5gIBW40Yb4kovqsWBAjw=",
       "url": "_framework\/blazor.boot.json"
     },
     {
-      "hash": "sha256-\/osRQ2RuoW32d9MNHVqyu\/eLa+Q1b1L+wk3mj5C48lA=",
+      "hash": "sha256-H6p0Omk5zEplCNu7\/cm62hjtk58aEOvCBOuSMQdzzlg=",
       "url": "_framework\/Blazor.dll"
     },
     {
-      "hash": "sha256-Hl49U\/1qKmILPDS8JTUK44RfeF8yx4B7NwfLxsT7JWU=",
+      "hash": "sha256-PldsaTp\/fA3dWm8YOsp221vjP+O1K2ZlQVMZcfGR8CE=",
       "url": "_framework\/Domain.dll"
     },
     {
@@ -101,7 +101,7 @@
       "url": "_framework\/SixLabors.ImageSharp.dll"
     },
     {
-      "hash": "sha256-VioFXs1OJyJq0oztkLzKfPTroHkm5zZbQ7J4FCR7Z7M=",
+      "hash": "sha256-oGUYQ55T1QZaQNJCxMyJ23iuQ6A3oRDfCvb3B\/i7h+M=",
       "url": "_framework\/System.Collections.Concurrent.dll"
     },
     {
@@ -129,7 +129,7 @@
       "url": "_framework\/System.dll"
     },
     {
-      "hash": "sha256-XWnuW+cfc4i1JQdLwztUVOmvd4ZKEpQJlq+XAnObARA=",
+      "hash": "sha256-nJVzTfd5YB5YJzrdSiMe9gceOnjwFe0fH5c8qEtfWg4=",
       "url": "_framework\/System.Linq.dll"
     },
     {
@@ -149,7 +149,7 @@
       "url": "_framework\/System.ObjectModel.dll"
     },
     {
-      "hash": "sha256-1pTr\/eYPleEFW39a+NnJv5pIGxOfxE+54DpOspuCUGk=",
+      "hash": "sha256-nxPaxO7jPUPZtJVN14XfdX7XFTEMnB9PnfN56alhGPM=",
       "url": "_framework\/System.Private.CoreLib.dll"
     },
     {
@@ -157,7 +157,7 @@
       "url": "_framework\/System.Private.Uri.dll"
     },
     {
-      "hash": "sha256-X0bJ4VgOs6Xp5W8uECxFPYj0xAJOkPTo11\/xoihSchc=",
+      "hash": "sha256-pF7WRGpsc6yd3G97BlKyTOQ+SW1g+1jyzqEfsKO6Aso=",
       "url": "_framework\/System.Runtime.dll"
     },
     {
@@ -177,7 +177,7 @@
       "url": "_framework\/System.Text.Json.dll"
     },
     {
-      "hash": "sha256-hlGsS\/i7F4NXAIyLSl\/tlx2bbkvCITjRFANJnw8Op9o=",
+      "hash": "sha256-grDJKjV7XhvtljBpu7nfcSHjm0tGR\/j6XSuY9ulNtgU=",
       "url": "_framework\/System.Text.RegularExpressions.dll"
     },
     {
@@ -393,6 +393,14 @@
       "url": "sample-data\/GrovePositioningSystem.txt"
     },
     {
+      "hash": "sha256-MXGVEwv89UDH0a6se6y5mI+h+ngOa0nHEJ\/lHvB8tGo=",
+      "url": "sample-data\/HauntedWasteland_full.txt"
+    },
+    {
+      "hash": "sha256-+CU5y1YmR5D4Cb\/\/rn\/ieo16wTNB9BR9WoLK2OrbK68=",
+      "url": "sample-data\/HauntedWasteland.txt"
+    },
+    {
       "hash": "sha256-9kduf0HczSKHzey0mXPTyyEkEgDeMbizQNqlw+07Reg=",
       "url": "sample-data\/HillClimbingAlgorithm_full.txt"
     },
@@ -561,5 +569,5 @@
       "url": "sample-data\/WaitForIt.txt"
     }
   ],
-  "version": "00TXW2vD"
+  "version": "je4l3HU2"
 };
