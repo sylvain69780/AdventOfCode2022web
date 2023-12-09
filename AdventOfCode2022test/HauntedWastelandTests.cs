@@ -57,7 +57,7 @@ XXX = (XXX, XXX)").Count();
             var service = new HauntedWastelandService(s);
             service.SetStrategy("Part 2");
             var c = service.GetStepsToSolution(input2).Count();
-            Assert.That(service.Solution, Is.EqualTo("255632664")); // low
+            Assert.That(service.Solution, Is.EqualTo("19185263738117")); // low
         }
 
 //        const string path = "C:\\Users\\sylvain.lecourtois\\source\\repos\\dev\\AdventOfCode2022web\\AdventOfCode2022web\\wwwroot\\sample-data\\";

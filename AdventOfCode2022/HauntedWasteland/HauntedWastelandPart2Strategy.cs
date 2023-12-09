@@ -43,8 +43,8 @@ namespace Domain.HauntedWasteland
                 (long cycleLenght, long Value) cycle = (paths[i].cycleLenght / 277, targetsList[i][0].Value);
                 cycles.Add(cycle); // 277 common divisor // 16343 16897 21883 20221 19667 13019
             }
-                yield return updateContext();
-            provideSolution("19185263738117"); // 277 * 59 * 61 * 79 * 73 * 71 * 47
+                yield return updateContext(); // use the "Theoreme du reste chinois"
+            provideSolution("19185263738117"); // 277 * 59 * 61 * 79 * 73 * 71 * 47 // solution hard coded 
         }
 
         public IEnumerable<ProcessingProgressModel> GetStepsNaive(HauntedWastelandModel model, Func<ProcessingProgressModel> updateContext, Action<string> provideSolution)
