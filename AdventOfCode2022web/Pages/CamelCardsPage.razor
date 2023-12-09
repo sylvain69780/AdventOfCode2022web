@@ -1,0 +1,5 @@
+﻿@page "/CamelCardsPage"
+@inject Domain.CamelCards.CamelCardsService PuzzleService
+<PuzzleSolutionControllerNEW PuzzleContext="@PuzzleService">
+    <DefaultVisualizationNEW Step="@PuzzleService.Step" Solution="@PuzzleService.Solution" />
+</PuzzleSolutionControllerNEW>

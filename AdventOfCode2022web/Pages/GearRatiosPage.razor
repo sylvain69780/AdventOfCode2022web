@@ -1,0 +1,5 @@
+﻿@page "/GearRatiosPage"
+@inject Domain.GearRatios.GearRatiosService PuzzleService
+<PuzzleSolutionControllerNEW PuzzleContext="@PuzzleService">
+    <DefaultVisualizationNEW Step="@PuzzleService.Step" Solution="@PuzzleService.Solution" />
+</PuzzleSolutionControllerNEW>

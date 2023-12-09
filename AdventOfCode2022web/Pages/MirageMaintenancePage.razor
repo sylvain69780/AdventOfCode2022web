@@ -1,0 +1,5 @@
+﻿@page "/MirageMaintenancePage"
+@inject Domain.MirageMaintenance.MirageMaintenanceService PuzzleService
+<PuzzleSolutionControllerNEW PuzzleContext="@PuzzleService">
+    <DefaultVisualizationNEW Step="@PuzzleService.Step" Solution="@PuzzleService.Solution" />
+</PuzzleSolutionControllerNEW>

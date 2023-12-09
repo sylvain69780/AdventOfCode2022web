@@ -1,0 +1,5 @@
+﻿@page "/ScratchcardsPage"
+@inject Domain.Scratchcards.ScratchcardsService PuzzleService
+<PuzzleSolutionControllerNEW PuzzleContext="@PuzzleService">
+    <DefaultVisualizationNEW Step="@PuzzleService.Step" Solution="@PuzzleService.Solution" />
+</PuzzleSolutionControllerNEW>

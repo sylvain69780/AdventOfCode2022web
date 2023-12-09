@@ -1,0 +1,5 @@
+﻿@page "/WaitForItPage"
+@inject Domain.WaitForIt.WaitForItService PuzzleService
+<PuzzleSolutionControllerNEW PuzzleContext="@PuzzleService">
+    <DefaultVisualizationNEW Step="@PuzzleService.Step" Solution="@PuzzleService.Solution" />
+</PuzzleSolutionControllerNEW>

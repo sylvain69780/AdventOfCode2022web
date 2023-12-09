@@ -34,6 +34,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Update="Pages\GearRatiosPage.razor">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
     <Content Update="Pages\TrebuchetPage.razor">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </Content>

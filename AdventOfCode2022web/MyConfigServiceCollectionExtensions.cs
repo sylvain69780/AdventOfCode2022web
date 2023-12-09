@@ -25,6 +25,13 @@ using Domain.MonkeyMap;
 using Domain.Trebuchet;
 using Domain.CubeConundrum;
 using Domain.FullOfHotAir;
+using Domain.GearRatios;
+using Domain.Scratchcards;
+using Domain.IfYouGiveASeedAFertilizer;
+using Domain.WaitForIt;
+using Domain.CamelCards;
+using Domain.HauntedWasteland;
+using Domain.MirageMaintenance;
 
 namespace Blazor
 {
@@ -136,6 +143,34 @@ namespace Blazor
             services.AddTransient<CubeConundrumService, CubeConundrumService>();
             services.AddTransient<IPuzzleStrategy<CubeConundrumModel>, CubeConundrumPart1Strategy>();
             services.AddTransient<IPuzzleStrategy<CubeConundrumModel>, CubeConundrumPart2Strategy>();
+
+            services.AddTransient<GearRatiosService, GearRatiosService>();
+            services.AddTransient<IPuzzleStrategy<GearRatiosModel>, GearRatiosPart1Strategy>();
+            services.AddTransient<IPuzzleStrategy<GearRatiosModel>, GearRatiosPart2Strategy>();
+
+            services.AddTransient<ScratchcardsService, ScratchcardsService>();
+            services.AddTransient<IPuzzleStrategy<ScratchcardsModel>, ScratchcardsPart1Strategy>();
+            services.AddTransient<IPuzzleStrategy<ScratchcardsModel>, ScratchcardsPart2Strategy>();
+
+            services.AddTransient<IfYouGiveASeedAFertilizerService, IfYouGiveASeedAFertilizerService>();
+            services.AddTransient<IPuzzleStrategy<IfYouGiveASeedAFertilizerModel>, IfYouGiveASeedAFertilizerPart1Strategy>();
+            services.AddTransient<IPuzzleStrategy<IfYouGiveASeedAFertilizerModel>, IfYouGiveASeedAFertilizerPart2Strategy>();
+
+            services.AddTransient<WaitForItService, WaitForItService>();
+            services.AddTransient<IPuzzleStrategy<WaitForItModel>, WaitForItPart1Strategy>();
+            services.AddTransient<IPuzzleStrategy<WaitForItModel>, WaitForItPart2Strategy>();
+
+            services.AddTransient<CamelCardsService, CamelCardsService>();
+            services.AddTransient<IPuzzleStrategy<CamelCardsModel>, CamelCardsPart1Strategy>();
+            services.AddTransient<IPuzzleStrategy<CamelCardsModel>, CamelCardsPart2Strategy>();
+
+            services.AddTransient<HauntedWastelandService, HauntedWastelandService>();
+            services.AddTransient<IPuzzleStrategy<HauntedWastelandModel>, HauntedWastelandPart1Strategy>();
+            services.AddTransient<IPuzzleStrategy<HauntedWastelandModel>, HauntedWastelandPart2Strategy>();
+
+            services.AddTransient<MirageMaintenanceService, MirageMaintenanceService>();
+            services.AddTransient<IPuzzleStrategy<MirageMaintenanceModel>, MirageMaintenancePart1Strategy>();
+            services.AddTransient<IPuzzleStrategy<MirageMaintenanceModel>, MirageMaintenancePart2Strategy>();
 
             return services;
         }

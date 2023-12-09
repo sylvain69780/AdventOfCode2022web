@@ -1,0 +1,5 @@
+﻿@page "/IfYouGiveASeedAFertilizerPage"
+@inject Domain.IfYouGiveASeedAFertilizer.IfYouGiveASeedAFertilizerService PuzzleService
+<PuzzleSolutionControllerNEW PuzzleContext="@PuzzleService">
+    <DefaultVisualizationNEW Step="@PuzzleService.Step" Solution="@PuzzleService.Solution" />
+</PuzzleSolutionControllerNEW>
