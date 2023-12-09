@@ -40,11 +40,15 @@ namespace Domain.HauntedWasteland
             var cycles = new List<(long cycleLenght, long Value)>();
             for (var i = 0; i < paths.Length; i++)
             {
-                (long cycleLenght, long Value) cycle = (paths[i].cycleLenght / 277, targetsList[i][0].Value);
-                cycles.Add(cycle); // 277 common divisor // 16343 16897 21883 20221 19667 13019
+                (long cycleLenght, long Value) cycle = (paths[i].cycleLenght, targetsList[i][0].Value);
+                cycles.Add(cycle); 
             }
-                yield return updateContext(); // use the "Theoreme du reste chinois"
-            provideSolution("19185263738117"); // 277 * 59 * 61 * 79 * 73 * 71 * 47 // solution hard coded 
+            var divisor = 2L; // greatest common divisor search
+            while (!cycles.All(x => x.cycleLenght % divisor == 0))
+                divisor++;
+            yield return updateContext(); // Way we use the "Theoreme du reste chinois"
+            var dist = divisor * cycles.Aggregate(1L, (x, y) => x * y.cycleLenght / divisor);
+            provideSolution(dist.ToString()); // 277 * 59 * 61 * 79 * 73 * 71 * 47 
         }
 
         public IEnumerable<ProcessingProgressModel> GetStepsNaive(HauntedWastelandModel model, Func<ProcessingProgressModel> updateContext, Action<string> provideSolution)
