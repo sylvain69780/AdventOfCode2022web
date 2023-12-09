@@ -29,15 +29,15 @@
       "url": "_framework\/icudt_no_CJK.dat"
     },
     {
-      "hash": "sha256-ZPkOlgLW2D0yR3aQWhcV1Hq5gIBW40Yb4kovqsWBAjw=",
+      "hash": "sha256-gftf\/Y3OKHGvG\/01i6sthpV+H40qmhyTGbAdMqpi41s=",
       "url": "_framework\/blazor.boot.json"
     },
     {
-      "hash": "sha256-H6p0Omk5zEplCNu7\/cm62hjtk58aEOvCBOuSMQdzzlg=",
+      "hash": "sha256-EK+VWWzOANo3ucDlHYIhPb+toF32Psj\/OLc7D5l5NvM=",
       "url": "_framework\/Blazor.dll"
     },
     {
-      "hash": "sha256-PldsaTp\/fA3dWm8YOsp221vjP+O1K2ZlQVMZcfGR8CE=",
+      "hash": "sha256-MTJpfDsqrh4GcCFKHZWOA1QVRkT2uJQkWBwPGFtPjyc=",
       "url": "_framework\/Domain.dll"
     },
     {
@@ -149,7 +149,7 @@
       "url": "_framework\/System.ObjectModel.dll"
     },
     {
-      "hash": "sha256-nxPaxO7jPUPZtJVN14XfdX7XFTEMnB9PnfN56alhGPM=",
+      "hash": "sha256-BQUtfFTw4L2LJPUtMoS7eh07hYsjlqjPEzxyRebkT48=",
       "url": "_framework\/System.Private.CoreLib.dll"
     },
     {
@@ -417,6 +417,14 @@
       "url": "sample-data\/IfYouGiveASeedAFertilizer.txt"
     },
     {
+      "hash": "sha256-CJQ+6awkD5kjWZOx50nYjwrDaFz2rrQWHPZ5k44L6aY=",
+      "url": "sample-data\/MirageMaintenance_full.txt"
+    },
+    {
+      "hash": "sha256-F1Q\/1nFtkH+K2ntiPe8REsqX7ZeYKv7KQBFT1tXVcCg=",
+      "url": "sample-data\/MirageMaintenance.txt"
+    },
+    {
       "hash": "sha256-x\/wz4OFhLUFYVrk2fukOws2QLzSnqGk4yb05IP6fnfY=",
       "url": "sample-data\/MonkeyInTheMiddle_full.txt"
     },
@@ -569,5 +577,5 @@
       "url": "sample-data\/WaitForIt.txt"
     }
   ],
-  "version": "je4l3HU2"
+  "version": "80DzGcvM"
 };
