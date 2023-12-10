@@ -32,6 +32,7 @@ using Domain.WaitForIt;
 using Domain.CamelCards;
 using Domain.HauntedWasteland;
 using Domain.MirageMaintenance;
+using Domain.PipeMaze;
 
 namespace Blazor
 {
@@ -171,6 +172,11 @@ namespace Blazor
             services.AddTransient<MirageMaintenanceService, MirageMaintenanceService>();
             services.AddTransient<IPuzzleStrategy<MirageMaintenanceModel>, MirageMaintenancePart1Strategy>();
             services.AddTransient<IPuzzleStrategy<MirageMaintenanceModel>, MirageMaintenancePart2Strategy>();
+
+            services.AddTransient<PipeMazeService, PipeMazeService>();
+            services.AddTransient<IPuzzleStrategy<PipeMazeModel>, PipeMazePart1Strategy>();
+            services.AddTransient<IPuzzleStrategy<PipeMazeModel>, PipeMazePart2Strategy>();
+
 
             return services;
         }
