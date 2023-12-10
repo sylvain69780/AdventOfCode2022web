@@ -18,8 +18,6 @@ namespace Domain.PipeMaze
                 .Select((line, y) => (line, y))
                 .SelectMany(row => row.line.Select((c, x) => (c, x, row.y)))
                 .Where(p => p.c == 'S').Select(p => (p.x, p.y)).First();
-            var bfs = new Queue<(int x, int y, int id)>();
-            bfs.Enqueue((start.x, start.y, 0));
             var visited = new int[maze[0].Length, maze.Length];
             model.Map = () => visited;
             var found = false;
@@ -33,6 +31,9 @@ namespace Domain.PipeMaze
             var distance = 0;
             var path1 = (x: -1, y: -1, dist: 0);
             var path2 = (x: -1, y: -1, dist: 0);
+            var previous = new Dictionary<(int x, int y), (int x, int y)>();
+            var bfs = new Queue<(int x, int y, int id)>();
+            bfs.Enqueue((start.x, start.y, 0));
             while (!found)
             {
                 var newBfs = new Queue<(int x, int y, int id)>();
@@ -69,6 +70,7 @@ namespace Domain.PipeMaze
                         if (visited[pos.x, pos.y] > 0)
                             continue;
                         visited[pos.x, pos.y] = distance+1;
+                        previous.Add((pos.x, pos.y),(p.x,p.y));
                         newBfs.Enqueue(pos);
                     }
                 }
@@ -84,54 +86,27 @@ namespace Domain.PipeMaze
             }
             // backtrace to identify the tiles part of the loop
             var loop = new List<(int x, int y)>();
-            loop.Add(start);
+            loop.Add((path1.x, path1.y));
+            loop.Add((path2.x, path2.y));
             model.Loop = () => loop;
             {
                 var p = (path1.x, path1.y);
-                var d = path1.dist;
-                while (d > 0)
+                while (previous.TryGetValue(p, out var parent))
                 {
-                    loop.Add(p);
-                    yield return updateContext();
-                    for (var i = 0; i < 4; i++)
-                    {
-                        var (dx, dy) = dirs[i];
-                        var (x, y) = (p.x + dx,p.y + dy);
-                        var c = model.GetTile((x, y));
-                        if (c == '.')
-                            continue;
-                        if (visited[x,y] == d-1)
-                        {
-                            p = (x, y);
-                            d--;
-                            break;
-                        }
-                    }
+                    p = parent;
+                    loop.Add(parent);
                 }
             }
             {
                 var p = (path2.x, path2.y);
-                var d = path2.dist;
-                while (d > 0)
+                while (previous.TryGetValue(p, out var parent))
                 {
-                    loop.Add(p);
-                    yield return updateContext();
-                    for (var i = 0; i < 4; i++)
-                    {
-                        var (dx, dy) = dirs[i];
-                        var (x, y) = (p.x + dx, p.y + dy);
-                        var c = model.GetTile((x, y));
-                        if (c == '.')
-                            continue;
-                        if (visited[x, y] == d - 1 && (x, y) != (path1.x,path1.y))
-                        {
-                            p = (x, y);
-                            d--;
-                            break;
-                        }
-                    }
+                    p = parent;
+                    loop.Add(parent);
                 }
             }
+
+
             yield return updateContext();
             var loopHash = loop.ToHashSet();
             // find the tile of the S
