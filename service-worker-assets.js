@@ -29,15 +29,15 @@
       "url": "_framework\/icudt_no_CJK.dat"
     },
     {
-      "hash": "sha256-A13KpI8H7ftA\/heViPudVg80bUXnw5mgaxN+UOTofO0=",
+      "hash": "sha256-Mo8sIp\/M0ZDYilPcsDnWNM3dUbTWge8RbriSLvAHYwA=",
       "url": "_framework\/blazor.boot.json"
     },
     {
-      "hash": "sha256-vqNHeSw7pp\/hJrRZP9588lv12i2J3nROhKhHRSP9oEQ=",
+      "hash": "sha256-Wi2CXsLj0kBoPzjvNDcqoigFbIgmwb2eYFLY39yR80o=",
       "url": "_framework\/Blazor.dll"
     },
     {
-      "hash": "sha256-\/QCAq9I1wZxMqvnF44W5u8\/8gwzdQZN1m+iSnbsRmng=",
+      "hash": "sha256-BRnNe2h78KHoPwIum0Bn0DLwpErKDkf204rLIWfXrY0=",
       "url": "_framework\/Domain.dll"
     },
     {
@@ -97,7 +97,7 @@
       "url": "_framework\/Microsoft.JSInterop.WebAssembly.dll"
     },
     {
-      "hash": "sha256-oovlymC7B2UHM07fSvMXriO\/PWrh49V1Q9SqY+Imz5Y=",
+      "hash": "sha256-tJ0vkN4tkLsDUHOYHCp0f+ssTr\/Ks8wtuAlzuKRBgHo=",
       "url": "_framework\/SixLabors.ImageSharp.dll"
     },
     {
@@ -157,7 +157,7 @@
       "url": "_framework\/System.Private.Uri.dll"
     },
     {
-      "hash": "sha256-pF7WRGpsc6yd3G97BlKyTOQ+SW1g+1jyzqEfsKO6Aso=",
+      "hash": "sha256-teUm2ahis+0BsIJcXrPWT7KlUth4p5+Cz47ZY9aTnsU=",
       "url": "_framework\/System.Runtime.dll"
     },
     {
@@ -465,6 +465,14 @@
       "url": "sample-data\/NotEnoughMinerals.txt"
     },
     {
+      "hash": "sha256-QQcKGw4TCsYXKCaEthlDeBEY8btwXtR8dCla4SYTefY=",
+      "url": "sample-data\/PipeMaze_full.txt"
+    },
+    {
+      "hash": "sha256-18VltjHYH46adiKFckLBR+y0ETq4P2+l92yAHr+Jju0=",
+      "url": "sample-data\/PipeMaze.txt"
+    },
+    {
       "hash": "sha256-R3zkFaE6lbekHKMwESdT2ciYPeDUyZxZ+\/Gdh5KqNtg=",
       "url": "sample-data\/ProboscideaVolcanium_full.txt"
     },
@@ -577,5 +585,5 @@
       "url": "sample-data\/WaitForIt.txt"
     }
   ],
-  "version": "InrUX4lh"
+  "version": "7mX3Qjpa"
 };
