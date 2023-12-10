@@ -11,7 +11,7 @@ namespace Blazor.Shared
         public IPuzzleService? PuzzleContext { get; set; }
 
         protected VisualizationSettings _settings = new() { AnimationDuration = 500 };
-
+        protected const int AnimationDurationMaxValue = 1000;
         public int SolvingStep { get; private set; } = 0;
         public PageState PageState { get; set; } = PageState.Loaded;
         private string _input = string.Empty;
@@ -72,6 +72,13 @@ namespace Blazor.Shared
         {
             PageState = PageState.ProcessingAuto;
             _stepComputationTimer.Stop();
+            if (_settings.AnimationDuration == AnimationDurationMaxValue)
+            {
+                // animation stopped
+                _stepComputationTimer!.Interval = 100;
+                _stepComputationTimer.Start();
+                return;
+            }
             MoveNext();
             if (_settings.AnimationDuration == 0)
             {

@@ -95,6 +95,7 @@ namespace Domain.PipeMaze
                 {
                     p = parent;
                     loop.Add(parent);
+                    yield return updateContext();
                 }
             }
             {
@@ -103,6 +104,7 @@ namespace Domain.PipeMaze
                 {
                     p = parent;
                     loop.Add(parent);
+                    yield return updateContext();
                 }
             }
 

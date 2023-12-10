@@ -38,16 +38,7 @@ namespace Tests
         {
             var service = new PipeMazeService(s);
             service.SetStrategy("Part 2");
-            var c = service.GetStepsToSolution(@"FF7FSF7F7F7F7F7F---7
-L|LJ||||||||||||F--J
-FL-7LJLJ||||||LJL-77
-F--JF--7||LJLJ7F7FJ-
-L---JF-JLJ.||-FJLJJ7
-|F|F-JF---7F7-L7L|7|
-|FFJF7L7F-JF7|JL---7
-7-L-JL7||F7|L7F-7F7|
-L.L7LFJ|||||FJL7||LJ
-L7JLJL-JLJLJL--JLJ.L").Count();
+            var c = service.GetStepsToSolution(input).Count();
             Assert.That(service.Solution, Is.EqualTo("10"));
         }
 
@@ -57,7 +48,7 @@ L7JLJL-JLJLJL--JLJ.L").Count();
             var service = new PipeMazeService(s);
             service.SetStrategy("Part 2");
             var c = service.GetStepsToSolution(input2).Count();
-            Assert.That(service.Solution, Is.EqualTo("1686")); // high
+            Assert.That(service.Solution, Is.EqualTo("525")); 
         }
 
 //        const string path = "C:\\Users\\sylvain.lecourtois\\source\\repos\\dev\\AdventOfCode2022web\\AdventOfCode2022web\\wwwroot\\sample-data\\";
