@@ -34,6 +34,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="wwwroot\sample-data\CosmicExpansion.txt" />
+    <None Include="wwwroot\sample-data\CosmicExpansion_full.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Update="Pages\GearRatiosPage.razor">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </Content>

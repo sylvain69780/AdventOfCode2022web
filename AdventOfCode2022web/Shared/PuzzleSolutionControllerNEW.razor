@@ -3,7 +3,7 @@
 <div class="row">
     <div class="col-lg-6">
         <div class="row">
-            <input type="range" id="delayRange" @bind=_settings.AnimationDuration min="0" max="@AnimationDurationMaxValue" step="50">
+            <input type="range" id="delayRange" @bind=_settings.AnimationDuration min="0" max="@AnimationDurationMaxValue">
             <div class="my-4">
                 <span class="p-2 rounded bg-light">@(_settings.AnimationDuration == 0 ? "Fastest" : _settings.AnimationDuration == AnimationDurationMaxValue ? "Animation Stopped" : $"Run a step every {_settings.AnimationDuration} ms")</span>
             </div>
