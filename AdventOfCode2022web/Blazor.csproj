@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <_ContentIncludedByDefault Remove="wwwroot\sample-data\CamelCards.txt" />
+    <_ContentIncludedByDefault Remove="wwwroot\sample-data\HotSprings.txt" />
     <_ContentIncludedByDefault Remove="wwwroot\sample-data\IfYouGiveASeedAFertilizer.txt" />
     <_ContentIncludedByDefault Remove="wwwroot\sample-data\MirageMaintenance.txt" />
     <_ContentIncludedByDefault Remove="wwwroot\sample-data\WaitForIt.txt" />
