@@ -29,15 +29,15 @@
       "url": "_framework\/icudt_no_CJK.dat"
     },
     {
-      "hash": "sha256-J4I3Xg+IsjCRIvWo\/mfdbot40CUFr4s0dAaCp0avdz8=",
+      "hash": "sha256-2mq6b7oPoPOrM184jElUWV01Ma6daAQIAZz7Rb+uuyc=",
       "url": "_framework\/blazor.boot.json"
     },
     {
-      "hash": "sha256-V3HxSBSHUHhIdiYGBfNFvuo8HYqC2s6DZ+hqzoZ67bQ=",
+      "hash": "sha256-HP9PdJSCKwxePwtGGt6i19aZRuFJ\/5p+xUFB5ciHs9U=",
       "url": "_framework\/Blazor.dll"
     },
     {
-      "hash": "sha256-ZLGPS8FyAunCBPFzZNdpisYQTWHgipbl7BTm0fUo8UU=",
+      "hash": "sha256-W28BI\/+koeC3H8MBHwvJ41Zbz0yUUlm6bfeGlR5dLuc=",
       "url": "_framework\/Domain.dll"
     },
     {
@@ -129,7 +129,7 @@
       "url": "_framework\/System.dll"
     },
     {
-      "hash": "sha256-gQNPjlD6le7LJ1GIzdHJcHT5zXLAgnmKBQWYFbv7U3k=",
+      "hash": "sha256-b0dr4AcHt9hSES7GtkvL7Fir8Kz2dmegidVF1cDdLTc=",
       "url": "_framework\/System.Linq.dll"
     },
     {
@@ -149,7 +149,7 @@
       "url": "_framework\/System.ObjectModel.dll"
     },
     {
-      "hash": "sha256-BQUtfFTw4L2LJPUtMoS7eh07hYsjlqjPEzxyRebkT48=",
+      "hash": "sha256-XHYNdKEvxUAuk9\/ur3z9v4p+rh9rVzqn6UAJ04els6c=",
       "url": "_framework\/System.Private.CoreLib.dll"
     },
     {
@@ -417,6 +417,14 @@
       "url": "sample-data\/HillClimbingAlgorithm.txt"
     },
     {
+      "hash": "sha256-8jM5C3VhgYdSdEl0\/Asxd43P0zRh3geMx74Kf4aOyAQ=",
+      "url": "sample-data\/HotSprings_full.txt"
+    },
+    {
+      "hash": "sha256-YpT\/OkbhfVn1YZNSN2nP2h1G0B5WYAN2Oloyc6guMzk=",
+      "url": "sample-data\/HotSprings.txt"
+    },
+    {
       "hash": "sha256-0zLurwNN873K\/nCv3qX\/GI\/woy6AA\/eMgxOlYnuxHX0=",
       "url": "sample-data\/IfYouGiveASeedAFertilizer_full.txt"
     },
@@ -473,12 +481,28 @@
       "url": "sample-data\/NotEnoughMinerals.txt"
     },
     {
+      "hash": "sha256-diVmFulZ2V0giVa4Qzxrz0Q4ZEpYnQdEqbXvjPS7sBY=",
+      "url": "sample-data\/ParabolicReflectorDish_full.txt"
+    },
+    {
+      "hash": "sha256-W1icYzevtEewSbxERptyJIaumGAm+uFsrv9sPUfmZiU=",
+      "url": "sample-data\/ParabolicReflectorDish.txt"
+    },
+    {
       "hash": "sha256-QQcKGw4TCsYXKCaEthlDeBEY8btwXtR8dCla4SYTefY=",
       "url": "sample-data\/PipeMaze_full.txt"
     },
     {
       "hash": "sha256-18VltjHYH46adiKFckLBR+y0ETq4P2+l92yAHr+Jju0=",
       "url": "sample-data\/PipeMaze.txt"
+    },
+    {
+      "hash": "sha256-o62r1YffkOBArIWmZGI\/n2W91D4PbONrWHMQqL4BEMk=",
+      "url": "sample-data\/PointOfIIcidence_full.txt"
+    },
+    {
+      "hash": "sha256-QxsNu7BTEL9dCV3J+YHckp8QCAkvCqhYpPw6pJCCma8=",
+      "url": "sample-data\/PointOfIIcidence.txt"
     },
     {
       "hash": "sha256-R3zkFaE6lbekHKMwESdT2ciYPeDUyZxZ+\/Gdh5KqNtg=",
@@ -593,5 +617,5 @@
       "url": "sample-data\/WaitForIt.txt"
     }
   ],
-  "version": "umHOls7f"
+  "version": "bm4bUENM"
 };
