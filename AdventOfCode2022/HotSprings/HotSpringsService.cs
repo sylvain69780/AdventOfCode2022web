@@ -11,5 +11,7 @@ namespace Domain.HotSprings
         public HotSpringsService(IEnumerable<IPuzzleStrategy<HotSpringsModel>> strategies) : base(strategies)
         {
         }
+
+        public Dictionary<(int i, int groups), long>? Cache => _model.Cache;
     }
 }

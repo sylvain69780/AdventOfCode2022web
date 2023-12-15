@@ -10,6 +10,8 @@ namespace Domain.HotSprings
     {
         (string springs, long[] ranges)[]? _rows;
         public (string springs, long[] ranges)[]? Rows => _rows;
+
+        public Dictionary<(int i, int groups), long>? Cache;
         public void Parse(string input)
         {
             // operational (.) or damaged (#)

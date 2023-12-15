@@ -23,12 +23,15 @@ namespace Domain.HotSprings
             foreach (var (springs, ranges) in rows)
             {
                 var cache = new Dictionary<(int i, int groups), long>();
+                model.Cache = cache;
                 var counter = Solve(springs, ranges, ranges.Length, 0, cache);
                 sum += counter;
+                yield return updateContext();
             }
             yield return updateContext();
             provideSolution(sum.ToString());
         }
+
 
         long Solve(string springs, long[] ranges, int groups, int i, Dictionary<(int i, int groups), long> cache)
         {
@@ -87,18 +90,10 @@ namespace Domain.HotSprings
 
         public IEnumerable<ProcessingProgressModel> GetStepsResign20231213(HotSpringsModel model, Func<ProcessingProgressModel> updateContext, Action<string> provideSolution)
         {
-            //          var test = "?###????????".PossibleConfigurationsOptim(new long[] { 3, 2, 1 }).ToArray();
-            //            var rows = model.Rows!.Select(x => (springs:x.springs + '?',x.ranges )).ToArray();
             var rows = model.Rows!;
             var sum = 0L;
             foreach (var (springs, ranges) in rows)
             {
-                //var sol = (long)springs.PossibleConfigurationsOptim(ranges);
-                //var sol2 = (long)(springs + "?" + springs).PossibleConfigurationsOptim(ranges.Concat(ranges).ToArray());
-                //var sol3 = (long)(springs + "?" + springs + "?" + springs).PossibleConfigurationsOptim(ranges.Concat(ranges).Concat(ranges).ToArray());
-                //var diff = sol2 / sol;
-                //var remains = sol2 % sol;
-
                 var set1 = springs.PossibleConfigurationsOptimBAD(ranges).ToArray();
                 var set11 = set1.SelectMany(x => set1.Select(y => x + '.' + y)).ToHashSet();
                 var set2 = (springs + "?" + springs).PossibleConfigurationsOptimBAD(ranges).ToArray();
@@ -106,15 +101,6 @@ namespace Domain.HotSprings
                 var count = 0L;
                 var diff = set3.Count();
                 count = set1.Length * (set1.Length + diff) * (set1.Length + diff) * (set1.Length + diff) * (set1.Length + diff);
-                // DEBUG in watch (springs+'?'+springs).PossibleConfigurationsOptimBAD(ranges.Concat(ranges).ToArray()).ToArray()
-                //if (remains != 0)
-                //{
-                //    // ;-(
-                //    var sol3 = (long)(springs + "?" + springs + "?" + springs + "?" + springs + "?" + springs).PossibleConfigurationsOptim(ranges.Concat(ranges).Concat(ranges).Concat(ranges).Concat(ranges).ToArray());
-                //    count = sol3;
-                //}
-                //else
-                //    count = sol * diff * diff * diff * diff;
                 yield return updateContext();
                 sum += count;
             }
@@ -123,18 +109,3 @@ namespace Domain.HotSprings
         }
     }
 }
-
-//var sum = rows.Select(row => row.springs.PossibleConfigurations()
-//    .Select(x => (springs: x, ranges: x.Groups().ToArray()))
-//    .Where(x => x.ranges.Length == row.ranges.Length && !Enumerable.Range(0, x.ranges.Length).Any(i => x.ranges[i] != row.ranges[i]))
-//    .Select(x => (
-//        springs: x.springs + '?' + x.springs + '?' + x.springs + '?' + x.springs + '?' + x.springs,
-//        ranges: x.ranges.Concat(x.ranges).Concat(x.ranges).Concat(x.ranges).Concat(x.ranges).ToArray())
-//        )
-//    .SelectMany(x => x.springs.PossibleConfigurations()
-//        .Select(y => (springs: y, ranges: y.Groups().ToArray()))
-//        .Where(y => x.ranges.Length == y.ranges.Length && !Enumerable.Range(0, x.ranges.Length).Any(i => x.ranges[i] != y.ranges[i]))
-//        )
-//    .Count())
-//    //                .Select(x => x*x*x*x*x)
-//    .Sum();
