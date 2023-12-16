@@ -10,9 +10,11 @@ jobs:
         steps:
             - uses: actions/checkout@v2
             
-
             - name: Setup .NET Core SDK
               uses: actions/setup-dotnet@v4.0.0
+
+            - name: Setup wasm-tools
+              run: dotnet worklload install wasm-tools
 
             - name: Publish .NET Core Project
               run: dotnet publish AdventOfCode2022web/Blazor.csproj -c Release -o release --nologo
