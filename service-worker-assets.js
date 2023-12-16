@@ -29,15 +29,15 @@
       "url": "_framework\/icudt_no_CJK.dat"
     },
     {
-      "hash": "sha256-2mq6b7oPoPOrM184jElUWV01Ma6daAQIAZz7Rb+uuyc=",
+      "hash": "sha256-x7JXPDcAUVUjm21O07lYxSPGlR4ETFvBaR+RRUIKkCo=",
       "url": "_framework\/blazor.boot.json"
     },
     {
-      "hash": "sha256-HP9PdJSCKwxePwtGGt6i19aZRuFJ\/5p+xUFB5ciHs9U=",
+      "hash": "sha256-C2neRf1R\/juOKRS5F73ZUz2o9mMRAmp+pGayMedZcW8=",
       "url": "_framework\/Blazor.dll"
     },
     {
-      "hash": "sha256-W28BI\/+koeC3H8MBHwvJ41Zbz0yUUlm6bfeGlR5dLuc=",
+      "hash": "sha256-4WOGRWvP9oCle1Wf3TCCAWMy8eTZ4D8qp3Gw5uPHiKo=",
       "url": "_framework\/Domain.dll"
     },
     {
@@ -433,6 +433,14 @@
       "url": "sample-data\/IfYouGiveASeedAFertilizer.txt"
     },
     {
+      "hash": "sha256-mGsDBkGAR8p5eMC8VIPKKZlytMhBMA56sTDSqVzxMv0=",
+      "url": "sample-data\/LensLibrary_full.txt"
+    },
+    {
+      "hash": "sha256-KXdC4s9mv3mTJMrW+om1zz0M6R+VUlQBHQ4nzrclhpw=",
+      "url": "sample-data\/LensLibrary.txt"
+    },
+    {
       "hash": "sha256-CJQ+6awkD5kjWZOx50nYjwrDaFz2rrQWHPZ5k44L6aY=",
       "url": "sample-data\/MirageMaintenance_full.txt"
     },
@@ -617,5 +625,5 @@
       "url": "sample-data\/WaitForIt.txt"
     }
   ],
-  "version": "bm4bUENM"
+  "version": "bJwuvpY4"
 };
