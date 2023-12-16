@@ -25,7 +25,7 @@ namespace Domain.BeaconExclusionZone
                 .Select(x => coordinatesRegex.Matches(x))
                 .Select(x => new
                 {
-                    Sensor = (x: int.Parse(x[0].Groups[1].Value), y: int.Parse(x[0].Groups[2].Value)),
+                    Sensor = (x: int.Parse(x[0].Groups[1].Value), y: x[0].Groups[2].Value == string.Empty ? 0 : int.Parse(x[0].Groups[2].Value)),
                     Beacon = (x: int.Parse(x[1].Groups[1].Value), y: int.Parse(x[1].Groups[2].Value)),
                 })
                 .Select(x => new SensorPositionAndClosestBeacon
