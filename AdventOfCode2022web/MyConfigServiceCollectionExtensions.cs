@@ -33,6 +33,7 @@ using Domain.CamelCards;
 using Domain.HauntedWasteland;
 using Domain.MirageMaintenance;
 using Domain.PipeMaze;
+using Domain.HotSprings;
 
 namespace Blazor
 {
@@ -177,6 +178,9 @@ namespace Blazor
             services.AddTransient<IPuzzleStrategy<PipeMazeModel>, PipeMazePart1Strategy>();
             services.AddTransient<IPuzzleStrategy<PipeMazeModel>, PipeMazePart2Strategy>();
 
+            services.AddTransient<HotSpringsService, HotSpringsService>();
+            services.AddTransient<IPuzzleStrategy<HotSpringsModel>, HotSpringsPart1Strategy>();
+            services.AddTransient<IPuzzleStrategy<HotSpringsModel>, HotSpringsPart2Strategy>();
 
             return services;
         }

@@ -1,0 +1,57 @@
+﻿@page "/HotSpringsPage"
+@inject Domain.HotSprings.HotSpringsService PuzzleService
+<PuzzleSolutionControllerNEW PuzzleContext="@PuzzleService">
+    <DefaultVisualizationNEW Step="@PuzzleService.Step" Solution="@PuzzleService.Solution" />
+    <div>
+        @if (PuzzleService.Step != _previousStep)
+        {
+            UpdateBitmap();
+        }
+        <img style="width:100%; image-rendering:pixelated" src=@Image64 />
+    </div>
+</PuzzleSolutionControllerNEW>
+
+@code {
+    public string Image64 { get; set; } = string.Empty;
+    private int _previousStep = -1;
+    private void UpdateBitmap()
+    {
+        Image64 = Visualize();
+        _previousStep = PuzzleService.Step;
+    }
+
+    private string Visualize()
+    {
+        if (PuzzleService.Cache == null)
+            return string.Empty;
+        var map = PuzzleService.Cache;
+        var Width = map.Select(c => c.Key.i ).Max();
+        var Height = map.Select(c => c.Key.groups).Max();
+        var response = string.Empty;
+        using (MemoryStream outStream = new())
+        {
+            using (Image<Rgba32> img = new(Width, Height, Color.White))
+            {
+                img.ProcessPixelRows(accessor =>
+                {
+                    for (int y = 0; y < accessor.Height; y++)
+                    {
+                        Span<Rgba32> pixelRow = accessor.GetRowSpan(y);
+                        for (int x = 0; x < pixelRow.Length; x++)
+                        {
+                            ref Rgba32 pixel = ref pixelRow[x];
+                            if (map.TryGetValue((x, y),out var value))
+                                pixel = new Rgba32(0, value % 255,0, 255);
+                            else
+                                pixel = new Rgba32(255,255,255,255);
+                        }
+                    }
+                });
+                img.SaveAsPng(outStream);
+            }
+            response = "data:image/png;base64, " + Convert.ToBase64String(outStream.ToArray());
+        }
+        return response;
+    }
+
+}
