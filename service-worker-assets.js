@@ -29,15 +29,15 @@
       "url": "_framework\/icudt_no_CJK.dat"
     },
     {
-      "hash": "sha256-x7JXPDcAUVUjm21O07lYxSPGlR4ETFvBaR+RRUIKkCo=",
+      "hash": "sha256-fG+BacDyEFnk8VvM01BbLAOun9ZHeBveeBmqhXP9AzA=",
       "url": "_framework\/blazor.boot.json"
     },
     {
-      "hash": "sha256-C2neRf1R\/juOKRS5F73ZUz2o9mMRAmp+pGayMedZcW8=",
+      "hash": "sha256-r181c530RcM1ijl0lEAVkaSr5o4oMpOwBfiJRx1ZtpY=",
       "url": "_framework\/Blazor.dll"
     },
     {
-      "hash": "sha256-4WOGRWvP9oCle1Wf3TCCAWMy8eTZ4D8qp3Gw5uPHiKo=",
+      "hash": "sha256-C5h1qAj8A5pURb\/qiHWjNI9gtJKza4Z25kLuOg\/ajYQ=",
       "url": "_framework\/Domain.dll"
     },
     {
@@ -585,6 +585,14 @@
       "url": "sample-data\/SupplyStacks.txt"
     },
     {
+      "hash": "sha256-2jerROu0n4EPcso5hzAG1nRf7vXy\/S46FGUbdMyUA\/U=",
+      "url": "sample-data\/TheFloorWillBeLava_full.txt"
+    },
+    {
+      "hash": "sha256-pEevjxSeeJt9XER8WAKF07A6V\/LO2GabPbRl+xMjTak=",
+      "url": "sample-data\/TheFloorWillBeLava.txt"
+    },
+    {
       "hash": "sha256-nPrPulmMJmx8htBZnvXll8ulrkwSA\/IdfUM+vsfqg3w=",
       "url": "sample-data\/Trebuchet_full.txt"
     },
@@ -625,5 +633,5 @@
       "url": "sample-data\/WaitForIt.txt"
     }
   ],
-  "version": "bJwuvpY4"
+  "version": "gAqc\/s96"
 };
