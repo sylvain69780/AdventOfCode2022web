@@ -29,15 +29,15 @@
       "url": "_framework\/icudt_no_CJK.dat"
     },
     {
-      "hash": "sha256-Hs5w4+ogmApqQoiHFqtuwDstltPSFtENRW0YvYiVnks=",
+      "hash": "sha256-iL651j2ObEsJbZ03UiJlSpzMjhnyeNaMtWX20XydtTQ=",
       "url": "_framework\/blazor.boot.json"
     },
     {
-      "hash": "sha256-UDXHh02DpyO9NT03uq7bSnlzEur8VZtUgXVNkp46v70=",
+      "hash": "sha256-Bih2MT6yb01Xv6v9k3BUx0ijE8mMs1UZDKOUlrSqMzc=",
       "url": "_framework\/Blazor.dll"
     },
     {
-      "hash": "sha256-xSPus5ZgfSklUYSwtYYJFI0deD0eEx+HhYVbdezDAvs=",
+      "hash": "sha256-k6HBMPxJau8twQeof0uLLKVS0yErXWI+OdA7CjuPt24=",
       "url": "_framework\/Domain.dll"
     },
     {
@@ -157,7 +157,7 @@
       "url": "_framework\/System.Private.Uri.dll"
     },
     {
-      "hash": "sha256-teUm2ahis+0BsIJcXrPWT7KlUth4p5+Cz47ZY9aTnsU=",
+      "hash": "sha256-3soBPqMqh7scnmHsVeLplQDCpn96Coi4h2Nku2LRw78=",
       "url": "_framework\/System.Runtime.dll"
     },
     {
@@ -347,6 +347,14 @@
     {
       "hash": "sha256-G4jzVrF8fmIbpoXRNUgUgo7H9ziUwQPgSsprW5KFqp8=",
       "url": "sample-data\/CathodeRayTube.txt"
+    },
+    {
+      "hash": "sha256-Re+0ErU3aB4uJ3qx4OloMritY2XYnSWtOwfmEXqgZ4A=",
+      "url": "sample-data\/ClumsyCrucible_full.txt"
+    },
+    {
+      "hash": "sha256-MmIeUDizbLuClxb+Lb4yf7VofA+zVfiGGsQAXGiXtOA=",
+      "url": "sample-data\/ClumsyCrucible.txt"
     },
     {
       "hash": "sha256-NDT6sbyfMWJrnIdNnQ\/Dgzh5LYjdAqs17YFnFVQwsfI=",
@@ -633,5 +641,5 @@
       "url": "sample-data\/WaitForIt.txt"
     }
   ],
-  "version": "HDa9fXB1"
+  "version": "VpHflPhE"
 };
