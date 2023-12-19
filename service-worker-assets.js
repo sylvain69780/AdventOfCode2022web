@@ -29,15 +29,15 @@
       "url": "_framework\/icudt_no_CJK.dat"
     },
     {
-      "hash": "sha256-iL651j2ObEsJbZ03UiJlSpzMjhnyeNaMtWX20XydtTQ=",
+      "hash": "sha256-lZ+yxiyrIoBhUD\/QEeCt7GA5bcOIkt2PZUi4Wasda8Q=",
       "url": "_framework\/blazor.boot.json"
     },
     {
-      "hash": "sha256-Bih2MT6yb01Xv6v9k3BUx0ijE8mMs1UZDKOUlrSqMzc=",
+      "hash": "sha256-9OO+Gq1JHednDjPLc0UUxG8F7ACZT3+TFoQcaqyKNh8=",
       "url": "_framework\/Blazor.dll"
     },
     {
-      "hash": "sha256-k6HBMPxJau8twQeof0uLLKVS0yErXWI+OdA7CjuPt24=",
+      "hash": "sha256-ZMSz\/le6QD0swonSVIswCsW9\/7hxFya1do9y7eJofBE=",
       "url": "_framework\/Domain.dll"
     },
     {
@@ -149,7 +149,7 @@
       "url": "_framework\/System.ObjectModel.dll"
     },
     {
-      "hash": "sha256-XHYNdKEvxUAuk9\/ur3z9v4p+rh9rVzqn6UAJ04els6c=",
+      "hash": "sha256-voTfOb1yUYI+SXaNj0GWPwvAy+uMkPcNeHsShtHNNHc=",
       "url": "_framework\/System.Private.CoreLib.dll"
     },
     {
@@ -157,7 +157,7 @@
       "url": "_framework\/System.Private.Uri.dll"
     },
     {
-      "hash": "sha256-3soBPqMqh7scnmHsVeLplQDCpn96Coi4h2Nku2LRw78=",
+      "hash": "sha256-WyR2fo0iOkjt5lWy8rtguRtcbrpGis2ZMBzazvwS2Fg=",
       "url": "_framework\/System.Runtime.dll"
     },
     {
@@ -441,6 +441,14 @@
       "url": "sample-data\/IfYouGiveASeedAFertilizer.txt"
     },
     {
+      "hash": "sha256-pQl4sjMQOvr4FkoR4h7d9FOF7ikkBl56hLFNSo8TaFE=",
+      "url": "sample-data\/LavaductLagoon_full.txt"
+    },
+    {
+      "hash": "sha256-s9XnexlRlNdjDmB1129GgVNEewyqf5fjPVrz+0Bm5ks=",
+      "url": "sample-data\/LavaductLagoon.txt"
+    },
+    {
       "hash": "sha256-mGsDBkGAR8p5eMC8VIPKKZlytMhBMA56sTDSqVzxMv0=",
       "url": "sample-data\/LensLibrary_full.txt"
     },
@@ -641,5 +649,5 @@
       "url": "sample-data\/WaitForIt.txt"
     }
   ],
-  "version": "VpHflPhE"
+  "version": "ejrfLu9L"
 };
