@@ -39,7 +39,7 @@ namespace Tests
             var service = new LavaductLagoonService(s);
             service.SetStrategy("Part 2");
             var c = service.GetStepsToSolution(input).Count();
-            Assert.That(service.Solution, Is.EqualTo("71503"));
+            Assert.That(service.Solution, Is.EqualTo("952408144115"));
         }
 
         [Test]
@@ -48,7 +48,7 @@ namespace Tests
             var service = new LavaductLagoonService(s);
             service.SetStrategy("Part 2");
             var c = service.GetStepsToSolution(input2).Count();
-            Assert.That(service.Solution, Is.EqualTo("41513103"));
+            Assert.That(service.Solution, Is.EqualTo("134549294799713"));
         }
 
 //        const string path = "C:\\Users\\sylvain.lecourtois\\source\\repos\\dev\\AdventOfCode2022web\\AdventOfCode2022web\\wwwroot\\sample-data\\";
