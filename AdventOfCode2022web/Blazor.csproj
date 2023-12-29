@@ -17,6 +17,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <_ContentIncludedByDefault Remove="wwwroot\sample-data\Aplenty.txt" />
     <_ContentIncludedByDefault Remove="wwwroot\sample-data\TheFloorWillBeLava.txt" />
   </ItemGroup>
 
